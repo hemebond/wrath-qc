@@ -299,13 +299,14 @@ float(float v) anglemod =
 
 void() movetarget_f = 
 {
-	if ((!self.targetname) && (self.classname != "path_corner_start"))
+	if (self.targetname == "" && self.classname != "path_corner_start") {
 		objerror("monster_movetarget: no targetname");
+		return;
+	}
 
 	self.solid = SOLID_TRIGGER;
 	self.touch = t_movetarget;
 	setsize(self, '-8 -8 -8', '8 8 8');
-
 };
 
 void() path_corner = 

@@ -3316,7 +3316,7 @@ void() RestoreGame =
 	// this prevents an annoying engine bug where ents don't get linked on load
 	fixitems();
 	entity lst = world;
-	while(lst = nextent(lst))
+	while((lst = nextent(lst)))
 	{
 		setorigin(lst, lst.origin);
 	}

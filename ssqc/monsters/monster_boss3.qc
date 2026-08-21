@@ -265,7 +265,7 @@ void() bossnav_c::destructor {
 bosspath_c(bossnav_c node) bossnav_reconstruct_path
 {
 	bosspath_c path, hold;
-	for(node; node; node = node.cameFrom)
+	for(; node; node = node.cameFrom)
 	{
 		if (path)
 			hold = path;
@@ -1642,7 +1642,7 @@ float() boss3_c::anim_flail {
 		return FALSE;
 	
 	entity lst = findradius(this.origin, 350);
-	for(; ; lst = lst.chain)
+	for(; lst ; lst = lst.chain)
 	{
 		if (lst.movetype != MOVETYPE_STEP && lst.movetype != MOVETYPE_WALK)
 			continue;

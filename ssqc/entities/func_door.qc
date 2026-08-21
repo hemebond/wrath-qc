@@ -76,7 +76,7 @@ void() door_fire =
 
 	if(self.wait == -2)
 	{
-		self.targetname == "";
+		self.targetname = "";
 		self.use = SUB_Null;
 	}
 

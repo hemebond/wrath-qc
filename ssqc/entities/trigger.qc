@@ -209,31 +209,6 @@ void() trigger_relay =
 		self.use = SUB_UseTargets;
 };
 
-
-//=============================================================================
-
-void() trigger_secret2 = 
-{
-	self.wait = -1;
-
-	if (!self.message)
-		self.message = "You found a secret area!";
-
-	if (!self.sounds)
-		self.sounds = 1;
-
-	if (self.sounds == 1)
-	{
-		self.noise = "misc/secret.ogg";
-	}
-	else if (self.sounds == 2)
-	{
-		self.noise = "misc/talk.ogg";
-	}
-
-	trigger_multiple();
-};
-
 //=============================================================================
 
 void() counter_use = 
@@ -1710,7 +1685,7 @@ void spawnfunc_info_achievement_gamecomplete()
 void info_endscreen_use(void)
 {
 	entity lst = world;
-	while(lst = findflags(lst, flags, FL_CLIENT))
+	while((lst = findflags(lst, flags, FL_CLIENT)))
 	{
 		lst.r_endscreen = time;
 	}

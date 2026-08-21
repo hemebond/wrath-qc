@@ -1484,7 +1484,7 @@ void() mark_revelation =
 
 	spawn_relevelation_particles(self.origin + self.view_ofs + v_forward * 72,24,'1 1.1 1',0);
 	stuffcmd (self, "bf 0.85 1.1 0.9 0.5 0.5\n");
-	while (secret_entity = nextent(secret_entity))
+	while ((secret_entity = nextent(secret_entity)))
 	{
 		if (secret_entity.wrathflags & FL_SECRET)
 		{

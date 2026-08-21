@@ -1063,9 +1063,6 @@ void() precaches =
     precache_monster_keeper();
     precache_sound ("items/artifacts/artifactE_end.ogg");
     precache_sound ("objects/switch1_use.ogg");
-    precache_sound ("weapons/crystaliser/fire1.ogg");
-    precache_sound ("weapons/crystaliser/inspect.ogg");
-    precache_sound ("weapons/crystaliser/raise.ogg");
 	precache_sound ( "impact/destruct/skullbreak.ogg");
 };
 

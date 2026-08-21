@@ -55,14 +55,21 @@ void()incisor_touch =
 void() alpha_modifier =
 {
 	if(self.owner.walktime2 > time)
-	self.owner.alpha_fade  = -1;
+		self.owner.alpha_fade  = -1;
 
 	if((self.alpha_fade != self.owner.alpha_fade) && (self.owner.classname ==  "monster_incisor"))
 	{
-		if(self.owner.alpha_fade == 1)
-			sound(self, CHAN_AUTO, "enemies/prowler/cloak.ogg", 1, 0.25);
-		if(self.owner.alpha_fade == -1) 
-			sound(self, CHAN_AUTO, "enemies/prowler/decloak.ogg", 1, 0.25);
+		float r = floor(random() * 3) + 1;
+		string sound_number = ftos(r);
+		string sound_file = "";
+
+		if(self.owner.alpha_fade == 1) {
+			sound_file = strcat("enemies/prowler/cloak", sound_number, ".ogg");
+		}
+		if(self.owner.alpha_fade == -1) {
+			sound_file = strcat("enemies/prowler/decloak", sound_number, ".ogg");
+		}
+		sound(self.owner, CHAN_AUTO, sound_file, 1, 0.25);
 	}
 	if((self.owner.health <= 0) && (self.cnt != 1))
 	{
@@ -121,12 +128,9 @@ void() incisor_stand1 =[$inc_idle1, incisor_stand2]
 
 	if ((self.sight_time < time) && !(self.spawnflags &1))
 	{
-		chattersound("enemies/incisor/chatter", 5, 1);
+		chattersound("enemies/prowler/chatter", 5, 1);
 		self.sight_time = time + random(5,10);
 	}
-
-
-	//chattersound ("enemies/prowler/inc_idle", 1, 0.5);
 };
 void() incisor_stand2 =[$inc_idle2, incisor_stand3]{ai_stand();};
 void() incisor_stand3 =[$inc_idle3, incisor_stand4]{ai_stand();};
@@ -144,7 +148,7 @@ void() incisor_walk1 =[$inc_walk1, incisor_walk2]{ai_walk(24);
 
 	if ((self.sight_time < time) && !(self.spawnflags &1))
 	{
-		chattersound("enemies/incisor/chatter", 5, 1);
+		chattersound("enemies/prowler/chatter", 5, 1);
 		self.sight_time = time + random(3,7);
 	}
 
@@ -212,15 +216,9 @@ void() incisor_atk = { local float r;
 };
 
 .float incisorscreaming;
-void() loop_incisor_sound = { 
-	/*if ((self.incisorscreaming != 1) && (self.incisorscreamingtime < time))
-	{
-		msound(self, CHAN_VOICE, "enemies/prowler/run.ogg", 0.5, 0.25);
-		self.incisorscreaming = 1;
-	}*/
-};
+void() loop_incisor_sound = {};
 
-void() loop_incisor_soundoff = { msound(self, CHAN_VOICE, "enemies/prowler/run.ogg", 0, 0);
+void() loop_incisor_soundoff = {
 	self.incisorscreaming = 0;
 };
 
@@ -248,7 +246,7 @@ void() incisor_run1 =[$inc_run1, incisor_run2]
 
 	if ((self.sight_time < time) && !(self.spawnflags &1))
 	{
-		chattersound("enemies/incisor/chatter", 5, 1);
+		chattersound("enemies/prowler/chatter", 5, 1);
 		self.sight_time = time + random(3,7);
 	}
 
@@ -316,15 +314,8 @@ void() incisor_attack =
 	delta = self.enemy.origin - self.origin;
 	dist = vlen(delta);
 	loop_incisor_soundoff();
-	if ((dist > 120))
-	{
-		chattersound("enemies/prowler/miss", 3, TRUE);
-		return;
-	}
-	else
-	{
+	if (dist <= 120) {
 		wdmg = incisordamage * 0.35;
-		chattersound("enemies/prowler/hit", 3, TRUE);
 		T_Damage(self.enemy, self, self, wdmg);
 	}
 };
@@ -368,7 +359,7 @@ void() incisor_atkb1 = [ $inc_attackb1, incisor_atkb2 ]
 	ai_charge(MOVETYPE_PUSH);
 	if ((self.incisorscreamingtime < time))
 	{
-		monstersound1("enemies/prowler/attack", 3, TRUE);
+		monstersound1("enemies/prowler/attack", 5, CHAN_WEAPON);
 	}
 };
 void() incisor_atkb2 = [ $inc_attackb2, incisor_atkb3 ]{ai_face();ai_charge(3);};
@@ -381,7 +372,7 @@ void() incisor_atka1 = [ $inc_attacka1, incisor_atka2 ]
 	ai_charge(10);
 	if ((self.incisorscreamingtime < time))
 	{
-		monstersound1("enemies/prowler/attack", 3, TRUE);
+		monstersound1("enemies/prowler/attack", 5, CHAN_WEAPON);
 	}
 	self.nextthink = time + 0.05;
 };
@@ -456,7 +447,6 @@ void(entity attacker, float damage) incisor_pain =
 	{
 		return;
 	}
-	//msound(self, 2, "enemies/prowler/run.ogg", FALSE, FALSE);
 	self.sustained_damage = 0;
 	self.movetype = 0;
 	self.think = incisor_painr;
@@ -521,8 +511,6 @@ void() incisor_die =
 	//self.colormod = '1 1 1';
 	self.effects = 0;	
 	loop_incisor_soundoff();
-	//msound(self, MOVETYPE_WALK, "enemies/prowler/run.ogg", 0, 0);
-	//drop_item((self.origin - '0 0 12'), "ammo_spitter", MOVETYPE_BOUNCE, self);
 	self.solid = FALSE;
 	if (((self.health < widod) || self.gibbable))
 	{
@@ -643,17 +631,18 @@ void() precache_monster_prowler =
 	precache_sound("enemies/prowler/die1.ogg");
 	precache_sound("enemies/prowler/die2.ogg");
 	precache_sound("enemies/prowler/die3.ogg");
-	precache_sound("enemies/prowler/hit1.ogg");
-	precache_sound("enemies/prowler/hit2.ogg");
-	precache_sound("enemies/prowler/hit3.ogg");
 	precache_sound("enemies/prowler/attack1.ogg");
 	precache_sound("enemies/prowler/attack2.ogg");
 	precache_sound("enemies/prowler/attack3.ogg");
 	precache_sound("enemies/prowler/attack4.ogg");
 	precache_sound("enemies/prowler/attack5.ogg");
 
-	precache_sound("enemies/prowler/cloak.ogg");
-	precache_sound("enemies/prowler/decloak.ogg");
+	precache_sound("enemies/prowler/cloak1.ogg");
+	precache_sound("enemies/prowler/cloak2.ogg");
+	precache_sound("enemies/prowler/cloak3.ogg");
+	precache_sound("enemies/prowler/decloak1.ogg");
+	precache_sound("enemies/prowler/decloak2.ogg");
+	precache_sound("enemies/prowler/decloak3.ogg");
 
 	precache_sound("enemies/prowler/idle1.ogg");
 	precache_sound("enemies/prowler/idle2.ogg");
@@ -665,13 +654,9 @@ void() precache_monster_prowler =
 	precache_sound("enemies/prowler/chatter3.ogg");
 	precache_sound("enemies/prowler/chatter4.ogg");
 	precache_sound("enemies/prowler/chatter5.ogg");
-	precache_sound("enemies/prowler/miss1.ogg");
-	precache_sound("enemies/prowler/miss2.ogg");
-	precache_sound("enemies/prowler/miss3.ogg");
 	precache_sound("enemies/prowler/pain1.ogg");
 	precache_sound("enemies/prowler/pain2.ogg");
 	precache_sound("enemies/prowler/pain3.ogg");
-	precache_sound("enemies/prowler/run.ogg");
 	precache_sound("enemies/prowler/sight1.ogg");
 	precache_sound("enemies/prowler/sight2.ogg");
 	precache_sound("enemies/prowler/sight3.ogg");
@@ -702,17 +687,18 @@ void() monster_prowler =
 	precache_sound("enemies/prowler/die1.ogg");
 	precache_sound("enemies/prowler/die2.ogg");
 	precache_sound("enemies/prowler/die3.ogg");
-	precache_sound("enemies/prowler/hit1.ogg");
-	precache_sound("enemies/prowler/hit2.ogg");
-	precache_sound("enemies/prowler/hit3.ogg");
 	precache_sound("enemies/prowler/attack1.ogg");
 	precache_sound("enemies/prowler/attack2.ogg");
 	precache_sound("enemies/prowler/attack3.ogg");
 	precache_sound("enemies/prowler/attack4.ogg");
 	precache_sound("enemies/prowler/attack5.ogg");
 
-	precache_sound("enemies/prowler/cloak.ogg");
-	precache_sound("enemies/prowler/decloak.ogg");
+	precache_sound("enemies/prowler/cloak1.ogg");
+	precache_sound("enemies/prowler/cloak2.ogg");
+	precache_sound("enemies/prowler/cloak3.ogg");
+	precache_sound("enemies/prowler/decloak1.ogg");
+	precache_sound("enemies/prowler/decloak2.ogg");
+	precache_sound("enemies/prowler/decloak3.ogg");
 
 	precache_sound("enemies/prowler/idle1.ogg");
 	precache_sound("enemies/prowler/idle2.ogg");
@@ -724,13 +710,9 @@ void() monster_prowler =
 	precache_sound("enemies/prowler/chatter3.ogg");
 	precache_sound("enemies/prowler/chatter4.ogg");
 	precache_sound("enemies/prowler/chatter5.ogg");
-	precache_sound("enemies/prowler/miss1.ogg");
-	precache_sound("enemies/prowler/miss2.ogg");
-	precache_sound("enemies/prowler/miss3.ogg");
 	precache_sound("enemies/prowler/pain1.ogg");
 	precache_sound("enemies/prowler/pain2.ogg");
 	precache_sound("enemies/prowler/pain3.ogg");
-	precache_sound("enemies/prowler/run.ogg");
 	precache_sound("enemies/prowler/sight1.ogg");
 	precache_sound("enemies/prowler/sight2.ogg");
 	precache_sound("enemies/prowler/sight3.ogg");

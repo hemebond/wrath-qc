@@ -128,7 +128,7 @@ void shepherd_usepressed(void)
 		activator = self;
 		string targ = self.targlist[line];
 		entity lst = world;
-		while(lst = find(lst, targetname, targ))
+		while((lst = find(lst, targetname, targ)))
 		{
 			self = lst;
 			lst.use();
@@ -158,7 +158,7 @@ void shepherd_approached(void)
 			activator = self;
 			string targ = self.targlist[line];
 			entity lst = world;
-			while(lst = find(lst, targetname, targ))
+			while((lst = find(lst, targetname, targ)))
 			{
 				self = lst;
 				lst.use();
@@ -177,7 +177,7 @@ void shepherd_approached(void)
 		activator = self;
 		string targ = self.target;
 		entity lst = world;
-		while(lst = find(lst, targetname, targ))
+		while((lst = find(lst, targetname, targ)))
 		{
 			self = lst;
 			lst.use();
@@ -233,7 +233,7 @@ void place_shepherd_think(void)
 		
 		// check for approach
 		entity lst = world;
-		while(lst = findflags(lst, flags, FL_CLIENT))
+		while((lst = findflags(lst, flags, FL_CLIENT)))
 		{
 			vector diff = lst.origin - self.origin;
 			if (vlen(diff) > 256)
@@ -250,7 +250,7 @@ void place_shepherd_think(void)
 			self.frame |= 0x40;
 
 		entity lst = world;
-		while(lst = findflags(lst, flags, FL_CLIENT))
+		while((lst = findflags(lst, flags, FL_CLIENT)))
 		{
 			vector diff = lst.origin - self.origin;
 			if (vlen(diff) > 256)
@@ -272,7 +272,7 @@ void place_shepherd_filter(void)
 		loc = 6;
 
 	entity lst = world;
-	while(lst = find(lst, classname, "place_shepherd"))
+	while((lst = find(lst, classname, "place_shepherd")))
 	{
 		if !(lst.spawnflags & 1)
 			continue;

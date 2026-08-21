@@ -94,7 +94,7 @@ void()info_nogib_touch =
 	{
 		vector dir = (self.origin - '0 0 8')  - other.origin;
 		dir = normalize(dir);
-		other.velocity += dir * (128,256);
+		other.velocity += dir * random(128,256);
 		other.movetype = MOVETYPE_NOCLIP;
 		other.think = becomesolid;
 		other.nextthink = time + random(0.2,0.5);

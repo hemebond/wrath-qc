@@ -159,7 +159,7 @@ void() object_switch =
 	precache_model(selfpipesmodel);
 
 	precache_sound("objects/switches/e1_switch1.ogg");
-	precache_sound("objects/switches/e1_switch_reset.ogg");
+	precache_sound("objects/switches/e1_switch1_reset.ogg");
 	self.noise = "objects/switches/e1_switch1.ogg";
 	self.noise2 = "objects/switches/e1_switch1_reset.ogg";
 
