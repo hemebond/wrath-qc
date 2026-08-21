@@ -531,6 +531,7 @@ void() precaches =
 	precache_sound ("impact/destruct/glass_break1.ogg");
 	precache_sound ("impact/destruct/glass_break2.ogg");
 	precache_sound ("impact/destruct/glass_break3.ogg");
+	precache_sound ("impact/destruct/glass_small_break.ogg");
 	precache_sound ("impact/destruct/stone_break1.ogg");
 	precache_sound ("impact/destruct/stone_break2.ogg");
 	precache_sound ("impact/destruct/wood1_break1.ogg");
@@ -895,8 +896,6 @@ void() precaches =
 	precache_sound ("weapons/cannon/lower.ogg");
 	precache_sound ("weapons/cannon/raise.ogg");
 	precache_sound ("weapons/crystal/inspect.ogg");
-	precache_sound ("weapons/crystal/lower.ogg");
-	precache_sound ("weapons/crystal/raise.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_fire1.ogg");
 	precache_sound ("weapons/crystal/crystallizer_fire2.ogg");
@@ -913,12 +912,14 @@ void() precaches =
 	precache_sound ("weapons/crystal/crystallizer_fire_loop.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_fire_alt_loop.ogg");
-	precache_sound ("weapons/crystal/crystallizer_fire_alt_release.ogg");
-	precache_sound ("weapons/crystal/crystallizer_fire_alt_stinger.ogg");
-	precache_sound ("weapons/crystal/crystallizer_fire_alt_release_max.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire_stinger.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_altfire1_max.ogg");
 	precache_sound ("weapons/crystal/crystallizer_altfire1_light.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire2_max.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire2_light.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire3_max.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire3_light.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_deselect1.ogg");
 	precache_sound ("weapons/crystal/crystallizer_deselect2.ogg");

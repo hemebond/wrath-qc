@@ -1210,7 +1210,6 @@ void() glowmodderthink =
 
 
 void(entity e, float chan, string samp, float vol, float attenn) msound;
-//			msound(self, CHAN_VOICE, "weapons/crystal/raise.ogg", 0, 0);
 void()heretic_run;
 .float movingz;
 void() loop_widow_soundoff;
@@ -1638,16 +1637,18 @@ void() wsfire_crystal =
 		float dmg_cnt = 	self.wsfire_crystal_dmgcnt;
 		self.soundfade = 2;
 		wvol = cvar ("weapons_fire_volume");
+		float sound_number = floor(random() * 3) + 1;
+		string sound_file = strcat("weapons/crystal/crystallizer_altfire", ftos(sound_number), "_light.ogg");
 		if(dmg_cnt <= 6)
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_light.ogg",wvol * 0.6,0.25,100,0);
+			sound7(self, CHAN_AUTO, sound_file, wvol*0.6, 0.25, 100, 0);
 		else if ((dmg_cnt > 6) && (dmg_cnt <= 12))
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_light.ogg",wvol * 0.8,0.25,100,0);
+			sound7(self, CHAN_AUTO, sound_file, wvol*0.8, 0.25, 100, 0);
 		else if ((dmg_cnt > 12) && (dmg_cnt <= 18))
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_light.ogg",wvol * 1,0.25,100,0);
+			sound7(self, CHAN_AUTO, sound_file, wvol*1, 0.25, 100, 0);
 		else if (dmg_cnt > 18) 
 		{
-			//sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_fire_alt_release.ogg",1,0.25,100,0);
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_max.ogg",wvol,0.25,100,0);
+			sound_file = strcat("weapons/crystal/crystallizer_altfire", ftos(sound_number), "_max.ogg");
+			sound7(self, CHAN_AUTO, sound_file, wvol, 0.25, 100, 0);
 		}
 		sound7(self, CHAN_AUTO, "weapons/lance/fire1.ogg", 0.4, 0.25,368,0);
 		if (dmg_cnt > 18)
@@ -1680,8 +1681,11 @@ void() wsfire_crystal =
 			setorigin (muzzle2,trace_endpos + v_forward * -12);
 
 
-			if(self.beam_muzzle)
-				remove(self.beam_muzzle);
+			if(self.beam_muzzle) {
+				self.beam_muzzle.think = SUB_Remove;
+				self.beam_muzzle.nextthink = time;
+			}
+
 			if (crystal_impact(self.wsfire_crystal_dmgcnt) == FALSE)
 			{
 				if(dmg_cnt <= 6)

@@ -797,7 +797,6 @@ void() raise_cannon =
 	self.vweaponglowmod = '1 1 1';
     self.weapon = IT_CANNON;
 	W_SetWeapon();
-	//sound(self, CHAN_WEAPON, "weapons/cannon/raise.ogg", 1, ATTN_NORM);
 	self.vweaponglowmod = '1 1 1';
 	sound(self, CHAN_AUTO, "weapons/cannon/raise.ogg", 1, ATTN_NORM);
 	self.draw_w = 0;
