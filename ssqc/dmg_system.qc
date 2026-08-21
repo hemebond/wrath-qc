@@ -265,14 +265,12 @@ void();
 void()bersek_push;
 void(entity e) pop_entitycleanup;
 void(entity targ, entity attacker, float gibable) Killed = 
-{ 
-	float health_gain;
-	
+{
 	//targ.colormod = '1 0 0'; // crystallised test
 
 	if ((targ.flags &FL_MONSTER) && (targ.alreadykilled >= 1))
 		return;
-	if ((self.classentity == "corpse") &&((self.flags &FL_MONSTER))&& (!self.wrathflags & FL_CRYSTAL) )
+	if ((self.classentity == "corpse") && (self.flags & FL_MONSTER) && !(self.wrathflags & FL_CRYSTAL))
 		return;
 	if(self.buffer !=  world)
 		self.buffer.goalentity = world;	

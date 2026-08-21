@@ -884,7 +884,6 @@ void() trigger_displacement =
 	self.solid = SOLID_TRIGGER;
 	setmodel(self, self.model);
 	vector center = (self.absmax + self.absmin) / 2;  
-	float attn;
 	if (!self.rad_sound)
 		self.rad_sound = 512;	
 	self.atten = 512 / self.rad_sound;
@@ -1115,32 +1114,6 @@ void() fd_die=
 void() pointlight_d =
 {
 	return;
-	vector org = (self.absmin + self.absmax) / 2;
-	org_z -= 64;
-	if(self.classname != "func_shrine")
-	{
-		if(!self.cnt)
-			self.cnt = 100;
-		org = self.origin;
-		float r = random() * 100;
-		if(r > self.cnt)
-		remove(self);
-		return;
-	}
-	entity fd = spawn();
-	setmodel (fd,"models/alpha/impact_oppressor8.md3");
-	fd.origin = org;
-	fd.solid = SOLID_BBOX;
-	setsize(fd, '-12 -12 0', '12 12 64');
-	fd.movetype = MOVETYPE_TOSS;
-	fd.takedamage = DAMAGE_YES;
-	fd.health = 5;
-	fd.classname = "dancingfallen";
-	fd.th_die = fd_die;
-	fd.think = fdupdate;
-	fd.nextthink = time + 0.5;
-	if(self.classname != "func_shrine")
-		remove(self);
 };
 void() trigger_shrine = 
 { 
@@ -1490,7 +1463,7 @@ void() hurt_touch =
 				ThrowGib3(self, "models/gibs/gib_large.md3", 0, 0.75, 1, 2, tagorg+ randomvector('-24 -24 24','24 24 24'), relvel('42 12 -12', self), 0, 3);	// relvel: forward, right, up
 			}
 		}
-		if((self.kill_player == 1) && (other.flags & FL_MONSTER)&& (!other.wrathflags & FL_CRYSTAL))
+		if((self.kill_player == 1) && (other.flags & FL_MONSTER)&& !(other.wrathflags & FL_CRYSTAL))
 		{
 
 			if((other.th_die) && (other.voided != 1))

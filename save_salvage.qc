@@ -147,7 +147,6 @@ void Check_SaveCompatibility(void)
 					}
 
 					self.foundedrelics = have_relics;
-					//
 
 					dprint(sprintf("^3%s: self.relics = %.0f\n", __func__, self.relics));
 					goto resetmap_keepitems;
@@ -178,14 +177,14 @@ void Check_SaveCompatibility(void)
 		resetmap_keepitems:
 		// try to undo the coffer count...
 		entity lst = world;
-		while(lst = find(lst, classname, "coffer"))
+		while((lst = find(lst, classname, "coffer")))
 		{
 			if (lst.use != null)
 				continue;
 			self.opened_coffers--;
 		}
 		lst = world;
-		while(lst = find(lst, classname, "coffer_open")) // why....
+		while((lst = find(lst, classname, "coffer_open"))) // why....
 		{
 			if (lst.use != null)
 				continue;

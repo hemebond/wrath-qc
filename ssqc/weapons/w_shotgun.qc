@@ -973,35 +973,7 @@ void() wfire_shotgun1 = {
 	if(self.centered == 1)	centered_frames = 131;	
 	if (self.vweaponframe == 3 + centered_frames)
 	{
-		local vector dir;
 		self.vweaponglowmod = '0.9 0.9 0.9';
-		#if 0
-		makevectors(self.v_angle);
-		playerwsound("weapons/shotgun/fire1_", 2, CHAN_WEAPON);
-		dir = aim(self, 100000);
-		FireBullets(self.buckshot_count, dir, '0.3 0.3 0', self.shotgun_damage1, self.shotgun_spread1);
-		#endif
-		#if 0
-		self.effects += EF_MUZZLEFLASH;
-		float active_punchangle = cvar ("cl_punch");
-		if(active_punchangle == 1)
-			self.punchangle_x = -5;
-		self.ammo_shotgun -= 2;
-		//muzzle_shotgun(self.vweapon, 1);
-		local entity muzzle;
-		local string muzzlemodel;
-		muzzlemodel = "models/weapons/shotgun/flash_small.md3";
-		muzzle = spawn();
-		muzzle.owner = self;
-		muzzle.scale = 2;
-		setmodel(muzzle, muzzlemodel);
-		muzzle.viewmodelforclient = self;
-		setattachment(muzzle, self.vweapon, "tag_muzzle");
-		muzzle.angles_z = random() *360;
-		muzzle.think = SUB_Remove;
-		muzzle.nextthink = time + 0.05;
-		#endif
-		
 	}
 
 	if ((self.vweaponframe > 4 + centered_frames) && (self.vweaponglowmod_x > 0))
@@ -1013,11 +985,6 @@ void() wfire_shotgun1 = {
 		self.vweaponglowmod_z -= 0.1;
 	}
 
-	///	if(self.charge_shotgun == self.charge_shotgun_count)
-	//	{
-	//		self.timezoom = time + self.shotgun_time1 /2;
-	//	}
-
 	if (self.vweaponframe >= 15 + centered_frames)
 		self.shotgun_clip = 2;
 
@@ -1026,8 +993,6 @@ void() wfire_shotgun1 = {
 	else if (self.vweaponframe == (30 + centered_frames))
 		Controller_Rumble(self, 0.25, 0.1, 160);
 
-	//	if(self.vweaponframe == 40)
-	//	self.timezoomframe = time;
 	if (self.vweaponframe >= 41 + centered_frames)
 	{
 		self.shotgun_fire1 = 0;

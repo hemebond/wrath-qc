@@ -2990,7 +2990,7 @@ void() WeaponFrames =
 	{
 		dprint("^3-- BEGIN ENTITY LIST --\n");
 		entity lst = world;
-		while(lst = nextent(lst))
+		while((lst = nextent(lst)))
 		{
 			dprint(sprintf(" %s %.0f\n", lst.classname, num_for_edict(lst)));
 		}
@@ -3198,14 +3198,17 @@ void() WeaponFrames =
 	}	
 	
 
-	if(self.sigil_time > time)
-	{
-		if (self.timefly > time)
+	if(self.sigil_time > time) {
+		if (self.timefly > time) {
+			// FIXME: divide by zero if you get fly and then another, e.g., displacement
 			self.artifacttime = 142 - (floor(((self.timefly) - time) * (142 / self.takenflytime)));
-		if (self.displacement_time > time)
+		}
+		if (self.displacement_time > time) {
 			self.artifacttime = 142 - (floor(((self.displacement_time) - time) * (142 / self.takendisplacement_time)));
-		if (self.wrath_time > time)
+		}
+		if (self.wrath_time > time) {
 			self.artifacttime = 142 - (floor(((self.wrath_time) - time) * (142 / self.takenwrath_time)));
+		}
 	}
 	else	
 	{

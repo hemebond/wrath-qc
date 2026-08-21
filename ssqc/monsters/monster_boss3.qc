@@ -770,7 +770,6 @@ returns the blocked flags (1 = floor, 2 = step / wall)
 #define STOP_EPSILON 0.1
 void ClipVelocity (vector in, vector normal, __out vector out, float overbounce)
 {
-	float i;
 	float backoff;
 	
 	local vector oldout = in;
@@ -967,8 +966,8 @@ class boss3_c {
 	nonvirtual void() attack_sweep;
 	nonvirtual void() attack_homing;
 	nonvirtual void() attack_summon;
-	var float attack_score[BOSS3_ATTACKPATTERNS];
-	var virtual void() attack_func[BOSS3_ATTACKPATTERNS];
+	float attack_score[BOSS3_ATTACKPATTERNS];
+	virtual void() attack_func[BOSS3_ATTACKPATTERNS];
 	nonvirtual void(entity, float) pain_stage2;
 	float s2_mutilation;
 	vector s2_homelocation;
@@ -1643,7 +1642,7 @@ float() boss3_c::anim_flail {
 		return FALSE;
 	
 	entity lst = findradius(this.origin, 350);
-	for(lst; lst; lst = lst.chain)
+	for(; ; lst = lst.chain)
 	{
 		if (lst.movetype != MOVETYPE_STEP && lst.movetype != MOVETYPE_WALK)
 			continue;
@@ -3264,7 +3263,7 @@ static const float boss3_orbmovements_scale[] = {
 	6,
 	2,
 	0.001,
-}
+};
 
 const float boss3_orbmovements_period = 0.7;
 

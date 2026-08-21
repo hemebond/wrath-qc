@@ -29,8 +29,8 @@ void(float vel, float facing) ai_swim_charge =
 {
 
 
-	local vector vec;
-	local vector yaw;
+	vector vec;
+	float yaw;
 	if((time < self.time_float) && (self.velocity_z == 0))
 	{
 		if(self.upfloat == 1)
@@ -50,7 +50,7 @@ void(float vel, float facing) ai_swim_charge =
 	{
 	    vec = self.enemy.origin - self.origin;
 	    yaw = vectoyaw(vec);
-	    self.angles_y = yaw_y; 
+	    self.angles_y = yaw;
 	}
 
 	self.avelocity = '0 0 0';
@@ -148,7 +148,8 @@ void() lurker_wait1 =[$lurker_swim1, lurker_wait1]
 
 void() lurker_roaming1  =[$lurker_swim1, lurker_roaming1] 
 {
-
+	vector dir;
+	float r;
 	float speed = vlen(self.velocity);
 
 	self.yaw_speed = 25;
@@ -171,14 +172,14 @@ void() lurker_roaming1  =[$lurker_swim1, lurker_roaming1]
 
 	if((enemy_is_visible == 1) && (self.no_hunting_time < time))
 	{
-		float r = random();
+		r = random();
 		if((self.enemy.origin_z > self.pool.absmax_z + 32) && ((self.lurker_jump_time > time)&& (disttoplayer < 468) || (r < 0.1))) 
 		{
-			vector dir = normalize(self.origin - self.enemy.origin);
+			dir = normalize(self.origin - self.enemy.origin);
 			self.velocity = dir * 512;
 			self.velocity_z -= 92;
 			self.lurker_dest = dir * 2048;
-			self.lurker_roam_time = time + (1.5,3);
+			self.lurker_roam_time = time + random(1.5, 3);
 			self.avelocity = '0 0 0';
 			self.think = lurker_hide;
 			self.nextthink = time + 0.05;
@@ -218,7 +219,7 @@ void() lurker_roaming1  =[$lurker_swim1, lurker_roaming1]
 				self.velocity -= v_forward * 128;	
 
 
-			float r = random();
+			r = random();
 			if(r < 0.5)
 			{
 				tracebox(self.origin, '-7 -7 -7', '7 7 7', self.origin + v_right * 128, FALSE, self);
@@ -240,7 +241,7 @@ void() lurker_roaming1  =[$lurker_swim1, lurker_roaming1]
 
 			self.lurker_roam_time = time + random (3,7);
 
-			vector dir = normalize ((self.origin + self.velocity) - self.origin);
+			dir = normalize ((self.origin + self.velocity) - self.origin);
 			self.lurker_dest =dir * 2048;
 
 		}
@@ -356,7 +357,7 @@ self.nextthink = time + 0.1;
 };
 void() lurker_charge2        =[      $lurker_attack2,       lurker_charge3 ] {self.nextthink = time + 0.1;};
 void() lurker_charge3        =[      $lurker_attack3,       lurker_charge4 ] {self.nextthink = time + 0.1;};
-void() lurker_charge4        =[      $lurker_attack4,       lurker_charge5 ] {;self.nextthink = time + 0.05;lurker_melee();ai_swim_charge(10,1);};
+void() lurker_charge4        =[      $lurker_attack4,       lurker_charge5 ] {self.nextthink = time + 0.05;lurker_melee();ai_swim_charge(10,1);};
 void() lurker_charge5        =[      $lurker_attack5,       lurker_charge6 ] {self.nextthink = time + 0.05;lurker_melee();ai_swim_charge(10,1);};
 void() lurker_charge6        =[      $lurker_attack6,       lurker_charge7 ] {self.nextthink = time + 0.05;lurker_melee();ai_swim_charge(10,1);};
 void() lurker_charge7        =[      $lurker_attack7,       lurker_charge8 ] {self.nextthink = time + 0.05;};
@@ -383,7 +384,6 @@ void()lurker_precharge1 =
 	if(self.velocity_z <= 1)
 	{
 			self.effects = 0;
-		vector lurkervel, dir;
 		vector dir = normalize (self.enemy.origin - self.origin);
 		self.movetype = MOVETYPE_WALK;
 		self.velocity = dir * 1200;
@@ -530,7 +530,7 @@ void(float vel, float facing, float walking) ai_swim =
 			self.lurker_jump_moment = time + 1;
 			vector lurkervel;
 			lurkervel = dir * 512;
-			lurkervel += 192;
+			lurkervel_z += 192;
 			self.velocity_z += lurkervel_z;
 			self.velocity = dir * -128;
 			self.effects = 512;

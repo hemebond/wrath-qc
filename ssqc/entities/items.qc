@@ -218,7 +218,7 @@ float() Send_Item2 =
 	return TRUE;
 };
 
-float() Send_Item = 
+float(entity to, float sendflags) Send_Item =
 {
 	WriteByte(MSG_ENTITY, ENT::HUDMSG);
 	WriteShort(MSG_ENTITY, self.msg);
@@ -2464,7 +2464,7 @@ void() PreStartItem =
 entity(vector org, string class, float ammount, entity ownr) drop_item = 
 {
 
-	local entity dropped;
+	entity dropped;
 	dropped = spawn();
 	dropped.origin = org;
 	dropped.movetype = MOVETYPE_TOSS;
@@ -2474,7 +2474,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	dropped.angles_z = 0;
 	
 	
-	local vector revel;
+	vector revel;
 	makevectors(ownr.angles);
 
 	if(dropped.owner.classname == "monster_oppressor")
@@ -2498,7 +2498,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.gravity = coffer_item_gravity;
 		dropped.bouncefactor = coffer_item_bounce;
 		makevectors(ownr.angles);
-		local float right_vel;
+		float right_vel;
 		
 		if(ownr.counter_coffer_ammount == 4)
 		{
@@ -2696,7 +2696,6 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		//dropped.touch = wammo_touch;
 		//spawn_bbox_collider(dropped);
 		//dropped.oldtouch = dropped.touch;
-		return;
 	}	
 
 	if (class == "shard")
@@ -2753,7 +2752,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	}
 	if (class == "shard_dark")
 	{
-		local float r;
+		float r;
 		r = floor(random() *3);
 		if (r < 1)
 			dropped.noise = "items/armor_shard_dark1.ogg";
@@ -3218,10 +3217,9 @@ if (class == "mark")
 	
  	if(dropped.owner.classname == "coffer")
 	{
-	dropped.solid = SOLID_NOT;
-	dropped.nextthink = time + 0.1;	// items start after other solids
-	dropped.think = vel_item;
-//	dropped.think = 
+		dropped.solid = SOLID_NOT;
+		dropped.nextthink = time + 0.1;	// items start after other solids
+		dropped.think = vel_item;
 	}
 
 	return dropped;
@@ -5144,7 +5142,6 @@ void() cannon_item =
 	self.think = cannon_item_think;
 	self.nextthink = time + 0.05;
 };
-float rel_totalmonsters;
 
 
 void (string classnme,vector org, float c1, float c2, float c3, float c4, float c5, float coun, float collectedrelics) write_stuff_monsters =

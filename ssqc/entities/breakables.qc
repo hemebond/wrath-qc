@@ -59,7 +59,7 @@ void() urn_die = { local vector tagorg;
 	}
 
 	if(spitch <= 85)
-	randomsound7("impact/destruct/urn_break", 5,1, spitch,1);
+	randomsound7("impact/destruct/urn_break", 5,1, spitch);
 
 	randomsound("impact/destruct/urn_break", 5,0.7);
 

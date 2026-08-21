@@ -341,7 +341,7 @@ void() write_tether = {
 	stuffcmd(self, "scratch1 0\n");
 
 	// Reki (June 8 2023): Trigger trigger_soultether_checker entities
-	trigger_all_soultether_checkers();
+	trigger_all_soultether_checkers(self);
 
 	if (!(self.savedlist &SAVED_TETHER))
 		self.savedlist += SAVED_TETHER;

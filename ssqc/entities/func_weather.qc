@@ -1032,11 +1032,6 @@ void() trigger_fog_prethink =
 	self.tmp_fog_h = stof(cvar_string ("_fog_h"));
 	self.tmp_fog_f = stof(cvar_string ("_fog_f"));
 
-
-	local string lmessage;
-//	lmessage =strcat ((ftos(self.tmp_fog_g)),("\n")) ;
-//	bprint (lmessage);
-
 	self.cnt = self.wait / 0.025; 
 
 	if(self.ammo_shells == 1)
@@ -1083,12 +1078,7 @@ void() trigger_fog_touch =
 	other.fogtrigger = self;	
 	self.enemy = other;
 	stuffcmd (single_player,"get_fog\n");
-	//stuffcmd (self.enemy,"impulse 99\n");
 	self.touch = SUB_Null;
-
-	local string lmessage;
-//	lmessage =strcat (("first step"),("\n")) ;
-//	bprint (lmessage);
 
 	self.think = trigger_fog_prethink;
 	self.nextthink = time + 0.05;

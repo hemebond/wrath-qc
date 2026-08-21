@@ -163,7 +163,6 @@ enum ST_STATS:float
 
 #undef _STAT_ID
 #define _STAT_ID(st, type, callback) { st, #st, type, 0, 0, __NULL__ }, // SSQC doesn't get callbacks... fixme ?
-var steamstat_t steam_statlist[] = {
+steamstat_t steam_statlist[] = {
 	STAT_LIST
 };
-

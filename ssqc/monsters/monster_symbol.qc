@@ -496,13 +496,6 @@ float()zoom_up_check =
 	makevectors2(self.angles);
 	source = self.origin;
 	return 0;
-	tracebox(source,'-48 -32 -32','48 48 32' ,source + v_up * 128, MOVE_WORLDONLY, self);
-	if (trace_fraction == 1)
-		return 1;
-	tracebox(source,'-48 -32 -32','48 48 32' ,source + v_up * 368, MOVE_WORLDONLY, self);
-	if (trace_fraction == 1)
-		return 2;
-
 };
 
 float(float height)zoom_down_check = 
@@ -1010,14 +1003,14 @@ void() symbolshoot1 =[$symbolshoot1, symbolshoot2]{ai_face();self.glowmod = '0.6
 	self.light_lev = 3.5;
 	self.color ='0.75 0.1 0.1';
 };
-void() symbolshoot2 =[$symbolshoot2, symbolshoot3]{ai_face();self.glowmod = '0.65 0.65 0.65';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot3 =[$symbolshoot3, symbolshoot4]{ai_face();self.glowmod = '0.7 0.7 0.7';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot4 =[$symbolshoot4, symbolshoot5]{ai_face();self.glowmod = '0.75 0.75 0.75';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot5 =[$symbolshoot5, symbolshoot6]{ai_face();self.glowmod = '0.8 0.8 0.8';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot6 =[$symbolshoot6, symbolshoot7]{ai_face();self.glowmod = '0.85 0.85 0.85';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot7 =[$symbolshoot7, symbolshoot8]{ai_face();self.glowmod = '0.9 0.9 0.9';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot8 =[$symbolshoot8, symbolshoot9]{ai_face();self.glowmod = '1 1 1';self.light_lev += 3;self.velocity * 0.95;};
-void() symbolshoot9 =[$symbolshoot9, symbolshoot10]{ai_face();self.glowmod = '1.05 1.05 1.05';self.light_lev += 3;self.velocity * 0.95;};
+void() symbolshoot2 =[$symbolshoot2, symbolshoot3]{ai_face();self.glowmod = '0.65 0.65 0.65';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot3 =[$symbolshoot3, symbolshoot4]{ai_face();self.glowmod = '0.7 0.7 0.7';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot4 =[$symbolshoot4, symbolshoot5]{ai_face();self.glowmod = '0.75 0.75 0.75';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot5 =[$symbolshoot5, symbolshoot6]{ai_face();self.glowmod = '0.8 0.8 0.8';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot6 =[$symbolshoot6, symbolshoot7]{ai_face();self.glowmod = '0.85 0.85 0.85';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot7 =[$symbolshoot7, symbolshoot8]{ai_face();self.glowmod = '0.9 0.9 0.9';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot8 =[$symbolshoot8, symbolshoot9]{ai_face();self.glowmod = '1 1 1';self.light_lev += 3;self.velocity *= 0.95;};
+void() symbolshoot9 =[$symbolshoot9, symbolshoot10]{ai_face();self.glowmod = '1.05 1.05 1.05';self.light_lev += 3;self.velocity *= 0.95;};
 void() symbolshoot10 =[$symbolshoot10, symbolshoot11]
 {
 	self.pain_finished = time + 1;

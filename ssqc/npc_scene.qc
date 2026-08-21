@@ -700,6 +700,10 @@ static string StripCommand(string ln)
 static logic_c if_logic_stack;
 static float GenerateCommand(scene_c sc, string cmdstr)
 {
+	entity path;
+	setang_c ang;
+	move_c move;
+
 	float argc = tokenize_console(cmdstr);
 	if (argc == 0) // NOP
 		return TRUE;
@@ -715,28 +719,28 @@ static float GenerateCommand(scene_c sc, string cmdstr)
 
 		// angles
 		case "setang":
-			setang_c ang = spawn(setang_c, scene: sc, actor: strzone(argv(1)), value: [0, stof(argv(2)), 0]);
+			ang = spawn(setang_c, scene: sc, actor: strzone(argv(1)), value: [0, stof(argv(2)), 0]);
 			break;
 		case "setangto":
-			entity path = find(world, ::targetname, argv(2));
-			setang_c ang = spawn(setang_c, scene: sc, actor: strzone(argv(1)), value: path.angles);
+			path = find(world, ::targetname, argv(2));
+			ang = spawn(setang_c, scene: sc, actor: strzone(argv(1)), value: path.angles);
 			break;
 		case "setangsmooth":
-			entity path = find(world, ::targetname, argv(2));
-			setang_c ang = spawn(setang_c, scene: sc, actor: strzone(argv(1)), value: path.angles, is_smooth: fabs(stof(argv(3))));
+			path = find(world, ::targetname, argv(2));
+			ang = spawn(setang_c, scene: sc, actor: strzone(argv(1)), value: path.angles, is_smooth: fabs(stof(argv(3))));
 			break;
 		
 		// move
 		case "move":
-			move_c move = spawn(move_c, scene: sc, actor: strzone(argv(1)), value: stov(argv(2)), is_relative: 1);
+			move = spawn(move_c, scene: sc, actor: strzone(argv(1)), value: stov(argv(2)), is_relative: 1);
 			break;
 		case "moveto":
-			entity path = find(world, ::targetname, argv(2));
-			move_c move = spawn(move_c, scene: sc, actor: strzone(argv(1)), value: path.origin);
+			path = find(world, ::targetname, argv(2));
+			move = spawn(move_c, scene: sc, actor: strzone(argv(1)), value: path.origin);
 			break;
 		case "movesmooth":
-			entity path = find(world, ::targetname, argv(2));
-			move_c move = spawn(move_c, scene: sc, actor: strzone(argv(1)), value: path.origin, is_smooth: fabs(stof(argv(3))));
+			path = find(world, ::targetname, argv(2));
+			move = spawn(move_c, scene: sc, actor: strzone(argv(1)), value: path.origin, is_smooth: fabs(stof(argv(3))));
 			break;
 		
 		// setmodel
@@ -787,6 +791,7 @@ static float GenerateCommand(scene_c sc, string cmdstr)
 			break;
 
 		// variable funcs
+		varbitand_c v4;
 		case "varset":
 			varset_c v1 = spawn(varset_c, scene: sc, actor: strzone(argv(1)), netname: argv(2), value: stof(argv(3)));
 			break;
@@ -797,10 +802,10 @@ static float GenerateCommand(scene_c sc, string cmdstr)
 			varbitor_c v3 = spawn(varbitor_c, scene: sc, actor: strzone(argv(1)), netname: argv(2), value: stof(argv(3)));
 			break;
 		case "varbitand":
-			varbitand_c v4 = spawn(varbitand_c, scene: sc, actor: strzone(argv(1)), netname: argv(2), value: stof(argv(3)));
+			v4 = spawn(varbitand_c, scene: sc, actor: strzone(argv(1)), netname: argv(2), value: stof(argv(3)));
 			break;
 		case "varbitiand":
-			varbitand_c v4 = spawn(varbitand_c, scene: sc, actor: strzone(argv(1)), netname: argv(2), value: ~(stof(argv(3))));
+			v4 = spawn(varbitand_c, scene: sc, actor: strzone(argv(1)), netname: argv(2), value: ~(stof(argv(3))));
 			break;
 
 		// logic cmds

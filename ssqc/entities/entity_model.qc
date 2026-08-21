@@ -41,7 +41,7 @@ void() train_stop =
 {
 	local entity targ;
 
-	soundwrath(self, FL_SWIM, self.noise2, TRUE, 0.15,100,0.5);
+	soundwrath(self, FL_SWIM, self.noise2, TRUE, 0.15,100,0.5, FALSE);
 	targ = find(world, targetname, self.target);
 	self.target = targ.target;
 	self.velocity = VEC_ORIGIN;
@@ -53,7 +53,7 @@ void() train_wait =
 	if (self.wait)
 	{
 		self.nextthink = (self.ltime + self.wait);
-		soundwrath(self, FL_SWIM, self.noise2, TRUE, 0.15,100,0.5);
+		soundwrath(self, FL_SWIM, self.noise2, 1, 0.15, 100, 0.5, FALSE);
 	}
 	else
 	{
@@ -379,7 +379,7 @@ void() place_model_checkowner =
 			self.frame = 0;
 			self.owner = realt;
 			self.think = boat_check;
-			vector xyorigin = (realt.absmin*realt.absmax) * 0.5;
+			vector xyorigin = (realt.absmin + realt.absmax) * 0.5;
 			xyorigin_z = self.origin_z;
 			setorigin (self,xyorigin);
 			self.nextthink = time + 0.05;
@@ -980,7 +980,7 @@ void(string gibtagname, string gibmodel, entity ownr, vector gvel) spawngibs =
 		gib.touch = smallbonetocuh;
 		gib.noise = "impact/destruct/skullbreak.ogg";
 	}
-	gib.nextthink = time + 3 + random() * 5;;
+	gib.nextthink = time + 3 + random() * 5;
 };
 .entity lastchain;
 .float degrees_chain_constant;
@@ -1397,6 +1397,7 @@ void() object_eyeball =
 
 	// lid
 	setorigin(lid, self.origin);
+	precache_model("models/objects/eyeball/eyelid.md3");
 	setmodel(lid, "models/objects/eyeball/eyelid.md3");
 	lid.angles = self.angles; lid.angles[0] *= -1;
 	setattachment(self, lid, "tag_eye");

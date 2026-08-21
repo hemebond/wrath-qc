@@ -1129,7 +1129,7 @@ void() func_wall =
 			self.glowmod = '1 1 1';
 		if(!self.nextglowmod)
 			self.nextglowmod = '0 0 0';
-		if(!self.wait);
+		if(!self.wait)
 			self.wait = 1;	
 		self.oldglowmod = self.glowmod;
 

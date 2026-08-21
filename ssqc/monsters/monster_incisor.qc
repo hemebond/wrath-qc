@@ -102,7 +102,7 @@ void() alpha_modifier =
 
 	if(((self.owner.health <= 0) ||(self.owner.classname !=  "monster_incisor")||(!self.owner.health) ) && (self.lifetime < time))
 	{	
-		if(self.owner.classname == "crystallised");
+		if(self.owner.classname == "crystallised")
 			self.owner.alpha = 1;
 		self.think = SUB_Remove;
 	}

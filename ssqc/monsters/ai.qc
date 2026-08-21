@@ -1403,7 +1403,7 @@ float() wraithCheckAttack;
 float() CheckAnyAttack = 
 { 
 	if(self.health < 0)
-		return;
+		return FALSE;
 	if (!enemy_vis)
 		return FALSE;
 	if (self.classname == "monster_wraith")

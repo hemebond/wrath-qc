@@ -887,7 +887,7 @@ void() brute_run8 =
 	{
 		float dist = vlen(self.enemy.origin - self.origin);
 		self.think= brute_run9;
-		float v_dist =  vlen(self.origin_z - self.enemy.origin_z);
+		float v_dist =  self.origin_z - self.enemy.origin_z;
 		if((dist > 128) && (v_dist > 128))
 			self.think = self.th_missile;
 		if((dist > 302) && (self.shotgun_time1 < time) &&(self.skin != 1))
@@ -918,7 +918,7 @@ void() brute_run16 =[$brt_run8, brute_run1]
 	{
 		self.think = brute_run1;
 		float dist = vlen(self.enemy.origin - self.origin);
-		float v_dist =  vlen(self.origin_z - self.enemy.origin_z);
+		float v_dist =  self.origin_z - self.enemy.origin_z;
 		if((dist > 128) && (v_dist > 128))
 			self.think = self.th_missile;
 		if((dist > 302) && (self.shotgun_time1 < time)&&(self.skin != 1))

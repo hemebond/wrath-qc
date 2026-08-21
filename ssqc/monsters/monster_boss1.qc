@@ -948,6 +948,9 @@ void() guardian1_rotate =
 
 void() guardian1_float =
 {
+	float r;
+	float distz;
+
 	self.frame = $boss1_float;
 	self.yaw_speed = 0.75;
 	self.enemy = single_player;
@@ -994,8 +997,8 @@ void() guardian1_float =
 
 	if(single_player.origin_z > self.origin_z)
 	{
-		float r = random();
-		float distz = single_player.origin_z - self.origin_z;
+		r = random();
+		distz = single_player.origin_z - self.origin_z;
 		if((distz > 500) && (distz <= 1000))
 		{
 			if (r < 0.33)
@@ -1010,8 +1013,8 @@ void() guardian1_float =
 
 	if(single_player.origin_z < self.origin_z)
 	{
-		float r = random();
-		float distz = self.origin_z - single_player.origin_z;
+		r = random();
+		distz = self.origin_z - single_player.origin_z;
 		if((distz > 500) && (distz <= 1000))
 		{
 			if (r < 0.33)
