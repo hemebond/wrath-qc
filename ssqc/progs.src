@@ -24,6 +24,7 @@ dmg_system.qc
 editor/editor.qc
 
 
+../localization.h
 ../localization.qc
 func_readable.qc
 player/artifact.qc

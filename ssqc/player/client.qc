@@ -1,5 +1,3 @@
-	#include "localization.h"
-
 .float deadwaiting;
 .float oldwatertype;
 .float melee_jump_time;

@@ -1,12 +1,9 @@
-
 // Reki (May 31 2023)
 // localization_table.qc:
 // defines hashtable and functions for
 // interacting with dynamically localized
 // strings (as opposed to static localization
 // at load time done by the engine)
-
-#include "localization.h"
 
 // only for SSQC
 #ifdef SSQC
@@ -200,16 +197,16 @@ string strcontrols(string strbody, float hint_glyphs)
 				float type = bind_gettype(keynum);
 				if (IS_KBM_KEY(type) && (input_mode == IN_MODE_KEYBOARD || input_mode == IN_MODE_MOUSE))
 					break;
-				else if (type == INPUT_TYPE::XBOX && input_mode == IN_MODE_GAMEPAD)
+				else if (type == INPUT_TYPE_XBOX && input_mode == IN_MODE_GAMEPAD)
 					break;
-				else if (type == INPUT_TYPE::JOYSTICK && input_mode == IN_MODE_JOYSTICK)
+				else if (type == INPUT_TYPE_JOYSTICK && input_mode == IN_MODE_JOYSTICK)
 					break;
 			}
 
 			string s_key;
 			if (keynum != -1)
 			{
-				if (bind_gettype(keynum) == INPUT_TYPE::XBOX && hint_glyphs)
+				if (bind_gettype(keynum) == INPUT_TYPE_XBOX && hint_glyphs)
 				{
 					s_key = sprintf("{GLYPH_%.0f}", keynum);
 				}
@@ -369,7 +366,7 @@ void LanguageDef_LoadFonts(language_c langdef)
 		fontwritten[slot] = TRUE;
 	}
 
-	for(float i = 0; i < LANGFONT::MAX; i++) // reinit with conchars
+	for(float i = 0; i < LANGFONT_MAX; i++) // reinit with conchars
 	{
 		if (fontwritten[i])
 			continue;
@@ -454,7 +451,7 @@ void LanguageDef_LoadFile(string lcode)
 				case "font":
 					string type = argv(1);
 					float ind = -1;
-					for(float j = 0; j < LANGFONT::MAX; j++)
+					for(float j = 0; j < LANGFONT_MAX; j++)
 					{
 						if (type == fontnames[j] || (altfontnames[j] != "" && type == altfontnames[j]))
 						{
@@ -502,14 +499,14 @@ void LanguageDef_LoadFile(string lcode)
 
 	// register menu font (for language selection)
 	langdef.fontcode = FONT_MENU;
-	string menufontfile = LanguageDef_FindFont(langdef, LANGFONT::MAINMENU);
+	string menufontfile = LanguageDef_FindFont(langdef, LANGFONT_MAINMENU);
 	if (menufontfile)
 	{
-		langdef.fontcode = loadfont(langdef.lang, menufontfile, fontsizes[LANGFONT::MAINMENU], -1, fontscales[LANGFONT::MAINMENU], 0);
+		langdef.fontcode = loadfont(langdef.lang, menufontfile, fontsizes[LANGFONT_MAINMENU], -1, fontscales[LANGFONT_MAINMENU], 0);
 	}
 	else
 	{
-		langdef.fontcode = loadfont(langdef.lang, "fonts/journal", fontsizes[LANGFONT::MAINMENU], -1, fontscales[LANGFONT::MAINMENU], 0);
+		langdef.fontcode = loadfont(langdef.lang, "fonts/journal", fontsizes[LANGFONT_MAINMENU], -1, fontscales[LANGFONT_MAINMENU], 0);
 	}
 
 	//print(ftos(langdef.fontcode), "\n");

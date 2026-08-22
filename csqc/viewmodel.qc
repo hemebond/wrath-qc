@@ -239,5 +239,3 @@ void Viewmodel_CalculateMovement(void)
 
 	old_pmove_flags = pmove_flags;
 }
-
-

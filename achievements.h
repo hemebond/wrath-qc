@@ -1,7 +1,6 @@
 // Reki (May 8 2023):
 // achievements.h
 // header file for types/structs for interacting with the steam achievements
-#pragma once
 
 #define STEAM_IS_CONNECTED (cvar_string("steam_id") != "")
 

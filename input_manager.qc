@@ -2,47 +2,16 @@ vector thumbstick_right;
 vector thumbstick_look;
 vector thumbstick_mouse;
 
-enum CONTROLLER:float {
-	NULL,
-	GENERIC,
-	XBOX,
-	PLAYSTATION,
-	NINTENDO,
-	STEAM,
-	MAX
-};
-
-CONTROLLER controllerType;
-
 #ifdef CSQC
 #define getkeydest(x) (cvar("keydest"))
 #endif
 
 // Reki (December 2 2023): Added controller mapping, and made it so it
 // won't interfere with our normal single-input keyboard mapping.
-#define IS_KBM_KEY(k) (k == INPUT_TYPE::KEYBOARD || k == INPUT_TYPE::MOUSE)
-enum INPUT_TYPE:float {
-	KEYBOARD,
-	MOUSE,
-	XBOX,
-	JOYSTICK,
-};
-float bind_gettype(float keycode)
-{
-	if (keycode >= K_MOUSE1 && keycode <= K_MOUSE16)
-		return INPUT_TYPE::MOUSE;
-	else if (keycode >= K_XIN_DPAD_UP && keycode <= K_XIN_RSTK_RIGHT) // xinput, nice.
-		return INPUT_TYPE::XBOX;
-	else if (keycode >= K_JOY1 && keycode <= K_AUX32) //icky, dinput :\
-		return INPUT_TYPE::JOYSTICK;
-
-	// if all else fails, assume keyboard
-	return INPUT_TYPE::KEYBOARD;
-}
+#define IS_KBM_KEY(k) (k == INPUT_TYPE_KEYBOARD || k == INPUT_TYPE_MOUSE)
 
 string Controller_GetGlyph(string code);
-void Controller_InitGlyphs(CONTROLLER type);
-#include "uielement.h"
+void Controller_InitGlyphs(float type);
 
 void Controller_Query(void)
 {
@@ -65,7 +34,7 @@ void Controller_Type(float index, float type)
 		if (controllerType != type)
 			Controller_InitGlyphs(type);
 
-		controllerType = (CONTROLLER)type;
+		controllerType = (float)type;
 	}
 }
 
@@ -85,7 +54,7 @@ void input_modeswitching(float EventType, float charx, float scany)
 			}
 			else
 			{
-				if (type == INPUT_TYPE::XBOX)
+				if (type == INPUT_TYPE_XBOX)
 					new_mode = IN_MODE_GAMEPAD;
 				else
 					new_mode = IN_MODE_JOYSTICK;
@@ -170,7 +139,6 @@ void input_thumbsticks(__inout float EventType, __inout float charx, __inout flo
 
 void input_frame(void)
 {
-	#pragma region ACCELERATION
 	static float thumbstick_accel = 1;
 	static float thumbstick_accelcooldown = 0;
 	#define THUMBSTICK_SENSITIVITY 200
@@ -191,7 +159,6 @@ void input_frame(void)
 	thumbstick_mouse += ((thumbstick_right * thumbstick_accel) * THUMBSTICK_SENSITIVITY) * clframetime;
 	thumbstick_mouse[0] = bound(0, thumbstick_mouse[0], cvar("vid_conwidth"));
 	thumbstick_mouse[1] = bound(0, thumbstick_mouse[1], cvar("vid_conheight"));
-	#pragma endregion
 
 	#ifdef CSQC
 	setsensitivityscale(1);
@@ -237,10 +204,10 @@ string controllerglyph_folder[] = {
 };
 
 float gamepadglyph_active(void) { return input_mode == IN_MODE_GAMEPAD; }
-void Controller_InitGlyphs(CONTROLLER type)
+void Controller_InitGlyphs(float type)
 {
-	if (type < 0 || type >= CONTROLLER::MAX)
-		type = CONTROLLER::GENERIC;
+	if (type < 0 || type >= CONTROLLER_MAX)
+		type = CONTROLLER_GENERIC;
 
 	string folder = controllerglyph_folder[type];
 
@@ -254,26 +221,24 @@ void Controller_InitGlyphs(CONTROLLER type)
 
 string Controller_GetGlyph(string code)
 {
-	if (controllerType == CONTROLLER::NULL)
+	if (controllerType == CONTROLLER_NULL)
 		return __NULL__;
 
 	float type = controllerType;
-	if (type < 0 || type >= CONTROLLER::MAX)
-		type = CONTROLLER::GENERIC;
+	if (type < 0 || type >= CONTROLLER_MAX)
+		type = CONTROLLER_GENERIC;
 
 	return sprintf("gfx/glyphs/%s/%s.tga", controllerglyph_folder[type], code);
 }
 
-string Controller_GetGlyph_Fallback(string code, CONTROLLER fallback)
+string Controller_GetGlyph_Fallback(string code, float fallback)
 {
 	string ret;
-	CONTROLLER oldcontroller = controllerType;
-	if (controllerType == CONTROLLER::NULL)
+	float oldcontroller = controllerType;
+	if (controllerType == CONTROLLER_NULL)
 		controllerType = fallback;
 	ret = Controller_GetGlyph(code);
 	controllerType = oldcontroller;
 
 	return ret;
 }
-
-//

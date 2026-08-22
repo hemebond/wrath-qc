@@ -12,6 +12,7 @@ constants.qc
 ../shared_menu.qc
 ../shared_menu_csqc.qc
 wrathdefs.qc
+uielement.h
 ../input_manager.qc
 draw.qc
 frik_file.qc

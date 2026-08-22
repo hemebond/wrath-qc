@@ -1,9 +1,14 @@
 // Reki: Added this .h file since journal.qc is added after main.qc in progs.src and I wanted to avoid copy pasta
-#pragma once
+
+/*
 enum JOURNAL_ETYPE:float {
 	TEXT,
 	PIC,
 };
+*/
+
+float JOURNAL_ETYPE_TEXT = 0;
+float JOURNAL_ETYPE_PIC = 1;
 
 #define JOURNAL_COLOR_NOTE 			'-1 -1 -1'
 #define JOURNAL_COLOR_HIGHLIGHT 	'0.5 0.5 1'
@@ -11,8 +16,6 @@ enum JOURNAL_ETYPE:float {
 #define JOURNAL_TEXTALPHA 			0.8
 
 #ifdef CSQC
-#include "uielement.h" 	// this is a bit yuck, but oh well.
-						// we need it to init journal_ui
 
 class journalentry_c; // prototype
 class journalelement_c
@@ -52,7 +55,7 @@ class journalentry_c
 	journalentry_c		_next;
 	
 	void() journalentry_c;
-	void() destructor;
+	nonvirtual void() destructor;
 };
 
 journalentry_c journal_entries;

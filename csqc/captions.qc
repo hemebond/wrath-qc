@@ -86,7 +86,7 @@ void HUD_InitializeCaptions(void)
 			if (line.text)
 				strunzone(line.text);
 			line.text = 0;
-			backdrop.flags |= UIFLAG::HIDE;
+			backdrop.flags |= UIFLAG_HIDE;
 		}
 		//
 
@@ -138,7 +138,7 @@ void HUD_InitializeCaptions(void)
 			backdrop.size[0] /= ui_scale[0];
 			backdrop.size[1] /= ui_scale[1];
 			backdrop.size += '4 2';
-			backdrop.flags &= ~UIFLAG::HIDE;
+			backdrop.flags &= ~UIFLAG_HIDE;
 			ui_scale = o_uiscale;
 		}
 
@@ -239,7 +239,7 @@ void HUD_InitializeCaptions(void)
 		return (caption_list != 0);
 	};
 
-	uielement_c captionbox = spawn(uielement_c, owner: ui_hud, flags: UIFLAG::STRETCH | UIFLAG::SETALPHA, alpha: 1);
+	uielement_c captionbox = spawn(uielement_c, owner: ui_hud, flags: UIFLAG_STRETCH | UIFLAG_SETALPHA, alpha: 1);
 		captionbox.active_condition = captionbox_active;
 
 	uifill_c fillbox = spawn(uifill_c, owner: captionbox, origin: '0 -68', anchor: '0.5 1', justify: '0.5 1', size: '400 120', color: '-1 -1 -1', alpha: 0.001);

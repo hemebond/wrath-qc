@@ -1,5 +1,3 @@
-
-#include "journal.h"
 #include "localized_assets.h"
 uipicture_c journal_ui;
 
@@ -105,7 +103,7 @@ void Journal_Init(void)
 
 	float(uielement_c this) page_condtional = { if (journal_chapter != this.skin) return FALSE; return TRUE; }
 	//uipicture_c page = spawn(uipicture_c, owner: journal_ui,
-	//		flags: UIFLAG::FILL, color: '0.3 0.3 0.32', alpha: 0.9,
+	//		flags: UIFLAG_FILL, color: '0.3 0.3 0.32', alpha: 0.9,
 	//		origin: '82 24', size: '128 300');
 
 	typedef struct journalitem_t {
@@ -120,11 +118,11 @@ void Journal_Init(void)
 	void(uielement_c this) tab_world_click = { journal_chapter = this.skin; Journal_Sound(); Journal_ScrollToCurrentMap(); }
 	uipicture_c tab = spawn(uipicture_c, owner: journal_ui,
 		origin: '51 336', anchor: '0 0', justify: '0 0',
-		size: '88 48', image: journal_assets[JOURNAL_IMG::TABA_ACTIVE], skin: 1, flags: UIFLAG::CLICKABLE);
+		size: '88 48', image: journal_assets[JOURNAL_IMG::TABA_ACTIVE], skin: 1, flags: UIFLAG_CLICKABLE);
 		tab.prerender = tab_prerender;
 		tab.m_click = tab_world_click;
 	
-	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 192', skin: 1, flags: UIFLAG::CLIP, smoothspeed: 5);
+	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 192', skin: 1, flags: UIFLAG_CLIP, smoothspeed: 5);
 		page.active_condition = page_condtional;
 	uielement_c page2 = spawn(uielement_c, owner: journal_ui, origin: '256 24', size: '216 304', skin: 1);
 		page2.active_condition = page_condtional;
@@ -290,7 +288,7 @@ void Journal_Init(void)
 				}
 
 				uilocpicture_c map_label = spawn(uilocpicture_c, owner: episode_entry,
-					origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '128 16', flags: UIFLAG::SELECTABLE | UIFLAG::KEEPSELECT, skin: mapitem.itflag,
+					origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '128 16', flags: UIFLAG_SELECTABLE | UIFLAG_KEEPSELECT, skin: mapitem.itflag,
 					image: journal_label_assets[mapitem.label_index], image2: journal_label_assets[mapitem.label_index + 1], fallback_txt: journal_label_assets_string[mapitem.label_index],
 					fallback_sz: '10 10', fallback_color: '-1 -1 -1');
 					map_label.active_condition = map_hasitem;
@@ -316,7 +314,7 @@ void Journal_Init(void)
 					case 0:
 						//uipicture_c relic_icon = spawn(uipicture_c, owner: map_page, size: '184 184', origin: '16 56', 
 						//	skin: mapitem.relicflag, image: strzone(sprintf("gfx/journal/pages/relic_%s_large.tga", mapitem.name)));
-						uipicture_c relic_icon = spawn(uipicture_c, owner: map_page, flags: UIFLAG::STRETCH, skin: mapitem.relicflag, image: journal_page_assets[mapitem.page_index + JOURNAL_PAGE_IMG::RELIC_START]);
+						uipicture_c relic_icon = spawn(uipicture_c, owner: map_page, flags: UIFLAG_STRETCH, skin: mapitem.relicflag, image: journal_page_assets[mapitem.page_index + JOURNAL_PAGE_IMG::RELIC_START]);
 						relic_icon.active_condition = map_hasrelic;
 
 						// Reki (February 6 2024): for when the journal page is unlocalized and therefore blank
@@ -428,13 +426,13 @@ void Journal_Init(void)
 			
 			// scroll up
 			uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 32', anchor: '0 0', justify: '0 0', size: '32 40',
-				flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 1);
+				flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 1);
 				scroll.active_condition = scroll_conditional;
 				scroll.prerender = scroll_prerender;
 				scroll.m_click = scroll_click;
 			// scroll down
 			uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 272', anchor: '0 0', justify: '0 0', size: '32 40',
-				flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 1);
+				flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 1);
 				scroll.active_condition = scroll_conditional;
 				scroll.prerender = scroll_prerender;
 				scroll.m_click = scroll_click;
@@ -446,11 +444,11 @@ void Journal_Init(void)
 	////////////////////
 	uipicture_c tab = spawn(uipicture_c, owner: journal_ui,
 		origin: '144 336', anchor: '0 0', justify: '0 0',
-		size: '96 56', image: journal_assets[JOURNAL_IMG::TABB_ACTIVE], skin: 2, flags: UIFLAG::CLICKABLE);
+		size: '96 56', image: journal_assets[JOURNAL_IMG::TABB_ACTIVE], skin: 2, flags: UIFLAG_CLICKABLE);
 		tab.prerender = tab_prerender;
 		tab.m_click = tab_click;
 
-	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 32', skin: 2, flags: UIFLAG::CLIP);
+	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 32', skin: 2, flags: UIFLAG_CLIP);
 		page.active_condition = page_condtional;
 	uielement_c page2 = spawn(uielement_c, owner: journal_ui, origin: '256 24', size: '216 304', skin: 2);
 		page2.active_condition = page_condtional;
@@ -480,7 +478,7 @@ void Journal_Init(void)
 		{
 			journalitem_t wep = wep_list[i];
 			uilocpicture_c wep_label = spawn(uilocpicture_c, owner: page,
-				origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '128 16', flags: UIFLAG::SELECTABLE | UIFLAG::KEEPSELECT,
+				origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '128 16', flags: UIFLAG_SELECTABLE | UIFLAG_KEEPSELECT,
 				image: journal_label_assets[wep.label_index], image2: journal_label_assets[wep.label_index + 1], fallback_txt: journal_label_assets_string[wep.label_index],
 				fallback_sz: '10 10', fallback_color: '-1 -1 -1',
 				skin: wep.itflag);
@@ -497,13 +495,13 @@ void Journal_Init(void)
 
 		// scroll up
 		uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 32', anchor: '0 0', justify: '0 0', size: '32 40',
-			flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 2);
+			flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 2);
 			scroll.active_condition = scroll_conditional;
 			scroll.prerender = scroll_prerender;
 			scroll.m_click = scroll_click;
 		// scroll down
 		uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 272', anchor: '0 0', justify: '0 0', size: '32 40',
-			flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 2);
+			flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 2);
 			scroll.active_condition = scroll_conditional;
 			scroll.prerender = scroll_prerender;
 			scroll.m_click = scroll_click;
@@ -515,11 +513,11 @@ void Journal_Init(void)
 	////////////////////
 	uipicture_c tab = spawn(uipicture_c, owner: journal_ui,
 		origin: '264 328', anchor: '0 0', justify: '0 0',
-		size: '88 64', image: journal_assets[JOURNAL_IMG::TABC_ACTIVE], skin: 3, flags: UIFLAG::CLICKABLE);
+		size: '88 64', image: journal_assets[JOURNAL_IMG::TABC_ACTIVE], skin: 3, flags: UIFLAG_CLICKABLE);
 		tab.prerender = tab_prerender;
 		tab.m_click = tab_click;
 
-	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 32', skin: 3, flags: UIFLAG::CLIP);
+	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 32', skin: 3, flags: UIFLAG_CLIP);
 		page.active_condition = page_condtional;
 	uielement_c page2 = spawn(uielement_c, owner: journal_ui, origin: '256 24', size: '216 304', skin: 3);
 		page2.active_condition = page_condtional;
@@ -555,7 +553,7 @@ void Journal_Init(void)
 		{
 			journalitem_t monst = monster_list[i];
 			uilocpicture_c monst_label = spawn(uilocpicture_c, owner: page,
-				origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '128 16', flags: UIFLAG::SELECTABLE | UIFLAG::KEEPSELECT,
+				origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '128 16', flags: UIFLAG_SELECTABLE | UIFLAG_KEEPSELECT,
 				image: journal_label_assets[monst.label_index], image2: journal_label_assets[monst.label_index + 1], fallback_txt: journal_label_assets_string[monst.label_index],
 				fallback_sz: '10 10', fallback_color: '-1 -1 -1',
 				skin: monst.itflag);
@@ -571,13 +569,13 @@ void Journal_Init(void)
 		
 		// scroll up
 		uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 32', anchor: '0 0', justify: '0 0', size: '32 40',
-			flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 3);
+			flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 3);
 			scroll.active_condition = scroll_conditional;
 			scroll.prerender = scroll_prerender;
 			scroll.m_click = scroll_click;
 		// scroll down
 		uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 272', anchor: '0 0', justify: '0 0', size: '32 40',
-			flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 3);
+			flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 3);
 			scroll.active_condition = scroll_conditional;
 			scroll.prerender = scroll_prerender;
 			scroll.m_click = scroll_click;
@@ -589,12 +587,12 @@ void Journal_Init(void)
 	////////////////////
 	uipicture_c tab = spawn(uipicture_c, owner: journal_ui,
 		origin: '368 328', anchor: '0 0', justify: '0 0',
-		size: '96 64', image: journal_assets[JOURNAL_IMG::TABD_ACTIVE], skin: 4, flags: UIFLAG::CLICKABLE);
+		size: '96 64', image: journal_assets[JOURNAL_IMG::TABD_ACTIVE], skin: 4, flags: UIFLAG_CLICKABLE);
 		tab.prerender = tab_prerender;
 		tab.m_click = tab_click;
 	}
 
-	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 32', skin: 4, flags: UIFLAG::CLIP);
+	uielement_c page = spawn(uismoothlist_c, owner: journal_ui, origin: '82 80', size: '128 192', separation: '0 32', skin: 4, flags: UIFLAG_CLIP);
 		page.active_condition = page_condtional;
 	uielement_c page2 = spawn(uielement_c, owner: journal_ui, origin: '256 24', size: '216 304', skin: 4);
 		page2.active_condition = page_condtional;
@@ -628,7 +626,7 @@ void Journal_Init(void)
 				continue;
 			
 			uitext_c note_label = spawn(uitext_c, owner: page,
-				origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '12 12', flags: UIFLAG::SELECTABLE | UIFLAG::KEEPSELECT, skin: j,
+				origin: '0 0', anchor: '0.5 0', justify: '0.5 0', size: '12 12', flags: UIFLAG_SELECTABLE | UIFLAG_KEEPSELECT, skin: j,
 				text: jentry.title, color: '-1 -1 -1');
 				note_label.active_condition = note_hasnote;
 				note_label.prerender = note_prerender;
@@ -640,19 +638,19 @@ void Journal_Init(void)
 				note_label.size[0] *= (note_label.owner.size[0] / sz);
 			}
 			
-			uijournalpage_c note_page = spawn(uijournalpage_c, owner: page2, size: '216 304', entry: jentry, partner: note_label, flags: UIFLAG::CLIP, entry_offset: '12 10');
+			uijournalpage_c note_page = spawn(uijournalpage_c, owner: page2, size: '216 304', entry: jentry, partner: note_label, flags: UIFLAG_CLIP, entry_offset: '12 10');
 			note_page.active_condition = note_isselected;
 		}
 		
 		// scroll up
 		uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 32', anchor: '0 0', justify: '0 0', size: '32 40',
-			flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 4);
+			flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_up", image2: "gfx/journal/arrow_up_active", partner: page, skin: -1, colormap: 4);
 			scroll.active_condition = scroll_conditional;
 			scroll.prerender = scroll_prerender;
 			scroll.m_click = scroll_click;
 		// scroll down
 		uipicture_c scroll = spawn(uipicture_c, owner: journal_ui, origin: '128 272', anchor: '0 0', justify: '0 0', size: '32 40',
-			flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 4);
+			flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/journal/arrow_down", image2: "gfx/journal/arrow_down_active", partner: page, skin: 1, colormap: 4);
 			scroll.active_condition = scroll_conditional;
 			scroll.prerender = scroll_prerender;
 			scroll.m_click = scroll_click;
@@ -684,7 +682,7 @@ void Journal_RenderNote(journalentry_c note, vector drawoffset, vector drawscale
 		switch (el.type)
 		{
 			// RENDER JOURNAL TEXT
-			case JOURNAL_ETYPE::TEXT:
+			case JOURNAL_ETYPE_TEXT:
 				journaltext_c txt = (journaltext_c)el;
 				vector sz = [txt.fontsize[0] * drawscale[0], txt.fontsize[1] * drawscale[1]];;
 				drawfont = txt.font;
@@ -694,7 +692,7 @@ void Journal_RenderNote(journalentry_c note, vector drawoffset, vector drawscale
 				break;
 			
 			// RENDER JOURNAL PICTURES
-			case JOURNAL_ETYPE::PIC:
+			case JOURNAL_ETYPE_PIC:
 				journalpic_c pic = (journalpic_c)el;
 				vector sz = [pic.pos[0] * drawscale[0], pic.pos[1] * drawscale[1]];
 				
@@ -707,7 +705,7 @@ void Journal_RenderNote(journalentry_c note, vector drawoffset, vector drawscale
 
 void journaltext_c :: journaltext_c() // constructor for text element
 {
-	this.type = JOURNAL_ETYPE::TEXT;
+	this.type = JOURNAL_ETYPE_TEXT;
 	
 	// link into entry list
 	if (this.owner)
@@ -727,7 +725,7 @@ void journaltext_c :: journaltext_c() // constructor for text element
 
 void journalpic_c :: journalpic_c() // constructor for pic element
 {
-	this.type = JOURNAL_ETYPE::PIC;
+	this.type = JOURNAL_ETYPE_PIC;
 	
 	// link into entry list (at the end so draw order is proper)
 	if (this.owner)
@@ -954,11 +952,11 @@ journalentry_c Journal_ParseEntry(string path)
 	{
 		switch (el.type)
 		{
-			case JOURNAL_ETYPE::TEXT:
+			case JOURNAL_ETYPE_TEXT:
 				journaltext_c txt = (journaltext_c)el;
 				//dprint(sprintf("TXT (%g %g %g): %s\n", txt.font, txt.fontsize[0], txt.fontsize[1], txt.text));
 				break;
-			case JOURNAL_ETYPE::PIC:
+			case JOURNAL_ETYPE_PIC:
 				journalpic_c pic = (journalpic_c)el;
 				//dprint(sprintf("PIC (%g %g): %s\n", pic.size[0], pic.size[1], pic.image));
 				break;

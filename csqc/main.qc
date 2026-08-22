@@ -1,7 +1,6 @@
 // --------------------------------------------------------------------------
 // BEGIN REQUIRED CSQC FUNCTIONS
 
-#include "uielement.h"
 #include "journal.h"
 #include "localization.h"
 
@@ -133,7 +132,7 @@ void CSQC_Init(void)
 	}
 	// Reki: Init HUD elements
 	HUD_InitializeUnderUI();
-	ui_hud = spawn(uielement_c, flags: UIFLAG::STRETCH | UIFLAG::MULTALPHA, alpha: 1);
+	ui_hud = spawn(uielement_c, flags: UIFLAG_STRETCH | UIFLAG_MULTALPHA, alpha: 1);
 	HUD_InitializeNotifications();
 	HUD_InitializeUI();
 	HUD_InitializeCaptions();
@@ -150,7 +149,7 @@ void CSQC_Init(void)
 	//
 
 	// Reki (May 8 2023): Init steam stuff
-	Steam_InitStats();
+	// Steam_InitStats();
 	
 	// Reki (May 31 2023): Init common.LANG.po
 	// Reki (October 8 2023): Init csprogs.LANG.po as well
@@ -381,10 +380,10 @@ void GameCommand(string s)
 	float argc = tokenize(s);
 	string cmd = argv(0);
 
-	if (cmd == "achievementvalue")
-		CSQC_Steam_AchievementValue(argv(1), stof(argv(2)));
-	else if (cmd == "statvalue")
-		CSQC_Steam_StatValue(argv(1), stof(argv(2)));
+	// if (cmd == "achievementvalue")
+	// 	CSQC_Steam_AchievementValue(argv(1), stof(argv(2)));
+	// else if (cmd == "statvalue")
+	// 	CSQC_Steam_StatValue(argv(1), stof(argv(2)));
 }
 
 // CSQC_InputEvent : Used to perform actions based on any key pressed or released by the client.
@@ -545,7 +544,7 @@ float CSQC_InputEvent(float EventType, float charx, float scany)
 			if (!ui_usemouse)
 				ui_selected = __NULL__;
 			
-			if ((ui_selected.flags & UIFLAG::CLICKABLE) && !(ui_selected.flags & UIFLAG::SELECTABLE))
+			if ((ui_selected.flags & UIFLAG_CLICKABLE) && !(ui_selected.flags & UIFLAG_SELECTABLE))
 			{
 				uielement_c u_sel = ui_selected;
 				if (ui_selected && ui_selected.m_click)
@@ -555,7 +554,7 @@ float CSQC_InputEvent(float EventType, float charx, float scany)
 			}
 			
 			// keep select means blank space doesn't matter
-			if (old_selected.flags & UIFLAG::KEEPSELECT && !ui_selected)
+			if (old_selected.flags & UIFLAG_KEEPSELECT && !ui_selected)
 			{
 				ui_selected = old_selected;
 			}
@@ -787,8 +786,8 @@ float CSQC_Parse_TempEntity()
 
 					if (fexists_pak(cntimg.image))
 					{
-						cnt.flags |= UIFLAG::HIDE;
-						cntimg.flags &= ~UIFLAG::HIDE;
+						cnt.flags |= UIFLAG_HIDE;
+						cntimg.flags &= ~UIFLAG_HIDE;
 
 						vector isize = draw_getimagesize(cntimg.image);
 						isize[1] = max(isize[1], 1); // prevent div0 error
@@ -796,8 +795,8 @@ float CSQC_Parse_TempEntity()
 					}
 					else
 					{
-						cnt.flags &= ~UIFLAG::HIDE;
-						cntimg.flags |= UIFLAG::HIDE;
+						cnt.flags &= ~UIFLAG_HIDE;
+						cntimg.flags |= UIFLAG_HIDE;
 					}
 
 					return TRUE;
@@ -811,8 +810,8 @@ float CSQC_Parse_TempEntity()
 			uipicture_c msgpic = (uipicture_c)line.partner3;
 			uitext_c cnt = (uitext_c)line.partner4;
 			uipicture_c cntimg = (uipicture_c)line.partner5;
-			cnt.flags |= UIFLAG::HIDE; // hide count on new elements
-			cntimg.flags |= UIFLAG::HIDE;
+			cnt.flags |= UIFLAG_HIDE; // hide count on new elements
+			cntimg.flags |= UIFLAG_HIDE;
 
 			// figure out icon size
 			if (msg_mode & 0x02)
@@ -824,12 +823,12 @@ float CSQC_Parse_TempEntity()
 				msg.origin = msgpic.origin = [icon.size[0] + 6, 0];
 
 				precache_pic(s_icon);
-				icon.flags &= ~UIFLAG::HIDE;
+				icon.flags &= ~UIFLAG_HIDE;
 			}
 			else
 			{
 				msg.origin = msgpic.origin = '0 0';
-				icon.flags |= UIFLAG::HIDE;
+				icon.flags |= UIFLAG_HIDE;
 			}
 			//
 
@@ -837,11 +836,11 @@ float CSQC_Parse_TempEntity()
 			if (msg_mode & 0x01) // img mode
 			{
 				msg.text = strzone(s_msg);
-				msg.flags |= UIFLAG::HIDE;
+				msg.flags |= UIFLAG_HIDE;
 
 				precache_pic(s_msg_pic);
 				msgpic.image = strzone(s_msg_pic);
-				msgpic.flags &= ~UIFLAG::HIDE;
+				msgpic.flags &= ~UIFLAG_HIDE;
 
 				vector isize = draw_getimagesize(s_msg_pic);
 				isize[1] = max(isize[1], 1); // prevent div0 error
@@ -853,10 +852,10 @@ float CSQC_Parse_TempEntity()
 			else // text mode
 			{
 				msg.text = strzone(s_msg);
-				msg.flags &= ~UIFLAG::HIDE;
+				msg.flags &= ~UIFLAG_HIDE;
 
 				msgpic.image = strzone("");
-				msgpic.flags |= UIFLAG::HIDE;
+				msgpic.flags |= UIFLAG_HIDE;
 
 				cnt.origin = cntimg.origin = msg.origin + [msg.totalsize()[0] + 8, 0];
 			}
@@ -880,9 +879,9 @@ float CSQC_Parse_TempEntity()
 			msg.origin = [icon.size[0] + 6, 0];
 			//
 
-			icon.flags &= ~UIFLAG::HIDE;
-			msg.flags &= ~UIFLAG::HIDE;
-			msgimg.flags |= UIFLAG::HIDE;
+			icon.flags &= ~UIFLAG_HIDE;
+			msg.flags &= ~UIFLAG_HIDE;
+			msgimg.flags |= UIFLAG_HIDE;
 
 			icon.image = strzone(s_icon);
 			string note_name = "INVALID NOTE";
@@ -898,11 +897,11 @@ float CSQC_Parse_TempEntity()
 				msgimg.image = strzone(s_msg_pic);
 
 				msg.text = strzone(s_msg);
-				msg.flags |= UIFLAG::HIDE;
+				msg.flags |= UIFLAG_HIDE;
 
 				precache_pic(s_msg_pic);
 				msgimg.image = strzone(s_msg_pic);
-				msgimg.flags &= ~UIFLAG::HIDE;
+				msgimg.flags &= ~UIFLAG_HIDE;
 
 				vector isize = draw_getimagesize(s_msg_pic);
 				isize[1] = max(isize[1], 1); // prevent div0 error
@@ -911,10 +910,10 @@ float CSQC_Parse_TempEntity()
 			else
 			{
 				msg.text = strzone(s_msg);
-				msg.flags &= ~UIFLAG::HIDE;
+				msg.flags &= ~UIFLAG_HIDE;
 
 				msgimg.image = strzone("");
-				msgimg.flags |= UIFLAG::HIDE;
+				msgimg.flags |= UIFLAG_HIDE;
 			}
 		break;
 		case TEMPENT::NOTIFICATION_CONTROL:
@@ -957,17 +956,17 @@ float CSQC_Parse_TempEntity()
 		break;
 		case TEMPENT::ACHIEVEMENT_UNLOCK:
 			float achievement = ReadShort();
-			Steam_AchievementUnlock(world, achievement);
+			// Steam_AchievementUnlock(world, achievement);
 		break;
 		case TEMPENT::STAT_INCREMENT:
 			float stat = ReadShort();
 			float value = ReadLong() / 100;
-			Steam_StatIncrement(world, stat, value);
+			// Steam_StatIncrement(world, stat, value);
 		break;
 		case TEMPENT::STAT_SET:
 			float stat = ReadShort();
 			float value = ReadLong() / 100;
-			Steam_StatSet(world, stat, value);
+			// Steam_StatSet(world, stat, value);
 		break;
 		case TEMPENT::CRYSTALLIZER_BEZIER:
 			TempEnt_Crystallizer_Bezier();

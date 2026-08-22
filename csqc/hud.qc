@@ -511,7 +511,7 @@ void HUD_InitializeUnderUI(void)
 {
 	float(uielement_c this) condtional = { if (getstatf(STAT_ARTIFACTTIME) && (getstatf(STAT_RADIALACTIVE) == 2)) {appparatus_using = 1; return TRUE; } appparatus_using = 0; return FALSE; };
 	void(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) apparatus_prerender = { alpha_to_render *= appparatus_flash; };
-	uifill_c apparatus_fill = spawn(uifill_c, flags: UIFLAG::STRETCH, color: '0 0 0.25', alpha: 0.25);
+	uifill_c apparatus_fill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '0 0 0.25', alpha: 0.25);
 		apparatus_fill.active_condition = condtional;
 		apparatus_fill.prerender = apparatus_prerender;
 	
@@ -523,7 +523,7 @@ void HUD_InitializeUnderUI(void)
 	// healthhaze fill
 	float(uielement_c this) condtional = { if (getstatf(STAT_HEALTHHAZE) > 0) return TRUE; return FALSE; };
 	void(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) healthhaze_prerender = { float a = getstatf(STAT_HEALTHHAZE); if (floor(getstatf(STAT_THWOFG))) a = 0; alpha_to_render *= a; };
-	uifill_c healthhaze_fill = spawn(uifill_c, flags: UIFLAG::STRETCH, color: '0.7 -1 -1', alpha: 0.5);
+	uifill_c healthhaze_fill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '0.7 -1 -1', alpha: 0.5);
 		healthhaze_fill.active_condition = condtional;
 		healthhaze_fill.prerender = healthhaze_prerender;
 }
@@ -569,9 +569,9 @@ void HUD_InitializeUI(void)
 		xhair.preloop = xhair_preloop;
 		xhair.active_condition = xhair_active;
 	
-	xhair.partner = spawn(uipicture_c, owner: xhair, flags: UIFLAG::STRETCH, image: "gfx/hud/crosshair1.tga");
-	xhair.partner2 = spawn(uipicture_c, owner: xhair, flags: UIFLAG::STRETCH, image: "gfx/hud/crosshair1_active.tga");
-	xhair.partner3 = spawn(uipicture_c, owner: xhair, flags: UIFLAG::STRETCH, image: "gfx/hud/crosshair1_use.tga");
+	xhair.partner = spawn(uipicture_c, owner: xhair, flags: UIFLAG_STRETCH, image: "gfx/hud/crosshair1.tga");
+	xhair.partner2 = spawn(uipicture_c, owner: xhair, flags: UIFLAG_STRETCH, image: "gfx/hud/crosshair1_active.tga");
+	xhair.partner3 = spawn(uipicture_c, owner: xhair, flags: UIFLAG_STRETCH, image: "gfx/hud/crosshair1_use.tga");
 
 	// Health Numbers
 	void(uielement_c this, __inout vector position) hp_preloop = {
@@ -617,18 +617,18 @@ void HUD_InitializeUI(void)
 		((uispritesheet_c)this.partner2).sprite[1] = pulseicon;
 		((uispritesheet_c)this.partner3).sprite[1] = pulseicon;
 
-		this.partner.flags &= ~UIFLAG::HIDE;
-		this.partner2.flags &= ~UIFLAG::HIDE;
-		this.partner3.flags &= ~UIFLAG::HIDE;
+		this.partner.flags &= ~UIFLAG_HIDE;
+		this.partner2.flags &= ~UIFLAG_HIDE;
+		this.partner3.flags &= ~UIFLAG_HIDE;
 		if (health < 100)
 		{
-			this.partner3.flags |= UIFLAG::HIDE;
+			this.partner3.flags |= UIFLAG_HIDE;
 			if (health < 10)
 			{
-				this.partner2.flags |= UIFLAG::HIDE;
+				this.partner2.flags |= UIFLAG_HIDE;
 				if (health <= 0)
 				{
-					this.partner.flags |= UIFLAG::HIDE;
+					this.partner.flags |= UIFLAG_HIDE;
 				}
 				else
 				{
@@ -669,18 +669,18 @@ void HUD_InitializeUI(void)
 		((uispritesheet_c)this.partner2).sprite[1] = arphicon; 
 		((uispritesheet_c)this.partner3).sprite[1] = arphicon;
 
-		this.partner.flags &= ~UIFLAG::HIDE;
-		this.partner2.flags &= ~UIFLAG::HIDE;
-		this.partner3.flags &= ~UIFLAG::HIDE;
+		this.partner.flags &= ~UIFLAG_HIDE;
+		this.partner2.flags &= ~UIFLAG_HIDE;
+		this.partner3.flags &= ~UIFLAG_HIDE;
 		if (armorv < 100)
 		{
-			this.partner3.flags |= UIFLAG::HIDE;
+			this.partner3.flags |= UIFLAG_HIDE;
 			if (armorv < 10)
 			{
-				this.partner2.flags |= UIFLAG::HIDE;
+				this.partner2.flags |= UIFLAG_HIDE;
 				if (armorv <= 0)
 				{
-					this.partner.flags |= UIFLAG::HIDE;
+					this.partner.flags |= UIFLAG_HIDE;
 				}
 				else
 				{
@@ -721,18 +721,18 @@ void HUD_InitializeUI(void)
 		((uispritesheet_c)this.partner2).sprite[1] = drphicon; 
 		((uispritesheet_c)this.partner3).sprite[1] = drphicon;
 
-		this.partner.flags &= ~UIFLAG::HIDE;
-		this.partner2.flags &= ~UIFLAG::HIDE;
-		this.partner3.flags &= ~UIFLAG::HIDE;
+		this.partner.flags &= ~UIFLAG_HIDE;
+		this.partner2.flags &= ~UIFLAG_HIDE;
+		this.partner3.flags &= ~UIFLAG_HIDE;
 		if (armorv < 100)
 		{
-			this.partner3.flags |= UIFLAG::HIDE;
+			this.partner3.flags |= UIFLAG_HIDE;
 			if (armorv < 10)
 			{
-				this.partner2.flags |= UIFLAG::HIDE;
+				this.partner2.flags |= UIFLAG_HIDE;
 				if (armorv <= 0)
 				{
-					this.partner.flags |= UIFLAG::HIDE;
+					this.partner.flags |= UIFLAG_HIDE;
 				}
 				else
 				{
@@ -762,8 +762,8 @@ void HUD_InitializeUI(void)
 	void(uielement_c this, __inout vector position) tether_preloop = {
 		float tethers = floor(getstatf(STAT_RD_ST));
 		float tether_time = getstatf(STAT_TETHERTIME);
-		this.partner.flags &= ~UIFLAG::HIDE;
-		this.partner2.flags &= ~UIFLAG::HIDE;
+		this.partner.flags &= ~UIFLAG_HIDE;
+		this.partner2.flags &= ~UIFLAG_HIDE;
 
 		uipicture_c tether_hightlightA = (uipicture_c)this.partner3;
 		uipicture_c tether_hightlightB = (uipicture_c)this.partner4;
@@ -783,7 +783,7 @@ void HUD_InitializeUI(void)
 
 		if (tethers < 10)
 		{
-			this.partner2.flags |= UIFLAG::HIDE;
+			this.partner2.flags |= UIFLAG_HIDE;
 			this.partner.skin = tethers % 10;
 		}
 		else
@@ -825,8 +825,8 @@ void HUD_InitializeUI(void)
 		//uipicture_c artifact_hightlightB = (uipicture_c)this.partner4;
 
 		// we don't zone the numbers, so hide them unless told otherwise
-		this.partner.flags |= UIFLAG::HIDE;
-		this.partner2.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
+		this.partner2.flags |= UIFLAG_HIDE;
 		//
 
 		if (artifact_active > 0 && artifact_active <= 10)
@@ -863,7 +863,7 @@ void HUD_InitializeUI(void)
 		artifact_time = floor(artifact_time);
 		if (artifact_time > 0)
 		{
-			ring_sprite.flags &= ~UIFLAG::HIDE;
+			ring_sprite.flags &= ~UIFLAG_HIDE;
 
 			float ring_time = min(artifact_time, 135);
 			ring_sprite.sprite = [ring_time % 12, ring_time / 12];
@@ -897,15 +897,15 @@ void HUD_InitializeUI(void)
 		}
 		else
 		{
-			ring_sprite.flags |= UIFLAG::HIDE;
+			ring_sprite.flags |= UIFLAG_HIDE;
 		}
 
 		vector pulseicon = [nexartifacticon * 0.1, nexartifacticon * 0.1, nexartifacticon * 0.1];
 
-		//ring_pulse.flags |= UIFLAG::HIDE;
-		artifact_icon.flags |= UIFLAG::HIDE;
-		//artifact_hightlightA.flags |= UIFLAG::HIDE;
-		//artifact_hightlightB.flags |= UIFLAG::HIDE;
+		//ring_pulse.flags |= UIFLAG_HIDE;
+		artifact_icon.flags |= UIFLAG_HIDE;
+		//artifact_hightlightA.flags |= UIFLAG_HIDE;
+		//artifact_hightlightB.flags |= UIFLAG_HIDE;
 		if (artifact_active > 0 && artifact_active < artifact_names.length)
 		{
 			artifact_icon.image = sprintf("%s_hud.tga", artifact_names[artifact_active]);
@@ -931,24 +931,24 @@ void HUD_InitializeUI(void)
 			//artifact_hightlightA.alpha = hla_alpha;
 			//artifact_hightlightB.alpha = hlb_alpha;
 
-			artifact_icon.flags &= ~UIFLAG::HIDE;
-			//artifact_hightlightA.flags &= ~UIFLAG::HIDE;
-			//artifact_hightlightB.flags &= ~UIFLAG::HIDE;
+			artifact_icon.flags &= ~UIFLAG_HIDE;
+			//artifact_hightlightA.flags &= ~UIFLAG_HIDE;
+			//artifact_hightlightB.flags &= ~UIFLAG_HIDE;
 
 			if (artifact_time > 0)
 			{
-				//this.partner.flags |= UIFLAG::HIDE;
-				//this.partner2.flags |= UIFLAG::HIDE;
+				//this.partner.flags |= UIFLAG_HIDE;
+				//this.partner2.flags |= UIFLAG_HIDE;
 				//return;
 			}
 
-			this.partner.flags &= ~UIFLAG::HIDE;
-			this.partner2.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
+			this.partner2.flags &= ~UIFLAG_HIDE;
 			if (artifact_amount < 10)
 			{
-				this.partner2.flags |= UIFLAG::HIDE;
+				this.partner2.flags |= UIFLAG_HIDE;
 				if (artifact_amount <= 0)
-					this.partner.flags |= UIFLAG::HIDE;
+					this.partner.flags |= UIFLAG_HIDE;
 				else
 					this.partner.skin = artifact_amount % 10;
 			}
@@ -959,7 +959,7 @@ void HUD_InitializeUI(void)
 			}
 	
 			((uipicture_c)this.partner).image = sprintf("gfx/artifactmenu/artifact_num%g.tga", this.partner.skin);
-			if !(this.partner2.flags & UIFLAG::HIDE)
+			if !(this.partner2.flags & UIFLAG_HIDE)
 				((uipicture_c)this.partner2).image = sprintf("gfx/artifactmenu/artifact_num%g.tga", this.partner2.skin);
 		}
 	}
@@ -1072,17 +1072,17 @@ void HUD_InitializeUI(void)
 		((uispritesheet_c)this.partner2).image = picofnammo; 
 		((uispritesheet_c)this.partner3).image = picofnammo;
 
-		this.partner.flags &= ~UIFLAG::HIDE;
-		this.partner2.flags &= ~UIFLAG::HIDE;
-		this.partner3.flags &= ~UIFLAG::HIDE;
+		this.partner.flags &= ~UIFLAG_HIDE;
+		this.partner2.flags &= ~UIFLAG_HIDE;
+		this.partner3.flags &= ~UIFLAG_HIDE;
 		if (ammov < 100)
 		{
-			this.partner3.flags |= UIFLAG::HIDE;
+			this.partner3.flags |= UIFLAG_HIDE;
 			if (ammov < 10)
 			{
-				this.partner2.flags |= UIFLAG::HIDE;
+				this.partner2.flags |= UIFLAG_HIDE;
 				if (ammov < 0)
-				this.partner.flags |= UIFLAG::HIDE;
+				this.partner.flags |= UIFLAG_HIDE;
 				else
 					((uispritesheet_c)this.partner).sprite[0] = ammov % 10;
 			}
@@ -1141,36 +1141,36 @@ void HUD_InitializeUI(void)
 		uipicture_c relic4 = (uipicture_c)this.partner4;
 		uipicture_c relic5 = (uipicture_c)this.partner5;
 
-		relic1.flags |= UIFLAG::HIDE;
-		relic2.flags |= UIFLAG::HIDE;
-		relic3.flags |= UIFLAG::HIDE;
-		relic4.flags |= UIFLAG::HIDE;
-		relic5.flags |= UIFLAG::HIDE;
+		relic1.flags |= UIFLAG_HIDE;
+		relic2.flags |= UIFLAG_HIDE;
+		relic3.flags |= UIFLAG_HIDE;
+		relic4.flags |= UIFLAG_HIDE;
+		relic5.flags |= UIFLAG_HIDE;
 
 		if (relic_p1)
 		{
 			relic1.image = relic_images[relic_p1];
-			relic1.flags &= ~UIFLAG::HIDE;
+			relic1.flags &= ~UIFLAG_HIDE;
 		}
 		if (relic_p2)
 		{
 			relic2.image = relic_images[relic_p2];
-			relic2.flags &= ~UIFLAG::HIDE;
+			relic2.flags &= ~UIFLAG_HIDE;
 		}
 		if (relic_p3)
 		{
 			relic3.image = relic_images[relic_p3];
-			relic3.flags &= ~UIFLAG::HIDE;
+			relic3.flags &= ~UIFLAG_HIDE;
 		}
 		if (relic_p4)
 		{
 			relic4.image = relic_images[relic_p4];
-			relic4.flags &= ~UIFLAG::HIDE;
+			relic4.flags &= ~UIFLAG_HIDE;
 		}
 		if (relic_p5)
 		{
 			relic5.image = relic_images[relic_p5];
-			relic5.flags &= ~UIFLAG::HIDE;
+			relic5.flags &= ~UIFLAG_HIDE;
 		}
 	}
 
@@ -1201,25 +1201,25 @@ void HUD_InitializeUI(void)
 		uipicture_c key2 = (uipicture_c)this.partner2;
 		uipicture_c key3 = (uipicture_c)this.partner3;
 
-		key1.flags |= UIFLAG::HIDE;
-		key2.flags |= UIFLAG::HIDE;
-		key3.flags |= UIFLAG::HIDE;
+		key1.flags |= UIFLAG_HIDE;
+		key2.flags |= UIFLAG_HIDE;
+		key3.flags |= UIFLAG_HIDE;
 
 
 		if (key_p1)
 		{
 			key1.image = keys_images[key_p1];
-			key1.flags &= ~UIFLAG::HIDE;
+			key1.flags &= ~UIFLAG_HIDE;
 		}
 		if (key_p2)
 		{
 			key2.image = keys_images[key_p2];
-			key2.flags &= ~UIFLAG::HIDE;
+			key2.flags &= ~UIFLAG_HIDE;
 		}
 		if (key_p3)
 		{
 			key3.image = keys_images[key_p3];
-			key3.flags &= ~UIFLAG::HIDE;
+			key3.flags &= ~UIFLAG_HIDE;
 		}
 	}
 
@@ -1257,7 +1257,7 @@ void HUD_InitializeBackfill(void)
 				this.alpha = max(0, this.alpha - (clframetime * 6));
 		}
 	}
-	uifill_c backfill = spawn(uifill_c, flags: UIFLAG::STRETCH, color: '-1 -1 -1', skin: 0.65);
+	uifill_c backfill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '-1 -1 -1', skin: 0.65);
 		backfill.preloop = backfill_preloop;
 }
 
@@ -1395,9 +1395,9 @@ void HUD_InitializeArtifactRadial(void)
 		cursor.origin[0] = floor(cursor.origin[0]);
 		cursor.origin[1] = floor(cursor.origin[1]);
 
-		large_icon.flags |= UIFLAG::HIDE;
-		large_text.flags |= UIFLAG::HIDE;
-		center_ring.flags |= UIFLAG::HIDE;
+		large_icon.flags |= UIFLAG_HIDE;
+		large_text.flags |= UIFLAG_HIDE;
+		center_ring.flags |= UIFLAG_HIDE;
 
 		#define RADIAL_SELECT_THRESHOLD 16
 		if (input_mode != IN_MODE_GAMEPAD) // gamepads get special treatment
@@ -1442,9 +1442,9 @@ void HUD_InitializeArtifactRadial(void)
 					large_text.size[0] = isz[0] * (80 / isz[1]);
 				}
 
-				large_icon.flags &= ~UIFLAG::HIDE;
-				large_text.flags &= ~UIFLAG::HIDE;
-				center_ring.flags &= ~UIFLAG::HIDE;
+				large_icon.flags &= ~UIFLAG_HIDE;
+				large_text.flags &= ~UIFLAG_HIDE;
+				center_ring.flags &= ~UIFLAG_HIDE;
 			}
 		}
 
@@ -1461,28 +1461,28 @@ void HUD_InitializeArtifactRadial(void)
 		uielement_c num2 = numcontainer.partner2;
 		float index = radial_artifact_order[bound(0, this.colormap, 9)];
 
-		num1.flags |= UIFLAG::HIDE;
-		num2.flags |= UIFLAG::HIDE;
+		num1.flags |= UIFLAG_HIDE;
+		num2.flags |= UIFLAG_HIDE;
 
-		icon.flags |= UIFLAG::HIDE;
-		highlight.flags |= UIFLAG::HIDE;
+		icon.flags |= UIFLAG_HIDE;
+		highlight.flags |= UIFLAG_HIDE;
 		if (!getstatf(STAT_RD_MR + (index)))
 			return;
 
-		icon.flags &= ~UIFLAG::HIDE;
+		icon.flags &= ~UIFLAG_HIDE;
 		if (radial_selected == index + 1)
-			highlight.flags &= ~UIFLAG::HIDE;
+			highlight.flags &= ~UIFLAG_HIDE;
 		
 		float amount = getstatf(STAT_RD_MR + (index));
 		if (amount >= 10)
 		{
-			num1.flags &= ~UIFLAG::HIDE;
+			num1.flags &= ~UIFLAG_HIDE;
 			num1.skin = floor((amount % 100) / 10);
 
 			num1.origin = '0 0';
 			num2.origin = '6 0';
 			
-			num2.flags &= ~UIFLAG::HIDE;
+			num2.flags &= ~UIFLAG_HIDE;
 			num2.skin = amount % 10;
 		}
 		else if (amount >= 1)
@@ -1490,7 +1490,7 @@ void HUD_InitializeArtifactRadial(void)
 			num1.origin = '3 0';
 
 			num1.skin = amount % 10;
-			num1.flags &= ~UIFLAG::HIDE;
+			num1.flags &= ~UIFLAG_HIDE;
 		}	
 		
 		((uipicture_c)num1).image = sprintf("gfx/artifactmenu/artifact_num%g.tga", num1.skin);
@@ -1498,7 +1498,7 @@ void HUD_InitializeArtifactRadial(void)
 	};
 
 
-	uifill_c radial_fill = spawn(uifill_c, flags: UIFLAG::STRETCH, color: '-1 -1 -1', alpha: 0.65);
+	uifill_c radial_fill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '-1 -1 -1', alpha: 0.65);
 		radial_fill.active_condition = condtional;
 		radial_fill.prerender = radial_prerender;
 		radial_fill.preloop = radial_preloop;
@@ -1611,7 +1611,7 @@ void HUD_InitializeDeathMenu(void)
 		localcmd("scratch3 0\n");
 	};
 
-	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG::CLICKABLE, fallback_sz: '18 18',
+	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG_CLICKABLE, fallback_sz: '18 18',
 		image: deathmenu_assets[DEATHMENU_IMG::DEPART], image2: deathmenu_assets[DEATHMENU_IMG::DEPART_ACTIVE], fallback_txt: deathmenu_assets_string[DEATHMENU_IMG::DEPART]);
 		button.prerender = button_highlight;
 		button.prerender_text = buttontxt_highlight;
@@ -1646,7 +1646,7 @@ void HUD_InitializeDeathMenu(void)
 		localcmd("scratch3 0\n");
 	};
 
-	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG::CLICKABLE, fallback_sz: '18 18',
+	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG_CLICKABLE, fallback_sz: '18 18',
 		image: deathmenu_assets[DEATHMENU_IMG::RESTART], image2: deathmenu_assets[DEATHMENU_IMG::RESTART_ACTIVE], fallback_txt: deathmenu_assets_string[DEATHMENU_IMG::RESTART]);
 		button.prerender = button_highlight;
 		button.prerender_text = buttontxt_highlight;
@@ -1686,7 +1686,7 @@ void HUD_InitializeDeathMenu(void)
 		localcmd("scratch3 0\n");
 	};
 
-	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG::CLICKABLE, fallback_sz: '18 18',
+	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG_CLICKABLE, fallback_sz: '18 18',
 		image: deathmenu_assets[DEATHMENU_IMG::SHRINE], image2: deathmenu_assets[DEATHMENU_IMG::SHRINE_ACTIVE], fallback_txt: deathmenu_assets_string[DEATHMENU_IMG::SHRINE]);
 		button.prerender = button_highlight;
 		button.prerender_text = buttontxt_highlight;
@@ -1728,7 +1728,7 @@ void HUD_InitializeDeathMenu(void)
 		load_tether();
 		localcmd("scratch3 0\n");
 	};
-	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG::CLICKABLE, fallback_sz: '18 18',
+	uilocpicture_c button = spawn(uilocpicture_c, owner: deathmenu, anchor: '0.5 1', size: '300 32', justify: '0.5 0.5', flags: UIFLAG_CLICKABLE, fallback_sz: '18 18',
 		image: deathmenu_assets[DEATHMENU_IMG::SOULTETHER], image2: deathmenu_assets[DEATHMENU_IMG::SOULTETHER_ACTIVE], fallback_txt: deathmenu_assets_string[DEATHMENU_IMG::SOULTETHER]);
 		button.prerender = button_highlight;
 		button.prerender_text = buttontxt_highlight;
@@ -1820,7 +1820,7 @@ void HUD_InitializeEndscreen(void)
 	};
 	
 	precache_pic("gfx/splashes/endgame.tga");
-	uifill_c endscreen = spawn(uifill_c, flags: UIFLAG::STRETCH); endscreen.color = '0 0 0'; endscreen.alpha = 0;
+	uifill_c endscreen = spawn(uifill_c, flags: UIFLAG_STRETCH); endscreen.color = '0 0 0'; endscreen.alpha = 0;
 		endscreen.active_condition = endscreen_conditional;
 		endscreen.preloop = endscreen_preloop;
 	uipicture_c splash = spawn(uipicture_c, owner: endscreen, size: '960 540', anchor: '0.5 0.5', justify: '0.5 0.5', image: "gfx/splashes/endgame.tga"); splash.alpha = 0;

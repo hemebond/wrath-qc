@@ -130,11 +130,11 @@ void HUD_InitializeEndscreen(void)
 	};
 	
 
-	uielement_c endscreen = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	uielement_c endscreen = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		endscreen.active_condition = endscreen_conditional;
 		endscreen.preloop = endscreen_preloop;
-	uifill_c backsplash = spawn(uifill_c, flags: UIFLAG::STRETCH, owner: endscreen); backsplash.color = '0 0 0'; backsplash.alpha = 0;
-	uielement_c splash = spawn(uielement_c, owner: endscreen, size: '960 540', anchor: '0 1', flags: UIFLAG::MULTALPHA); splash.alpha = 0;
+	uifill_c backsplash = spawn(uifill_c, flags: UIFLAG_STRETCH, owner: endscreen); backsplash.color = '0 0 0'; backsplash.alpha = 0;
+	uielement_c splash = spawn(uielement_c, owner: endscreen, size: '960 540', anchor: '0 1', flags: UIFLAG_MULTALPHA); splash.alpha = 0;
 
 
 	endscreen.partner = splash;

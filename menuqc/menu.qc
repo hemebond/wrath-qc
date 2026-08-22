@@ -1,29 +1,21 @@
- 
- #include "uielement.h"
- #if NEW_MENU
- #include "menudefs.h"
- #include "csqc/journal.h"
- #include "csqc/localized_assets.h"
- #endif
- 
- void(float alternative) menu_type_confirmbind;
- void() menu_type_confirmresolution;
- void() menu_type_confirmantialias;
- void() menu_type_confirmfullscreen;
- void(vector txt_pos) menu_type_profile;
- void(vector txt_pos) menu_type_main;
- void() menu_type_resume;
- void() menu_type_options;
- void() menu_type_options_controls;
- void() menu_type_options_video;
- void() menu_type_options_resolution;
- void() menu_type_options_audio;
- void() menu_type_options_gameplay;
- void() menu_type_ingame;
- void() menu_type_difficult;
+void(float alternative) menu_type_confirmbind;
+void() menu_type_confirmresolution;
+void() menu_type_confirmantialias;
+void() menu_type_confirmfullscreen;
+void(vector txt_pos) menu_type_profile;
+void(vector txt_pos) menu_type_main;
+void() menu_type_resume;
+void() menu_type_options;
+void() menu_type_options_controls;
+void() menu_type_options_video;
+void() menu_type_options_resolution;
+void() menu_type_options_audio;
+void() menu_type_options_gameplay;
+void() menu_type_ingame;
+void() menu_type_difficult;
 
- float slayeralpha;
- float slayerstate;
+float slayeralpha;
+float slayerstate;
 void()menu_type_deleteprofile;
 void()menu_type_options_controlbinds;
 void()menu_type_confirmresettodefaults;
@@ -92,8 +84,8 @@ string quit_taunts[] = {
 #define ACHIEVEMENT_NOTIFICATIONS_MAX	8
 #define ACHIEVEMENT_NOTIFICATIONS_TIME	6
 #define ACHIEVEMENT_NOTIFICATIONS_MAXSIZE 18
-uielement_c achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX];
-string achnotify_icons[ST_ACHIEVEMENTS::MAX];
+// uielement_c achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX];
+// string achnotify_icons[ST_ACHIEVEMENTS::MAX];
 
 static string(void) ach_getnextscroll = {
 	string pieces[] = {
@@ -113,22 +105,23 @@ static string(void) ach_getnextscroll = {
 	return pieces[touse];
 };
 
+/*
 void Achievement_CleanupBox(uielement_c cleanup)
 {
-	cleanup.flags |= UIFLAG::HIDE;
-	/*
-	if (cleanstring)
-	{
-		if (((uipicture_c)cleanup.partner6).image)
-		{
-			strunzone(((uipicture_c)cleanup.partner6).image);
-			((uipicture_c)cleanup.partner6).image = __NULL__;
-		}
-	}
-	*/
+	cleanup.flags |= UIFLAG_HIDE;
+
+	// if (cleanstring)
+	// {
+	// 	if (((uipicture_c)cleanup.partner6).image)
+	// 	{
+	// 		strunzone(((uipicture_c)cleanup.partner6).image);
+	// 		((uipicture_c)cleanup.partner6).image = __NULL__;
+	// 	}
+	// }
+
 	for(uipicture_c clean = (uipicture_c)cleanup.partner; clean; clean = clean.partner)
 	{
-		clean.flags |= UIFLAG::HIDE;
+		clean.flags |= UIFLAG_HIDE;
 	}
 }
 
@@ -149,8 +142,8 @@ void Overlay_AchievementShuffleDown(void)
 			bd_to = bd_to.partner, bd_from = bd_from.partner)
 		{
 			bd_to.image = bd_from.image;
-			bd_to.flags &= ~UIFLAG::HIDE;
-			bd_to.flags |= (bd_from.flags & UIFLAG::HIDE);
+			bd_to.flags &= ~UIFLAG_HIDE;
+			bd_to.flags |= (bd_from.flags & UIFLAG_HIDE);
 			bd_to.origin[0] = bd_from.origin[0];
 		}
 
@@ -184,8 +177,8 @@ void Overlay_AchievementShuffleUp(void)
 			bd_to = bd_to.partner, bd_from = bd_from.partner)
 		{
 			bd_to.image = bd_from.image;
-			bd_to.flags &= ~UIFLAG::HIDE;
-			bd_to.flags |= (bd_from.flags & UIFLAG::HIDE);
+			bd_to.flags &= ~UIFLAG_HIDE;
+			bd_to.flags |= (bd_from.flags & UIFLAG_HIDE);
 			bd_to.origin[0] = bd_from.origin[0];
 		}
 
@@ -218,18 +211,18 @@ void Overlay_NewAchievement(string id, string name, string desc)
 	for(float i = 0; i <= segments_needed && bd_to && bd_to != to.partner2; i++, bd_to = bd_to.partner)
 	{
 		bd_to.image = ach_getnextscroll();
-		bd_to.flags &= ~UIFLAG::HIDE;
+		bd_to.flags &= ~UIFLAG_HIDE;
 		sz += 16;
 	}
 	
-	((uipicture_c)to.partner).flags &= ~UIFLAG::HIDE; // opener
-	((uipicture_c)to.partner2).flags &= ~UIFLAG::HIDE; // ender
+	((uipicture_c)to.partner).flags &= ~UIFLAG_HIDE; // opener
+	((uipicture_c)to.partner2).flags &= ~UIFLAG_HIDE; // ender
 	((uipicture_c)to.partner2).origin[0] = sz;
 	sz += 24;
 
 	to.origin[0] = -sz/2; // center justify
 
-	to.flags &= ~UIFLAG::HIDE;
+	to.flags &= ~UIFLAG_HIDE;
 	((uitext_c)to.partner4).text = name;
 	((uitext_c)to.partner5).text = desc;
 
@@ -248,35 +241,36 @@ void Overlay_NewAchievement(string id, string name, string desc)
 	//	ach_icon = "gfx/hud/messages/icons/msgicon_helm.tga";
 	((uipicture_c)to.partner6).image = achnotify_icons[index];//strzone(ach_icon);
 }
+*/
 
 void MenuInit_Overlay(void)
 {
-	menu_gameoverlay = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_gameoverlay = spawn(uielement_c, flags: UIFLAG_STRETCH);
 
 	void(uielement_c this, __inout vector position) notify_preloop = {
 
-		if (achnotify_list[0].flags & UIFLAG::HIDE)
-			return;
+		// if (achnotify_list[0].flags & UIFLAG_HIDE)
+		// 	return;
 
 		float frac = 0;
-		if (cltime < achievement_notify_time)
-		{
-			// move up
-			frac = (achievement_notify_time - cltime) / 0.4;
-			//
-		}
-		else if (cltime > (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME))
-		{
-			// move down
-			frac = (cltime - (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME)) / 0.3;
-			//
+		// if (cltime < achievement_notify_time)
+		// {
+		// 	// move up
+		// 	frac = (achievement_notify_time - cltime) / 0.4;
+		// 	//
+		// }
+		// else if (cltime > (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME))
+		// {
+		// 	// move down
+		// 	frac = (cltime - (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME)) / 0.3;
+		// 	//
 
-			if (frac > 1)
-			{
-				achievement_notify_time = cltime - (ACHIEVEMENT_NOTIFICATIONS_TIME - 0.9);
-				Overlay_AchievementShuffleDown();
-			}
-		}
+		// 	if (frac > 1)
+		// 	{
+		// 		achievement_notify_time = cltime - (ACHIEVEMENT_NOTIFICATIONS_TIME - 0.9);
+		// 		Overlay_AchievementShuffleDown();
+		// 	}
+		// }
 		
 		frac = bound(0, frac, 1);
 		position[1] += 44 * frac;
@@ -289,18 +283,18 @@ void MenuInit_Overlay(void)
 	for(float i = 0; i < ACHIEVEMENT_NOTIFICATIONS_MAX; i++)
 	{
 		uielement_c container = spawn(uielement_c, owner: notifybox, anchor: '0.5 0', justify: '0 1', size: '0 48');
-		achnotify_list[i] = container;
-		container.flags |= UIFLAG::HIDE;
+		// achnotify_list[i] = container;
+		container.flags |= UIFLAG_HIDE;
 		
 		uielement_c backdroplist;
 		float xpos = 0;
 		container.partner = backdroplist = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '48 48', image: "gfx/achievements/achievementscrolls_left.tga"); xpos += 48;
-		for(float j = 0; j < ACHIEVEMENT_NOTIFICATIONS_MAXSIZE; j++)
-		{
-			backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '16 48', image: ach_getnextscroll());
-			backdroplist = backdroplist.partner;
-			xpos += 16;
-		}
+		// for(float j = 0; j < ACHIEVEMENT_NOTIFICATIONS_MAXSIZE; j++)
+		// {
+		// 	backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '16 48', image: ach_getnextscroll());
+		// 	backdroplist = backdroplist.partner;
+		// 	xpos += 16;
+		// }
 		container.partner2 = backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '48 48', image: "gfx/achievements/achievementscrolls_right.tga"); xpos += 48;
 		uipicture_c icon = spawn(uipicture_c, owner: container, origin: '8 8', size: '32 32', image: strzone("gfx/hud/messages/icons/msgicon_helm.tga"));
 
@@ -315,28 +309,26 @@ void MenuInit_Overlay(void)
 		container.partner6 = icon;
 	}
 
-	/*
-	for(float i = 0; i < ACHIEVEMENT_NOTIFICATIONS_MAX; i++)
-	{
-		uifill_c backdrop = spawn(uifill_c, owner: notifybox, justify: '0.5 1', size: '168 44', color: '0.8 0.8 0.8');
-		achnotify_list[i] = backdrop;
-		backdrop.flags |= UIFLAG::HIDE;
-
-		uifill_c middle = spawn(uifill_c, owner: backdrop, anchor: '0.5 0.5', justify: '0.5 0.5', size: '164 40', color: '0.12 0.12 0.12');
-
-		spawn(uifill_c, owner: middle, anchor: '0 0.5', justify: '0 0.5', origin: '4 0', size: '32 32', color: '0.01 0.01 0.01');
-		uipicture_c icon = spawn(uipicture_c, owner: middle, anchor: '0 0.5', justify: '0 0.5', origin: '4 0', size: '32 32', image: strzone("gfx/hud/messages/icons/msgicon_helm.tga"));
-
-		uielement_c textbody = spawn(uielement_c, owner: middle, origin: '38 4', size: '124 32');
-		uitext_c cheevo = spawn(uitext_c, owner: textbody, origin: '0 4', text: _("ACHIEVEMENT_UNLOCKED"), size: '6 6', font: FONT_CENTERPRINT, color: HIGHLIGHT_TEXT_COLOR);
-		uitext_c cheevo_name = spawn(uitext_c, owner: textbody, origin: '0 16', text: "name", size: '6 6', font: FONT_CENTERPRINT, color: '1 1 1');
-		uitext_c cheevo_desc = spawn(uitext_c, owner: textbody, origin: '0 26', text: "description", size: '4 4', font: FONT_CENTERPRINT, color: '0.6 0.6 0.6');
-
-		backdrop.partner = cheevo;
-		backdrop.partner2 = cheevo_name;
-		backdrop.partner3 = cheevo_desc;
-	}
-	*/
+//	for(float i = 0; i < ACHIEVEMENT_NOTIFICATIONS_MAX; i++)
+//	{
+//		uifill_c backdrop = spawn(uifill_c, owner: notifybox, justify: '0.5 1', size: '168 44', color: '0.8 0.8 0.8');
+//		achnotify_list[i] = backdrop;
+//		backdrop.flags |= UIFLAG_HIDE;
+//
+//		uifill_c middle = spawn(uifill_c, owner: backdrop, anchor: '0.5 0.5', justify: '0.5 0.5', size: '164 40', color: '0.12 0.12 0.12');
+//
+//		spawn(uifill_c, owner: middle, anchor: '0 0.5', justify: '0 0.5', origin: '4 0', size: '32 32', color: '0.01 0.01 0.01');
+//		uipicture_c icon = spawn(uipicture_c, owner: middle, anchor: '0 0.5', justify: '0 0.5', origin: '4 0', size: '32 32', image: strzone("gfx/hud/messages/icons/msgicon_helm.tga"));
+//
+//		uielement_c textbody = spawn(uielement_c, owner: middle, origin: '38 4', size: '124 32');
+//		uitext_c cheevo = spawn(uitext_c, owner: textbody, origin: '0 4', text: _("ACHIEVEMENT_UNLOCKED"), size: '6 6', font: FONT_CENTERPRINT, color: HIGHLIGHT_TEXT_COLOR);
+//		uitext_c cheevo_name = spawn(uitext_c, owner: textbody, origin: '0 16', text: "name", size: '6 6', font: FONT_CENTERPRINT, color: '1 1 1');
+//		uitext_c cheevo_desc = spawn(uitext_c, owner: textbody, origin: '0 26', text: "description", size: '4 4', font: FONT_CENTERPRINT, color: '0.6 0.6 0.6');
+//
+//		backdrop.partner = cheevo;
+//		backdrop.partner2 = cheevo_name;
+//		backdrop.partner3 = cheevo_desc;
+//	}
 }
 
 typedef struct {
@@ -381,23 +373,23 @@ void MenuInit_LoadingScreen(void)
 			if (fexists_pak(path))
 			{
 				splash.image = strzone(path);
-				map_string.flags |= UIFLAG::HIDE;
+				map_string.flags |= UIFLAG_HIDE;
 			}
 			else if (fexists_pak(path_generic))
 			{
 				splash.image = strzone(path_generic);
-				map_string.flags &= ~UIFLAG::HIDE;
+				map_string.flags &= ~UIFLAG_HIDE;
 				map_string.button_index = 1;
 			}
 			else
 			{
 				splash.image  = strzone(splash.image2);
-				map_string.flags &= ~UIFLAG::HIDE;
+				map_string.flags &= ~UIFLAG_HIDE;
 				map_string.button_index = 0;
 				use_blank = TRUE;
 			}
 
-			if !(map_string.flags & UIFLAG::HIDE)
+			if !(map_string.flags & UIFLAG_HIDE)
 			{
 				string map_name = load_mapname;
 				for(float i = 0; i < loadscreen_list.length; i++)
@@ -480,7 +472,7 @@ void MenuInit_LoadingScreen(void)
 		return TRUE;//(clientstate() != CS_DISCONNECTED); // Reki (January 31 2024): this fixes the vid_restart loading screen thing, but causes the load screen not to show up until the last second :(
 	}
 
-	menu_loading = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_loading = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_loading.active_condition = loading_active;
 		menu_loading.preloop = splash_preloop;
 
@@ -500,17 +492,17 @@ void MenuInit_LoadingScreen(void)
 		shadow.drawflags = DRAWFLAG_NORMAL;
 		shadow.origin = '-1.2 1.2' * (txt.size[0] / 72);
 
-		shadow.flags |= UIFLAG::HIDE;
+		shadow.flags |= UIFLAG_HIDE;
 		if (txt.button_index)
-			shadow.flags &= ~UIFLAG::HIDE;
+			shadow.flags &= ~UIFLAG_HIDE;
 	};
-	uitext_c txt = spawn(uitext_c, owner: pic, justify: '0 1', anchor: '0 1', origin: '16 -8', font: FONT_USER7, flags: UIFLAG::HIDE);
+	uitext_c txt = spawn(uitext_c, owner: pic, justify: '0 1', anchor: '0 1', origin: '16 -8', font: FONT_USER7, flags: UIFLAG_HIDE);
 		txt.partner = spawn(uitext_c, owner: txt);
 		txt.preloop = text_shadow;
 		pic.partner = txt;
 
 	
-	uipicture_c vignette = spawn(uipicture_c, owner: pic, flags: UIFLAG::STRETCH, image: "gfx/splashes/vignette.tga");
+	uipicture_c vignette = spawn(uipicture_c, owner: pic, flags: UIFLAG_STRETCH, image: "gfx/splashes/vignette.tga");
 		pic.partner2 = vignette;
 }
 
@@ -551,14 +543,14 @@ void MenuInit_Backdrop(void)
 			this.alpha = 0.7;
 		return menu_current != menu_main && menu_current != menu_quitconfirm;
 	};
-	uifill_c backfill = spawn(uifill_c, flags: UIFLAG::STRETCH, color: '-1 -1 -1');
+	uifill_c backfill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '-1 -1 -1');
 		backfill.active_condition = backdrop_conditional;
 }
 
 void MenuInit_Main_Game(void)
 {
 	void(uipicture_c this, __inout string img_to_render) button_highlight = { if (ui_selected == this || ui_hover == this) img_to_render = this.image2; };
-	menu_main_game = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_main_game = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_main_game.active_condition = menu_conditional;
 
 	uilist_c menu_buttons = spawn(uilist_c, owner: menu_main_game, anchor: '0.5 0.5', justify: '0.5 0.5', size: '192 150', separation: '0 50');
@@ -568,7 +560,7 @@ void MenuInit_Main_Game(void)
 		localsound("sounds/menu.wav");
 		m_hide();
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0', justify: '0.5 0', size: '352 58',
 		image: menu_assets[MENU_IMG::RESUME], image2: menu_assets[MENU_IMG::RESUME_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::RESUME]);
 		lbutton.prerender = button_owner_highlight;
@@ -580,7 +572,7 @@ void MenuInit_Main_Game(void)
 		localsound("sounds/menu.wav");
 		menu_current = menu_options;
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0', justify: '0.5 0', size: '352 58',
 		image: menu_assets[MENU_IMG::OPTIONS], image2: menu_assets[MENU_IMG::OPTIONS_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::OPTIONS]);
 		lbutton.prerender = button_owner_highlight;
@@ -594,7 +586,7 @@ void MenuInit_Main_Game(void)
 		cmd("disconnect\n");
 		cmd("cd play 6\n");
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0', justify: '0.5 0', size: '352 58',
 		image: menu_assets[MENU_IMG::DEPART], image2: menu_assets[MENU_IMG::DEPART_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::DEPART]);
 		lbutton.prerender = button_owner_highlight;
@@ -620,18 +612,18 @@ void MenuInit_Main(void)
 			search_end(sb);
 		}
 
-		resumebutton.flags |= UIFLAG::HIDE;
+		resumebutton.flags |= UIFLAG_HIDE;
 		if (search_length > 0)
-			resumebutton.flags &= ~UIFLAG::HIDE;
+			resumebutton.flags &= ~UIFLAG_HIDE;
 	}
 
-	menu_main = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_main = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_main.active_condition = menu_conditional;
 		menu_main.reinit = menu_reinit;
 	uilist_c menu_buttons = spawn(uilist_c, owner: menu_main, anchor: '0.5 0.45', justify: '0.5 0', origin: '0 0', size: '192 400', separation: '0 50');
 	
 	// logo
-	spawn(uipicture_c, owner: menu_main, anchor: '0.5 0', justify: '0.5 0', origin: '0 64', size: '504 136', flags: UIFLAG::CLICKABLE, image: "gfx/menu/logo.tga");
+	spawn(uipicture_c, owner: menu_main, anchor: '0.5 0', justify: '0.5 0', origin: '0 64', size: '504 136', flags: UIFLAG_CLICKABLE, image: "gfx/menu/logo.tga");
 
 	// begin button
 	MenuInit_CreateProfile();
@@ -640,7 +632,7 @@ void MenuInit_Main(void)
 		menu_current = menu_createprofile;
 		Run_Reinit_List(menu_createprofile);
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0.5', justify: '0.5 0.5', size: '352 58',
 		image: menu_assets[MENU_IMG::BEGIN], image2: menu_assets[MENU_IMG::BEGIN_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::BEGIN]);
 		lbutton.prerender = button_owner_highlight;
@@ -654,7 +646,7 @@ void MenuInit_Main(void)
 		menu_current = menu_loadprofile;
 		Run_Reinit_List(menu_loadprofile);
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0.5', justify: '0.5 0.5', size: '352 58',
 		image: menu_assets[MENU_IMG::RETURN], image2: menu_assets[MENU_IMG::RETURN_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::RETURN]);
 		lbutton.prerender = button_owner_highlight;
@@ -667,7 +659,7 @@ void MenuInit_Main(void)
 		localsound("sounds/menu.wav");
 		menu_current = menu_options;
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0.5', justify: '0.5 0.5', size: '352 58',
 		image: menu_assets[MENU_IMG::OPTIONS], image2: menu_assets[MENU_IMG::OPTIONS_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::OPTIONS]);
 		lbutton.prerender = button_owner_highlight;
@@ -675,24 +667,24 @@ void MenuInit_Main(void)
 		container.m_click = button_click;
 
 	// achievements
-	float(uielement_c this) achievement_conditional = {
-		return (!(STEAM_IS_CONNECTED) && cltime > steam_initTime);
-	}
+	// float(uielement_c this) achievement_conditional = {
+	// 	return (!(STEAM_IS_CONNECTED) && cltime > steam_initTime);
+	// }
 	void(uielement_c this) button_click = {
 		localsound("sounds/menu.wav");
 		menu_current = menu_achievements;
 		Run_Reinit_List(menu_achievements);
 	};
-	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: menu_main, anchor: '0.5 1', justify: '0.5 1', origin: '0 0', size: '352 58', flags: UIFLAG::CLICKABLE,
+	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: menu_main, anchor: '0.5 1', justify: '0.5 1', origin: '0 0', size: '352 58', flags: UIFLAG_CLICKABLE,
 		image: menu_assets[MENU_IMG::ACHIEVEMENTS], image2: menu_assets[MENU_IMG::ACHIEVEMENTS_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::ACHIEVEMENTS], fallback_sz: '20 20');
-		lbutton.active_condition = achievement_conditional;
+		// lbutton.active_condition = achievement_conditional;
 		lbutton.prerender = button_highlight;
 		lbutton.prerender_text = text_highlight;
 		lbutton.m_click = button_click;
 
 	// exit button
 	// QUIT CONFIRM MENU
-	menu_quitconfirm = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_quitconfirm = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_quitconfirm.active_condition = menu_conditional;
 	
 	float(uielement_c this, float nkey, float ascii, float released) quit_input = {
@@ -727,7 +719,7 @@ void MenuInit_Main(void)
 		Run_Reinit_List(menu_current);
 	}
 	uitext_c txtbutton = spawn(uitext_c, owner: quitconfirm_buttons, anchor: '0.5 0.5', justify: '0 0.5', origin: '-184 0', padding: '24 8',
-		size: '32 32', text: _("UI_NO"), font: FONT_USER7, flags: UIFLAG::CLICKABLE);
+		size: '32 32', text: _("UI_NO"), font: FONT_USER7, flags: UIFLAG_CLICKABLE);
 		txtbutton.prerender = text_highlight;
 		txtbutton.m_click = button_click;
 	
@@ -735,7 +727,7 @@ void MenuInit_Main(void)
 		cmd("quit\n");
 	}
 	uitext_c txtbutton = spawn(uitext_c, owner: quitconfirm_buttons, anchor: '0.5 0.5', justify: '1 0.5', origin: '184 0', padding: '24 8',
-		size: '32 32', text: _("UI_YES"), font: FONT_USER7, flags: UIFLAG::CLICKABLE);
+		size: '32 32', text: _("UI_YES"), font: FONT_USER7, flags: UIFLAG_CLICKABLE);
 		txtbutton.prerender = text_highlight;
 		txtbutton.m_click = button_click;
 	//
@@ -746,7 +738,7 @@ void MenuInit_Main(void)
 		uitext_c taunt = (uitext_c)menu_quitconfirm.partner;
 		taunt.text = quit_taunts[floor(random(quit_taunts.length))];
 	};
-	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG::CLICKABLE);
+	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0.5', justify: '0.5 0.5', size: '352 58',
 		image: menu_assets[MENU_IMG::DEPART], image2: menu_assets[MENU_IMG::DEPART_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::DEPART]);
 		lbutton.prerender = button_owner_highlight;
@@ -757,11 +749,11 @@ void MenuInit_Main(void)
 	float(uielement_c this) hackfill_conditional = {
 		return (clientstate() != CS_DISCONNECTED);
 	}
-	uifill_c hackfill = spawn(uifill_c, owner: menu_main, color: '0.01 0.01 0.01', flags: UIFLAG::STRETCH);
+	uifill_c hackfill = spawn(uifill_c, owner: menu_main, color: '0.01 0.01 0.01', flags: UIFLAG_STRETCH);
 		hackfill.active_condition = hackfill_conditional;
 }
 
-
+/*
 void MenuInit_Achievements(void)
 {
 	static uielement_c achievement_menu_list[ST_ACHIEVEMENTS::MAX];
@@ -804,7 +796,7 @@ void MenuInit_Achievements(void)
 			{
 				txt.text = _("UI_UNLOCKED");
 				txt.color = CONVERT_TO_DP_SHITTY_COLOR('0.4 0.9 0.7');
-				//lck.flags |= UIFLAG::HIDE;
+				//lck.flags |= UIFLAG_HIDE;
 
 				while(backdrop)
 				{
@@ -816,7 +808,7 @@ void MenuInit_Achievements(void)
 			{
 				txt.text = _("UI_LOCKED");
 				txt.color = CONVERT_TO_DP_SHITTY_COLOR('0.5 0 0');
-				//lck.flags &= ~UIFLAG::HIDE;
+				//lck.flags &= ~UIFLAG_HIDE;
 
 				while(backdrop)
 				{
@@ -854,7 +846,7 @@ void MenuInit_Achievements(void)
 	};
 
 	ui_scale = '1 1';
-	menu_achievements = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_achievements = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_achievements.active_condition = menu_conditional;
 		menu_achievements.input = achievement_input;
 		menu_achievements.reinit = achievement_reinit;
@@ -862,7 +854,7 @@ void MenuInit_Achievements(void)
 	uitext_c txt = spawn(uitext_c, owner: menu_achievements, anchor: '0.5 0', origin: '0 20', justify: '0.5 0', size: '16 16', text: _("UI_ACHIEVEMENTS"), color: OPTIONS_HEADER_TEXT_COLOR, font: FONT_MENU);
 	spawn(uifill_c, owner: txt, anchor: '0.5 1', justify: '0.5 0', origin: '0 2', size: [txt.totalsize()[0], 2], color: OPTIONS_HEADER_COLOR, alpha: 0.3);
 
-	uilist_c column_list = spawn(uismoothlist_c, owner: menu_achievements, justify: '0.5 0', anchor: '0.5 0', origin: '0 60', size: '1024 384', separation: '0 48', flags: UIFLAG::CLIP);
+	uilist_c column_list = spawn(uismoothlist_c, owner: menu_achievements, justify: '0.5 0', anchor: '0.5 0', origin: '0 60', size: '1024 384', separation: '0 48', flags: UIFLAG_CLIP);
 	//uilist_c current_row;
 	for(float i = 0; i < ST_ACHIEVEMENTS::MAX; i++)
 	{	
@@ -893,14 +885,13 @@ void MenuInit_Achievements(void)
 		backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '48 48', image: "gfx/achievements/achievementscrolls_right.tga"); xpos += 48;
 
 
-		/*
-		string ach_icon = sprintf("gfx/achievements/icon_%s.tga", strtolower(steam_achievementlist[i].name));
-		if !(fexists_pak(ach_icon))
-		{
-			spawn(uifill_c, owner: container, origin: '8 8', size: '32 32', color: '0.01 0.01 0.01', alpha: 0.8);
-			ach_icon = "gfx/hud/messages/icons/msgicon_helm.tga";
-		}
-		*/
+		//string ach_icon = sprintf("gfx/achievements/icon_%s.tga", strtolower(steam_achievementlist[i].name));
+		//if !(fexists_pak(ach_icon))
+		//{
+		//	spawn(uifill_c, owner: container, origin: '8 8', size: '32 32', color: '0.01 0.01 0.01', alpha: 0.8);
+		//	ach_icon = "gfx/hud/messages/icons/msgicon_helm.tga";
+		//}
+
 		spawn(uipicture_c, owner: container, origin: '8 8', size: '32 32', image: achnotify_icons[i]);
 
 
@@ -915,37 +906,35 @@ void MenuInit_Achievements(void)
 		container.partner2 = cheevo;
 		achievement_menu_list[i] = container;
 
-		/*
-		uifill_c backdrop = spawn(uifill_c, owner: current_row, size: '172 42', color: '0.6 0.6 0.6');
-		achievement_menu_list[i] = backdrop;
-
-		uifill_c middle = spawn(uifill_c, owner: backdrop, justify: '0.5 0.5', anchor: '0.5 0.5', size: '168 38', color: '0.1 0.1 0.1');
-
-		uifill_c iconback = spawn(uifill_c, owner: middle, origin: '3 3', size: '32 32', color: '0.01 0.01 0.01');
-		uipicture_c icon = spawn(uipicture_c, owner: iconback, flags: UIFLAG::STRETCH, image: "gfx/hud/messages/icons/msgicon_helm.tga");
-
-		uielement_c textbody = spawn(uielement_c, owner: middle, origin: '38 4', size: '124 32');
-		uitext_c cheevo = spawn(uitext_c, owner: textbody, origin: '0 4', text: _("UI_UNLOCKED"), size: '6 6', font: FONT_CENTERPRINT, color: HIGHLIGHT_TEXT_COLOR);
-		uitext_c cheevo_name = spawn(uitext_c, owner: textbody, origin: '0 16', text: disp_name, size: '6 6', font: FONT_CENTERPRINT, color: '1 1 1');
-		uitext_c cheevo_desc = spawn(uitext_c, owner: textbody, origin: '0 26', text: disp_desc, size: '4 4', font: FONT_CENTERPRINT, color: '0.6 0.6 0.6');
-		
-		uifill_c locked = spawn(uifill_c, owner: backdrop, flags: UIFLAG::STRETCH, color: '0.01 0.01 0.01', alpha: 0.8);
-
-		backdrop.partner = cheevo;
-		backdrop.partner2 = locked;
-		*/
+//		uifill_c backdrop = spawn(uifill_c, owner: current_row, size: '172 42', color: '0.6 0.6 0.6');
+//		achievement_menu_list[i] = backdrop;
+//
+//		uifill_c middle = spawn(uifill_c, owner: backdrop, justify: '0.5 0.5', anchor: '0.5 0.5', size: '168 38', color: '0.1 0.1 0.1');
+//
+//		uifill_c iconback = spawn(uifill_c, owner: middle, origin: '3 3', size: '32 32', color: '0.01 0.01 0.01');
+//		uipicture_c icon = spawn(uipicture_c, owner: iconback, flags: UIFLAG_STRETCH, image: "gfx/hud/messages/icons/msgicon_helm.tga");
+//
+//		uielement_c textbody = spawn(uielement_c, owner: middle, origin: '38 4', size: '124 32');
+//		uitext_c cheevo = spawn(uitext_c, owner: textbody, origin: '0 4', text: _("UI_UNLOCKED"), size: '6 6', font: FONT_CENTERPRINT, color: HIGHLIGHT_TEXT_COLOR);
+//		uitext_c cheevo_name = spawn(uitext_c, owner: textbody, origin: '0 16', text: disp_name, size: '6 6', font: FONT_CENTERPRINT, color: '1 1 1');
+//		uitext_c cheevo_desc = spawn(uitext_c, owner: textbody, origin: '0 26', text: disp_desc, size: '4 4', font: FONT_CENTERPRINT, color: '0.6 0.6 0.6');
+//
+//		uifill_c locked = spawn(uifill_c, owner: backdrop, flags: UIFLAG_STRETCH, color: '0.01 0.01 0.01', alpha: 0.8);
+//
+//		backdrop.partner = cheevo;
+//		backdrop.partner2 = locked;
 	}
 
 	// scroll
 	// scroll up
 	uipicture_c scroll = spawn(uipicture_c, owner: menu_achievements, origin: '-156 60', anchor: '0.5 0', justify: '1 0', size: '32 40',
-		flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/menu/a_arrow_up", image2: "gfx/menu/a_arrow_up_active", partner: column_list, button_index: -1);
+		flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/menu/a_arrow_up", image2: "gfx/menu/a_arrow_up_active", partner: column_list, button_index: -1);
 		scroll.active_condition = scroll_conditional;
 		scroll.prerender = scroll_prerender;
 		scroll.m_click = scroll_click;
 	// scroll down
 	uipicture_c scroll = spawn(uipicture_c, owner: menu_achievements, origin: '-156 450', anchor: '0.5 0', justify: '1 1', size: '32 40',
-		flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/menu/a_arrow_down", image2: "gfx/menu/a_arrow_down_active", partner: column_list, button_index: 1);
+		flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/menu/a_arrow_down", image2: "gfx/menu/a_arrow_down_active", partner: column_list, button_index: 1);
 		scroll.active_condition = scroll_conditional;
 		scroll.prerender = scroll_prerender;
 		scroll.m_click = scroll_click;
@@ -961,10 +950,11 @@ void MenuInit_Achievements(void)
 		Run_Reinit_List(menu_current);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_achievements, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 }
+*/
 
 void MenuInit_Options(void)
 {
@@ -985,7 +975,7 @@ void MenuInit_Options(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_options.active_condition = menu_conditional;
 		menu_options.input = option_input;
 	
@@ -1005,7 +995,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_mouse.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_MOUSE"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 
@@ -1017,7 +1007,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_keybinds.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_BINDS"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 
@@ -1029,7 +1019,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_controller.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_CONTROLLER"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 
@@ -1041,7 +1031,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_graphics.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_GRAPHICS"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 
@@ -1053,7 +1043,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_resolution.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_RESOLUTION"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 
@@ -1065,7 +1055,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_audio.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_AUDIO"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 
@@ -1077,7 +1067,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_options_gameplay.reinit_list);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0', justify: '0.5 0', size: '16 16', text: _("UI_OPTION_GAMEPLAY"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	
@@ -1091,7 +1081,7 @@ void MenuInit_Options(void)
 		Run_Reinit_List(menu_current);
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_options, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 30');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 }
@@ -1116,7 +1106,7 @@ uielement_c UI_Sliderbar(uielement_c own, vector org, vector anc, vector just, v
 		uifill_c slider = (uifill_c)this.partner;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (slider_selected == this || (!slider_selected && (ui_hover == this || ui_oldhover == scroll_left || ui_oldhover == scroll_right)))
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -1220,7 +1210,7 @@ uielement_c UI_Sliderbar(uielement_c own, vector org, vector anc, vector just, v
 		}
 	};
 
-	uielement_c bar = spawn(uielement_c, owner: own, origin: org, anchor: anc, justify: just, size: sz + '0 24', flags: UIFLAG::HIGHLIGHT);
+	uielement_c bar = spawn(uielement_c, owner: own, origin: org, anchor: anc, justify: just, size: sz + '0 24', flags: UIFLAG_HIGHLIGHT);
 		bar.preloop = bar_preloop;
 		bar.input = bar_input;
 		bar.bar_scrollamt = 0.05;
@@ -1229,12 +1219,12 @@ uielement_c UI_Sliderbar(uielement_c own, vector org, vector anc, vector just, v
 
 	// scroll buttons
 	float scroll_sz = sz[1] + 12;
-	bar.partner2 = spawn(uitext_c, owner: bar, anchor: '0 0.5', justify:'0 0.5', origin: '-24 2', size: [scroll_sz, scroll_sz], color: '1 1 1', alpha: 0.9, text: "<", flags: UIFLAG::CLICKABLE, bar_scrollamt: -1);
+	bar.partner2 = spawn(uitext_c, owner: bar, anchor: '0 0.5', justify:'0 0.5', origin: '-24 2', size: [scroll_sz, scroll_sz], color: '1 1 1', alpha: 0.9, text: "<", flags: UIFLAG_CLICKABLE, bar_scrollamt: -1);
 		((uitext_c)bar.partner2).prerender = scroll_button_predraw;
 		bar.partner2.m_click = scroll_button_click;
 		bar.partner2.preloop = scroll_button_preloop;
 		bar.partner2.input = scroll_button_input;
-	bar.partner3 = spawn(uitext_c, owner: bar, anchor: '1 0.5', justify:'1 0.5', origin: '24 2', size: [scroll_sz, scroll_sz], color: '1 1 1', alpha: 0.9, text: ">", flags: UIFLAG::CLICKABLE, bar_scrollamt: 1);
+	bar.partner3 = spawn(uitext_c, owner: bar, anchor: '1 0.5', justify:'1 0.5', origin: '24 2', size: [scroll_sz, scroll_sz], color: '1 1 1', alpha: 0.9, text: ">", flags: UIFLAG_CLICKABLE, bar_scrollamt: 1);
 		((uitext_c)bar.partner3).prerender = scroll_button_predraw;
 		bar.partner3.m_click = scroll_button_click;
 		bar.partner3.preloop = scroll_button_preloop;
@@ -1287,7 +1277,7 @@ void MenuInit_Options_Controller(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options_controller = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_controller = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_options_controller.active_condition = menu_conditional;
 	menu_options_controller.input = option_input;
 	menu_options_controller.preloop = option_preloop;
@@ -1366,7 +1356,7 @@ void MenuInit_Options_Controller(void)
 	};
 
 	void(uipicture_c this, __inout string img_to_render) glyph_prerender = {
-		img_to_render = Controller_GetGlyph_Fallback(this.glyph_code, CONTROLLER::STEAM);
+		img_to_render = Controller_GetGlyph_Fallback(this.glyph_code, CONTROLLER_STEAM);
 	};
 
 	void(uielement_c this) glyph_reinit = {
@@ -1538,12 +1528,12 @@ void MenuInit_Options_Controller(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -1552,7 +1542,7 @@ void MenuInit_Options_Controller(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_CONTROLLER_RUMBLE"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c boxsel = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c boxsel = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		boxsel.partner = spawn(uifill_c, owner: boxsel, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		boxsel.m_click = option_click;
 		boxsel.preloop = option_preloop;
@@ -1677,7 +1667,7 @@ void MenuInit_Options_Controller(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_controller, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -1699,7 +1689,7 @@ void MenuInit_Options_Mouse(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options_mouse = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_mouse = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_options_mouse.active_condition = menu_conditional;
 		menu_options_mouse.input = option_input;
 
@@ -1714,7 +1704,7 @@ void MenuInit_Options_Mouse(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_mouse, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -1793,12 +1783,12 @@ void MenuInit_Options_Mouse(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -1807,7 +1797,7 @@ void MenuInit_Options_Mouse(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '14 14', text: _("UI_MOUSE_SMOOTH"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '24 24', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '24 24', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '16 16', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -1828,12 +1818,12 @@ void MenuInit_Options_Mouse(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == -0.022)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -1842,7 +1832,7 @@ void MenuInit_Options_Mouse(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '14 14', text: _("UI_MOUSE_INVERTX"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '24 24', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '24 24', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '16 16', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -1863,12 +1853,12 @@ void MenuInit_Options_Mouse(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == -0.022)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -1877,7 +1867,7 @@ void MenuInit_Options_Mouse(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '14 14', text: _("UI_MOUSE_INVERTY"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '24 24', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '24 24', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '16 16', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -1941,7 +1931,7 @@ void MenuInit_Options_Binds(void)
 	}
 	
 	ui_scale = '1 1';
-	menu_options_keybinds = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_keybinds = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_options_keybinds.active_condition = menu_conditional;
 		menu_options_keybinds.input = option_input;
 		menu_options_keybinds.preloop = option_preloop;
@@ -1957,7 +1947,7 @@ void MenuInit_Options_Binds(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_keybinds, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -2050,7 +2040,7 @@ void MenuInit_Options_Binds(void)
 	{
 		keybind_t bind = binds_lane1[i];
 		uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-48 0' + offs_list, justify: '0.8 0.5', size: '10 10', text: bind.name, font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-		uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0' + offs_list, justify: '0.2 0.5', size: '16 16', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+		uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0' + offs_list, justify: '0.2 0.5', size: '16 16', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 			box.partner = spawn(uitext_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '10 10', color: '1 1 1', alpha: 0.9, text: strzone("t"));
 			box.partner2 = txt;
 			box.key_bind = bind;
@@ -2067,7 +2057,7 @@ void MenuInit_Options_Binds(void)
 	{
 		keybind_t bind = binds_lane2[i];
 		uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-48 0' + offs_list, justify: '0.8 0.5', size: '10 10', text: bind.name, font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-		uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0' + offs_list, justify: '0.2 0.5', size: '16 16', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+		uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0' + offs_list, justify: '0.2 0.5', size: '16 16', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 			box.partner = spawn(uitext_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '10 10', color: '1 1 1', alpha: 0.9, text: strzone("t"));
 			box.partner2 = txt;
 			box.key_bind = bind;
@@ -2084,7 +2074,7 @@ void MenuInit_Options_Binds(void)
 	{
 		keybind_t bind = binds_lane3[i];
 		uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-48 0' + offs_list, justify: '0.8 0.5', size: '10 10', text: bind.name, font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-		uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0' + offs_list, justify: '0.2 0.5', size: '16 16', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+		uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', origin: '0 0' + offs_list, justify: '0.2 0.5', size: '16 16', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 			box.partner = spawn(uitext_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '10 10', color: '1 1 1', alpha: 0.9, text: strzone("t"));
 			box.partner2 = txt;
 			box.key_bind = bind;
@@ -2181,7 +2171,7 @@ void MenuInit_Options_Binds(void)
 
 		return FALSE;
 	};
-	fill_waitforinput = spawn(uifill_c, owner: menu_options_keybinds, flags: UIFLAG::STRETCH, color: '-1 -1 -1', alpha: 0.9);
+	fill_waitforinput = spawn(uifill_c, owner: menu_options_keybinds, flags: UIFLAG_STRETCH, color: '-1 -1 -1', alpha: 0.9);
 		fill_waitforinput.active_condition = waitforinput_conditional;
 		fill_waitforinput.preloop = waitforinput_preloop;
 		fill_waitforinput.input = waitforinput_input;
@@ -2208,7 +2198,7 @@ void MenuInit_Options_Video(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options_graphics = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_graphics = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_options_graphics.active_condition = menu_conditional;
 	menu_options_graphics.input = option_input;
 
@@ -2225,7 +2215,7 @@ void MenuInit_Options_Video(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_graphics, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -2390,12 +2380,12 @@ void MenuInit_Options_Video(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -2404,7 +2394,7 @@ void MenuInit_Options_Video(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_DYNAMICLIGHTS"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -2681,12 +2671,12 @@ void MenuInit_Options_Video(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -2695,7 +2685,7 @@ void MenuInit_Options_Video(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_INTERPOLATION"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -2726,12 +2716,12 @@ void MenuInit_Options_Video(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -2740,7 +2730,7 @@ void MenuInit_Options_Video(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_SOFTWARE"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -2812,12 +2802,12 @@ void MenuInit_Options_Video(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -2826,7 +2816,7 @@ void MenuInit_Options_Video(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_FXAA"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -2890,7 +2880,7 @@ void MenuInit_Options_Resolution(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options_resolution = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_resolution = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_options_resolution.active_condition = menu_conditional;
 	menu_options_resolution.input = option_input;
 
@@ -2906,7 +2896,7 @@ void MenuInit_Options_Resolution(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_resolution, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -3020,12 +3010,12 @@ void MenuInit_Options_Resolution(void)
 			flags_to_apply |= 2;
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (fullscreen_to_apply)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3035,14 +3025,14 @@ void MenuInit_Options_Resolution(void)
 
 		if (resolution_to_apply[0] == 0)
 		{
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		}
 	}
 	void(uielement_c this) option_reinit = {
 		fullscreen_to_apply = cvar("vid_fullscreen");
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '14 14', text: _("UI_FULLSCREEN"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3060,12 +3050,12 @@ void MenuInit_Options_Resolution(void)
 			flags_to_apply |= 4;
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (vsync_to_apply)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3077,7 +3067,7 @@ void MenuInit_Options_Resolution(void)
 		vsync_to_apply = cvar("vid_vsync");
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', origin: '-64 -16', justify: '1 0', size: '14 14', text: _("UI_VSYNC"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3096,8 +3086,8 @@ void MenuInit_Options_Resolution(void)
 		Run_Reinit_List(this.partner);
 		Run_Reinit_List(this.partner2);
 		
-		this.partner.flags &= ~UIFLAG::HIDE;
-		this.partner2.flags |= UIFLAG::HIDE;
+		this.partner.flags &= ~UIFLAG_HIDE;
+		this.partner2.flags |= UIFLAG_HIDE;
 	}
 
 	static void(uitext_c langtxt_viewer, uitext_c langtxt_native, language_c langdef) lang_initname = {
@@ -3106,8 +3096,8 @@ void MenuInit_Options_Resolution(void)
 		if (langtxt_native.text)
 			strunzone(langtxt_native.text);
 
-		langtxt_viewer.flags &= ~UIFLAG::HIDE;
-		langtxt_native.flags &= ~UIFLAG::HIDE;
+		langtxt_viewer.flags &= ~UIFLAG_HIDE;
+		langtxt_native.flags &= ~UIFLAG_HIDE;
 
 		if (langdef) // if our language is actually registered
 		{
@@ -3126,7 +3116,7 @@ void MenuInit_Options_Resolution(void)
 				else
 				{
 					langtxt_native.text = strzone(" ");
-					langtxt_native.flags |= UIFLAG::HIDE;
+					langtxt_native.flags |= UIFLAG_HIDE;
 				}
 			}
 			else
@@ -3137,14 +3127,14 @@ void MenuInit_Options_Resolution(void)
 					langtxt_viewer.text = strzone(langdef.lang);
 
 				langtxt_native.text = strzone(" ");
-				langtxt_native.flags |= UIFLAG::HIDE;
+				langtxt_native.flags |= UIFLAG_HIDE;
 			}
 		}
 		else
 		{
 			langtxt_viewer.text = strzone(langdef.lang);
 			langtxt_native.text = strzone(" ");
-			langtxt_native.flags |= UIFLAG::HIDE;
+			langtxt_native.flags |= UIFLAG_HIDE;
 		}
 	}
 
@@ -3166,8 +3156,8 @@ void MenuInit_Options_Resolution(void)
 		uielement_c header = langbutton.partner;
 		uismoothlist_c list = langbutton.partner2;
 
-		header.flags |= UIFLAG::HIDE;
-		list.flags &= ~UIFLAG::HIDE;
+		header.flags |= UIFLAG_HIDE;
+		list.flags &= ~UIFLAG_HIDE;
 		list.scroll = 0;
 		list.scroll_smooth = 0;
 	}
@@ -3181,7 +3171,7 @@ void MenuInit_Options_Resolution(void)
 		txt.active_condition = lang_activecondition;
 		langbutton = txt;
 	
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '256 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '256 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.reinit = box_reinit;
 		box.m_click = box_click;
 	
@@ -3244,7 +3234,7 @@ void MenuInit_Options_Resolution(void)
 		flags_to_apply = 0;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_resolution, anchor: '0.5 0.5', origin: '0 120', justify: '0.5 0', size: '16 16', text: _("UI_APPLY"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.active_condition = apply_conditional;
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
@@ -3263,9 +3253,9 @@ void MenuInit_Options_Resolution(void)
 		language_c langdef = this.langset;
 
 		//this.color = OPTIONS_TEXT_COLOR;
-		//this.flags &= ~UIFLAG::HIDE;
+		//this.flags &= ~UIFLAG_HIDE;
 		//if (this.langset.lang == language_to_apply)
-		//	this.flags |= UIFLAG::HIDE;
+		//	this.flags |= UIFLAG_HIDE;
 		
 		lang_initname(langtxt_viewer, langtxt_native, langdef);
 
@@ -3295,7 +3285,7 @@ void MenuInit_Options_Resolution(void)
 	};
 
 	static uilist_c langboxlist;
-	uilist_c boxlist = spawn(uismoothlist_c, owner: langbutton, origin: '24 -9', anchor: '1 0.5', justify: '0 0', size: '256 128', separation: '0 20', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLIP);
+	uilist_c boxlist = spawn(uismoothlist_c, owner: langbutton, origin: '24 -9', anchor: '1 0.5', justify: '0 0', size: '256 128', separation: '0 20', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLIP);
 		boxlist.input = list_input;
 		boxlist.bar_scrollamt = 0; // number of languages
 	langbutton.partner2 = boxlist;
@@ -3311,8 +3301,8 @@ void MenuInit_Options_Resolution(void)
 		strunzone(language_to_apply);
 		language_to_apply = strzone(this.langset.lang);
 
-		header.flags &= ~UIFLAG::HIDE;
-		list.flags |= UIFLAG::HIDE;
+		header.flags &= ~UIFLAG_HIDE;
+		list.flags |= UIFLAG_HIDE;
 	};
 
 	static void(uielement_c this) lang_reinit_current = {
@@ -3322,11 +3312,11 @@ void MenuInit_Options_Resolution(void)
 			return;
 		
 		lang_reinit(this);
-		this.flags &= ~UIFLAG::HIDE;
+		this.flags &= ~UIFLAG_HIDE;
 	};
 
 	#if 1
-	uifill_c button = spawn(uifill_c, owner: boxlist, langset: language_current, size: [boxlist.size[0], boxlist.separation[1]], color: OPTIONS_TEXT_COLOR + '0.04 0.045 0', flags: UIFLAG::CLICKABLE);
+	uifill_c button = spawn(uifill_c, owner: boxlist, langset: language_current, size: [boxlist.size[0], boxlist.separation[1]], color: OPTIONS_TEXT_COLOR + '0.04 0.045 0', flags: UIFLAG_CLICKABLE);
 		button.reinit = lang_reinit_current;
 		button.m_click = abtn_click;
 
@@ -3366,11 +3356,11 @@ void MenuInit_Options_Resolution(void)
 			//lang_reinit(langbutton);
 			Run_Reinit_List(header);
 
-			header.flags &= ~UIFLAG::HIDE;
-			list.flags |= UIFLAG::HIDE;
+			header.flags &= ~UIFLAG_HIDE;
+			list.flags |= UIFLAG_HIDE;
 		};
 
-		uifill_c button = spawn(uifill_c, owner: boxlist, langset: lang, size: [boxlist.size[0], boxlist.separation[1]], color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+		uifill_c button = spawn(uifill_c, owner: boxlist, langset: lang, size: [boxlist.size[0], boxlist.separation[1]], color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 			button.reinit = lang_reinit;
 			button.m_click = btn_click;
 			button.active_condition = lang_activecondition;
@@ -3413,7 +3403,7 @@ void MenuInit_Options_Audio(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options_audio = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_audio = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_options_audio.active_condition = menu_conditional;
 	menu_options_audio.input = option_input;
 
@@ -3428,7 +3418,7 @@ void MenuInit_Options_Audio(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_audio, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -3567,7 +3557,7 @@ void MenuInit_Options_Gameplay(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_options_gameplay = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_options_gameplay = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_options_gameplay.active_condition = menu_conditional;
 	menu_options_gameplay.input = option_input;
 
@@ -3584,7 +3574,7 @@ void MenuInit_Options_Gameplay(void)
 		menu_current = menu_options;
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_options_gameplay, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -3603,12 +3593,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3617,7 +3607,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_STRAFETILT"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3634,12 +3624,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3648,7 +3638,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_VIEWBOB"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3665,12 +3655,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (!cvar(OPT_CVAR))
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3679,7 +3669,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_CROSSHAIR"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3697,12 +3687,12 @@ void MenuInit_Options_Gameplay(void)
 		cmd("cmd check_custom_cvars\n");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3711,7 +3701,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_CENTERWEAPON"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3728,12 +3718,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3742,7 +3732,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_SWITCHEMPTY"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3759,12 +3749,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3773,7 +3763,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_DECALS"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3790,12 +3780,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3804,7 +3794,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_SCREENFLASH"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3822,12 +3812,12 @@ void MenuInit_Options_Gameplay(void)
 		cmd("cmd check_custom_cvars\n");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3836,7 +3826,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_ALWAYSRUN"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3854,12 +3844,12 @@ void MenuInit_Options_Gameplay(void)
 		cmd("cmd check_custom_cvars\n");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3868,7 +3858,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_TOGGLERUN"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3885,12 +3875,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3899,7 +3889,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_VIEWPUNCH"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3916,12 +3906,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -3930,7 +3920,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_TIMESTAMPS"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -3988,12 +3978,12 @@ void MenuInit_Options_Gameplay(void)
 		cmd("cmd check_infinite_saves\n");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -4002,7 +3992,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_INFINITESAVES"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -4019,12 +4009,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -4033,7 +4023,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_AUTOARTIFACTSWITCH"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -4050,12 +4040,12 @@ void MenuInit_Options_Gameplay(void)
 		localsound("sounds/menu.wav");
 	}
 	void(uielement_c this, __inout vector position) option_preloop = {
-		this.partner.flags |= UIFLAG::HIDE;
+		this.partner.flags |= UIFLAG_HIDE;
 		if (cvar(OPT_CVAR) == OPT_VAL)
-			this.partner.flags &= ~UIFLAG::HIDE;
+			this.partner.flags &= ~UIFLAG_HIDE;
 		
 		// hightlight title
-		if (this.owner.type == UITYPE::TEXT)
+		if (this.owner.type == UITYPE_TEXT)
 		{
 			if (ui_hover == this)
 				this.owner.color = HIGHLIGHT_TEXT_COLOR;
@@ -4064,7 +4054,7 @@ void MenuInit_Options_Gameplay(void)
 		}
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_right, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_STRAIGHTBEAM"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
-	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG::CLICKABLE | UIFLAG::HIGHLIGHT);
+	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
 		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
 		box.m_click = option_click;
 		box.preloop = option_preloop;
@@ -4111,18 +4101,18 @@ void MenuInit_LoadProfile(void)
 		for(float i = 0; i < menu_loadprofile_slots.length; i++)
 		{
 			uitext_c slot = menu_loadprofile_slots[i];
-			slot.flags |= UIFLAG::HIDE;
+			slot.flags |= UIFLAG_HIDE;
 		}
 
 		for(float i = 0; i < profile_loadimage.length; i++)
 		{
 			uitext_c slot = profile_loadbutton[i];
 			uipicture_c page = profile_loadimage[i];
-			slot.flags |= UIFLAG::HIDE;
-			page.flags |= UIFLAG::HIDE;
+			slot.flags |= UIFLAG_HIDE;
+			page.flags |= UIFLAG_HIDE;
 		}
 
-		menu_loadprofile_warning.flags |= UIFLAG::HIDE;
+		menu_loadprofile_warning.flags |= UIFLAG_HIDE;
 		//
 
 		float search_length = 0;
@@ -4138,7 +4128,7 @@ void MenuInit_LoadProfile(void)
 		for(float i = 0; i < min(menu_loadprofile_slots.length, search_length); i++)
 		{
 			uitext_c slot = menu_loadprofile_slots[i];
-			slot.flags |= UIFLAG::HIDE;
+			slot.flags |= UIFLAG_HIDE;
 
 			tokenizebyseparator(search_getfilename(sb, i), "/");
 			string prof_name = argv(2);
@@ -4152,7 +4142,7 @@ void MenuInit_LoadProfile(void)
 			slot.text = strzone(prof_name);
 			if (prof_name && prof_name != " ")
 			{
-				slot.flags &= ~UIFLAG::HIDE;
+				slot.flags &= ~UIFLAG_HIDE;
 				if (!force_profile_select)
 				{
 					force_profile_select = i | 0x80;
@@ -4178,7 +4168,7 @@ void MenuInit_LoadProfile(void)
 	};
 	
 	ui_scale = '1 1';
-	menu_loadprofile = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_loadprofile = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_loadprofile.active_condition = menu_conditional;
 		menu_loadprofile.input = option_input;
 		menu_loadprofile.reinit = profile_reinit;
@@ -4190,7 +4180,7 @@ void MenuInit_LoadProfile(void)
 		Run_Reinit_List(menu_current);
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_loadprofile, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -4214,18 +4204,18 @@ void MenuInit_LoadProfile(void)
 		save_selected = this.button_index;
 		Journal_Sound();
 	};
-	uielement_c profile_page2 = spawn(uielement_c, owner:menu_journal, flags: UIFLAG::STRETCH);
+	uielement_c profile_page2 = spawn(uielement_c, owner:menu_journal, flags: UIFLAG_STRETCH);
 	uilist_c profile_loadlist = spawn(uilist_c, owner: menu_journal, origin: '360 84', justify:'0.5 0', size: '200 300', separation: '0 24');
 	for(float i = 0; i < saveslot_str.length; i++)
 	{
-		profile_loadimage[i] = spawn(uipicture_c, button_index: i, owner: profile_page2, flags: UIFLAG::STRETCH, image: strzone("gfx/menu/load_menu_e1m1.tga"));
+		profile_loadimage[i] = spawn(uipicture_c, button_index: i, owner: profile_page2, flags: UIFLAG_STRETCH, image: strzone("gfx/menu/load_menu_e1m1.tga"));
 			profile_loadimage[i].active_condition = profilepage_conditional;
 		profile_loadimage[i].partner = spawn(uitext_c, owner: profile_loadimage[i], origin: '361 283', justify:'0.5 1', size: '12 12', color: '-0.5 -0.5 -0.5', alpha: JOURNAL_TEXTALPHA, text: strzone("Time not found"));
 		profile_loadimage[i].partner2 = spawn(uitext_c, owner: profile_loadimage[i], origin: '361 175', justify:'0.5 1', size: '12 12', color: '-0.5 -0.5 -0.5', alpha: JOURNAL_TEXTALPHA, text: strzone("Date not found"));
 		/* skill */ profile_loadimage[i].partner3 = spawn(uitext_c, owner: profile_loadimage[i], origin: '361 180', justify:'0.5 0', size: '12 12', color: '-0.5 -0.5 -0.5', alpha: JOURNAL_TEXTALPHA, text: " ");
 		/* loc label */ profile_loadimage[i].partner4 = spawn(uitext_c, owner: profile_loadimage[i], origin: '361 243', justify:'0.5 0', size: '16 16', color: CONVERT_TO_DP_SHITTY_COLOR('0 0 0'), alpha: JOURNAL_TEXTALPHA, font: FONT_USER7, text: " ");
 
-		profile_loadbutton[i] = spawn(uitext_c, button_index: i, owner: profile_loadlist, anchor: '0.5 0', justify:'0.5 0', size: '22 22', flags: UIFLAG::CLICKABLE, color: JOURNAL_COLOR_NOTE, font: FONT_USER7, alpha: JOURNAL_TEXTALPHA, text: saveslot_str[i]);
+		profile_loadbutton[i] = spawn(uitext_c, button_index: i, owner: profile_loadlist, anchor: '0.5 0', justify:'0.5 0', size: '22 22', flags: UIFLAG_CLICKABLE, color: JOURNAL_COLOR_NOTE, font: FONT_USER7, alpha: JOURNAL_TEXTALPHA, text: saveslot_str[i]);
 			profile_loadbutton[i].prerender = saveslot_prerender;
 			profile_loadbutton[i].m_click = saveslot_click;
 	}
@@ -4251,7 +4241,7 @@ void MenuInit_LoadProfile(void)
 	float(uielement_c this) load_conditional = {
 		if (save_selected < 0)
 			return FALSE;
-		if (profile_loadbutton[save_selected].flags & UIFLAG::HIDE)
+		if (profile_loadbutton[save_selected].flags & UIFLAG_HIDE)
 			return FALSE;
 		return TRUE;
 	};
@@ -4277,7 +4267,7 @@ void MenuInit_LoadProfile(void)
 			load_autosave();
 		}
 	};
-	uipicture_c loadbutton = spawn(uipicture_c, owner: menu_journal, origin: '360 285', justify:'0.5 0', size: '152 40', image: menu_assets[MENU_IMG::LOAD_GAME_ACTIVE], image2: menu_assets[MENU_IMG::LOAD_GAME_ACTIVE2], flags: UIFLAG::CLICKABLE);
+	uipicture_c loadbutton = spawn(uipicture_c, owner: menu_journal, origin: '360 285', justify:'0.5 0', size: '152 40', image: menu_assets[MENU_IMG::LOAD_GAME_ACTIVE], image2: menu_assets[MENU_IMG::LOAD_GAME_ACTIVE2], flags: UIFLAG_CLICKABLE);
 		loadbutton.active_condition = load_conditional;
 		loadbutton.prerender = loadbutton_prerender;
 		loadbutton.m_click = load_click;
@@ -4289,10 +4279,10 @@ void MenuInit_LoadProfile(void)
 		if (list.elements <= list.scroll_count)
 			position[1] -= (32 * ui_scale[1]);
 	};
-	uielement_c profile_list_handler = spawn(uielement_c, owner: menu_journal, flags: UIFLAG::STRETCH);
+	uielement_c profile_list_handler = spawn(uielement_c, owner: menu_journal, flags: UIFLAG_STRETCH);
 		profile_list_handler.preloop = profile_list_preloop;
 		
-	uismoothlist_c profile_list = spawn(uismoothlist_c, owner: profile_list_handler, size: '256 130', origin: '22 120', separation: '0 26', flags: UIFLAG::CLIP);
+	uismoothlist_c profile_list = spawn(uismoothlist_c, owner: profile_list_handler, size: '256 130', origin: '22 120', separation: '0 26', flags: UIFLAG_CLIP);
 	profile_list_handler.partner = profile_list;
 
 	void(uipicture_c this, __inout string img_to_render) scroll_prerender = { if (ui_hover == this) img_to_render = this.image2; };
@@ -4323,13 +4313,13 @@ void MenuInit_LoadProfile(void)
 
 	// scroll up
 	uipicture_c scroll = spawn(uipicture_c, owner: menu_journal, origin: '132 76', anchor: '0 0', justify: '0 0', size: '32 40',
-		flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/menu/arrow_up", image2: "gfx/menu/arrow_up_active", partner: profile_list, button_index: -1);
+		flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/menu/arrow_up", image2: "gfx/menu/arrow_up_active", partner: profile_list, button_index: -1);
 		scroll.active_condition = scroll_conditional;
 		scroll.prerender = scroll_prerender;
 		scroll.m_click = scroll_click;
 	// scroll down
 	uipicture_c scroll = spawn(uipicture_c, owner: menu_journal, origin: '132 250', anchor: '0 0', justify: '0 0', size: '32 40',
-		flags: UIFLAG::CLIP | UIFLAG::CLICKABLE, image: "gfx/menu/arrow_down", image2: "gfx/menu/arrow_down_active", partner: profile_list, button_index: 1);
+		flags: UIFLAG_CLIP | UIFLAG_CLICKABLE, image: "gfx/menu/arrow_down", image2: "gfx/menu/arrow_down_active", partner: profile_list, button_index: 1);
 		scroll.active_condition = scroll_conditional;
 		scroll.prerender = scroll_prerender;
 		scroll.m_click = scroll_click;
@@ -4360,14 +4350,14 @@ void MenuInit_LoadProfile(void)
 			{
 				uitext_c slot = profile_loadbutton[i];
 				uipicture_c page = profile_loadimage[i];
-				slot.flags |= UIFLAG::HIDE;
-				page.flags |= UIFLAG::HIDE;
+				slot.flags |= UIFLAG_HIDE;
+				page.flags |= UIFLAG_HIDE;
 			}
 
-			menu_loadprofile_warning.flags &= ~UIFLAG::HIDE;
+			menu_loadprofile_warning.flags &= ~UIFLAG_HIDE;
 			return;
 		}
-		menu_loadprofile_warning.flags |= UIFLAG::HIDE;
+		menu_loadprofile_warning.flags |= UIFLAG_HIDE;
 			
 		checkdates(this.text);
 		get_timestamp_map(this.text);
@@ -4448,17 +4438,17 @@ void MenuInit_LoadProfile(void)
 
 			if !(save_slots & (1 << i))
 			{
-				slot.flags |= UIFLAG::HIDE;
-				page.flags |= UIFLAG::HIDE;
+				slot.flags |= UIFLAG_HIDE;
+				page.flags |= UIFLAG_HIDE;
 				continue;
 			}
 
 			if (save_selected < 0)
 				save_selected = i;
 
-			slot.flags &= ~UIFLAG::HIDE;
-			page.flags &= ~UIFLAG::HIDE;
-			loc_label.flags |= UIFLAG::HIDE;
+			slot.flags &= ~UIFLAG_HIDE;
+			page.flags &= ~UIFLAG_HIDE;
+			loc_label.flags |= UIFLAG_HIDE;
 
 			string img = timestamp_str[i];
 			//float lm_ofs = strstrofs(img, "load_menu_", 0);
@@ -4482,7 +4472,7 @@ void MenuInit_LoadProfile(void)
 						if (strcmp(ls.locname, sprintf("UI_JOURNAL_LABEL_%s", ls.mapfile))) // and make sure we have a journal label
 						{
 							loc_label.text = ls.locname;
-							loc_label.flags &= ~UIFLAG::HIDE;
+							loc_label.flags &= ~UIFLAG_HIDE;
 
 							float o_font = drawfont; drawfont = loc_label.font;
 							float str_width = stringwidth(loc_label.text, TRUE, '16 16');
@@ -4506,7 +4496,7 @@ void MenuInit_LoadProfile(void)
 				{
 					img = "gfx/empty.tga"; // sigh
 				}
-				//page.flags |= UIFLAG::HIDE;
+				//page.flags |= UIFLAG_HIDE;
 			}
 			page.image = strzone(img);
 			
@@ -4525,7 +4515,7 @@ void MenuInit_LoadProfile(void)
 	};
 
 	float(uielement_c this) dprof_conditional = {
-		if (this.partner.flags & UIFLAG::HIDE)
+		if (this.partner.flags & UIFLAG_HIDE)
 			return FALSE;
 		if (profile_selected == this.partner.button_index)
 			return TRUE;
@@ -4548,12 +4538,12 @@ void MenuInit_LoadProfile(void)
 		uitext_c slot;
 		
 		// delete profile
-		uipicture_c delete_profile = spawn(uipicture_c, owner: menu_journal, origin: '160 285', justify:'0.5 0', size: '152 40', image: menu_assets[MENU_IMG::DELETE_PROFILE], image2: menu_assets[MENU_IMG::DELETE_PROFILE_ACTIVE], flags: UIFLAG::CLICKABLE);
+		uipicture_c delete_profile = spawn(uipicture_c, owner: menu_journal, origin: '160 285', justify:'0.5 0', size: '152 40', image: menu_assets[MENU_IMG::DELETE_PROFILE], image2: menu_assets[MENU_IMG::DELETE_PROFILE_ACTIVE], flags: UIFLAG_CLICKABLE);
 			delete_profile.active_condition = dprof_conditional;
 			delete_profile.prerender = loadbutton_prerender;
 			delete_profile.m_click = dprof_click;
 		// profile name
-		menu_loadprofile_slots[i] = slot = spawn(uitext_c, owner: profile_list, button_index: i, size: '20 20',  justify: '0.5 0', anchor: '0.5 0', flags: UIFLAG::CLICKABLE, padding: '24 4',
+		menu_loadprofile_slots[i] = slot = spawn(uitext_c, owner: profile_list, button_index: i, size: '20 20',  justify: '0.5 0', anchor: '0.5 0', flags: UIFLAG_CLICKABLE, padding: '24 4',
 			font: FONT_USER7, text: strzone(" "), color: JOURNAL_COLOR_NOTE, alpha: JOURNAL_TEXTALPHA);
 			slot.prerender = profile_prerender;
 			slot.m_click = profile_click;
@@ -4569,7 +4559,7 @@ void MenuInit_DeleteConfirm()
 {
 	// exit button
 	// DELETE CONFIRM MENU
-	menu_deleteconfirm = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_deleteconfirm = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_deleteconfirm.active_condition = menu_conditional;
 	
 	float(uielement_c this, float nkey, float ascii, float released) quit_input = {
@@ -4606,7 +4596,7 @@ void MenuInit_DeleteConfirm()
 		menu_current = menu_loadprofile;
 	}
 	uitext_c txtbutton = spawn(uitext_c, owner: delconfirm_buttons, anchor: '0.5 0.5', justify: '0 0.5', origin: '-184 0', padding: '24 8',
-		size: '32 32', text: _("UI_NO"), font: FONT_USER7, flags: UIFLAG::CLICKABLE);
+		size: '32 32', text: _("UI_NO"), font: FONT_USER7, flags: UIFLAG_CLICKABLE);
 		txtbutton.prerender = text_highlight;
 		txtbutton.m_click = button_click;
 	
@@ -4619,7 +4609,7 @@ void MenuInit_DeleteConfirm()
 		Run_Reinit_List(menu_loadprofile.reinit_list);
 	}
 	uitext_c txtbutton = spawn(uitext_c, owner: delconfirm_buttons, anchor: '0.5 0.5', justify: '1 0.5', origin: '184 0', padding: '24 8',
-		size: '32 32', text: _("UI_YES"), font: FONT_USER7, flags: UIFLAG::CLICKABLE);
+		size: '32 32', text: _("UI_YES"), font: FONT_USER7, flags: UIFLAG_CLICKABLE);
 		txtbutton.prerender = text_highlight;
 		txtbutton.m_click = button_click;
 	//
@@ -4693,21 +4683,21 @@ void MenuInit_CreateProfile()
 				// check for empty
 				if (!txt.text)
 				{
-					warningdup.flags |= UIFLAG::HIDE;
-					warningamt.flags |= UIFLAG::HIDE;
-					accept.flags |= UIFLAG::HIDE;
+					warningdup.flags |= UIFLAG_HIDE;
+					warningamt.flags |= UIFLAG_HIDE;
+					accept.flags |= UIFLAG_HIDE;
 					return;
 				}
 
 				// check for duplicates
-				warningdup.flags |= UIFLAG::HIDE;
-				warningamt.flags |= UIFLAG::HIDE;
-				accept.flags &= ~UIFLAG::HIDE;
+				warningdup.flags |= UIFLAG_HIDE;
+				warningamt.flags |= UIFLAG_HIDE;
+				accept.flags &= ~UIFLAG_HIDE;
 				
 				if (strtolower(txt.text) == "default")
 				{
-					warningdup.flags &= ~UIFLAG::HIDE;
-					accept.flags |= UIFLAG::HIDE;
+					warningdup.flags &= ~UIFLAG_HIDE;
+					accept.flags |= UIFLAG_HIDE;
 					return;
 				}
 				
@@ -4723,8 +4713,8 @@ void MenuInit_CreateProfile()
 					ln = fgets(f);
 					if (strtolower(ln) == strtolower(txt.text))
 					{
-						warningdup.flags &= ~UIFLAG::HIDE;
-						accept.flags |= UIFLAG::HIDE;
+						warningdup.flags &= ~UIFLAG_HIDE;
+						accept.flags |= UIFLAG_HIDE;
 						fclose(f);
 						return;
 					}
@@ -4734,8 +4724,8 @@ void MenuInit_CreateProfile()
 
 				if (lnnum >= menu_loadprofile_slots.length)
 				{
-					warningamt.flags &= ~UIFLAG::HIDE;
-					accept.flags |= UIFLAG::HIDE;
+					warningamt.flags &= ~UIFLAG_HIDE;
+					accept.flags |= UIFLAG_HIDE;
 				}
 
 				fclose(f);
@@ -4751,8 +4741,8 @@ void MenuInit_CreateProfile()
 						string profname = argv(2);
 						if (strtolower(profname) == strtolower(txt.text))
 						{
-							warningdup.flags &= ~UIFLAG::HIDE;
-							accept.flags |= UIFLAG::HIDE;
+							warningdup.flags &= ~UIFLAG_HIDE;
+							accept.flags |= UIFLAG_HIDE;
 						}
 					}
 
@@ -4775,15 +4765,15 @@ void MenuInit_CreateProfile()
 		strunzone(txt.text);
 		txt.text = strzone("");
 
-		accept.flags |= UIFLAG::HIDE;
-		warningdup.flags |= UIFLAG::HIDE;
-		warningamt.flags |= UIFLAG::HIDE;
+		accept.flags |= UIFLAG_HIDE;
+		warningdup.flags |= UIFLAG_HIDE;
+		warningamt.flags |= UIFLAG_HIDE;
 		
 		ui_selected = this.partner;
 	};
 	
 	ui_scale = '1 1';
-	menu_createprofile = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_createprofile = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_createprofile.active_condition = menu_conditional;
 	menu_createprofile.input = option_input;
 	menu_createprofile.reinit = option_reinit;
@@ -4803,7 +4793,7 @@ void MenuInit_CreateProfile()
 		profile_steam_openkeyboard();
 	}
 	uifill_c box = spawn(uifill_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0.5', size: '360 32', color: '0.2 0.2 0.23', alpha: 0.4,
-		flags: UIFLAG::CLICKABLE | UIFLAG::SELECTABLE | UIFLAG::HIGHLIGHT);
+		flags: UIFLAG_CLICKABLE | UIFLAG_SELECTABLE | UIFLAG_HIGHLIGHT);
 		box.prerender = box_prerender;
 		box.m_click = box_click;
 	menu_createprofile.partner = box;
@@ -4847,15 +4837,15 @@ void MenuInit_CreateProfile()
 	};
 
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_ACCEPT"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE | UIFLAG::HIDE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE | UIFLAG_HIDE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	box.partner2 = txt;
 
-	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_DUPLICATESAVE"), font: FONT_MENU, color: HIGHLIGHT_TEXT_COLOR, flags: UIFLAG::HIDE, padding: '48 32');
+	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_DUPLICATESAVE"), font: FONT_MENU, color: HIGHLIGHT_TEXT_COLOR, flags: UIFLAG_HIDE, padding: '48 32');
 	box.partner3 = txt;
 
-	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_TOOMANYSAVES"), font: FONT_MENU, color: HIGHLIGHT_TEXT_COLOR, flags: UIFLAG::HIDE, padding: '48 32');
+	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_TOOMANYSAVES"), font: FONT_MENU, color: HIGHLIGHT_TEXT_COLOR, flags: UIFLAG_HIDE, padding: '48 32');
 	box.partner4 = txt;
 	//
 
@@ -4866,7 +4856,7 @@ void MenuInit_CreateProfile()
 		Run_Reinit_List(menu_current);
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_createprofile, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -4891,7 +4881,7 @@ void MenuInit_CreateProfile_Difficulty()
 	};
 	
 	ui_scale = '1 1';
-	menu_createprofile_difficulty = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	menu_createprofile_difficulty = spawn(uielement_c, flags: UIFLAG_STRETCH);
 	menu_createprofile_difficulty.active_condition = menu_conditional;
 	menu_createprofile_difficulty.input = option_input;
 
@@ -4943,22 +4933,22 @@ void MenuInit_CreateProfile_Difficulty()
 	};
 
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_DIFFICULTY_EASY"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32', button_index: 0);
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32', button_index: 0);
 		txt.prerender = text_highlight;
 		txt.m_click = button_click;
 	
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_DIFFICULTY_MEDIUM"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32', button_index: 1);
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32', button_index: 1);
 		txt.prerender = text_highlight;
 		txt.m_click = button_click;
 
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_DIFFICULTY_HARD"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32', button_index: 2);
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32', button_index: 2);
 		txt.prerender = text_highlight;
 		txt.m_click = button_click;
 
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_DIFFICULTY_OUTLANDER"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR + '0.3 -0.32 -0.34', padding: '48 32', button_index: 3);
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR + '0.3 -0.32 -0.34', padding: '48 32', button_index: 3);
 		txt.prerender = text_highlight;
 		txt.m_click = button_click;
 		txt.active_condition = outlander_active;
@@ -4973,7 +4963,7 @@ void MenuInit_CreateProfile_Difficulty()
 		Run_Reinit_List(menu_current);
 	};
 	uitext_c txt = spawn(uitext_c, owner: menu_createprofile, anchor: '0.5 0.5', origin: '0 180', justify: '0.5 0', size: '16 16', text: _("UI_BACK"), font: FONT_MENU,
-		flags: UIFLAG::CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
+		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
 	//
@@ -5036,17 +5026,17 @@ void menu_anydraw(void)
 	}
 	//
 
-	if (cltime > statistics_FileOpTime)
-	{
-		statistics_FileOpTime = cltime + 1;
-		Achievements_RunFileOperations();
-		Stats_RunFileOperations();
-	}
+	// if (cltime > statistics_FileOpTime)
+	// {
+	// 	statistics_FileOpTime = cltime + 1;
+	// 	Achievements_RunFileOperations();
+	// 	Stats_RunFileOperations();
+	// }
 
-	if (oldtime <= steam_initTime && cltime > steam_initTime) // HACK: wait a bit then init steam
-	{
-		Steam_InitStats();
-	}
+	// if (oldtime <= steam_initTime && cltime > steam_initTime) // HACK: wait a bit then init steam
+	// {
+	// 	  Steam_InitStats();
+	// }
 
 	vid_x = cvar("vid_conwidth");
 	vid_y = cvar("vid_conheight");

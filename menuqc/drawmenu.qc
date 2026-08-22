@@ -1,10 +1,3 @@
-
-#include "uielement.h"
-#include "localization.h"
-#if NEW_MENU
-#include "menudefs.h"
-#endif
-
 float smallbuttons;
 
  void() m_display;
@@ -561,7 +554,7 @@ void() updateMouse = {
 	MenuInit_Main();
 	MenuInit_Main_Game();
 	MenuInit_Options();
-	MenuInit_Achievements();
+	// MenuInit_Achievements();
 
 	MenuInit_Overlay();
 	MenuInit_LoadingScreen();
@@ -569,7 +562,7 @@ void() updateMouse = {
 	#endif
 
 	write_currentprofileslot_byname("default", 0);
-	steam_initTime = gettime() + 2; // Reki (May 10 2023): We need to delay the steam init a little to give the API time to fetch the stats...
+	// steam_initTime = gettime() + 2; // Reki (May 10 2023): We need to delay the steam init a little to give the API time to fetch the stats...
 
 
 	check_menuversion();
@@ -680,6 +673,7 @@ void() updateMouse = {
 
 	if (cmd == "backtomainmenu")
  		m_main();
+ 	/*
 	if (!STEAM_IS_CONNECTED) // only run this stuff if we're not using steam already.
 	{
 		if (cmd == "achievementunlock")
@@ -693,6 +687,7 @@ void() updateMouse = {
 		else if (cmd == "statset")
 			Stats_DRMFreeSet(argv(1), stof(argv(2)));
 	}
+	*/
 	if (cmd == "keynumtostring")
 	{
 		print(sprintf("keynumtostring: %.0f,%s\n", stof(argv(1)), keynumtostring(stof(argv(1)))));
@@ -870,7 +865,7 @@ void(float key, float ascii) menu_keydown = {
 			if (!ui_usemouse)
 				ui_selected = __NULL__;
 			
-			if ((ui_selected.flags & UIFLAG::CLICKABLE) && !(ui_selected.flags & UIFLAG::SELECTABLE))
+			if ((ui_selected.flags & UIFLAG_CLICKABLE) && !(ui_selected.flags & UIFLAG_SELECTABLE))
 			{
 				uielement_c u_sel = ui_selected;
 				if (ui_selected && ui_selected.m_click)
@@ -880,7 +875,7 @@ void(float key, float ascii) menu_keydown = {
 			}
 			
 			// keep select means blank space doesn't matter
-			if (old_selected.flags & UIFLAG::KEEPSELECT && !ui_selected)
+			if (old_selected.flags & UIFLAG_KEEPSELECT && !ui_selected)
 			{
 				ui_selected = old_selected;
 			}
