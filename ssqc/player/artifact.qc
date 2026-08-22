@@ -368,7 +368,6 @@ void() LifeSiphon_selected = { self.radialruning = 1;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void() Aegis_selected = { self.radialruning = 1;
 	sound(self, CHAN_AUTO, "items/artifacts/artifactH_use.ogg", 1, 0.25);
-	sound(self, CHAN_AUTO, "items/artifacts/aegis.ogg", 1, 0.25);
 	self.Aegis_time = time + 20.8;
 	self.radial_time = time + 21;
 	self.aegisflag = 1;
@@ -1412,57 +1411,6 @@ void() secret_mark_think =
 	else
 		self.think = secret_mark_think;
 	self.nextthink = time + 0.05; 
-};
-
-void() info_mark_think =
-{
-	float disttoplayer;
-	if(revelation_mark == 1)
-	{
-		disttoplayer = vlen (single_player.origin - self.origin);
-		if(disttoplayer <= 1024)
-		{	
-			self.alpha = 1;
-			if(disttoplayer <= 128)
-			{
-				self.pflags = 129;
-				self.scale = 1;
-			}
-			else
-			{
-				self.pflags = 0;
-				self.scale = 0.5;	
-			}
-		}
-
-		else
-			self.alpha = -1;
-	}
-	else
-		self.alpha = -1;
-
-//	if(self.owner.secret != 1)
-//		self.think = SUB_Remove;
-//	else
-		self.think = info_mark_think;
-	self.nextthink = time + 0.05; 
-};
-
-void() info_mark =
-{
-	self.owner = find (world, targetname, self.target);
-	self.oldowner = self.owner;
-	self.effects = 512 + EF_ADDITIVE;
-	setmodel (self,"models/artifacts/mark_flame.md3");
-	self.scale =0.5;
-	self.pflags = 0;
-	self.origin_z +=7;
-	self.style = 1; 
-	self.color= '1 1 7';
-	self.light_lev = 32;
-	self.wrathflags += FL_GARBAGE;
- 	self.think = info_mark_think;
-	self.nextthink = time + 0.25; 
 };
 
 void() mark_revelation =

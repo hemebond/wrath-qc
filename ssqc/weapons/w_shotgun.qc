@@ -482,9 +482,8 @@ void()proj_heretic_explo;
 void(string locsound, float vol, float nchannel, float iswav, float atten) alreadyrandomsound2;
 
 
-void()shotgun_projectile_explo = 
-{
-	alreadyrandomsound2  ("impact/projectiles/shotgun_explo",1, CHAN_AUTO, 0, 0.25);
+void shotgun_projectile_explo() {
+	alreadyrandomsound2("impact/projectiles/shotgun_explo", 1, CHAN_AUTO, 0, 0.25);
 
 	self.movetype = 0;
 	self.velocity = '0 0 0';	

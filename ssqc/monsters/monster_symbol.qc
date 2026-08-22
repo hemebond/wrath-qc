@@ -1031,7 +1031,6 @@ void() symbolshoot10 =[$symbolshoot10, symbolshoot11]
 void() symbolshoot11 =[$symbolshoot11, symbolshoot12a]
 {	
 	ai_face();
-	attacksound("enemies/symbol/attack");
 	self.glowmod = '1.5 1.5 1.5';
 	float symbol_angles = 1.5;
 	self.movetype = MOVETYPE_STEP; 
@@ -1420,7 +1419,7 @@ void() symbol_death1 =[1, symbol_death2]
 void() symbol_death2 =[2, SUB_Null]
 {
 
-	sound7(self, CHAN_VOICE2, "misc/null", 0, 0.2,100,0);
+	sound7(self, CHAN_VOICE2, "misc/null.wav", 0, 0.2,100,0);
 	local vector tagorg;
 	local float tagindex;
 	local string tagname;
@@ -1527,7 +1526,6 @@ void() symbol_death2 =[2, SUB_Null]
 void() symbol_die = {	// check for gib
 	self.solid = SOLID_NOT;
 	self.takedamage = 0;
-	painsound("enemies/symbol/die");
 	symbol_death1();
 };
 
@@ -1577,19 +1575,8 @@ void() symbol_Missile = { symbolshoot1();
 	WRATHED monster_symbol (1 0 0) (-16 -16 -24) (16 16 40) Ambush
 */
 void() precache_monster_symbol = {
-	precache_model("models/enemies/symbol/symbol_tail2.md3");
-	precache_model("models/enemies/symbol/symbol_tail1.md3");
-	precache_model("models/enemies/symbol/symbol_head.md3");
-	precache_model("models/enemies/symbol/symbol_back3.md3");
-	precache_model("models/enemies/symbol/symbol_back2.md3");
-	precache_model("models/enemies/symbol/symbol_back1.md3");
-	precache_model("models/enemies/symbol/symbol_arm4.md3");
-	precache_model("models/enemies/symbol/symbol_arm3.md3");
-	precache_model("models/enemies/symbol/symbol_arm2.md3");
-	precache_model("models/enemies/symbol/symbol_arm1.md3");
 	precache_model("models/enemies/symbol/symbol.md3");
 	precache_model("models/projectiles/proj_symbol.md3");
-	precache_model("models/projectiles/proj_symbol_explo.md3");
 
 	precache_model("models/misc/null.md3");
 	precache_model("models/enemies/symbol/gibs/c_bl.md3");
@@ -1603,33 +1590,19 @@ void() precache_monster_symbol = {
 	precache_model("models/enemies/symbol/gibs/t_fl.md3");
 	precache_model("models/enemies/symbol/gibs/t_fm.md3");
 	precache_model("models/enemies/symbol/gibs/t_fr.md3");
-	precache_sound("misc/null");
+	precache_sound("misc/null.wav");
 	precache_sound("enemies/symbol/idle1.ogg");
 	precache_sound("enemies/symbol/idle2.ogg");
 	precache_sound("enemies/symbol/idle3.ogg");
 	precache_sound("enemies/symbol/idle_loop.ogg");
 	precache_sound("enemies/symbol/impact.ogg");
 
-	precache_sound("enemies/symbol/attack1.ogg");
-	precache_sound("enemies/symbol/attack2.ogg");
-	precache_sound("enemies/symbol/attack3.ogg");
 	precache_sound("enemies/symbol/chatter1.ogg");
 	precache_sound("enemies/symbol/chatter2.ogg");
 	precache_sound("enemies/symbol/chatter3.ogg");
-	precache_sound("enemies/symbol/chatter4.ogg");
-	precache_sound("enemies/symbol/chatter5.ogg");
-	precache_sound("enemies/symbol/die1.ogg");
-	precache_sound("enemies/symbol/die2.ogg");
-	precache_sound("enemies/symbol/die3.ogg");
 	precache_sound("enemies/symbol/pain1.ogg");
 	precache_sound("enemies/symbol/pain2.ogg");
 	precache_sound("enemies/symbol/pain3.ogg");
-	precache_sound("enemies/symbol/proj_impact1.ogg");
-	precache_sound("enemies/symbol/proj_impact2.ogg");
-	precache_sound("enemies/symbol/proj_impact3.ogg");
-	precache_sound("enemies/symbol/proj_loop1.ogg");
-	precache_sound("enemies/symbol/proj_loop2.ogg");
-	precache_sound("enemies/symbol/proj_loop3.ogg");
 	precache_sound("enemies/symbol/sight1.ogg");
 	precache_sound("enemies/symbol/sight2.ogg");
 	precache_sound("enemies/symbol/sight3.ogg");
@@ -1637,40 +1610,16 @@ void() precache_monster_symbol = {
 
 
 void() monster_symbol = {
-	precache_model("models/enemies/symbol/symbol_tail2.md3");
-	precache_model("models/enemies/symbol/symbol_tail1.md3");
-	precache_model("models/enemies/symbol/symbol_head.md3");
-	precache_model("models/enemies/symbol/symbol_back3.md3");
-	precache_model("models/enemies/symbol/symbol_back2.md3");
-	precache_model("models/enemies/symbol/symbol_back1.md3");
-	precache_model("models/enemies/symbol/symbol_arm4.md3");
-	precache_model("models/enemies/symbol/symbol_arm3.md3");
-	precache_model("models/enemies/symbol/symbol_arm2.md3");
-	precache_model("models/enemies/symbol/symbol_arm1.md3");
 	precache_model("models/enemies/symbol/symbol.md3");
 	precache_model("models/misc/null.md3");
 
-	precache_sound("enemies/symbol/attack1.ogg");
-	precache_sound("enemies/symbol/attack2.ogg");
-	precache_sound("enemies/symbol/attack3.ogg");
 	precache_sound("enemies/symbol/chatter1.ogg");
 	precache_sound("enemies/symbol/chatter2.ogg");
 	precache_sound("enemies/symbol/chatter3.ogg");
-	precache_sound("enemies/symbol/chatter4.ogg");
-	precache_sound("enemies/symbol/chatter5.ogg");
-	precache_sound("enemies/symbol/die1.ogg");
-	precache_sound("enemies/symbol/die2.ogg");
-	precache_sound("enemies/symbol/die3.ogg");
 	precache_sound("enemies/symbol/pain1.ogg");
 	precache_sound("enemies/symbol/pain2.ogg");
 	precache_sound("enemies/symbol/pain3.ogg");
-	precache_sound("enemies/symbol/proj_impact1.ogg");
-	precache_sound("enemies/symbol/proj_impact2.ogg");
-	precache_sound("enemies/symbol/proj_impact3.ogg");
 	precache_sound("enemies/symbol/proj_loop.ogg");
-	precache_sound("enemies/symbol/proj_loop1.ogg");
-	precache_sound("enemies/symbol/proj_loop2.ogg");
-	precache_sound("enemies/symbol/proj_loop3.ogg");
 	precache_sound("enemies/symbol/sight1.ogg");
 	precache_sound("enemies/symbol/sight2.ogg");
 	precache_sound("enemies/symbol/sight3.ogg");

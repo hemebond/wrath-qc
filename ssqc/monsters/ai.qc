@@ -1839,25 +1839,6 @@ float()check_step =
 	if(dist > 256)
 	float tracefraction = 3;
 
-	/*
-	entity dimaond = spawn();
-	setmodel (dimaond,"sdfdsd");
-	dimaond.think = SUB_Remove;
-	dimaond.nextthink = time + 5;
-	dimaond.origin = trace_endpos;
-
-	entity dimaond2 = spawn();
-	setmodel (dimaond2,"sddfsd");
-	dimaond2.think = SUB_Remove;
-	dimaond2.nextthink = time + 5;
-	dimaond2.origin = source;
-	dimaond2.colormod = '1 0 0';
-	dimaond2.scale = 0.333;
-
-
-	string viewxanglesfactor = strcat ((ftos (dist)), (" dist \n"));
-	bprint (viewxanglesfactor);*/
-
 	return tracefraction;
 
 };

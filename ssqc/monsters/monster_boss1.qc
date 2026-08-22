@@ -1777,7 +1777,6 @@ void()glowmodcontrollerboss1_think =
 void() precache_monster_boss1 =
 {
 	precache_sound("enemies/boss1/die1.ogg");
-	precache_sound("enemies/boss1/filename1");
 	precache_sound("enemies/boss1/pain1.ogg");
 	precache_sound("enemies/boss1/pain2.ogg");
 	precache_sound("enemies/boss1/pain3.ogg");
@@ -1795,7 +1794,6 @@ void() precache_monster_boss1 =
 	precache_sound("enemies/boss1/weak1.ogg");
 	precache_sound("enemies/boss1/weak2.ogg");
 	precache_sound("enemies/boss1/weak3.ogg");
-	precache_sound("enemies/boss1/sight1.ogg");
 	precache_sound("enemies/boss1/cry1.ogg");
 	precache_sound("enemies/boss1/cry2.ogg");
 	precache_sound("enemies/boss1/cry3.ogg");

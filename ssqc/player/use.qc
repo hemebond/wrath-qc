@@ -37,28 +37,6 @@ void() object_switch_fire = { self.skin = 1;
 		self.think = object_switch_fire_wait;
 	self.nextthink = time + self.wait;
 };
-void() object_switch2 = { if (!self.wait)
-		self.wait = 2;
-	if (self.wait < 0)
-		self.spawnflags = 1;
-	setmodel(self, "models/objects/switch1.md3");
-	self.solid = SOLID_BSP;
-	if (self.target2)
-	{
-		self.followner = find(world, classname, "func_door");
-		self.colormod = '1 1 0';
-		setattachment(self, self.followner, "");
-	}
-	if(self.displacement == 1)
-	{
-		self.wrathflags += FL_INVISIBLE;
-		self.effects = EF_NODRAW;
-		self.solid = 0;
-	}
-	setsize(self, '-16 -16 -24', '16 16 24');
-	self.usable = 1;
-	self.use = object_switch_fire;
-};
 
 .float switch_state;
 

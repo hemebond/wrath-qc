@@ -3272,7 +3272,6 @@ void() WeaponFrames =
 				}
 				if (self.radialactive == 5)
 				{
-					sound(self, CHAN_AUTO, "items/artifacts/artifactE_end.ogg", 1, 0.25);
 					if(!self.BlackGrenade)
 					{
 						if(autoswitch == 1)

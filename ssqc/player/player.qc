@@ -23,20 +23,6 @@ float    MAT_WOOD = 393216; // 262144 + 131072, 0x60000
 float    MAT_BFLESH= 425984; // 262144 + 131072+ 32768;, 0x68000
 float    MAT_MASK = 426048 ; //  262144 + 131072+ 32768 +64, 0x68040
 
-
-void(vector org) spawnfootstep = { local entity fs;
-	fs = spawn();
-	setmodel(fs, "models/player/footstep.md3");
-	fs.scale = 3;
-	fs.origin = org;
-	fs.angles_x = -90;
-	fs.alpha = 0.5;
-	fs.effects = EF_ADDITIVE;
-	fs.angles_y = self.angles_y;
-};
-
-
-
 float() GetTraceMaterial = 
 { 
 	if(trace_dphitq3surfaceflags & 16)
@@ -206,10 +192,6 @@ void(float isheavy) playerlandsound = { if (self.landsoundtime > time)
 		else if (material == MAT_GRASS)
 		{
 			landingsound = strcat("player/landings/land_grass", r, ".ogg");
-		}
-		else if (material == MAT_BFLESH)
-		{
-			landingsound = strcat("player/landings/land_flesh", r, ".ogg");
 		}
 	}
 

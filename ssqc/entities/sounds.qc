@@ -1081,9 +1081,9 @@ void(string locsound, float rnd, float vol, float nchannel, float iswav, float a
 
 void(string locsound, float vol, float nchannel, float iswav, float atten) alreadyrandomsound2 =
 {
-	local string soundend;
-	local string lsound;
-	local string rsound;
+	string soundend;
+	string lsound;
+	string rsound;
 
 	if (iswav)
 	{

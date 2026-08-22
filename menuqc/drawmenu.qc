@@ -632,8 +632,7 @@ void() updateMouse = {
  	//cmd("cd play 6\n");
  	precache_file("gfx/help");
  	precache_file("gfx/credits");
- 	precache_sound("musica/menu.ogg");
- 	precache_sound("menu1.wav");
+ 	precache_sound("misc/menu1.wav");
  	//	check_save();
  	check_profileslot();
  	//	check_profilenames();

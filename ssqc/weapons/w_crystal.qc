@@ -720,43 +720,6 @@ void() wfire_crystal =
 	self.nextthink = time + 0.01;
 };
 
-/*
-void(entity e) beamcrystal_spawner =
-{
-	local entity beam;
-	beam = spawn();
-	beam.classname = "crystalbeam_view";
-	beam.owner = e;
-	setmodel (beam,"models/weapons/crystal/railb.md3");
-	setattachment (beam,e.lastbeam,"tag_nextbeam");
-	e.lastbeam = beam;
-	beam.alpha = 1;
-	beam.think = alphafade3;
-	beam.nextthink = time + 1; 
-}
-void(entity e) te_beamcrystal =
-{
-	local entity beam;
-	beam = spawn();
-	beam.owner = e;
-	e.lastbeam = beam;
-	if(self.owner.beam_lenght <= 1)
-		setmodel (beam,"models/weapons/crystal/raila.md3");
-	else
-		setmodel (beam,"models/weapons/crystal/railb.md3");
-	setattachment (beam,e.vweapon,"tag_muzzle");
-	beam.alpha = 1;
-	beam.think = alphafade3;
-	beam.nextthink = time + 1;
-	float loop_lenght;
-	loop_lenght = self.owner.beam_lenght;
-	while(loop_lenght > 1)
-	{
-		beamcrystal_spawner(e);
-		loop_lenght --;
-	}
-};
-*/
 void(entity e, float beamlenght) sub_beam2crystal =
 {
 	local entity beam;
@@ -775,36 +738,6 @@ void(entity e, float beamlenght) sub_beam2crystal =
 	beam.alphatime = 1;
 	e.lastbeam = beam;
 	beam.think = alphafade;
-};
-
-void(entity e, vector tagorg, vector tangles) te_beamcrystal =
-{
-	local entity beam;
-	local float beamlenght;
-
-	beam = spawn();
-	self.owner = e;
-	e.lastbeam = beam;
-	//if(self.owner.beam_lenght <= 1)
-		setmodel (beam,"models/projectiles/boibeama.md3");
-	//else
-	//	setmodel (models/projectiles/proj_railb.md3");
-	beam.origin = tagorg;
-	beam.angles = tangles;
-	//beam.effects = EF_NODEPTHTEST;
-	//setattachment(beam, e.vweapon, "tag_muzzle");
-	beam.beam_lenght = (e.beam_lenght - TRUE);
-	beam.nextthink = (time + 0.05);
-	beam.alpha = 1;
-	beam.colormod = '1 1 1';
-	beam.alphatime = 1;
-	beam.think = alphafade;
-	beamlenght = beam.beam_lenght;
-	while ((beamlenght > 0))
-	{
-		beamlenght --;
-		sub_beam2crystal(e, beamlenght);
-	}
 };
 
 void()trail_remove2 =

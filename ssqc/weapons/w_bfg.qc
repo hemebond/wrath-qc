@@ -42,33 +42,6 @@ void() v_bfg_idle =
 	self.nextthink = time + 0.1;
 };
 
-void() LightningHit =
-{        
-	local	vector org; 
-	local	float damage=0; 
-	local	entity head;
-
-	org = self.origin + '0 0 16'; 
-	head = findradius(self.origin, 512); 
-	
-	te_customflash ( org,32,1,' 0.89 0.3 0.3');
-	while (head) 
-	{
-		if ((head.takedamage)  && (visible(head)))
-		{
-			if(head != self.owner)
-            {
-				sound (head, CHAN_WEAPON, "weapons/lhit.wav", 1, ATTN_NORM); // its sound
-				damage = random(1024,2048); 
-				head.shockwaved = 1;
-				T_Damage (head, self, self.owner, damage);
-			}
-		}
-        head = head.chain;
-	}
-        remove(self);
-};
-
 void()bfg_explosion_think =
 {
     self.alpha -= 0.0065;
@@ -167,8 +140,6 @@ void() bfg_projectile_touch =
 		explo_blood_sprite(other.bloodimpact, trace_endpos);
 
 	pointparticles(particleeffectnum("mace_projectile_explosion"), org, '0 0 0', 1 + (3.5* (10- self.ammo_bfg) ));
-  	//  LightningHit();
-	//remove(self.pipes);
     remove(self);
 };
 //float(entity targ, float dist, float deviance) visibleinfront2 ;
@@ -1212,16 +1183,7 @@ void(entity e, entity vweapn) spawn_v_bfg_mace2 =
 	setattachment(e.vbfg1, vweapn, "tag_mace");
 	e.vbfg1.think = v_bfg_mace_think2;
 	e.vbfg1.nextthink = time;
-	/*
-	e.vbfg2 = spawn();
-	e.vbfg2.wrathflags += FL_GARBAGE;
-	e.vbfg2.owner = e;
-	setmodel(e.vbfg2, "models/weapons/mace/v_mace_energy.md3");
-	setattachment(e.vbfg2, vweapn, "tag_mace");
-	e.vbfg2.glowmod = '0.1 0.1 0.1';
-	e.vbfg2.think = v_bfg_mace_think2;
-	e.vbfg2.nextthink = time;
-	*/
+
 	e.vbfg3 = spawn();
 	e.vbfg3.wrathflags += FL_GARBAGE;
 	e.vbfg3.owner = e;
@@ -1308,7 +1270,7 @@ void() pick_up_bfg =
 	W_SetWeapon();
 	self.vweaponskin = 0;
 	self.vweaponglowmod = '0.01 0.01 0.01';
-	sound(self, CHAN_WEAPON, "weapons/mace/inspect.ogg", 1, ATTN_NORM);
+	sound(self, CHAN_WEAPON, "weapons/melee/inspect.ogg", 1, ATTN_NORM);
 	self.draw_w = 0;
 	self.vweaponframe = 19;
 	self.attack_finished = time + 0.05;

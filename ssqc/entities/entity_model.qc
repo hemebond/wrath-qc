@@ -204,10 +204,9 @@ void() misc_teleporttrain =
 	self.blocked = train_blocked;
 	self.use = train_use;
 	self.avelocity = '100 200 300';
+	precache_sound("misc/null.wav");
 	self.noise = "misc/null.wav";
-	precache_sound("misc/null.wav");
 	self.noise2 = "misc/null.wav";
-	precache_sound("misc/null.wav");
 	precache_model2("progs/teleport.mdl");
 	setmodel(self, "progs/teleport.mdl");
 	setsize(self, self.mins, self.maxs);
@@ -419,10 +418,9 @@ void() place_model =
 			self.bloody = TRUE;
 			self.solid = MOVETYPE_WALK;
 			self.takedamage = TRUE;
+			precache_sound("misc/null.wav");
 			self.noise = "misc/null.wav";
-			precache_sound("misc/null.wav");
 			self.noise2 = "misc/null.wav";
-			precache_sound("misc/null.wav");
 			self.health = 999999984306749440;
 			self.th_die = null;
 			setsize(self, '-24 -24 0', '24 24 96');

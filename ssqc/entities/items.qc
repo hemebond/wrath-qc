@@ -1989,7 +1989,7 @@ void() artifact_grenade =
 	radial();
 	self.noise = "items/artifacts/artifactE_pickup.ogg";
 	self.noise1 = "items/artifacts/artifactE_use.ogg";
-	self.noise2 = "items/artifacts/artifactE_end.ogg";
+	self.noise2 = "";
 	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
 	self.style = 1;
 	self.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE;
@@ -4588,64 +4588,9 @@ void() trigger_coffer_use =
 
 };
 
-//void() trigger_coffer = 
-//{
-//	self.use = trigger_coffer_use;
-//};
-
-void() manuscript_touch = 
-{
-	if (other.classname != "player")
-		return;
-	if (!(other.journal_jmessages &self.journal_jmessages))
-	{
-		other.journal_jmessages += self.journal_jmessages;
-		sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-		remove(self);
-	}
-	if (!(other.journal_jmessagesm &self.journal_jmessagesm))
-	{
-		other.journal_jmessagesm += self.journal_jmessagesm;
-		sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-		remove(self);
-	}
-};
 .float bestiary;
 .float jmessage;
 .float jmessagem;
-void() item_manuscript = 
-{
-	setmodel(self, "models/items/manuscript.md3");
-	setsizeitem(self, '4 4 24');
-	self.noise = "misc/null.wav";
-	precache_sound(self.noise);
-	if (!(self.bestiary))
-	{
-		if (!self.jmessage)
-			self.jmessage = 1;
-		self.journal_jmessages = pow(2, (self.jmessage - 1));
-		if (self.jmessage == 1)
-			self.journal_jmessages = 1;
-	}
-	else
-	{
-		if (!self.jmessagem)
-			self.jmessagem = 1;
-		self.journal_jmessagesm = pow(2, (self.jmessagem - 1));
-		if (self.jmessagem == 1)
-			self.journal_jmessagesm = 1;
-	}
-	self.origin_z += 24;
-	self.light_lev = 64;
-	self.pflags = 129;
-	self.color = '1 1 0.5';
-	self.effects = EF_FULLBRIGHT;
-	StartItem(1);
-	self.scale = 0.5;
-	self.touch = manuscript_touch;
-
-};
-
 
 .float note;
 void() readable_touch = 
