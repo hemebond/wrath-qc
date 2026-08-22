@@ -618,7 +618,6 @@ void() precaches =
 	precache_sound ("items/ammo_cannon.ogg");
 	precache_sound ("items/ammo_lance.ogg");
 	precache_sound ("items/ammo_crystallizer.ogg");
-	precache_sound ("items/ammo_mace.ogg");
 
 	precache_sound ("items/armor1.ogg");
 	precache_sound ("items/armor_dark1.ogg");
@@ -681,10 +680,6 @@ void() precaches =
 	precache_sound ("items/artifacts/mark_of_revelation_use.ogg");
 
 	precache_sound ("items/coffer_key.ogg");
-	precache_sound ("items/cysts.ogg");
-	precache_sound ("items/cysts.ogg");
-	precache_sound ("items/fangs.ogg");
-	precache_sound ("items/fangs.ogg");
 	precache_sound ("items/glyph.ogg");
 	precache_sound ("items/lifeblood_beaker1.ogg");
 	precache_sound ("items/lifeblood_beaker1.ogg");
@@ -707,7 +702,6 @@ void() precaches =
 	precache_sound ("items/sigils/sigil_flight_end.ogg");
 	precache_sound ("items/sigils/sigil_flight_end.ogg"); // (sound when effect ends)
 	precache_sound ("items/sigils/sigil_flight_start.ogg"); // (sound when you get sigil)
-	precache_sound ("items/slugs.ogg");
 	precache_sound ("misc/null.wav");
 	precache_sound ("misc/null.wav");
 	precache_sound ("misc/null.wav");
@@ -723,7 +717,6 @@ void() precaches =
 	precache_sound ("objects/hub1_pillar.ogg");
 	precache_sound ("objects/pylon_loop.ogg");
 	precache_sound ("objects/orrery.ogg");
-	precache_sound ("objects/switch1_use.ogg");
 
 	precache_sound ("player/breathe1.ogg");
 	precache_sound ("player/breathe2.ogg");
@@ -1061,7 +1054,6 @@ void() precaches =
     precache_monster_lurker();
     precache_monster_keeper();
     precache_sound ("items/artifacts/artifactE_end.ogg");
-    precache_sound ("objects/switch1_use.ogg");
 	precache_sound ( "impact/destruct/skullbreak.ogg");
 };
 

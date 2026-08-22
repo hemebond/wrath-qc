@@ -1265,7 +1265,6 @@ void() trigger_secret_touch =
 void() trigger_secret = 
 {
 	precache_sound("misc/secret.ogg");
-	precache_sound("misc/talk.ogg");
 	self.touch = trigger_secret_touch;
 	self.solid = SOLID_TRIGGER;
 	setmodel(self, self.model);

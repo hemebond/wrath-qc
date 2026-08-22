@@ -998,7 +998,7 @@ void()precache_monster_lurker =
 	precache_sound ("enemies/lurker/sight1.ogg");
 	precache_sound ("enemies/lurker/sight2.ogg");
 	precache_sound ("enemies/lurker/sight3.ogg");
-	precache_model ("models/enemies/lurker.md3");
+	precache_model ("models/enemies/lurker/lurker.md3");
 	precache_model ("models/enemies/lurker/gibs/gib_arm_a_l.md3");
 	precache_model ("models/enemies/lurker/gibs/gib_arm_a_r.md3");
 	precache_model ("models/enemies/lurker/gibs/gib_arm_b_l.md3");

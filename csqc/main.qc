@@ -732,8 +732,10 @@ float CSQC_Parse_TempEntity()
 			if (fexists_pak(s_msg_pic))
 				msg_mode |= 0x01;
 			s_icon = sprintf("gfx/hud/messages/icons/msgicon_%s.tga", s_icon);
-			if (fexists_pak(s_icon))
-				msg_mode |= 0x02;
+			// if (fexists_pak(s_icon))
+			// 	msg_mode |= 0x02;
+			// FIXME: Assume the file exists because fexists_pak is broken when using a mode/gamedir
+			msg_mode |= 0x02;
 			
 
 			// search for duplicates to aggregate

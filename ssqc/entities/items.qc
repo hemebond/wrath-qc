@@ -1318,11 +1318,11 @@ void() ammo_mace_think =
 	while (self.count > 0)
 	{	
 		entity dropped = spawn();
-		dropped.noise = "items/ammo_mace.ogg";
+		dropped.noise = "";
 		setmodel(dropped,"models/weapons/mace/soul.md3");
 		dropped.msg = 126;
 		dropped.msg_icon = "crystals";
-		dropped.msg_text = "$NOTIFY_AMMO_CRYSTAL";
+		dropped.msg_text = "$NOTIFY_AMMO_SOUL";
 		dropped.classname = "item_ammo_crystal";
 		setsizeitem2(dropped, shellsl_size);
 		dropped.alpha = 0.025;
