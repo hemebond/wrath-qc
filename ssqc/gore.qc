@@ -378,7 +378,7 @@ void() gib_touch = { local vector v;
 			self.touchtime = time + 0.5 + random();
 			
 			// Reki (July 17 2023): achievement logic
-			Steam_StatIncrement(other, ST_STATS::heads_kicked, 1);
+			// Steam_StatIncrement(other, ST_STATS::heads_kicked, 1);
 		}
 
 		

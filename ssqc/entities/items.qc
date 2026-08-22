@@ -1309,7 +1309,7 @@ void() soul_touch =
 	stuffcmd (other,"pulseammo\n");
 	flash_screen_item(other);
 	Hud_SendNotification(other, "soul", "$NOTIFY_AMMO_SOUL", HUDMSGFLAG::AGGREGATE);
-	Steam_StatIncrement(other, ST_STATS::souls_harvested, 1);
+	// Steam_StatIncrement(other, ST_STATS::souls_harvested, 1);
 	remove(self);
 };
 
@@ -4669,7 +4669,7 @@ void() readable_touch =
 
 	if (((other.journal_jmessages & PERFECT_LOREA) == PERFECT_LOREA) && ((other.journal_jmessagesb & PERFECT_LOREB) == PERFECT_LOREB))
 	{
-		Steam_AchievementUnlock(other, ST_ACHIEVEMENTS::SP_GRIND_LORE_ALL);
+		// Steam_AchievementUnlock(other, ST_ACHIEVEMENTS::SP_GRIND_LORE_ALL);
 	}
 };
 

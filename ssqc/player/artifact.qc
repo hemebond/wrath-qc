@@ -746,7 +746,7 @@ void() trinket2_touch =
 
 		other.trinket_touched = 1;
 
-		Steam_StatIncrement(self.owner, ST_STATS::projectiles_deflected, 1);
+		// Steam_StatIncrement(self.owner, ST_STATS::projectiles_deflected, 1);
 	}
 };
 void() dome_remove =
@@ -1705,7 +1705,7 @@ void()grenade_magnet_kill =
 
 	if (flyingmonsters_killed >= 3)
 	{
-		Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_GRIND_VOID);
+		// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_GRIND_VOID);
 	}
 
 	self.think = grenade_magnet_push;
@@ -2156,8 +2156,9 @@ void(entity targ) shockwave_killincrement =
 	if (targ.flags & FL_MONSTER)
 	{
 		self.shockwave_kills++;
-		if (self.shockwave_kills >= 10)
-			Steam_AchievementUnlock(self.owner, ST_ACHIEVEMENTS::SP_GRIND_SHOCKWAVE);
+		if (self.shockwave_kills >= 10) {
+			// Steam_AchievementUnlock(self.owner, ST_ACHIEVEMENTS::SP_GRIND_SHOCKWAVE);
+		}
 	}
 }
 void() shockwave_think =

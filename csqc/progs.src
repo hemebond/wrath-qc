@@ -17,7 +17,7 @@ draw.qc
 frik_file.qc
 radial.qc
 multiplayer.qc
-../steam.qc
+// ../steam.qc
 hud_messages.qc
 ../orrey.qc
 ../shepherd.qc

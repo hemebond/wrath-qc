@@ -609,7 +609,7 @@ void() wfire_crystal =
 
 						if (monsters_hit >= 5) // Reki (July 30 2023): Added check for simultaneous monster hits
 						{
-							Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::SP_FEAT_CRYSTALSPREAD);
+							// Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::SP_FEAT_CRYSTALSPREAD);
 						}
 
 						if(trace_ent && (hittingmonster == 0) && (trace_ent.attack_finished < time))

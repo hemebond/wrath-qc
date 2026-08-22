@@ -724,7 +724,6 @@ void() precaches =
 	precache_sound ("objects/pylon_loop.ogg");
 	precache_sound ("objects/orrery.ogg");
 	precache_sound ("objects/switch1_use.ogg");
-	precache_sound ("particles/breathe1.ogg");
 
 	precache_sound ("player/breathe1.ogg");
 	precache_sound ("player/breathe2.ogg");
@@ -934,7 +933,6 @@ void() precaches =
 	precache_sound ("weapons/lance/fire2.ogg");
 	precache_sound ("weapons/lance/fire3.ogg");
 	precache_sound ("weapons/lance/inspect.ogg");
-	precache_sound ("weapons/lance/raise.ogg");
     precache_sound ("weapons/lance/lance_select1.ogg");
     precache_sound ("weapons/lance/lance_select2.ogg");
     precache_sound ("weapons/lance/lance_select3.ogg");

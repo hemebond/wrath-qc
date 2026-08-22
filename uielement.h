@@ -11,15 +11,14 @@
 //
 //========================================================================
 
-#pragma once
-enum UITYPE:float {
+enum class UITYPE:float {
 	EMPTY,
 	LIST,
 	TEXT,
 	PICTURE,
 };
 
-enumflags UIFLAG:float {
+enumflags class UIFLAG:float {
 	STRETCH,
 	HIDE,
 	CLICKABLE,
@@ -73,7 +72,7 @@ float autocvar_scr_hudscale;
 
 class uielement_c
 {
-	float type;
+	UITYPE type;
 	UIFLAG flags;
 	float drawflags;
 
@@ -463,8 +462,9 @@ class uilocpicture_c : uipicture_c
 			vector final_size = [size[0] * ui_scale[0], size[1] * ui_scale[1]];
 			
 			string final_img = image;
-			if (prerender)
-				prerender(this, final_img);
+			// FIXME: Unknown value "prerender".
+			// if (prerender)
+			// 	prerender(this, final_img);
 			if (final_img != __NULL__ && final_alpha > 0)
 			{
 				#ifdef CSQC
@@ -564,8 +564,9 @@ class uiglyph_c : uipicture_c
 		vector final_origin = ui_position;
 		vector final_size = [size[0] * ui_scale[0], size[1] * ui_scale[1]];
 		
-		if (prerender)
-			prerender(this, final_img);
+		// FIXME: Unknown value "prerender"?
+		// if (prerender)
+		// 	prerender(this, final_img);
 		if (final_img != __NULL__ && final_alpha > 0)
 		{
 			#ifdef CSQC

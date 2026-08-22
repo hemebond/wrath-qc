@@ -992,7 +992,7 @@ void() trigger_shrine_touch =
 	
 	write_shrine(0);
 
-	Steam_StatIncrement(other, ST_STATS::saved_shrines, 1);
+	// Steam_StatIncrement(other, ST_STATS::saved_shrines, 1);
 	
 	read_currentprofileslot();
 	copy_save_maps(0);
@@ -1640,7 +1640,7 @@ void() trigger_soultether_checker =
 };
 
 
-
+/*
 void info_achievement_use()
 {
 	for(float i = 0; i < ST_ACHIEVEMENTS::MAX; i++)
@@ -1666,7 +1666,9 @@ void spawnfunc_info_achievement()
 
 	self.use = info_achievement_use;
 }
+*/
 
+/*
 void info_achievement_gamecomplete_use()
 {
 	float ach[] = {ST_ACHIEVEMENTS::SP_FEAT_EASY, ST_ACHIEVEMENTS::SP_FEAT_EASY, ST_ACHIEVEMENTS::SP_FEAT_EASY, ST_ACHIEVEMENTS::SP_FEAT_OUTLANDER};
@@ -1681,6 +1683,7 @@ void spawnfunc_info_achievement_gamecomplete()
 {
 	self.use = info_achievement_gamecomplete_use;
 }
+*/
 
 void info_endscreen_use(void)
 {
@@ -1707,7 +1710,7 @@ void info_achievement_boss1_use()
 	{
 		if (!achievement_takendamage) // if we haven't taken any damage, give the 'cheevo
 		{
-			Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS1);
+			// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS1);
 		}
 	}
 }
@@ -1724,7 +1727,7 @@ void info_achievement_boss2_use()
 	{
 		if ((time - achievement_boss_starttime) <= 180 && achievement_boss_starttime) // if it's been less than 3 minutes since we activated, go!
 		{
-			Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS2);
+			// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS2);
 		}
 	}
 }
@@ -1741,7 +1744,7 @@ void info_achievement_boss3_use()
 	{
 		if (achievement_onlybladeandmace) // if we haven't fired any weapons besides mace and blade, earn the challenge
 		{
-			Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS3);
+			// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS3);
 		}
 	}
 }

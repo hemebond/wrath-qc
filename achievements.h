@@ -106,15 +106,14 @@ typedef struct
 	_ACH_ID(SP_GRIND_DEFLECTION, __NULL__) /* done 7/30 */
 
 #define _ACH_ID(id, callback) id,
-enum ST_ACHIEVEMENTS:float
-{
+enum class ST_ACHIEVEMENTS:float {
 	ACHIEVEMENT_LIST
 	MAX
 };
 
 #undef _ACH_ID
 #define _ACH_ID(id, callback) { id, #id, 0, 0, __NULL__, _("ACHIEVE_NAME_" #id), _("ACHIEVE_DESC_" #id) }, // SSQC doesn't get callbacks... fixme ?
-var steamachievement_t steam_achievementlist[] = {
+steamachievement_t steam_achievementlist[] = {
 	ACHIEVEMENT_LIST
 };
 
@@ -155,7 +154,7 @@ var steamachievement_t steam_achievementlist[] = {
 	
 
 #define _STAT_ID(st, type, callback) st,
-enum ST_STATS:float
+enum class ST_STATS:float
 {
 	STAT_LIST
 	MAX

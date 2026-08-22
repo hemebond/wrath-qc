@@ -968,6 +968,7 @@ float (float x, float y) angle_difference =
     return a;
 }
 
+/*
 #include "achievements.h"
 void Steam_AchievementUnlock(entity who, float achievement)
 {
@@ -1033,6 +1034,7 @@ void Steam_StatSet(entity who, float stat, float value)
 	Stats_DRMFreeSet(st.name, value);
 	#endif
 }
+*/
 
 void Controller_Rumble(entity who, float low, float high, float duration)
 {

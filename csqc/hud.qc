@@ -1430,7 +1430,17 @@ void HUD_InitializeArtifactRadial(void)
 
 				// resize, because some localization stuff is too wide
 				vector isz = draw_getimagesize(large_text.image);
-				large_text.size[0] = isz[0] * (80 / isz[1]);
+				// FIXME: Remove this debug code
+				dprint("isz: ", vtos(isz), "\n");
+				dprint("isz[0]: ", ftos(isz[0]), "\n");
+				dprint("isz[1]: ", ftos(isz[1]), "\n");
+
+				if (isz[1] == 0) {
+					error("draw_getimagesize(", large_text.image, ") returned zero");
+				}
+				else {
+					large_text.size[0] = isz[0] * (80 / isz[1]);
+				}
 
 				large_icon.flags &= ~UIFLAG::HIDE;
 				large_text.flags &= ~UIFLAG::HIDE;

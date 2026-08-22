@@ -273,8 +273,9 @@ void() shotgun_proj_touch = { local vector org;
 		if ((other.health <= 0 && o_health > 0) && (self.owner.weapon == IT_SHOTGUN) && (istmonster == 1))
 		{
 			scattershot_kills++;
-			if (scattershot_kills > 1) // this is pretty hacky and shit, but it is what it is :\
-				Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_SCATTER);
+			if (scattershot_kills > 1) {// this is pretty hacky and shit, but it is what it is :\
+				// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_SCATTER);
+			}
 		}
 
 		if((other.classname == "boss_guardian1") || (other.classname == "boss_guardian2") || (other.classname == "boss_guardian3"))

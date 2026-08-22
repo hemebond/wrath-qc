@@ -512,7 +512,7 @@ void() soulintag =
 		flash_screen_item(single_player);
 		//Hud_message(127, single_player.origin, single_player);
 		Hud_SendNotification(single_player, "soul", "$NOTIFY_AMMO_SOUL", HUDMSGFLAG::AGGREGATE);
-		Steam_StatIncrement(single_player, ST_STATS::souls_harvested, 1);
+		// Steam_StatIncrement(single_player, ST_STATS::souls_harvested, 1);
 	}
 	else
 		self.think = soulintag;	

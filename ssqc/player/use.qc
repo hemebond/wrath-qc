@@ -464,7 +464,7 @@ void() Use_Func = { local vector source;
 
 	if (trace_ent.classname == "func_button")
 	{
-		sound(trace_ent, CHAN_AUTO, "objects/switch1_use.ogg", 1, 1);
+		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		trace_ent.enemy = self;
 		trace_ent.think = button_fire;
 		trace_ent.nextthink = trace_ent.ltime + 0.01;
@@ -474,7 +474,7 @@ void() Use_Func = { local vector source;
 	if (trace_ent.buttondecal == 1)
 	{
 		local entity linkedbutton;
-		sound(trace_ent, CHAN_AUTO, "objects/switch1_use.ogg", 1, 1);
+		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		linkedbutton = trace_ent.owner;
 		linkedbutton.enemy = self;
 		linkedbutton.think = button_fire;
@@ -486,7 +486,7 @@ void() Use_Func = { local vector source;
 
 	if (trace_ent.classname == "object_switch")
 	{
-		sound(trace_ent, CHAN_AUTO, "objects/switch1_use.ogg", 1, 1);
+		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		trace_ent.enemy = self;
 		trace_ent.think = object_switch_fire;
 		trace_ent.nextthink = trace_ent.ltime + 0.01;

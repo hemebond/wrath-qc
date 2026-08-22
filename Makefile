@@ -1,6 +1,8 @@
 CFLAGS=-Wno-mundane
 # CFLAGS=
 
+all: progs.dat csprogs.dat menu.dat
+
 progs.dat:
 	fteqcc64 $(CFLAGS) -srcfile ssqc/progs.src
 

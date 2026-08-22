@@ -3056,8 +3056,9 @@ void() WeaponFrames =
 			write_tether();
 			message_garbage_collector ();
 
-			if (infinitesaves != 1) // Reki (July 17 2023): achievement logic, but only if we're not using infinite saves
-				Steam_StatIncrement(self, ST_STATS::saved_tethers, 1);
+			if (infinitesaves != 1) {// Reki (July 17 2023): achievement logic, but only if we're not using infinite saves
+				// Steam_StatIncrement(self, ST_STATS::saved_tethers, 1);
+			}
 		
 			if (!(self.centerprint_messages &8)) 
 			{
