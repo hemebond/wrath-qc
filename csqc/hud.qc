@@ -1609,7 +1609,7 @@ void HUD_InitializeDeathMenu(void)
 
 	if (!button.fallback && button.image)
 	{
-		vector isz
+		vector isz;
 		isz = drawgetimagesize(button.image); // Resize based on image
 		isz *= (button.size[1] / isz[1]);
 		button.size[0] = isz[0];
@@ -1644,7 +1644,7 @@ void HUD_InitializeDeathMenu(void)
 
 	if (!button.fallback && button.image)
 	{
-		vector isz
+		vector isz;
 		isz = drawgetimagesize(button.image); // Resize based on image
 		isz *= (button.size[1] / isz[1]);
 		button.size[0] = isz[0];
@@ -1685,7 +1685,7 @@ void HUD_InitializeDeathMenu(void)
 
 	if (!button.fallback && button.image)
 	{
-		vector isz
+		vector isz;
 		isz = drawgetimagesize(button.image); // Resize based on image
 		isz *= (button.size[1] / isz[1]);
 		button.size[0] = isz[0];
@@ -1727,7 +1727,7 @@ void HUD_InitializeDeathMenu(void)
 
 	if (!button.fallback && button.image)
 	{
-		vector isz
+		vector isz;
 		isz = drawgetimagesize(button.image); // Resize based on image
 		isz *= (button.size[1] / isz[1]);
 		button.size[0] = isz[0];

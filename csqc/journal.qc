@@ -106,11 +106,11 @@ void Journal_Init(void)
 	//		flags: UIFLAG_FILL, color: '0.3 0.3 0.32', alpha: 0.9,
 	//		origin: '82 24', size: '128 300');
 
-	typedef struct journalitem_t {
+	typedef struct {
 		float itflag;
 		float label_index;
 		string pageimage;
-	};
+	} journalitem_t;
 
 	////////////////////
 	////   World Section
@@ -128,7 +128,7 @@ void Journal_Init(void)
 		page2.active_condition = page_condtional;
 	journal_world_list = (uilist_c)page;
 	{
-		typedef struct journalmap_t {
+		typedef struct {
 			float itflag;
 			float relicflag;
 			string name;
@@ -136,7 +136,7 @@ void Journal_Init(void)
 			float episode;
 			float label_index;
 			float page_index;
-		};
+		} journalmap_t;
 
 		void(uipicture_c this, __inout string img_to_render) map_prerender = { if (ui_selected == this || ui_hover == this) img_to_render = this.image2; };
 		void(uilocpicture_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) map_prerendertext = {

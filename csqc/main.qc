@@ -656,7 +656,7 @@ void CSQC_Ent_Update(float bIsNewEntity)
 		case ENT::HUDMSG: Hud_Messages(bIsNewEntity); break;
 		case ENT::HUDMSG2: Hud_Messages2(bIsNewEntity); break;
 		case ENT::HMMSG: Health_Indicator(bIsNewEntity); break;
-		case ENT::HUDSYNC: EntUpdate_HudSync(bIsNewEntity); break;
+		case ENT::HUDSYNC: EntUpdate_HudSync(); break;
 		case ENT::ORREY: EntUpdate_Orrey(bIsNewEntity); break;
 		case ENT::EYEBALL: EntUpdate_Eyeball(bIsNewEntity); break;
 		case ENT::BOSS3HALO: EntUpdate_Boss3Halo(bIsNewEntity); break;

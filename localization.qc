@@ -159,11 +159,11 @@ string Localization_FindFile(string path, float primaryonly = FALSE)
 	// Assume the file exists because VM_fexists is broken and doesn't support mods
 	return langpath;
 
-	if (fexists_pak(langpath))
-		return langpath;
-	else if (fexists_pak(fallbackpath) && !primaryonly)
-		return fallbackpath;
-	return path; // Reki FIXME: this should probably return something else, but I'm afraid of bad path errors so I'm leaving it
+	// if (fexists_pak(langpath))
+	// 	return langpath;
+	// else if (fexists_pak(fallbackpath) && !primaryonly)
+	// 	return fallbackpath;
+	// return path; // Reki FIXME: this should probably return something else, but I'm afraid of bad path errors so I'm leaving it
 }
 
 string strcontrols(string strbody, float hint_glyphs)
@@ -430,8 +430,8 @@ void LanguageDef_LoadFile(string lcode)
 	chara s;
 	while(TRUE)
 	{
-		s = str_removeblank(fgets(f));
-		if (!s || s == "" || s == __NULL__) // if this line is blank, tell it to FUK'OFF
+		s = (chara)str_removeblank(fgets(f));
+		if (!(string)s || (string)s == "" || (string)s == __NULL__) // if this line is blank, tell it to FUK'OFF
 		{
 			k--;
 			if (k < 0)
@@ -444,11 +444,11 @@ void LanguageDef_LoadFile(string lcode)
 		uielement_c block;
 		if (s[0] == "<") // we have a special statement
 		{
-			float o = strstrofs(s, ">", 0);
-			string fullcmd = substring(s, 1, o - 1);
+			float o = strstrofs((string)s, ">", 0);
+			string fullcmd = substring((string)s, 1, o - 1);
 			float argc = tokenizebyseparator(fullcmd, ",");
 			string cmd = argv(0);
-			s = str_removeblank(substring(s, o + 1, strlen(s))); // remove special case from the string
+			s = (chara)str_removeblank(substring((string)s, o + 1, strlen((string)s))); // remove special case from the string
 
 			switch (cmd)
 			{
@@ -470,8 +470,8 @@ void LanguageDef_LoadFile(string lcode)
 						break;
 					}
 
-					dprint(sprintf("^3   %s=%s font registered (%s)\n", fontnames[ind], s, langdef.lang));
-					langfont_c fnt = spawn(langfont_c, index: ind, file: strzone(s));
+					dprint(sprintf("^3   %s=%s font registered (%s)\n", fontnames[ind], (string)s, langdef.lang));
+					langfont_c fnt = spawn(langfont_c, index: ind, file: strzone((string)s));
 					fnt._next = langdef.fontlist;
 					langdef.fontlist = fnt;
 				break;
@@ -483,8 +483,8 @@ void LanguageDef_LoadFile(string lcode)
 					}	
 					
 					string langcode = argv(1);
-					dprint(sprintf("^3   %s=%s name registered (%s)\n", langcode, s, langdef.lang));
-					langname_c nm = spawn(langname_c, lang: strzone(langcode), title: strzone(s));
+					dprint(sprintf("^3   %s=%s name registered (%s)\n", langcode, (string)s, langdef.lang));
+					langname_c nm = spawn(langname_c, lang: strzone(langcode), title: strzone((string)s));
 					nm._next = langdef.namelist;
 					langdef.namelist = nm;
 
@@ -492,7 +492,7 @@ void LanguageDef_LoadFile(string lcode)
 					{
 						if (langdef.nativename)
 							strunzone(langdef.nativename);
-						langdef.nativename = strzone(s);
+						langdef.nativename = strzone((string)s);
 						dprint(sprintf("^3      ^ native name found (%s)\n", langdef.lang));
 					}
 				break;

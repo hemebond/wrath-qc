@@ -72,7 +72,7 @@ void Boss_Beam_Predraw(void)
 		"models/projectiles/beam_crystalc.md3",
 		"models/projectiles/beam_crystald.md3",
 		"models/projectiles/beam_crystale.md3",
-	}
+	};
 
 	vector curve_start = bez.start;
 	vector curve_end = bez.end;
@@ -108,7 +108,7 @@ void Boss_Beam_Predraw(void)
 	float time_clamp = floor(time * 15) / 15;
 
     float segments_needed = ceil(vlen(curve_start - curve_end) / bez.segment_length);
-    vector curr_org = curve_start
+    vector curr_org = curve_start;
     vector last_org = curr_org;
     vector diff = normalize(curve_end - curve_start); // this might be flipped, I always get it mixed up
     vector angs = vectoangles(diff);

@@ -222,7 +222,7 @@ void TempEnt_ExpandingOrb()
 	vector clr = ReadColor();
 	float life = ReadShort() / 100;
 
-	expandingorb_c orb = spawn();
+	expandingorb_c orb = (expandingorb_c)spawn();
 	precache_model("models/enemies/boss3/deathsphere.md3"); // this should already be done, but just in case!
 	setmodel(orb, "models/enemies/boss3/deathsphere.md3");
 	setorigin(orb, org);
