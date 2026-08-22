@@ -221,9 +221,9 @@ void() counter_use =
 
 	self.count = self.count - 1;
 
-	float dev = cvar ("developer");
-	if(dev == 1)
-	centerprint(single_player, strcat("trigger counter count", ftos(self.count), "\n"));
+	if(cvar("developer")) {
+		centerprint(single_player, strcat("trigger counter count", ftos(self.count), "\n"));
+	}
 
 	if (self.count < 0)
 		return;
@@ -1653,19 +1653,21 @@ void info_achievement_use()
 	}
 
 	objerror("info_achievement: bad achievement name");
-}
+}*/
 
 void spawnfunc_info_achievement()
 {
-	if (!self.message)
-	{
-		remove(self);
-		return;
-	}
+	remove(self);
+	return;
 
-	self.use = info_achievement_use;
+	// if (!self.message)
+	// {
+	// 	remove(self);
+	// 	return;
+	// }
+
+	// self.use = info_achievement_use;
 }
-*/
 
 /*
 void info_achievement_gamecomplete_use()

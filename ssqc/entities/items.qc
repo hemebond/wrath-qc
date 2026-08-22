@@ -2031,6 +2031,10 @@ void() artifact_siphon =
 	self.oldtouch = self.touch;
 };
 
+void artifact_life_siphon() {
+	artifact_siphon();
+}
+
 void() artifact_deflection = 
 {
 	radial();
