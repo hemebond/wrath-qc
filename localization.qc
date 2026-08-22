@@ -147,6 +147,7 @@ string Localization_FindFile(string path, float primaryonly = FALSE)
 {
 	string langpath = cvar_string("prvm_language");
 	string fallbackpath = cvar_string("prvm_language_fallback");
+
 	if (!langpath)
 		langpath = "null";
 	if (!fallbackpath)
@@ -154,6 +155,9 @@ string Localization_FindFile(string path, float primaryonly = FALSE)
 
 	langpath = sprintf(path, langpath);
 	fallbackpath = sprintf(path, fallbackpath);
+
+	// Assume the file exists because VM_fexists is broken and doesn't support mods
+	return langpath;
 
 	if (fexists_pak(langpath))
 		return langpath;

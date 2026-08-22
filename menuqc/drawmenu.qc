@@ -574,7 +574,7 @@ void() updateMouse = {
  	consize_h = ftos(vid_hres / 2);
  	cmd(strcat("vid_conheight ", consize_h, " \n"));
  	cmd(strcat("vid_conwidth ", consize_w, " \n"));
-	string language_selected = 	cvar_string("prvm_language")
+	string language_selected = 	cvar_string("prvm_language");
 	//if (language_selected != "")
 	//	cmd("prvm_language en\n");
 
@@ -596,7 +596,7 @@ void() updateMouse = {
 	}
 
     float capvolume3 = cvar ("capvolume3");
-	float musicvolume = cvar("bgmvolume")
+	float musicvolume = cvar("bgmvolume");
 	if(musicvolume > capvolume3)
 	{
 		string mvol = strcat("bgmvolume ",ftos(capvolume3), " \n");
@@ -2143,7 +2143,7 @@ float() current_local_profilenames =
 	if (f2 < 0)
 		return;
 	
-	float duplicate_found
+	float duplicate_found;
 	string ln;
 	while(1) {
 		ln = fgets(f);

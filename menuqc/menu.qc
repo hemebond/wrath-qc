@@ -79,7 +79,7 @@ string quit_taunts[] = {
 	_("UI_QUIT_TAUNT6"),
 	_("UI_QUIT_TAUNT7"),
 	_("UI_QUIT_TAUNT8"),
-}
+};
 
 #define ACHIEVEMENT_NOTIFICATIONS_MAX	8
 #define ACHIEVEMENT_NOTIFICATIONS_TIME	6
@@ -1237,11 +1237,11 @@ uielement_c UI_Sliderbar(uielement_c own, vector org, vector anc, vector just, v
 	return bar;
 }
 
-typedef struct keybind_t {
+typedef struct {
 	string name;
 	string cmd;
 	float key;
-};
+} keybind_t;
 .keybind_t key_bind;
 .string glyph_code;
 
@@ -4367,7 +4367,7 @@ void MenuInit_LoadProfile(void)
 			sprintf("data/profiles/%s/autosave.sav", this.text),
 			sprintf("data/profiles/%s/tether.sav", this.text),
 			sprintf("data/profiles/%s/shrine.sav", this.text)
-		}
+		};
 
 		float save_slots = (
 			((fexists(save_filename[0]) > 0) << 0) |
@@ -4395,7 +4395,7 @@ void MenuInit_LoadProfile(void)
 			_("UI_DIFFICULTY_MEDIUM"),
 			_("UI_DIFFICULTY_HARD"),
 			_("UI_DIFFICULTY_OUTLANDER")
-		}
+		};
 		
 		for(float i = 0; i < 3; i++) // parse save files
 		{

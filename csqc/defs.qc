@@ -1396,6 +1396,7 @@ string(string filename) whichpack = #503;
 //for files in a pak/pk3/whatever, returns the pack's file name in FRIK_FILE name space.
 //for physical files, returns "".
 //in case of error, returns string_null.
+// Hemebond Note: it never returns null, only an empty string if the file is not found
 string string_null;
 
 // EXT_WRATH
@@ -1407,8 +1408,12 @@ float(string fname) fremove = #652;
 float(string filename) fexists = #653;
 
 float(string filename) fexists_pak = {
-	if ((whichpack(filename) != string_null) || fexists(filename))
+	if ((whichpack(filename) != "") || fexists(filename)) {
+		// Found it
 		return 1;
+	}
+
+	// File not found
 	return 0;
 };
 

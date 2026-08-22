@@ -29,6 +29,7 @@ precaches.qc
 captions.qc
 centerprint.qc
 viewmodel.qc
+../localization.h
 ../localization.qc
 main.qc
 ../uielement.qc

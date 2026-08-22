@@ -418,6 +418,7 @@ void EntUpdate_place_shepherd(float is_new)
 	if (is_new)
 	{
 		self.classname = "place_shepherd";
+		precache_model("models/enemies/shepherd/shepherd.md3");
 		setmodel(self, "models/enemies/shepherd/shepherd.md3");
 		//self.frame1time = time;
 		self.alpha = 1;
