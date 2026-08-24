@@ -1,4 +1,3 @@
-#pragma once
 uielement_c menu_current;
 uielement_c menu_main;
 uielement_c menu_main_game;
@@ -38,7 +37,7 @@ void MenuInit_LoadProfile(void);
 void MenuInit_DeleteConfirm(void);
 void MenuInit_CreateProfile(void);
 void MenuInit_CreateProfile_Difficulty(void);
-void MenuInit_Achievements(void);
+// void MenuInit_Achievements(void);
 void MenuInit_Overlay(void);
 void MenuInit_LoadingScreen(void);
 

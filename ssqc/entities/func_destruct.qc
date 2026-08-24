@@ -94,7 +94,7 @@ void()info_nogib_touch =
 	{
 		vector dir = (self.origin - '0 0 8')  - other.origin;
 		dir = normalize(dir);
-		other.velocity += dir * (128,256);
+		other.velocity += dir * random(128,256);
 		other.movetype = MOVETYPE_NOCLIP;
 		other.think = becomesolid;
 		other.nextthink = time + random(0.2,0.5);
@@ -1129,7 +1129,7 @@ void() func_wall =
 			self.glowmod = '1 1 1';
 		if(!self.nextglowmod)
 			self.nextglowmod = '0 0 0';
-		if(!self.wait);
+		if(!self.wait)
 			self.wait = 1;	
 		self.oldglowmod = self.glowmod;
 

@@ -17,7 +17,7 @@ void() weapon_think =
 		if(self.owner.weapon == IT_CANNON)
 			setmodel(self, "models/weapons/cannon/w_cannon.md3");
 		if(self.owner.weapon == IT_LANCE)
-			setmodel(self, "models/weapons/lance/w_shotgun.md3");
+			setmodel(self, "models/weapons/lance/w_lance.md3");
 
 		self.weapon = self.owner.weapon;
 	}
@@ -150,10 +150,6 @@ void(entity e) spawn_player_model =
 	weapon.nextthink = time + 0.05;
 
 };
-void(entity e) spawn_player_models =
-{
-setmodel(e,"models/players/outlander/player.md3");
-}
 void()corpse_dead_think =
 {
 self.think = SUB_Remove;

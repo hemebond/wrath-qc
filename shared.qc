@@ -139,13 +139,12 @@ void EntUpdate_HudSync()
 // because it was a real copy/paste mess and I didn't want
 // to type the same fields 85+ times
 // (primarily done to add PFLAGS_LODFADE)
-typedef struct lightparams_t
-{
+typedef struct {
 	float radius;
 	float pflags;
 	vector color;
 	float lstyle;
-};
+} lightparams_t;
 
 #define SET_DYNAMIC_LIGHT_PROPERTIES(e, dl) \
 	e.light_lev = dl.radius; 				\
@@ -153,98 +152,98 @@ typedef struct lightparams_t
 	e.color = dl.color;						\
 	e.style = dl.lstyle;
 
-const lightparams_t dl_hpvial = {
+lightparams_t dl_hpvial = {
 	15,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'3 0 0',
 	0
 };
 
-const lightparams_t dl_hpbeaker = {
+lightparams_t dl_hpbeaker = {
 	25,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'3 0 0',
 	0
 };
 
-const lightparams_t dl_hpchalice = {
+lightparams_t dl_hpchalice = {
 	32,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'3 0 0',
 	0
 };
 
-const lightparams_t dl_readable = {
+lightparams_t dl_readable = {
 	32,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'1 1 0.5',
 	0
 };
 
-const lightparams_t dl_cofferkey = {
+lightparams_t dl_cofferkey = {
 	48,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'1 1 1',
 	0
 };
 
-const lightparams_t dl_redkey = {
+lightparams_t dl_redkey = {
 	48,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'1 0 0',
 	0
 };
 
-const lightparams_t dl_bluekey = {
+lightparams_t dl_bluekey = {
 	48,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0 0.2 1',
 	0
 };
 
-const lightparams_t dl_yellowkey = {
+lightparams_t dl_yellowkey = {
 	48,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'1 1 0',
 	0
 };
 
-const lightparams_t dl_armor_shard = {
+lightparams_t dl_armor_shard = {
 	20,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0.9 0.9 1',
 	0
 };
 
-const lightparams_t dl_armor_helm = {
+lightparams_t dl_armor_helm = {
 	25,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0.9 0.9 1',
 	0
 };
 
-const lightparams_t dl_armor = {
+lightparams_t dl_armor = {
 	32,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0.9 0.9 1',
 	0
 };
 
-const lightparams_t dl_darkarmor_shard = {
+lightparams_t dl_darkarmor_shard = {
 	20,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0.7 0.7 1',
 	0
 };
 
-const lightparams_t dl_darkarmor_helm = {
+lightparams_t dl_darkarmor_helm = {
 	25,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0.7 0.7 1',
 	0
 };
 
-const lightparams_t dl_darkarmor = {
+lightparams_t dl_darkarmor = {
 	32,
 	PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE,
 	'0.7 0.7 1',
@@ -789,7 +788,7 @@ float findPosition(float n)
 void numfield_addtostring(__inout string numfield, float insert)
 {
 	float argc = tokenizebyseparator(numfield, "&")-1;
-	string numstr = strcat(numfield);
+	string numstr = strcat(numfield, "");
 	
 	for(float i = 1; i <= argc; i++)
 	{
@@ -969,6 +968,7 @@ float (float x, float y) angle_difference =
     return a;
 }
 
+/*
 #include "achievements.h"
 void Steam_AchievementUnlock(entity who, float achievement)
 {
@@ -1034,6 +1034,7 @@ void Steam_StatSet(entity who, float stat, float value)
 	Stats_DRMFreeSet(st.name, value);
 	#endif
 }
+*/
 
 void Controller_Rumble(entity who, float low, float high, float duration)
 {

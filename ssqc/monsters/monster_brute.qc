@@ -887,7 +887,7 @@ void() brute_run8 =
 	{
 		float dist = vlen(self.enemy.origin - self.origin);
 		self.think= brute_run9;
-		float v_dist =  vlen(self.origin_z - self.enemy.origin_z);
+		float v_dist =  self.origin_z - self.enemy.origin_z;
 		if((dist > 128) && (v_dist > 128))
 			self.think = self.th_missile;
 		if((dist > 302) && (self.shotgun_time1 < time) &&(self.skin != 1))
@@ -918,7 +918,7 @@ void() brute_run16 =[$brt_run8, brute_run1]
 	{
 		self.think = brute_run1;
 		float dist = vlen(self.enemy.origin - self.origin);
-		float v_dist =  vlen(self.origin_z - self.enemy.origin_z);
+		float v_dist =  self.origin_z - self.enemy.origin_z;
 		if((dist > 128) && (v_dist > 128))
 			self.think = self.th_missile;
 		if((dist > 302) && (self.shotgun_time1 < time)&&(self.skin != 1))
@@ -1020,10 +1020,10 @@ void() brute_painb20 =
 
 void() brutearmtouch =
 {
-	
+	// Occurs when a limb falls off
 	if(other.solid == SOLID_BSP)
 	{	
-		string snd2 = "enemies/brute/cannonground.ogg";
+		string snd2 = "enemies/brute/wound.ogg";
 		sound7(self, CHAN_AUTO, snd2, 1, 0.25,random(90,110) ,0);
 		self.think = alphafade;
 		self.nextthink = time + random(10,15);
@@ -1286,17 +1286,8 @@ void() precache_monster_brute =
     precache_sound("enemies/brute/sight1.ogg");
     precache_sound("enemies/brute/sight2.ogg");
     precache_sound("enemies/brute/sight3.ogg");
-    precache_sound("enemies/brute/step1_run_claw.ogg");
-    precache_sound("enemies/brute/step1_walk_claw.ogg");
-    precache_sound("enemies/brute/step2_run_claw.ogg");
-    precache_sound("enemies/brute/step2_walk_claw.ogg");
-    precache_sound("enemies/brute/step3_run_claw.ogg");
-    precache_sound("enemies/brute/step3_walk_claw.ogg");
     precache_sound("enemies/brute/wound.ogg");
-    precache_sound("enemies/brute/cannonground.ogg");
 	precache_model("models/enemies/brute/brute.md3");
-	precache_model("models/enemies/brute/arm_right.md3");
-	precache_model("models/enemies/brute/arm_left.md3");
 	precache_model("models/projectiles/proj_brute.md3");
 
 };
@@ -1334,17 +1325,8 @@ void() monster_brute =
     precache_sound("enemies/brute/sight1.ogg");
     precache_sound("enemies/brute/sight2.ogg");
     precache_sound("enemies/brute/sight3.ogg");
-    precache_sound("enemies/brute/step1_run_claw.ogg");
-    precache_sound("enemies/brute/step2_run_claw.ogg");
-    precache_sound("enemies/brute/step3_run_claw.ogg");
-    precache_sound("enemies/brute/step1_walk_claw.ogg");
-    precache_sound("enemies/brute/step2_walk_claw.ogg");
-    precache_sound("enemies/brute/step3_walk_claw.ogg");
     precache_sound("enemies/brute/wound.ogg");
-    precache_sound("enemies/brute/cannonground.ogg");
 	precache_model("models/enemies/brute/brute.md3");
-	precache_model("models/enemies/brute/arm_right.md3");
-	precache_model("models/enemies/brute/arm_left.md3");
 	precache_model("models/enemies/brute/howitzer/gib_howitser.md3");
 	precache_model("models/projectiles/proj_brute.md3");
 

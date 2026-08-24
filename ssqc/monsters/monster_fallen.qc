@@ -703,7 +703,7 @@ void(string location, string gibmodel, string bleffect, vector vel, entity gwner
 			bscale = 0.5;
 			bleed.glowmod = '1.1 1.1 1.1';
 		}
-		float gibextraduration = cvar("gib_extratime")
+		float gibextraduration = cvar("gib_extratime");
 		bleed.lifetime = time + random(10,25) + gibextraduration;
 		bleed.particleffect = bleffect;
 		bleed.particleffect2 = addeffect;

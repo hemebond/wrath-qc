@@ -609,7 +609,7 @@ void() wfire_crystal =
 
 						if (monsters_hit >= 5) // Reki (July 30 2023): Added check for simultaneous monster hits
 						{
-							Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::SP_FEAT_CRYSTALSPREAD);
+							// Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::SP_FEAT_CRYSTALSPREAD);
 						}
 
 						if(trace_ent && (hittingmonster == 0) && (trace_ent.attack_finished < time))
@@ -720,53 +720,13 @@ void() wfire_crystal =
 	self.nextthink = time + 0.01;
 };
 
-/*
-void(entity e) beamcrystal_spawner =
-{
-	local entity beam;
-	beam = spawn();
-	beam.classname = "crystalbeam_view";
-	beam.owner = e;
-	setmodel (beam,"models/weapons/crystal/railb.md3");
-	setattachment (beam,e.lastbeam,"tag_nextbeam");
-	e.lastbeam = beam;
-	beam.alpha = 1;
-	beam.think = alphafade3;
-	beam.nextthink = time + 1; 
-}
-void(entity e) te_beamcrystal =
-{
-	local entity beam;
-	beam = spawn();
-	beam.owner = e;
-	e.lastbeam = beam;
-	if(self.owner.beam_lenght <= 1)
-		setmodel (beam,"models/weapons/crystal/raila.md3");
-	else
-		setmodel (beam,"models/weapons/crystal/railb.md3");
-	setattachment (beam,e.vweapon,"tag_muzzle");
-	beam.alpha = 1;
-	beam.think = alphafade3;
-	beam.nextthink = time + 1;
-	float loop_lenght;
-	loop_lenght = self.owner.beam_lenght;
-	while(loop_lenght > 1)
-	{
-		beamcrystal_spawner(e);
-		loop_lenght --;
-	}
-};
-*/
 void(entity e, float beamlenght) sub_beam2crystal =
 {
 	local entity beam;
 
 	beam = spawn();
-	//if( beamlenght > 0)
-		setmodel(beam, "models/projectiles/boibeamb.md3");
-	//else
-	//	setmodel(beam, "models/projectiles/proj_raila.md3");
-	//beam.traileffectnum = particleeffectnum("NORMAL_BLOOD2");
+	precache_model("models/projectiles/boibeamb.md3");
+	setmodel(beam, "models/projectiles/boibeamb.md3");
 	setattachment(beam, e.lastbeam, "tag_nextbeam");
 	beam.nextthink = (time + 0.05);
 	beam.alpha = 1;
@@ -775,36 +735,6 @@ void(entity e, float beamlenght) sub_beam2crystal =
 	beam.alphatime = 1;
 	e.lastbeam = beam;
 	beam.think = alphafade;
-};
-
-void(entity e, vector tagorg, vector tangles) te_beamcrystal =
-{
-	local entity beam;
-	local float beamlenght;
-
-	beam = spawn();
-	self.owner = e;
-	e.lastbeam = beam;
-	//if(self.owner.beam_lenght <= 1)
-		setmodel (beam,"models/projectiles/boibeama.md3");
-	//else
-	//	setmodel (models/projectiles/proj_railb.md3");
-	beam.origin = tagorg;
-	beam.angles = tangles;
-	//beam.effects = EF_NODEPTHTEST;
-	//setattachment(beam, e.vweapon, "tag_muzzle");
-	beam.beam_lenght = (e.beam_lenght - TRUE);
-	beam.nextthink = (time + 0.05);
-	beam.alpha = 1;
-	beam.colormod = '1 1 1';
-	beam.alphatime = 1;
-	beam.think = alphafade;
-	beamlenght = beam.beam_lenght;
-	while ((beamlenght > 0))
-	{
-		beamlenght --;
-		sub_beam2crystal(e, beamlenght);
-	}
 };
 
 void()trail_remove2 =
@@ -1210,7 +1140,6 @@ void() glowmodderthink =
 
 
 void(entity e, float chan, string samp, float vol, float attenn) msound;
-//			msound(self, CHAN_VOICE, "weapons/crystal/raise.ogg", 0, 0);
 void()heretic_run;
 .float movingz;
 void() loop_widow_soundoff;
@@ -1638,16 +1567,18 @@ void() wsfire_crystal =
 		float dmg_cnt = 	self.wsfire_crystal_dmgcnt;
 		self.soundfade = 2;
 		wvol = cvar ("weapons_fire_volume");
+		float sound_number = floor(random() * 3) + 1;
+		string sound_file = strcat("weapons/crystal/crystallizer_altfire", ftos(sound_number), "_light.ogg");
 		if(dmg_cnt <= 6)
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_light.ogg",wvol * 0.6,0.25,100,0);
+			sound7(self, CHAN_AUTO, sound_file, wvol*0.6, 0.25, 100, 0);
 		else if ((dmg_cnt > 6) && (dmg_cnt <= 12))
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_light.ogg",wvol * 0.8,0.25,100,0);
+			sound7(self, CHAN_AUTO, sound_file, wvol*0.8, 0.25, 100, 0);
 		else if ((dmg_cnt > 12) && (dmg_cnt <= 18))
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_light.ogg",wvol * 1,0.25,100,0);
+			sound7(self, CHAN_AUTO, sound_file, wvol*1, 0.25, 100, 0);
 		else if (dmg_cnt > 18) 
 		{
-			//sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_fire_alt_release.ogg",1,0.25,100,0);
-			sound7(self,CHAN_AUTO,"weapons/crystal/crystallizer_altfire1_max.ogg",wvol,0.25,100,0);
+			sound_file = strcat("weapons/crystal/crystallizer_altfire", ftos(sound_number), "_max.ogg");
+			sound7(self, CHAN_AUTO, sound_file, wvol, 0.25, 100, 0);
 		}
 		sound7(self, CHAN_AUTO, "weapons/lance/fire1.ogg", 0.4, 0.25,368,0);
 		if (dmg_cnt > 18)
@@ -1680,8 +1611,11 @@ void() wsfire_crystal =
 			setorigin (muzzle2,trace_endpos + v_forward * -12);
 
 
-			if(self.beam_muzzle)
-				remove(self.beam_muzzle);
+			if(self.beam_muzzle) {
+				self.beam_muzzle.think = SUB_Remove;
+				self.beam_muzzle.nextthink = time;
+			}
+
 			if (crystal_impact(self.wsfire_crystal_dmgcnt) == FALSE)
 			{
 				if(dmg_cnt <= 6)

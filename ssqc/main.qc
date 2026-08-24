@@ -241,29 +241,7 @@ void() precache_monster_boss1;
 void() precache_monster_keeper;
 
 void() precaches = 
-{ 
-
-
-
-	
-	
-	
-	//	precache_model ("models/items/glyph_blue.md3");
-	//	precache_model ("models/items/glyph_red.md3");
-	//	precache_model ("models/items/glyph_yellow.md3");
-	//	precache_model ("models/items/life_heart.spr");
-	//	precache_model ("models/items/manuscript.md3");
-	//	precache_model ("models/items/relic.md3");
-	//	precache_model ("models/objects/switch1.md3");
-	//	precache_sound ("env/rain.wav");
-	//	precache_sound ("objects/sigil_flight.ogg");
-	//	precache_sound ("weapons/cannon/dryfire.ogg");
-	//	precache_sound ("weapons/cannon/inspect.ogg");
-	//	precache_sound ("weapons/cannon/lower.ogg");
-	//	precache_sound ("weapons/cannon/raise.ogg");
-	//precache_model ("models/fx/tether.spr");
-	//precache_model ("models/items/manuscript.md3" );
-	//precache_model ("models/weapons/cannon/w_cannon.md3");
+{
 	precache_model ("models/player/outlander/head.md3");
 	precache_model ("models/player/outlander/lower.md3");
 	precache_model ("models/player/outlander/upper.md3");
@@ -293,8 +271,6 @@ void() precaches =
 
 	precache_model ("models/artifacts/cruel_aegis.md3");
 	precache_model ("models/artifacts/drowners_apparatus.md3");
-	precache_model ("models/artifacts/effects/confounding_attar_cloud.md3 " );
-	precache_model ("models/artifacts/effects/confounding_attar_cloud.md3");
 	precache_model ("models/artifacts/effects/confounding_attar_enemy.md3");
 	precache_model ("models/artifacts/effects/confounding_attar_proj.md3");
 	precache_model ("models/artifacts/effects/life_siphon_heretic.md3");
@@ -315,21 +291,18 @@ void() precaches =
 	precache_model ("models/artifacts/effects/trinket_dome.md3");
 	precache_model ("models/artifacts/grenade.md3");
 	precache_model ("models/artifacts/life_siphon.md3");
-	precache_model ("models/artifacts/mark_flame.md3");
 	precache_model ("models/artifacts/orb_grenade.md3");
 	precache_model ("models/artifacts/soul_marker.md3");
 	precache_model ("models/artifacts/soul_marker.md3");
 	precache_model ("models/artifacts/soul_tether.md3");
 	precache_model ("models/artifacts/trinket_of_reflection.md3");
 	precache_model ("models/artifacts/vicious_animus.md3");
-	precache_model ("models/blackgrenade.md3");
 	precache_model ("models/dev/gizmo.md3");
 	precache_model ("models/dev/node.md3");
 	precache_model ("models/dev/sphere.md3");
 	precache_model ("models/dev/spherebig.md3");
-	precache_model ("models/enemies/incisor/incisor_spike.md3" );	precache_model ("models/artifacts/active/cruel_aegis_active.md3");
+	precache_model ("models/artifacts/active/cruel_aegis_active.md3");
 	precache_model ("models/enemies/lurker/lurker.md3");
-	precache_model ("models/fx/tether.spr");
 	precache_model ("models/gibs/gib_large.md3");
 	precache_model ("models/gibs/gib_med.md3");
 	precache_model ("models/gibs/gib_small.md3");
@@ -352,12 +325,9 @@ void() precaches =
 	precache_model ("models/items/glyph_yellow.md3");
 	precache_model ("models/items/helm.md3");
 	precache_model ("models/items/helm_dark.md3");
-	precache_model ("models/items/lances.md3");
-	precache_model ("models/items/life_heart.spr");
 	precache_model ("models/items/lifeblood_beaker.md3");
 	precache_model ("models/items/lifeblood_chalice.md3");
 	precache_model ("models/items/lifeblood_vial.md3");
-	precache_model ("models/items/manuscript.md3");
 	precache_model ("models/items/relic.md3");
 	precache_model ("models/items/shells.md3");
 	precache_model ("models/items/slugs.md3");
@@ -377,23 +347,15 @@ void() precaches =
 	precache_model ("models/objects/coffers/coffer1_collision.md3");
 	precache_model ("models/objects/coffers/coffer1_locked.md3");
 	precache_model ("models/objects/decor/crystals/crystal_small.md3");
-	precache_model ("models/objects/switch1.md3");
 	precache_model ("models/objects/teleporters/teleporter.md3");
-	precache_model ("models/player/footstep.md3");
-	precache_model ("models/players/outlander/player.md3");
 	precache_model ("models/projectiles/beam_crystal.md3");
 	precache_model ("models/projectiles/beam_crystala.md3");
 	precache_model ("models/projectiles/beam_crystalb.md3");
 	precache_model ("models/projectiles/beam_crystalc.md3");
 	precache_model ("models/projectiles/beam_crystald.md3");
 	precache_model ("models/projectiles/beam_crystale.md3");
-	precache_model ("models/projectiles/boibeama.md3");
-	precache_model ("models/projectiles/boibeamb.md3");
 	precache_model ("models/projectiles/proj_beam.md3");
 	precache_model ("models/projectiles/proj_crystal.md3");
-	precache_model ("models/projectiles/proj_crystaliser.md3");
-	precache_model ("models/projectiles/proj_crystalisera.md3");
-	precache_model ("models/projectiles/proj_crystaliserb.md3");
 	precache_model ("models/projectiles/proj_cyst.md3");
 	precache_model ("models/projectiles/proj_cyst.md3");
 	precache_model ("models/projectiles/proj_fang1.md3");
@@ -416,14 +378,11 @@ void() precaches =
 	precache_model ("models/weapons/cannon/w_cannon.md3");
 	precache_model ("models/weapons/crystal/v_crystal.md3");
 	precache_model ("models/weapons/crystal/w_crystal.md3");
-	precache_model ("models/weapons/crystaliser/v_beam.md3");
-	precache_model ("models/weapons/crystaliser/v_crystaliser.md3");
 	precache_model ("models/weapons/lance/barrier.md3");
 	precache_model ("models/weapons/lance/v_beam.md3");
 	precache_model ("models/weapons/lance/v_flash.md3");
 	precache_model ("models/weapons/lance/v_lance.md3");
 	precache_model ("models/weapons/lance/w_lance.md3");
-	precache_model ("models/weapons/lance/w_shotgun.md3");
 
 	precache_model ("models/weapons/mace/w_mace_open.md3");
 	precache_model ("models/weapons/mace/w_mace.md3");
@@ -431,7 +390,6 @@ void() precaches =
 	precache_model ("models/weapons/mace/v_mace.md3");
 	precache_model ("models/weapons/mace/v_mace_blood.md3");
 	precache_model ("models/weapons/mace/v_mace_hot.md3");
-	precache_model ("models/weapons/mace/v_mace_energy.md3");
 	precache_model ("models/weapons/mace/v_mace_runes.md3");
 	precache_model ("models/weapons/melee/v_blade.md3");
 	precache_model ("models/weapons/melee/v_blade_blood.md3");
@@ -461,14 +419,6 @@ void() precaches =
 	precache_model ("particles/explo/explo_retcher.md3");
 	precache_model ("particles/explo/explo_slag1.md3");
 	precache_model ("particles/explo/explo_slag2.md3");
-	precache_model ("particles/smoke_1.md3");
-	precache_model ("particles/smoke_2.md3");
-	precache_model ("particles/smoke_3.md3");
-	precache_model ("particles/smoke_4.md3");
-	precache_model ("particles/smoke_5.md3");
-	precache_model ("particles/smoke_6.md3");
-	precache_model ("particles/smoke_7.md3");
-	precache_model ("particles/smoke_8.md3");
 	precache_model("models/objects/decor/crystals/crystal_base.md3");
 	//precache_model("models/weapons/lance/v_lance_wrath.md3");
 	precache_model("models/artifacts/effects/revelation_particle.md3");
@@ -477,14 +427,10 @@ void() precaches =
 	precache_model("models/weapons/mace/soul.md3");
 	precache_model("particles/impact/impact_oppressor6.md3");
 	precache_model("models/dev/collisionbox.md3");
-	precache_model("models/alpha/impact_oppressor8.md3");
 	precache_model("models/items/item_readable.md3");
 	precache_model("models/artifacts/effects/revelation_note.md3");
 	precache_model("models/artifacts/effects/revelation_note_blur.md3");
 	precache_model("models/artifacts/effects/revelation_note_particle.md3");
-	precache_model("sdf");
-	precache_sound("weapons/lhit.wav");
-	precache_sound("weapons/mace/inspect.ogg");
 	precache_sound("enemies/wretch/proj_loop.ogg");
 	precache_sound("enemies/symbol/fire.ogg");
 
@@ -531,6 +477,7 @@ void() precaches =
 	precache_sound ("impact/destruct/glass_break1.ogg");
 	precache_sound ("impact/destruct/glass_break2.ogg");
 	precache_sound ("impact/destruct/glass_break3.ogg");
+	precache_sound ("impact/destruct/glass_small_break.ogg");
 	precache_sound ("impact/destruct/stone_break1.ogg");
 	precache_sound ("impact/destruct/stone_break2.ogg");
 	precache_sound ("impact/destruct/wood1_break1.ogg");
@@ -598,7 +545,6 @@ void() precaches =
 	precache_sound ("impact/projectiles/shotgun_explo3.ogg");
 	precache_sound ("impact/projectiles/shotgun_explo4.ogg");
 	precache_sound ("impact/projectiles/shotgun_explo5.ogg");
-	precache_sound ("impact/projectiles/shotgun_explo6.ogg");
 	precache_sound ("impact/projectiles/slag1_explo1.ogg");
 	precache_sound ("impact/projectiles/slag1_explo2.ogg");
 	precache_sound ("impact/projectiles/slag1_explo3.ogg");
@@ -617,7 +563,6 @@ void() precaches =
 	precache_sound ("items/ammo_cannon.ogg");
 	precache_sound ("items/ammo_lance.ogg");
 	precache_sound ("items/ammo_crystallizer.ogg");
-	precache_sound ("items/ammo_mace.ogg");
 
 	precache_sound ("items/armor1.ogg");
 	precache_sound ("items/armor_dark1.ogg");
@@ -638,7 +583,6 @@ void() precaches =
 	precache_sound ("items/armor_shard_dark2.ogg");
 	precache_sound ("items/armor_shard_dark3.ogg");
 	precache_sound ("items/armor_dark_impact.ogg");
-	precache_sound ("items/artifacts/aegis.ogg");
 	precache_sound ("items/artifacts/artifactA_end.ogg");
 	precache_sound ("items/artifacts/artifactA_pickup.ogg");
 	precache_sound ("items/artifacts/artifactA_use.ogg");
@@ -652,7 +596,6 @@ void() precaches =
 	precache_sound ("items/artifacts/artifactD_end.ogg");
 	precache_sound ("items/artifacts/artifactD_pickup.ogg");
 	precache_sound ("items/artifacts/artifactD_use.ogg");
-	precache_sound ("items/artifacts/artifactE_end.ogg");
 	precache_sound ("items/artifacts/artifactE_pickup.ogg");
 	precache_sound ("items/artifacts/artifactE_use.ogg");
 	precache_sound ("items/artifacts/artifactF_end.ogg");
@@ -680,10 +623,6 @@ void() precaches =
 	precache_sound ("items/artifacts/mark_of_revelation_use.ogg");
 
 	precache_sound ("items/coffer_key.ogg");
-	precache_sound ("items/cysts.ogg");
-	precache_sound ("items/cysts.ogg");
-	precache_sound ("items/fangs.ogg");
-	precache_sound ("items/fangs.ogg");
 	precache_sound ("items/glyph.ogg");
 	precache_sound ("items/lifeblood_beaker1.ogg");
 	precache_sound ("items/lifeblood_beaker1.ogg");
@@ -706,7 +645,6 @@ void() precaches =
 	precache_sound ("items/sigils/sigil_flight_end.ogg");
 	precache_sound ("items/sigils/sigil_flight_end.ogg"); // (sound when effect ends)
 	precache_sound ("items/sigils/sigil_flight_start.ogg"); // (sound when you get sigil)
-	precache_sound ("items/slugs.ogg");
 	precache_sound ("misc/null.wav");
 	precache_sound ("misc/null.wav");
 	precache_sound ("misc/null.wav");
@@ -722,8 +660,6 @@ void() precaches =
 	precache_sound ("objects/hub1_pillar.ogg");
 	precache_sound ("objects/pylon_loop.ogg");
 	precache_sound ("objects/orrery.ogg");
-	precache_sound ("objects/switch1_use.ogg");
-	precache_sound ("particles/breathe1.ogg");
 
 	precache_sound ("player/breathe1.ogg");
 	precache_sound ("player/breathe2.ogg");
@@ -863,11 +799,6 @@ void() precaches =
 	precache_sound ("player/landings/land_wood3.ogg");
 	precache_sound ("player/landings/land_wood4.ogg");
 	precache_sound ("player/landings/land_wood5.ogg");
-	precache_sound ("player/landings/land_flesh1.ogg");
-	precache_sound ("player/landings/land_flesh2.ogg");
-	precache_sound ("player/landings/land_flesh3.ogg");
-	precache_sound ("player/landings/land_flesh4.ogg");
-	precache_sound ("player/landings/land_flesh5.ogg");
 	precache_sound ("player/underwater_loop.wav");
 	precache_sound ("player/water_enter1.ogg");
 	precache_sound ("player/water_exit1.ogg");
@@ -895,8 +826,6 @@ void() precaches =
 	precache_sound ("weapons/cannon/lower.ogg");
 	precache_sound ("weapons/cannon/raise.ogg");
 	precache_sound ("weapons/crystal/inspect.ogg");
-	precache_sound ("weapons/crystal/lower.ogg");
-	precache_sound ("weapons/crystal/raise.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_fire1.ogg");
 	precache_sound ("weapons/crystal/crystallizer_fire2.ogg");
@@ -913,12 +842,14 @@ void() precaches =
 	precache_sound ("weapons/crystal/crystallizer_fire_loop.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_fire_alt_loop.ogg");
-	precache_sound ("weapons/crystal/crystallizer_fire_alt_release.ogg");
-	precache_sound ("weapons/crystal/crystallizer_fire_alt_stinger.ogg");
-	precache_sound ("weapons/crystal/crystallizer_fire_alt_release_max.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire_stinger.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_altfire1_max.ogg");
 	precache_sound ("weapons/crystal/crystallizer_altfire1_light.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire2_max.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire2_light.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire3_max.ogg");
+	precache_sound ("weapons/crystal/crystallizer_altfire3_light.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_deselect1.ogg");
 	precache_sound ("weapons/crystal/crystallizer_deselect2.ogg");
@@ -933,7 +864,6 @@ void() precaches =
 	precache_sound ("weapons/lance/fire2.ogg");
 	precache_sound ("weapons/lance/fire3.ogg");
 	precache_sound ("weapons/lance/inspect.ogg");
-	precache_sound ("weapons/lance/raise.ogg");
     precache_sound ("weapons/lance/lance_select1.ogg");
     precache_sound ("weapons/lance/lance_select2.ogg");
     precache_sound ("weapons/lance/lance_select3.ogg");
@@ -1061,11 +991,6 @@ void() precaches =
     precache_monster_prowler();
     precache_monster_lurker();
     precache_monster_keeper();
-    precache_sound ("items/artifacts/artifactE_end.ogg");
-    precache_sound ("objects/switch1_use.ogg");
-    precache_sound ("weapons/crystaliser/fire1.ogg");
-    precache_sound ("weapons/crystaliser/inspect.ogg");
-    precache_sound ("weapons/crystaliser/raise.ogg");
 	precache_sound ( "impact/destruct/skullbreak.ogg");
 };
 

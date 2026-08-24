@@ -1,12 +1,9 @@
-
 // Reki (May 31 2023)
 // localization_table.qc:
 // defines hashtable and functions for
 // interacting with dynamically localized
 // strings (as opposed to static localization
 // at load time done by the engine)
-
-#include "localization.h"
 
 // only for SSQC
 #ifdef SSQC
@@ -150,6 +147,7 @@ string Localization_FindFile(string path, float primaryonly = FALSE)
 {
 	string langpath = cvar_string("prvm_language");
 	string fallbackpath = cvar_string("prvm_language_fallback");
+
 	if (!langpath)
 		langpath = "null";
 	if (!fallbackpath)
@@ -158,11 +156,14 @@ string Localization_FindFile(string path, float primaryonly = FALSE)
 	langpath = sprintf(path, langpath);
 	fallbackpath = sprintf(path, fallbackpath);
 
-	if (fexists_pak(langpath))
-		return langpath;
-	else if (fexists_pak(fallbackpath) && !primaryonly)
-		return fallbackpath;
-	return path; // Reki FIXME: this should probably return something else, but I'm afraid of bad path errors so I'm leaving it
+	// Assume the file exists because VM_fexists is broken and doesn't support mods
+	return langpath;
+
+	// if (fexists_pak(langpath))
+	// 	return langpath;
+	// else if (fexists_pak(fallbackpath) && !primaryonly)
+	// 	return fallbackpath;
+	// return path; // Reki FIXME: this should probably return something else, but I'm afraid of bad path errors so I'm leaving it
 }
 
 string strcontrols(string strbody, float hint_glyphs)
@@ -200,16 +201,16 @@ string strcontrols(string strbody, float hint_glyphs)
 				float type = bind_gettype(keynum);
 				if (IS_KBM_KEY(type) && (input_mode == IN_MODE_KEYBOARD || input_mode == IN_MODE_MOUSE))
 					break;
-				else if (type == INPUT_TYPE::XBOX && input_mode == IN_MODE_GAMEPAD)
+				else if (type == INPUT_TYPE_XBOX && input_mode == IN_MODE_GAMEPAD)
 					break;
-				else if (type == INPUT_TYPE::JOYSTICK && input_mode == IN_MODE_JOYSTICK)
+				else if (type == INPUT_TYPE_JOYSTICK && input_mode == IN_MODE_JOYSTICK)
 					break;
 			}
 
 			string s_key;
 			if (keynum != -1)
 			{
-				if (bind_gettype(keynum) == INPUT_TYPE::XBOX && hint_glyphs)
+				if (bind_gettype(keynum) == INPUT_TYPE_XBOX && hint_glyphs)
 				{
 					s_key = sprintf("{GLYPH_%.0f}", keynum);
 				}
@@ -369,7 +370,7 @@ void LanguageDef_LoadFonts(language_c langdef)
 		fontwritten[slot] = TRUE;
 	}
 
-	for(float i = 0; i < LANGFONT::MAX; i++) // reinit with conchars
+	for(float i = 0; i < LANGFONT_MAX; i++) // reinit with conchars
 	{
 		if (fontwritten[i])
 			continue;
@@ -429,8 +430,8 @@ void LanguageDef_LoadFile(string lcode)
 	chara s;
 	while(TRUE)
 	{
-		s = str_removeblank(fgets(f));
-		if (!s || s == "" || s == __NULL__) // if this line is blank, tell it to FUK'OFF
+		s = (chara)str_removeblank(fgets(f));
+		if (!(string)s || (string)s == "" || (string)s == __NULL__) // if this line is blank, tell it to FUK'OFF
 		{
 			k--;
 			if (k < 0)
@@ -443,18 +444,18 @@ void LanguageDef_LoadFile(string lcode)
 		uielement_c block;
 		if (s[0] == "<") // we have a special statement
 		{
-			float o = strstrofs(s, ">", 0);
-			string fullcmd = substring(s, 1, o - 1);
+			float o = strstrofs((string)s, ">", 0);
+			string fullcmd = substring((string)s, 1, o - 1);
 			float argc = tokenizebyseparator(fullcmd, ",");
 			string cmd = argv(0);
-			s = str_removeblank(substring(s, o + 1, strlen(s))); // remove special case from the string
+			s = (chara)str_removeblank(substring((string)s, o + 1, strlen((string)s))); // remove special case from the string
 
 			switch (cmd)
 			{
 				case "font":
 					string type = argv(1);
 					float ind = -1;
-					for(float j = 0; j < LANGFONT::MAX; j++)
+					for(float j = 0; j < LANGFONT_MAX; j++)
 					{
 						if (type == fontnames[j] || (altfontnames[j] != "" && type == altfontnames[j]))
 						{
@@ -469,8 +470,8 @@ void LanguageDef_LoadFile(string lcode)
 						break;
 					}
 
-					dprint(sprintf("^3   %s=%s font registered (%s)\n", fontnames[ind], s, langdef.lang));
-					langfont_c fnt = spawn(langfont_c, index: ind, file: strzone(s));
+					dprint(sprintf("^3   %s=%s font registered (%s)\n", fontnames[ind], (string)s, langdef.lang));
+					langfont_c fnt = spawn(langfont_c, index: ind, file: strzone((string)s));
 					fnt._next = langdef.fontlist;
 					langdef.fontlist = fnt;
 				break;
@@ -482,8 +483,8 @@ void LanguageDef_LoadFile(string lcode)
 					}	
 					
 					string langcode = argv(1);
-					dprint(sprintf("^3   %s=%s name registered (%s)\n", langcode, s, langdef.lang));
-					langname_c nm = spawn(langname_c, lang: strzone(langcode), title: strzone(s));
+					dprint(sprintf("^3   %s=%s name registered (%s)\n", langcode, (string)s, langdef.lang));
+					langname_c nm = spawn(langname_c, lang: strzone(langcode), title: strzone((string)s));
 					nm._next = langdef.namelist;
 					langdef.namelist = nm;
 
@@ -491,7 +492,7 @@ void LanguageDef_LoadFile(string lcode)
 					{
 						if (langdef.nativename)
 							strunzone(langdef.nativename);
-						langdef.nativename = strzone(s);
+						langdef.nativename = strzone((string)s);
 						dprint(sprintf("^3      ^ native name found (%s)\n", langdef.lang));
 					}
 				break;
@@ -502,14 +503,14 @@ void LanguageDef_LoadFile(string lcode)
 
 	// register menu font (for language selection)
 	langdef.fontcode = FONT_MENU;
-	string menufontfile = LanguageDef_FindFont(langdef, LANGFONT::MAINMENU);
+	string menufontfile = LanguageDef_FindFont(langdef, LANGFONT_MAINMENU);
 	if (menufontfile)
 	{
-		langdef.fontcode = loadfont(langdef.lang, menufontfile, fontsizes[LANGFONT::MAINMENU], -1, fontscales[LANGFONT::MAINMENU], 0);
+		langdef.fontcode = loadfont(langdef.lang, menufontfile, fontsizes[LANGFONT_MAINMENU], -1, fontscales[LANGFONT_MAINMENU], 0);
 	}
 	else
 	{
-		langdef.fontcode = loadfont(langdef.lang, "fonts/journal", fontsizes[LANGFONT::MAINMENU], -1, fontscales[LANGFONT::MAINMENU], 0);
+		langdef.fontcode = loadfont(langdef.lang, "fonts/journal", fontsizes[LANGFONT_MAINMENU], -1, fontscales[LANGFONT_MAINMENU], 0);
 	}
 
 	//print(ftos(langdef.fontcode), "\n");

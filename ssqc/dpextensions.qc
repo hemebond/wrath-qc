@@ -1337,7 +1337,7 @@ float SOUNDFLAG_NOSPATIALIZE = 32; // isn't affected by 3D panning, but volume s
 // Reki: soundwrath
 // adds "trapezoid" option, which if non-0 will shift the beginning of the falloff curve to that multiplier of the sound distance
 // for example, a sound with trapezoid 0.5 and atten 1 will have full volume at 500u, but half volume at 750u
-void(entity e, float chan, string samp, float vol, float atten, float speed, float flags, float trapezoid) soundwrath = #8;
+void(entity e, float chan, string samp, float vol, float atten, float speed, float flags, optional float trapezoid=FALSE) soundwrath = #8;
 
 //DP_SND_OGGVORBIS
 //idea: Transfusion
@@ -2455,6 +2455,7 @@ void(string str) SV_ParseClientCommand =
 
     float numargs = tokenize(str);
 	string cmd = argv(0);
+	entity lst = world;
 
     if (cmd == "save")
 	{
@@ -2505,8 +2506,8 @@ void(string str) SV_ParseClientCommand =
 	else if (cmd == "listentities")
 	{
 		dprint("^3-- BEGIN ENTITY LIST --\n");
-		entity lst = world;
-		while(lst = nextent(lst))
+		lst = world;
+		while((lst = nextent(lst)))
 		{
 			dprint(sprintf("  %.0f: %s\n", num_for_edict(lst), lst.classname));
 		}
@@ -2529,8 +2530,8 @@ void(string str) SV_ParseClientCommand =
 		}
 
 		dprint("^3-- BEGIN REMOVAL LIST --\n");
-		entity lst = world;
-		while(lst = nextent(lst))
+		lst = world;
+		while((lst = nextent(lst)))
 		{
 			if (lst.classname != clss)
 				continue;
@@ -2771,7 +2772,7 @@ inline string chara_atpos(chara this, float pos)
 }
 string chara_setpos(chara this, float pos, string c)
 {
-	float idx = min(pos, strlen((string)this))
+	float idx = min(pos, strlen((string)this));
 
 	string s1 = substring((string)this, 0, idx);
 	string s2 = substring((string)this, idx + 1, strlen((string)this));

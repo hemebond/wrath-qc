@@ -897,16 +897,16 @@ void(string locsound, float rnd, float vol) chattersound2 =
 	}
 	if (!vol)
 	{
-		vol = TRUE;
+		vol = 1;
 	}
-	r = floor((random() * rnd)) + TRUE;
+	r = floor((random() * rnd)) + 1;
 	if ((r == self.chattersnd2))
 	{
-		r = r + TRUE;
+		r = r + 1;
 	}
 	if ((r > rnd))
 	{
-		r = TRUE;
+		r = 1;
 	}
 	self.chattersnd2 = r;
 	rsound = ftos(r);
@@ -950,11 +950,11 @@ void(string locsound, float rnd, float vol) chattersound =
 	monstersound = strcat(locsound, rsound, ".ogg");
 	if ((vol == 0.5))
 	{
-		msound(self, FALSE, monstersound, TRUE, 0.5);
+		msound(self, CHAN_AUTO, monstersound, 1, 0.5);
 	}
 	else
 	{
-		msound(self, FALSE, monstersound, TRUE, 0.25);
+		msound(self, CHAN_AUTO, monstersound, 1, 0.25);
 	}
 };
 
@@ -976,7 +976,7 @@ void(string locsound, float rnd, float vol) randomsound =
 	self.msound_cnt1 = r;
 	rsound = ftos(r);
 	monstersound = strcat(locsound, rsound, ".ogg");
-	msound(self, FALSE, monstersound, vol, 0.5);
+	msound(self, CHAN_AUTO, monstersound, vol, 0.5);
 };
 
 void(string locsound, float rnd, float vol,float pitch) randomsound7 =
@@ -1081,9 +1081,9 @@ void(string locsound, float rnd, float vol, float nchannel, float iswav, float a
 
 void(string locsound, float vol, float nchannel, float iswav, float atten) alreadyrandomsound2 =
 {
-	local string soundend;
-	local string lsound;
-	local string rsound;
+	string soundend;
+	string lsound;
+	string rsound;
 
 	if (iswav)
 	{

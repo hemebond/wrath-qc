@@ -180,6 +180,7 @@ void EntUpdate_Boss3Halo(float is_new)
 		self.classname = "boss3halo";
 		self.predraw = Boss3Halo_Predraw;
 		self.drawmask = MASK_NORMAL;
+		precache_model("models/enemies/boss3/halo_boss3.md3");
 		setmodel(self, "models/enemies/boss3/halo_boss3.md3");
 	}
 }
@@ -222,7 +223,7 @@ void TempEnt_ExpandingOrb()
 	vector clr = ReadColor();
 	float life = ReadShort() / 100;
 
-	expandingorb_c orb = spawn();
+	expandingorb_c orb = (expandingorb_c)spawn();
 	precache_model("models/enemies/boss3/deathsphere.md3"); // this should already be done, but just in case!
 	setmodel(orb, "models/enemies/boss3/deathsphere.md3");
 	setorigin(orb, org);

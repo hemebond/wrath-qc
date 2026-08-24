@@ -37,28 +37,6 @@ void() object_switch_fire = { self.skin = 1;
 		self.think = object_switch_fire_wait;
 	self.nextthink = time + self.wait;
 };
-void() object_switch2 = { if (!self.wait)
-		self.wait = 2;
-	if (self.wait < 0)
-		self.spawnflags = 1;
-	setmodel(self, "models/objects/switch1.md3");
-	self.solid = SOLID_BSP;
-	if (self.target2)
-	{
-		self.followner = find(world, classname, "func_door");
-		self.colormod = '1 1 0';
-		setattachment(self, self.followner, "");
-	}
-	if(self.displacement == 1)
-	{
-		self.wrathflags += FL_INVISIBLE;
-		self.effects = EF_NODRAW;
-		self.solid = 0;
-	}
-	setsize(self, '-16 -16 -24', '16 16 24');
-	self.usable = 1;
-	self.use = object_switch_fire;
-};
 
 .float switch_state;
 
@@ -159,7 +137,7 @@ void() object_switch =
 	precache_model(selfpipesmodel);
 
 	precache_sound("objects/switches/e1_switch1.ogg");
-	precache_sound("objects/switches/e1_switch_reset.ogg");
+	precache_sound("objects/switches/e1_switch1_reset.ogg");
 	self.noise = "objects/switches/e1_switch1.ogg";
 	self.noise2 = "objects/switches/e1_switch1_reset.ogg";
 
@@ -464,7 +442,7 @@ void() Use_Func = { local vector source;
 
 	if (trace_ent.classname == "func_button")
 	{
-		sound(trace_ent, CHAN_AUTO, "objects/switch1_use.ogg", 1, 1);
+		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		trace_ent.enemy = self;
 		trace_ent.think = button_fire;
 		trace_ent.nextthink = trace_ent.ltime + 0.01;
@@ -474,7 +452,7 @@ void() Use_Func = { local vector source;
 	if (trace_ent.buttondecal == 1)
 	{
 		local entity linkedbutton;
-		sound(trace_ent, CHAN_AUTO, "objects/switch1_use.ogg", 1, 1);
+		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		linkedbutton = trace_ent.owner;
 		linkedbutton.enemy = self;
 		linkedbutton.think = button_fire;
@@ -486,7 +464,7 @@ void() Use_Func = { local vector source;
 
 	if (trace_ent.classname == "object_switch")
 	{
-		sound(trace_ent, CHAN_AUTO, "objects/switch1_use.ogg", 1, 1);
+		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		trace_ent.enemy = self;
 		trace_ent.think = object_switch_fire;
 		trace_ent.nextthink = trace_ent.ltime + 0.01;

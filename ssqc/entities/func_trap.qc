@@ -46,12 +46,7 @@ void() func_trap_particlespawner =
 			partorg_z = pos3_z +  (random(-self.size_z* 0.5,self.size_z* 0.5));
 	
 		pointparticles(particleeffectnum(self.particlename), partorg, '0 0 0', 1);
-		
-		/*		
-		entity diamond = spawn();
-		setmodel(diamond,"sdfsd");
-		diamond.origin = partorg;
-		diamond.effects = EF_NODEPTHTEST;*/
+
 		partcounnt -= 1;
 	}
 

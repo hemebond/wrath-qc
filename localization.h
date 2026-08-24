@@ -1,5 +1,3 @@
-#pragma once
-
 #ifdef SSQC
 void spawnfunc_info_localization(void);
 void Localization_ResendFileList(entity to);
@@ -12,6 +10,7 @@ string strlocalize(string strbody);
 string strlocalize_full(string strbody, float hint_glyphs);
 string strcontrols(string strbody, float hint_glyphs);
 #ifdef MENU
+/*
 enum LANGFONT:float {
 	CENTERPRINT,
 	MAINMENU,
@@ -25,6 +24,19 @@ enum LANGFONT:float {
 	JOURNAL,
 	MAX
 };
+*/
+
+float LANGFONT_CENTERPRINT = 0;
+float LANGFONT_MAINMENU = 1;
+float LANGFONT_USER0 = 2;
+float LANGFONT_USER1 = 3;
+float LANGFONT_USER2 = 4;
+float LANGFONT_USER3 = 5;
+float LANGFONT_USER4 = 6;
+float LANGFONT_USER5 = 7;
+float LANGFONT_CREDITS = 8;
+float LANGFONT_JOURNAL = 9;
+float LANGFONT_MAX = 10;
 
 string fontnames[] = {
 	"centerprint",

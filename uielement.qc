@@ -11,8 +11,6 @@
 //
 //========================================================================
 
-#include "uielement.h"
-
 vector ui_position;
 vector ui_mouseposition;
 vector ui_scale;
@@ -51,12 +49,12 @@ void UI_RenderElements(uielement_c chain) // recursive render function
 		vector hud_start = '0 0';
 		vector hud_size = [vid_width, vid_height];
 		
-		if !(chain.flags & UIFLAG::STRETCH && chain.type == UITYPE::PICTURE)
+		if !(chain.flags & UIFLAG_STRETCH && chain.type == UITYPE_PICTURE)
 			UI_Letterbox(hud_start, hud_size);
 
 		master_position = hud_start;
 
-		if (chain.flags & UIFLAG::STRETCH)
+		if (chain.flags & UIFLAG_STRETCH)
 		{
 			master_position = hud_start;
 			chain.size[0] = hud_size[0] / ui_scale[0];
@@ -68,7 +66,7 @@ void UI_RenderElements(uielement_c chain) // recursive render function
 			master_position[1] += chain.anchor[1] * hud_size[1];
 		}
 
-		if (chain.flags & UIFLAG::HIDE)
+		if (chain.flags & UIFLAG_HIDE)
 			return;
 		
 		if (chain.active_condition)
@@ -77,7 +75,7 @@ void UI_RenderElements(uielement_c chain) // recursive render function
 	}
 	else
 	{
-		if (chain.flags & UIFLAG::STRETCH)
+		if (chain.flags & UIFLAG_STRETCH)
 		{
 			master_position = ui_position;
 			chain.size = chain.owner.totalsize();
@@ -92,9 +90,9 @@ void UI_RenderElements(uielement_c chain) // recursive render function
 	}
 
 	float o_alpha = ui_alpha;
-	if (chain.flags & UIFLAG::SETALPHA || chain.flags & UIFLAG::MULTALPHA)
+	if (chain.flags & UIFLAG_SETALPHA || chain.flags & UIFLAG_MULTALPHA)
 	{
-		if (chain.flags & UIFLAG::SETALPHA)
+		if (chain.flags & UIFLAG_SETALPHA)
 			ui_alpha = chain.alpha;
 		else
 			ui_alpha *= chain.alpha;
@@ -108,18 +106,18 @@ void UI_RenderElements(uielement_c chain) // recursive render function
 	master_position[1] -= tsize[1] * chain.justify[1];
 
 	ui_position = master_position;
-	if (chain.flags & UIFLAG::CLIP)
+	if (chain.flags & UIFLAG_CLIP)
 	{
 		clip_start = ui_clipstart = master_position;
 		clip_size = ui_clipsize = tsize;
 		drawsetcliparea(ui_clipstart[0], ui_clipstart[1], ui_clipsize[0], ui_clipsize[1]);
 	}
-	if ((chain.flags & UIFLAG::CLICKABLE) || (chain.flags & UIFLAG::SELECTABLE) || (chain.flags & UIFLAG::FORCECURSOR) || (chain.flags & UIFLAG::HIGHLIGHT))
+	if ((chain.flags & UIFLAG_CLICKABLE) || (chain.flags & UIFLAG_SELECTABLE) || (chain.flags & UIFLAG_FORCECURSOR) || (chain.flags & UIFLAG_HIGHLIGHT))
 	{
 		if (INBOUNDS(ui_mouseposition, master_position, (master_position + tsize)) && (!ui_clipsize || INBOUNDS(ui_mouseposition, ui_clipstart, (ui_clipstart + ui_clipsize))))
 			ui_hover = chain;
 	}
-	if ((chain.flags & UIFLAG::CLICKABLE) || (chain.flags & UIFLAG::SELECTABLE) || (chain.flags & UIFLAG::FORCECURSOR))
+	if ((chain.flags & UIFLAG_CLICKABLE) || (chain.flags & UIFLAG_SELECTABLE) || (chain.flags & UIFLAG_FORCECURSOR))
 		ui_usemouse = TRUE;
 	chain.render(); // render the top
 
@@ -128,7 +126,7 @@ void UI_RenderElements(uielement_c chain) // recursive render function
 
 	for(chain = chain._list; chain; chain = chain._next)
 	{
-		if (chain.flags & UIFLAG::HIDE)
+		if (chain.flags & UIFLAG_HIDE)
 			continue;
 		
 		if (chain.active_condition)
@@ -178,11 +176,11 @@ void UI_CheckClick(uielement_c chain)
 	{
 		vector hud_start = '0 0';
 		vector hud_size = [vid_width, vid_height];
-		if !(chain.flags & UIFLAG::STRETCH && chain.type == UITYPE::PICTURE)
+		if !(chain.flags & UIFLAG_STRETCH && chain.type == UITYPE_PICTURE)
 			UI_Letterbox(hud_start, hud_size);
 
 		master_position = hud_start;
-		if (chain.flags & UIFLAG::STRETCH)
+		if (chain.flags & UIFLAG_STRETCH)
 		{
 			master_position = hud_start;
 			chain.size[0] = hud_size[0] / ui_scale[0];
@@ -194,7 +192,7 @@ void UI_CheckClick(uielement_c chain)
 			master_position[1] += chain.anchor[1] * hud_size[1];
 		}
 
-		if (chain.flags & UIFLAG::HIDE)
+		if (chain.flags & UIFLAG_HIDE)
 			return;
 		
 		if (chain.active_condition)
@@ -203,7 +201,7 @@ void UI_CheckClick(uielement_c chain)
 	}
 	else
 	{
-		if (chain.flags & UIFLAG::STRETCH)
+		if (chain.flags & UIFLAG_STRETCH)
 		{
 			master_position = ui_position;
 			chain.size = chain.owner.totalsize();
@@ -222,12 +220,12 @@ void UI_CheckClick(uielement_c chain)
 	master_position[1] -= tsize[1] * chain.justify[1];
 
 	ui_position = master_position;
-	if (chain.flags & UIFLAG::CLIP)
+	if (chain.flags & UIFLAG_CLIP)
 	{
 		clip_start = ui_clipstart = master_position;
 		clip_size = ui_clipsize = tsize;
 	}
-	if ((chain.flags & UIFLAG::SELECTABLE) || (chain.flags & UIFLAG::CLICKABLE))
+	if ((chain.flags & UIFLAG_SELECTABLE) || (chain.flags & UIFLAG_CLICKABLE))
 	{
 		if (INBOUNDS(ui_mouseposition, master_position, (master_position + tsize)) && (!ui_clipsize || INBOUNDS(ui_mouseposition, ui_clipstart, (ui_clipstart + ui_clipsize))))
 			ui_selected = chain;
@@ -238,7 +236,7 @@ void UI_CheckClick(uielement_c chain)
 
 	for(chain = chain._list; chain; chain = chain._next)
 	{
-		if (chain.flags & UIFLAG::HIDE)
+		if (chain.flags & UIFLAG_HIDE)
 			continue;
 		
 		if (chain.active_condition)
@@ -279,14 +277,14 @@ float UI_CheckInput(uielement_c chain, float nkey, float ascii, float released)
 	{
 		vector hud_start = '0 0 0';
 		vector hud_size = [vid_width, vid_height];
-		if !(chain.flags & UIFLAG::STRETCH && chain.type == UITYPE::PICTURE)
+		if !(chain.flags & UIFLAG_STRETCH && chain.type == UITYPE_PICTURE)
 			UI_Letterbox(hud_start, hud_size);
 
 		master_position = hud_start;
 		master_position[0] += chain.anchor[0] * hud_size[0];
 		master_position[1] += chain.anchor[1] * hud_size[1];
 		
-		if (chain.flags & UIFLAG::HIDE)
+		if (chain.flags & UIFLAG_HIDE)
 			return FALSE;
 		
 		if (chain.active_condition)
@@ -316,7 +314,7 @@ float UI_CheckInput(uielement_c chain, float nkey, float ascii, float released)
 
 	for(chain = chain._list; chain; chain = chain._next)
 	{
-		if (chain.flags & UIFLAG::HIDE)
+		if (chain.flags & UIFLAG_HIDE)
 			continue;
 
 		if (chain.active_condition)
@@ -347,7 +345,7 @@ void UI_DryRun(uielement_c chain)
 	{
 		vector hud_start = '0 0 0';
 		vector hud_size = [vid_width, vid_height];
-		if !(chain.flags & UIFLAG::STRETCH && chain.type == UITYPE::PICTURE)
+		if !(chain.flags & UIFLAG_STRETCH && chain.type == UITYPE_PICTURE)
 			UI_Letterbox(hud_start, hud_size);
 
 		master_position = hud_start;

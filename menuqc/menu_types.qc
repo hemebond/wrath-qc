@@ -1057,7 +1057,7 @@ void() menu_type_options_audio = { local vector size, buttions_locs;
 	buttions_locs_y += 16 * vy_rel;
 	buttions_locs_x -= 145 * vx_rel;
 	drawfill(buttions_locs, fixed_vector('256 4 0'), '0.5 0.5 0.35', 0.7, 0);
-	float capvolume3 = cvar ("capvolume3")
+	float capvolume3 = cvar ("capvolume3");
 	bgmvol = cvar("bgmvolume") * (1/capvolume3);
 	local vector barpos3;
 	barpos3 = buttions_locs - fixed_vector('0 0 0');

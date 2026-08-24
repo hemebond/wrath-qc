@@ -2990,7 +2990,7 @@ void() WeaponFrames =
 	{
 		dprint("^3-- BEGIN ENTITY LIST --\n");
 		entity lst = world;
-		while(lst = nextent(lst))
+		while((lst = nextent(lst)))
 		{
 			dprint(sprintf(" %s %.0f\n", lst.classname, num_for_edict(lst)));
 		}
@@ -3056,8 +3056,9 @@ void() WeaponFrames =
 			write_tether();
 			message_garbage_collector ();
 
-			if (infinitesaves != 1) // Reki (July 17 2023): achievement logic, but only if we're not using infinite saves
-				Steam_StatIncrement(self, ST_STATS::saved_tethers, 1);
+			if (infinitesaves != 1) {// Reki (July 17 2023): achievement logic, but only if we're not using infinite saves
+				// Steam_StatIncrement(self, ST_STATS::saved_tethers, 1);
+			}
 		
 			if (!(self.centerprint_messages &8)) 
 			{
@@ -3198,14 +3199,17 @@ void() WeaponFrames =
 	}	
 	
 
-	if(self.sigil_time > time)
-	{
-		if (self.timefly > time)
+	if(self.sigil_time > time) {
+		if (self.timefly > time) {
+			// FIXME: divide by zero if you get fly and then another, e.g., displacement
 			self.artifacttime = 142 - (floor(((self.timefly) - time) * (142 / self.takenflytime)));
-		if (self.displacement_time > time)
+		}
+		if (self.displacement_time > time) {
 			self.artifacttime = 142 - (floor(((self.displacement_time) - time) * (142 / self.takendisplacement_time)));
-		if (self.wrath_time > time)
+		}
+		if (self.wrath_time > time) {
 			self.artifacttime = 142 - (floor(((self.wrath_time) - time) * (142 / self.takenwrath_time)));
+		}
 	}
 	else	
 	{
@@ -3268,7 +3272,6 @@ void() WeaponFrames =
 				}
 				if (self.radialactive == 5)
 				{
-					sound(self, CHAN_AUTO, "items/artifacts/artifactE_end.ogg", 1, 0.25);
 					if(!self.BlackGrenade)
 					{
 						if(autoswitch == 1)

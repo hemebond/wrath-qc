@@ -218,7 +218,7 @@ float() Send_Item2 =
 	return TRUE;
 };
 
-float() Send_Item = 
+float(entity to, float sendflags) Send_Item =
 {
 	WriteByte(MSG_ENTITY, ENT::HUDMSG);
 	WriteShort(MSG_ENTITY, self.msg);
@@ -1309,7 +1309,7 @@ void() soul_touch =
 	stuffcmd (other,"pulseammo\n");
 	flash_screen_item(other);
 	Hud_SendNotification(other, "soul", "$NOTIFY_AMMO_SOUL", HUDMSGFLAG::AGGREGATE);
-	Steam_StatIncrement(other, ST_STATS::souls_harvested, 1);
+	// Steam_StatIncrement(other, ST_STATS::souls_harvested, 1);
 	remove(self);
 };
 
@@ -1318,11 +1318,11 @@ void() ammo_mace_think =
 	while (self.count > 0)
 	{	
 		entity dropped = spawn();
-		dropped.noise = "items/ammo_mace.ogg";
+		dropped.noise = "";
 		setmodel(dropped,"models/weapons/mace/soul.md3");
 		dropped.msg = 126;
 		dropped.msg_icon = "crystals";
-		dropped.msg_text = "$NOTIFY_AMMO_CRYSTAL";
+		dropped.msg_text = "$NOTIFY_AMMO_SOUL";
 		dropped.classname = "item_ammo_crystal";
 		setsizeitem2(dropped, shellsl_size);
 		dropped.alpha = 0.025;
@@ -1989,7 +1989,7 @@ void() artifact_grenade =
 	radial();
 	self.noise = "items/artifacts/artifactE_pickup.ogg";
 	self.noise1 = "items/artifacts/artifactE_use.ogg";
-	self.noise2 = "items/artifacts/artifactE_end.ogg";
+	self.noise2 = "";
 	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
 	self.style = 1;
 	self.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE;
@@ -2030,6 +2030,10 @@ void() artifact_siphon =
 	self.touch = artifact_touch;
 	self.oldtouch = self.touch;
 };
+
+void artifact_life_siphon() {
+	artifact_siphon();
+}
 
 void() artifact_deflection = 
 {
@@ -2464,7 +2468,7 @@ void() PreStartItem =
 entity(vector org, string class, float ammount, entity ownr) drop_item = 
 {
 
-	local entity dropped;
+	entity dropped;
 	dropped = spawn();
 	dropped.origin = org;
 	dropped.movetype = MOVETYPE_TOSS;
@@ -2474,7 +2478,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	dropped.angles_z = 0;
 	
 	
-	local vector revel;
+	vector revel;
 	makevectors(ownr.angles);
 
 	if(dropped.owner.classname == "monster_oppressor")
@@ -2498,7 +2502,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.gravity = coffer_item_gravity;
 		dropped.bouncefactor = coffer_item_bounce;
 		makevectors(ownr.angles);
-		local float right_vel;
+		float right_vel;
 		
 		if(ownr.counter_coffer_ammount == 4)
 		{
@@ -2696,7 +2700,6 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		//dropped.touch = wammo_touch;
 		//spawn_bbox_collider(dropped);
 		//dropped.oldtouch = dropped.touch;
-		return;
 	}	
 
 	if (class == "shard")
@@ -2753,7 +2756,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	}
 	if (class == "shard_dark")
 	{
-		local float r;
+		float r;
 		r = floor(random() *3);
 		if (r < 1)
 			dropped.noise = "items/armor_shard_dark1.ogg";
@@ -3218,10 +3221,9 @@ if (class == "mark")
 	
  	if(dropped.owner.classname == "coffer")
 	{
-	dropped.solid = SOLID_NOT;
-	dropped.nextthink = time + 0.1;	// items start after other solids
-	dropped.think = vel_item;
-//	dropped.think = 
+		dropped.solid = SOLID_NOT;
+		dropped.nextthink = time + 0.1;	// items start after other solids
+		dropped.think = vel_item;
 	}
 
 	return dropped;
@@ -4590,64 +4592,9 @@ void() trigger_coffer_use =
 
 };
 
-//void() trigger_coffer = 
-//{
-//	self.use = trigger_coffer_use;
-//};
-
-void() manuscript_touch = 
-{
-	if (other.classname != "player")
-		return;
-	if (!(other.journal_jmessages &self.journal_jmessages))
-	{
-		other.journal_jmessages += self.journal_jmessages;
-		sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-		remove(self);
-	}
-	if (!(other.journal_jmessagesm &self.journal_jmessagesm))
-	{
-		other.journal_jmessagesm += self.journal_jmessagesm;
-		sound(self, CHAN_AUTO, self.noise, 1, ATTN_NORM);
-		remove(self);
-	}
-};
 .float bestiary;
 .float jmessage;
 .float jmessagem;
-void() item_manuscript = 
-{
-	setmodel(self, "models/items/manuscript.md3");
-	setsizeitem(self, '4 4 24');
-	self.noise = "misc/null.wav";
-	precache_sound(self.noise);
-	if (!(self.bestiary))
-	{
-		if (!self.jmessage)
-			self.jmessage = 1;
-		self.journal_jmessages = pow(2, (self.jmessage - 1));
-		if (self.jmessage == 1)
-			self.journal_jmessages = 1;
-	}
-	else
-	{
-		if (!self.jmessagem)
-			self.jmessagem = 1;
-		self.journal_jmessagesm = pow(2, (self.jmessagem - 1));
-		if (self.jmessagem == 1)
-			self.journal_jmessagesm = 1;
-	}
-	self.origin_z += 24;
-	self.light_lev = 64;
-	self.pflags = 129;
-	self.color = '1 1 0.5';
-	self.effects = EF_FULLBRIGHT;
-	StartItem(1);
-	self.scale = 0.5;
-	self.touch = manuscript_touch;
-
-};
-
 
 .float note;
 void() readable_touch = 
@@ -4671,7 +4618,7 @@ void() readable_touch =
 
 	if (((other.journal_jmessages & PERFECT_LOREA) == PERFECT_LOREA) && ((other.journal_jmessagesb & PERFECT_LOREB) == PERFECT_LOREB))
 	{
-		Steam_AchievementUnlock(other, ST_ACHIEVEMENTS::SP_GRIND_LORE_ALL);
+		// Steam_AchievementUnlock(other, ST_ACHIEVEMENTS::SP_GRIND_LORE_ALL);
 	}
 };
 
@@ -5144,7 +5091,6 @@ void() cannon_item =
 	self.think = cannon_item_think;
 	self.nextthink = time + 0.05;
 };
-float rel_totalmonsters;
 
 
 void (string classnme,vector org, float c1, float c2, float c3, float c4, float c5, float coun, float collectedrelics) write_stuff_monsters =

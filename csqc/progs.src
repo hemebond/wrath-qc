@@ -12,12 +12,13 @@ constants.qc
 ../shared_menu.qc
 ../shared_menu_csqc.qc
 wrathdefs.qc
+uielement.h
 ../input_manager.qc
 draw.qc
 frik_file.qc
 radial.qc
 multiplayer.qc
-../steam.qc
+// ../steam.qc
 hud_messages.qc
 ../orrey.qc
 ../shepherd.qc
@@ -28,6 +29,7 @@ precaches.qc
 captions.qc
 centerprint.qc
 viewmodel.qc
+../localization.h
 ../localization.qc
 main.qc
 ../uielement.qc

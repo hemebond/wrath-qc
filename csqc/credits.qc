@@ -13,8 +13,8 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 	chara s;
 	while(TRUE)
 	{
-		s = str_removeblank(fgets(f));
-		if (!s || s == "" || s == __NULL__) // if this line is blank, tell it to FUK'OFF
+		s = (chara)str_removeblank(fgets(f));
+		if (!(string)s || (string)s == "" || (string)s == __NULL__) // if this line is blank, tell it to FUK'OFF
 		{
 			k--;
 			if (k < 0)
@@ -27,8 +27,8 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 		uielement_c block;
 		if (s[0] == "<") // we have a special statement
 		{
-			float o = strstrofs(s, ">", 0);
-			string fullcmd = substring(s, 1, o - 1);
+			float o = strstrofs((string)s, ">", 0);
+			string fullcmd = substring((string)s, 1, o - 1);
 			float argc = tokenizebyseparator(fullcmd, "=");
 			string cmd = argv(0);
 
@@ -58,13 +58,13 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 
 			if (s) // if we still are using the string, bypass the command
 			{
-				s = substring(s, o + 1, strlen(s)); 
+				s = (chara)substring((string)s, o + 1, strlen((string)s));
 			}
 		}
 		
-		if (s && s != "")
+		if ((string)s && (string)s != "")
 		{
-			block = spawn(uitext_c, owner: credits, origin: pos, font: FONT_USER6, size: [fsz, fsz], text: strzone(s));
+			block = spawn(uitext_c, owner: credits, origin: pos, font: FONT_USER6, size: [fsz, fsz], text: strzone((string)s));
 			pos[1] += fsz - 2;
 			//print("adding string = ", s, "\n");
 		}
@@ -80,7 +80,7 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 
 float endscreen_startfade;
 const float endscreen_fadelength = 15;
-const float endscreen_creditstart;
+float endscreen_creditstart;
 const float endscreen_creditspeed = 40;
 const float endscreen_creditfade = 0.2;
 const float endscreen_creditwait = 768;
@@ -130,11 +130,11 @@ void HUD_InitializeEndscreen(void)
 	};
 	
 
-	uielement_c endscreen = spawn(uielement_c, flags: UIFLAG::STRETCH);
+	uielement_c endscreen = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		endscreen.active_condition = endscreen_conditional;
 		endscreen.preloop = endscreen_preloop;
-	uifill_c backsplash = spawn(uifill_c, flags: UIFLAG::STRETCH, owner: endscreen); backsplash.color = '0 0 0'; backsplash.alpha = 0;
-	uielement_c splash = spawn(uielement_c, owner: endscreen, size: '960 540', anchor: '0 1', flags: UIFLAG::MULTALPHA); splash.alpha = 0;
+	uifill_c backsplash = spawn(uifill_c, flags: UIFLAG_STRETCH, owner: endscreen); backsplash.color = '0 0 0'; backsplash.alpha = 0;
+	uielement_c splash = spawn(uielement_c, owner: endscreen, size: '960 540', anchor: '0 1', flags: UIFLAG_MULTALPHA); splash.alpha = 0;
 
 
 	endscreen.partner = splash;

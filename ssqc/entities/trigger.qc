@@ -209,31 +209,6 @@ void() trigger_relay =
 		self.use = SUB_UseTargets;
 };
 
-
-//=============================================================================
-
-void() trigger_secret2 = 
-{
-	self.wait = -1;
-
-	if (!self.message)
-		self.message = "You found a secret area!";
-
-	if (!self.sounds)
-		self.sounds = 1;
-
-	if (self.sounds == 1)
-	{
-		self.noise = "misc/secret.ogg";
-	}
-	else if (self.sounds == 2)
-	{
-		self.noise = "misc/talk.ogg";
-	}
-
-	trigger_multiple();
-};
-
 //=============================================================================
 
 void() counter_use = 
@@ -246,9 +221,9 @@ void() counter_use =
 
 	self.count = self.count - 1;
 
-	float dev = cvar ("developer");
-	if(dev == 1)
-	centerprint(single_player, strcat("trigger counter count", ftos(self.count), "\n"));
+	if(cvar("developer")) {
+		centerprint(single_player, strcat("trigger counter count", ftos(self.count), "\n"));
+	}
 
 	if (self.count < 0)
 		return;
@@ -884,7 +859,6 @@ void() trigger_displacement =
 	self.solid = SOLID_TRIGGER;
 	setmodel(self, self.model);
 	vector center = (self.absmax + self.absmin) / 2;  
-	float attn;
 	if (!self.rad_sound)
 		self.rad_sound = 512;	
 	self.atten = 512 / self.rad_sound;
@@ -1018,7 +992,7 @@ void() trigger_shrine_touch =
 	
 	write_shrine(0);
 
-	Steam_StatIncrement(other, ST_STATS::saved_shrines, 1);
+	// Steam_StatIncrement(other, ST_STATS::saved_shrines, 1);
 	
 	read_currentprofileslot();
 	copy_save_maps(0);
@@ -1115,32 +1089,6 @@ void() fd_die=
 void() pointlight_d =
 {
 	return;
-	vector org = (self.absmin + self.absmax) / 2;
-	org_z -= 64;
-	if(self.classname != "func_shrine")
-	{
-		if(!self.cnt)
-			self.cnt = 100;
-		org = self.origin;
-		float r = random() * 100;
-		if(r > self.cnt)
-		remove(self);
-		return;
-	}
-	entity fd = spawn();
-	setmodel (fd,"models/alpha/impact_oppressor8.md3");
-	fd.origin = org;
-	fd.solid = SOLID_BBOX;
-	setsize(fd, '-12 -12 0', '12 12 64');
-	fd.movetype = MOVETYPE_TOSS;
-	fd.takedamage = DAMAGE_YES;
-	fd.health = 5;
-	fd.classname = "dancingfallen";
-	fd.th_die = fd_die;
-	fd.think = fdupdate;
-	fd.nextthink = time + 0.5;
-	if(self.classname != "func_shrine")
-		remove(self);
 };
 void() trigger_shrine = 
 { 
@@ -1317,7 +1265,6 @@ void() trigger_secret_touch =
 void() trigger_secret = 
 {
 	precache_sound("misc/secret.ogg");
-	precache_sound("misc/talk.ogg");
 	self.touch = trigger_secret_touch;
 	self.solid = SOLID_TRIGGER;
 	setmodel(self, self.model);
@@ -1490,7 +1437,7 @@ void() hurt_touch =
 				ThrowGib3(self, "models/gibs/gib_large.md3", 0, 0.75, 1, 2, tagorg+ randomvector('-24 -24 24','24 24 24'), relvel('42 12 -12', self), 0, 3);	// relvel: forward, right, up
 			}
 		}
-		if((self.kill_player == 1) && (other.flags & FL_MONSTER)&& (!other.wrathflags & FL_CRYSTAL))
+		if((self.kill_player == 1) && (other.flags & FL_MONSTER)&& !(other.wrathflags & FL_CRYSTAL))
 		{
 
 			if((other.th_die) && (other.voided != 1))
@@ -1692,7 +1639,7 @@ void() trigger_soultether_checker =
 };
 
 
-
+/*
 void info_achievement_use()
 {
 	for(float i = 0; i < ST_ACHIEVEMENTS::MAX; i++)
@@ -1706,19 +1653,23 @@ void info_achievement_use()
 	}
 
 	objerror("info_achievement: bad achievement name");
-}
+}*/
 
 void spawnfunc_info_achievement()
 {
-	if (!self.message)
-	{
-		remove(self);
-		return;
-	}
+	remove(self);
+	return;
 
-	self.use = info_achievement_use;
+	// if (!self.message)
+	// {
+	// 	remove(self);
+	// 	return;
+	// }
+
+	// self.use = info_achievement_use;
 }
 
+/*
 void info_achievement_gamecomplete_use()
 {
 	float ach[] = {ST_ACHIEVEMENTS::SP_FEAT_EASY, ST_ACHIEVEMENTS::SP_FEAT_EASY, ST_ACHIEVEMENTS::SP_FEAT_EASY, ST_ACHIEVEMENTS::SP_FEAT_OUTLANDER};
@@ -1733,11 +1684,12 @@ void spawnfunc_info_achievement_gamecomplete()
 {
 	self.use = info_achievement_gamecomplete_use;
 }
+*/
 
 void info_endscreen_use(void)
 {
 	entity lst = world;
-	while(lst = findflags(lst, flags, FL_CLIENT))
+	while((lst = findflags(lst, flags, FL_CLIENT)))
 	{
 		lst.r_endscreen = time;
 	}
@@ -1759,7 +1711,7 @@ void info_achievement_boss1_use()
 	{
 		if (!achievement_takendamage) // if we haven't taken any damage, give the 'cheevo
 		{
-			Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS1);
+			// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS1);
 		}
 	}
 }
@@ -1776,7 +1728,7 @@ void info_achievement_boss2_use()
 	{
 		if ((time - achievement_boss_starttime) <= 180 && achievement_boss_starttime) // if it's been less than 3 minutes since we activated, go!
 		{
-			Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS2);
+			// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS2);
 		}
 	}
 }
@@ -1793,7 +1745,7 @@ void info_achievement_boss3_use()
 	{
 		if (achievement_onlybladeandmace) // if we haven't fired any weapons besides mace and blade, earn the challenge
 		{
-			Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS3);
+			// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_BOSS3);
 		}
 	}
 }

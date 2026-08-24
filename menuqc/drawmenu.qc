@@ -1,10 +1,3 @@
-
-#include "uielement.h"
-#include "localization.h"
-#if NEW_MENU
-#include "menudefs.h"
-#endif
-
 float smallbuttons;
 
  void() m_display;
@@ -42,45 +35,7 @@ void() precache_menu_files =
 	precache_pic("gfx/cursor.tga");
 	precache_pic("gfx/menu/background.tga");
 	precache_pic("gfx/menu/end_splash.tga");
-	precache_pic("gfx/menu/load_menud.tga");
 	precache_pic("gfx/menu/logo.tga");
-	/*
-	precache_pic("gfx/menu/begin_active.tga");
-	precache_pic("gfx/menu/begin.tga");
-	precache_pic("gfx/menu/delete_profile_active.tga");
-	precache_pic("gfx/menu/delete_profile.tga");
-	precache_pic("gfx/menu/depart_active.tga");
-	precache_pic("gfx/menu/depart.tga");
-	precache_pic("gfx/menu/load_game_active2.tga");
-	precache_pic("gfx/menu/load_game_active.tga");
-	precache_pic("gfx/menu/load_game.tga");
-	precache_pic("gfx/menu/load_menu_e1m1.tga");
-	precache_pic("gfx/menu/load_menu_e1m2.tga");
-	precache_pic("gfx/menu/load_menu_e1m3.tga");
-	precache_pic("gfx/menu/load_menu_e1m4.tga");
-	precache_pic("gfx/menu/load_menu_e1m5.tga");
-	precache_pic("gfx/menu/load_menu_hub1.tga");
-	precache_pic("gfx/menu/load_menu_boss1.tga");
-	precache_pic("gfx/menu/load_menu_e2m1.tga");
-	precache_pic("gfx/menu/load_menu_e2m2.tga");
-	precache_pic("gfx/menu/load_menu_e2m3.tga");
-	precache_pic("gfx/menu/load_menu_e2m4.tga");
-	precache_pic("gfx/menu/load_menu_e2m5.tga");
-	precache_pic("gfx/menu/load_menu_hub2.tga");
-	precache_pic("gfx/menu/load_menu_boss2.tga");
-	precache_pic("gfx/menu/load_menu_e3m1.tga");
-	precache_pic("gfx/menu/load_menu_e3m2.tga");
-	precache_pic("gfx/menu/load_menu_e3m3.tga");
-	precache_pic("gfx/menu/load_menu_e3m4.tga");
-	precache_pic("gfx/menu/load_menu_e3m5.tga");
-	precache_pic("gfx/menu/load_menu_hub3.tga");
-	precache_pic("gfx/menu/load_menu_boss3.tga");
-	precache_pic("gfx/menu/load_menu.tga");
-	precache_pic("gfx/menu/options_active.tga");
-	precache_pic("gfx/menu/options.tga");
-	precache_pic("gfx/menu/resume_active.tga");
-	precache_pic("gfx/menu/resume.tga");
-	*/
 	precache_pic("gfx/splashes/arrow.tga");
 	precache_pic("gfx/splashes/_blank.tga");
 	precache_pic("gfx/splashes/e1m1_16-9.tga");
@@ -125,7 +80,7 @@ void() precache_menu_files =
  }
 
 
- 
+
  void() delete_profiles = { writeempty("profiles/currentprofileslot.txt");
  	writeempty("profiles/profilenames.txt");
  	writeempty("profiles/profileslot.txt");
@@ -138,7 +93,7 @@ void() precache_menu_files =
  	fputs(writeparms, writethis);	//line 1
  	fputs(writeparms, "\n");	//and again
  	fclose_wrath(writeparms);
- 	//rmtree("profiles");	
+ 	//rmtree("profiles");
  };
 void()deleteallprofiles;
 void()write_totalprofileslot_updatedversion;
@@ -173,17 +128,17 @@ void()write_totalprofileslot_updatedversion;
  	fputs(writeparms, writethis);	//line 1
  	fputs(writeparms, "\n");	//and again
  	fclose_wrath(writeparms);
-	
+
 	float maxfps = cvar ("cl_maxfps");
-	if((maxfps <= 0) || (maxfps > 1000))	
+	if((maxfps <= 0) || (maxfps > 1000))
 	cmd("cl_maxfps 1000\n");
-	
+
  	//	deleteallprofiles();
  }
 
 
- 
- 
+
+
  void() refresh_mouse = {	//cvar_set("vid_conheight", ftos(cvar("vid_conwidth")*cvar("vid_height")/cvar("vid_width")));
  	//cmd("vid_conwidth 960\n");
  	//cmd("vid_conheight 540\n");
@@ -193,38 +148,13 @@ void()write_totalprofileslot_updatedversion;
  	mouse_pos_y = vid_ry / 2;
  };
 
- #if 0
- void() updateMouse = { vid_rx = cvar("vid_conwidth");
- 	vid_ry = cvar("vid_conheight");
- 	vector raw_mouse;
- 	raw_mouse = getpointerpos();
- 	// add some mouse acceleration 
-
- 	local float mousesen;
- 	mousesen = cvar("saved5") + 0.1;
- 	raw_mouse_x = raw_mouse_x *mousesen *5;	//pow(vlen(raw_mouse), mousesen);
- 	raw_mouse_y = raw_mouse_y *mousesen *5;
- 	mouse_pos += raw_mouse;
- 	if (mouse_pos_x < 0)
- 		mouse_pos_x = 0;
-
- 	if (mouse_pos_x > vid_rx)
- 		mouse_pos_x = vid_rx;
-
- 	if (mouse_pos_y < 0)
- 		mouse_pos_y = 0;
-
- 	if (mouse_pos_y > vid_ry)
- 		mouse_pos_y = vid_ry;
- };
-#else
 void() updateMouse = {
 	mouse_pos = getpointerpos();
 };
-#endif
 
  string(float kn) keynumtostring_wrath;
- string(float kn) keynumtostring_wrath_f = { if (kn == 127)
+ string(float kn) keynumtostring_wrath_f = {
+ 	if (kn == 127)
  		return "space bar";
  	else
  	{
@@ -273,7 +203,7 @@ void() updateMouse = {
  float() check_profileslottotal = { local float readparms;
  	local string readtext;
  	readparms = fopen_wrath("profiles/totalfileslot.txt", FILE_READ);	//open what file to use (THIS TIME IN READ MODE)
-	
+
 
  	if (readparms != -1)
  	{
@@ -416,7 +346,7 @@ void() updateMouse = {
  		strunzone(profilename);
  	write_currentprofileslot();
  };
- 
+
  void() write_menuversion = { check_profilenames_str(profileslot);
  	local float profilenamef;
  	local string profilenamestring;
@@ -424,7 +354,7 @@ void() updateMouse = {
  	profilenamef = fopen(profilenamestring, FILE_WRITE);	//open what file to use in write mode
 	if (profilenamef < 0)
 		return;
- 	local string writethis; 	
+ 	local string writethis;
  	writethis = ftos (menuversion);
  	fputs(profilenamef, writethis);
  	fputs(profilenamef, "\n");
@@ -442,7 +372,7 @@ void() updateMouse = {
 	fputs(f, "\n");
 	fclose(f);
 };
- 
+
  void() write_profileslot = { local float writeparms;
  	local string writethis;
  	writeparms = fopen_wrath("profiles/profileslot.txt", FILE_WRITE);	//open what file to use in write mode
@@ -494,10 +424,9 @@ void() updateMouse = {
  	fclose_wrath(writeparms);
  };
 
- float(string name) check_profilemenuversion_byname
-{
-	local float profilenamef;
-	local string profilenamestring;
+void check_profilemenuversion_byname(string name) {
+	float profilenamef;
+	string profilenamestring;
 	profilenamestring = strcat("data/profiles/", name,"/menu.version");
 	profilenamef = fopen(profilenamestring, FILE_READ);	//open what file to use in write mode
 	if (profilenamef < 0)
@@ -508,11 +437,11 @@ void() updateMouse = {
 	print(sprintf("%s: menu.version read\n", __func__));
 }
 
- void() check_profilemenuversion = 
- { 
+ void() check_profilemenuversion =
+ {
 	check_profilenames_str(profileslot);
- 	local float profilenamef;
- 	local string profilenamestring;
+ 	float profilenamef;
+ 	string profilenamestring;
  	profilenamestring = strcat("profiles/", profilename,"/menu.version");
  	profilenamef = fopen_wrath(profilenamestring, FILE_READ);	//open what file to use in write mode
  	profilenamestring = fgets(profilenamef);	//read the text
@@ -561,7 +490,7 @@ void() updateMouse = {
 	MenuInit_Main();
 	MenuInit_Main_Game();
 	MenuInit_Options();
-	MenuInit_Achievements();
+	// MenuInit_Achievements();
 
 	MenuInit_Overlay();
 	MenuInit_LoadingScreen();
@@ -569,7 +498,7 @@ void() updateMouse = {
 	#endif
 
 	write_currentprofileslot_byname("default", 0);
-	steam_initTime = gettime() + 2; // Reki (May 10 2023): We need to delay the steam init a little to give the API time to fetch the stats...
+	// steam_initTime = gettime() + 2; // Reki (May 10 2023): We need to delay the steam init a little to give the API time to fetch the stats...
 
 
 	check_menuversion();
@@ -581,7 +510,7 @@ void() updateMouse = {
  	consize_h = ftos(vid_hres / 2);
  	cmd(strcat("vid_conheight ", consize_h, " \n"));
  	cmd(strcat("vid_conwidth ", consize_w, " \n"));
-	string language_selected = 	cvar_string("prvm_language")
+	string language_selected = 	cvar_string("prvm_language");
 	//if (language_selected != "")
 	//	cmd("prvm_language en\n");
 
@@ -603,7 +532,7 @@ void() updateMouse = {
 	}
 
     float capvolume3 = cvar ("capvolume3");
-	float musicvolume = cvar("bgmvolume")
+	float musicvolume = cvar("bgmvolume");
 	if(musicvolume > capvolume3)
 	{
 		string mvol = strcat("bgmvolume ",ftos(capvolume3), " \n");
@@ -639,8 +568,7 @@ void() updateMouse = {
  	//cmd("cd play 6\n");
  	precache_file("gfx/help");
  	precache_file("gfx/credits");
- 	precache_sound("musica/menu.ogg");
- 	precache_sound("menu1.wav");
+ 	precache_sound("misc/menu1.wav");
  	//	check_save();
  	check_profileslot();
  	//	check_profilenames();
@@ -680,6 +608,7 @@ void() updateMouse = {
 
 	if (cmd == "backtomainmenu")
  		m_main();
+ 	/*
 	if (!STEAM_IS_CONNECTED) // only run this stuff if we're not using steam already.
 	{
 		if (cmd == "achievementunlock")
@@ -693,6 +622,7 @@ void() updateMouse = {
 		else if (cmd == "statset")
 			Stats_DRMFreeSet(argv(1), stof(argv(2)));
 	}
+	*/
 	if (cmd == "keynumtostring")
 	{
 		print(sprintf("keynumtostring: %.0f,%s\n", stof(argv(1)), keynumtostring(stof(argv(1)))));
@@ -870,7 +800,7 @@ void(float key, float ascii) menu_keydown = {
 			if (!ui_usemouse)
 				ui_selected = __NULL__;
 			
-			if ((ui_selected.flags & UIFLAG::CLICKABLE) && !(ui_selected.flags & UIFLAG::SELECTABLE))
+			if ((ui_selected.flags & UIFLAG_CLICKABLE) && !(ui_selected.flags & UIFLAG_SELECTABLE))
 			{
 				uielement_c u_sel = ui_selected;
 				if (ui_selected && ui_selected.m_click)
@@ -880,7 +810,7 @@ void(float key, float ascii) menu_keydown = {
 			}
 			
 			// keep select means blank space doesn't matter
-			if (old_selected.flags & UIFLAG::KEEPSELECT && !ui_selected)
+			if (old_selected.flags & UIFLAG_KEEPSELECT && !ui_selected)
 			{
 				ui_selected = old_selected;
 			}
@@ -2148,7 +2078,7 @@ float() current_local_profilenames =
 	if (f2 < 0)
 		return;
 	
-	float duplicate_found
+	float duplicate_found;
 	string ln;
 	while(1) {
 		ln = fgets(f);

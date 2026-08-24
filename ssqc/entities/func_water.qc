@@ -696,6 +696,8 @@ void() func_water =
 	precache_sound("env/liquids/water_splash2.ogg");
 	precache_sound("env/liquids/water_splash3.ogg");
 
+	precache_model("models/meshes/liquids/waterfall_base.md3");
+
 	if(!self.watertype)	
 		self.watertype = -3;
 	

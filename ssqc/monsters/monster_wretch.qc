@@ -156,17 +156,7 @@ float(vector end) ai_recheable =
 	vbox_z = self.maxs_x * 0.75;
 	float isteps = steps;
 
-	vector traceorigin;
 	float isrecheable = 1;
-
-	/*entity crysta1 = spawn();
-	entity crysta2 = spawn();
-	setmodel(crysta1,"asd");
-	setmodel(crysta2,"asd");
-	crysta1.colormod = '0 1 0';
-	crysta2.colormod = '1 0 0';
-	crysta2.scale = 0.3;
-	crysta1.scale = 0.3;*/
 
 	while(isteps > 0)
 	{
@@ -178,13 +168,6 @@ float(vector end) ai_recheable =
 			isrecheable = -1;
 		isteps --; 
 	}
-
-	
-	//crysta1.origin = source;
-	//crysta2.origin = traceend;
-
-//	if(isrecheable ==  1)
-//	crysta2.colormod = '1 0 1';
 	
 	return isrecheable;
 

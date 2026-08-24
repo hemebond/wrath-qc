@@ -299,13 +299,14 @@ float(float v) anglemod =
 
 void() movetarget_f = 
 {
-	if ((!self.targetname) && (self.classname != "path_corner_start"))
+	if (self.targetname == "" && self.classname != "path_corner_start") {
 		objerror("monster_movetarget: no targetname");
+		return;
+	}
 
 	self.solid = SOLID_TRIGGER;
 	self.touch = t_movetarget;
 	setsize(self, '-8 -8 -8', '8 8 8');
-
 };
 
 void() path_corner = 
@@ -1403,7 +1404,7 @@ float() wraithCheckAttack;
 float() CheckAnyAttack = 
 { 
 	if(self.health < 0)
-		return;
+		return FALSE;
 	if (!enemy_vis)
 		return FALSE;
 	if (self.classname == "monster_wraith")
@@ -1837,25 +1838,6 @@ float()check_step =
 
 	if(dist > 256)
 	float tracefraction = 3;
-
-	/*
-	entity dimaond = spawn();
-	setmodel (dimaond,"sdfdsd");
-	dimaond.think = SUB_Remove;
-	dimaond.nextthink = time + 5;
-	dimaond.origin = trace_endpos;
-
-	entity dimaond2 = spawn();
-	setmodel (dimaond2,"sddfsd");
-	dimaond2.think = SUB_Remove;
-	dimaond2.nextthink = time + 5;
-	dimaond2.origin = source;
-	dimaond2.colormod = '1 0 0';
-	dimaond2.scale = 0.333;
-
-
-	string viewxanglesfactor = strcat ((ftos (dist)), (" dist \n"));
-	bprint (viewxanglesfactor);*/
 
 	return tracefraction;
 

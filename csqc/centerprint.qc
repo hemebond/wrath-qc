@@ -25,7 +25,7 @@ void HUD_InitializeCenterprint(void)
 				if (lst.text)
 					strunzone(lst.text);
 				lst.text = 0;
-				lst.flags |= UIFLAG::HIDE;
+				lst.flags |= UIFLAG_HIDE;
 				lst = lst.partner;
 			}
 		}
@@ -38,7 +38,7 @@ void HUD_InitializeCenterprint(void)
 	uitext_c hold = 0;
 	for(float i = 0; i < CENTERPRINT_MAXLINES; i++)
 	{
-		uitext_c txt = spawn(uitext_c, owner: container, justify: '0.5 0', size: '8 8', text: strzone(" "), font: FONT_CENTERPRINT, flags: UIFLAG::HIDE);
+		uitext_c txt = spawn(uitext_c, owner: container, justify: '0.5 0', size: '8 8', text: strzone(" "), font: FONT_CENTERPRINT, flags: UIFLAG_HIDE);
 		
 		txt.partner2 = spawn(uipicture_c, owner: txt);
 		txt.partner3 = spawn(uipicture_c, owner: txt);
@@ -66,9 +66,9 @@ void centerprint(string s)
 		
 		string sub_s = argv(i);
 
-		.uielement_c glpyhlist[] = {uielement_c::partner2, uielement_c::partner3, uielement_c::partner4}
+		.uielement_c glpyhlist[] = {uielement_c::partner2, uielement_c::partner3, uielement_c::partner4};
 		for(float n = 0; n < glpyhlist.length; n++) // hide all glyphs
-			txt.glpyhlist[n].flags |= UIFLAG::HIDE;
+			txt.glpyhlist[n].flags |= UIFLAG_HIDE;
 
 		float k = 3;
 		while(strstrofs(sub_s, "{GLYPH_", 0) >= 0 && k > 0)
@@ -88,7 +88,7 @@ void centerprint(string s)
 			if (glyph.image)
 				strunzone(glyph.image);
 
-			glyph.flags &= ~UIFLAG::HIDE;
+			glyph.flags &= ~UIFLAG_HIDE;
 			glyph.image = strzone(Controller_GetGlyph(code));
 			glyph.size = '20 20';
 			glyph.anchor = '0 0.5';
@@ -103,7 +103,7 @@ void centerprint(string s)
 		}
 		
 		txt.text = strzone(sub_s);
-		txt.flags &= ~UIFLAG::HIDE;
+		txt.flags &= ~UIFLAG_HIDE;
 	}
 
 	// clean up any remaining lines
@@ -112,7 +112,7 @@ void centerprint(string s)
 		if (txt.text)
 			strunzone(txt.text);
 		txt.text = 0;
-		txt.flags |= UIFLAG::HIDE;
+		txt.flags |= UIFLAG_HIDE;
 	}
 
 	centerprint_list.health = time + CENTERPRINT_TIMEOUT;

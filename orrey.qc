@@ -187,7 +187,7 @@ static float orreyls_windup[] = {
 	0.45,
 	0.5,
 	0.5,
-}
+};
 
 static float orreyls_winddown[] = {
 	0.5,
@@ -201,7 +201,7 @@ static float orreyls_winddown[] = {
 	0.2,
 	0.3,
 	0.1,
-}
+};
 
 void Orrey_Predraw()
 {

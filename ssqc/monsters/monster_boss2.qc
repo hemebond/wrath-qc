@@ -655,8 +655,8 @@ vector boss2_beam_aimpos;
 void boss2_hitscandamage(vector p1, vector p2, entity from, float damage)
 {
 
-	local entity		e1, e2;
-	local vector		f;
+	entity		e1, e2;
+	vector		f;
 	f = p2 - p1;
 	normalize (f);
 	f_x = 0 - f_y;
@@ -683,12 +683,12 @@ void boss2_hitscandamage(vector p1, vector p2, entity from, float damage)
 		sound7 (from, CHAN_AUTO, "fx/tele4.ogg", 1, 0.5,random(150,200),0);
 		if(r2 < 0.25)
 		{
-		te_customflash ( trace_endpos,92,1,'0.9 0 0.75');
-		spawn_relevelation_particles(trace_endpos,7,'0.8 0.25 0.75',1);
-		sound7 (from, CHAN_AUTO, "fx/tele3.ogg", 1, 0.5,random(150,200),0);
+			te_customflash ( trace_endpos,92,1,'0.9 0 0.75');
+			spawn_relevelation_particles(trace_endpos,7,'0.8 0.25 0.75',1);
+			sound7 (from, CHAN_AUTO, "fx/tele3.ogg", 1, 0.5,random(150,200),0);
 		}
 		if(r2 < 0.1)
-		sound7 (from, CHAN_AUTO, "fx/tele2.ogg", 1, 0.5,random(150,200),0);
+			sound7 (from, CHAN_AUTO, "fx/tele2.ogg", 1, 0.5,random(150,200),0);
 
 	}
 	pointparticles(particleeffectnum("crystal_impact3"), trace_endpos, '0 0 0', 1);
@@ -1818,7 +1818,7 @@ void func_crystal_fadeout(void)
 			self = o_self;
 
 			entity lst = world;
-			while(lst = find(lst, ::target, self.targetname))
+			while((lst = find(lst, ::target, self.targetname)))
 			{
 				if (lst.classname != "boss2_stage1_node")
 					continue;
@@ -1993,7 +1993,7 @@ void spawnfunc_trigger_boss2_position(void)
 
 	// find position node
 	entity e = world;
-	while(e = find(e, classname, "boss2_stage1_node"))
+	while((e = find(e, classname, "boss2_stage1_node")))
 	{
 		if (e.targetname == self.target)
 			break;
@@ -2113,7 +2113,7 @@ float BOSS2_POINTTOCIRCLE(vector diff)
 void boss2_stage2_playerspawn_use(void)
 {
 	entity lst = world;
-	while(lst = findflags(lst, flags, FL_CLIENT))
+	while((lst = findflags(lst, flags, FL_CLIENT)))
 	{
 		stuffcmd(lst, "bf 0.52 0.5 0.6 0.6 2.5\n");
 		lst.velocity = '0 0 0';
@@ -2136,13 +2136,13 @@ float boss2_c::anim_transitionstage2(void)
 		return FALSE;
 
 	if (this.stage >= 2)
-		return;
+		return FALSE;
 
 	this.stage = 2;
 	this.trigger_stage(this.stage);
 
 	entity lst = world;
-	while(lst = find(lst, ::classname, "boss2_stage2_node")) // find initial spawn spot
+	while((lst = find(lst, ::classname, "boss2_stage2_node"))) // find initial spawn spot
 	{
 		if !(lst.spawnflags & 8)
 			continue;
@@ -2156,6 +2156,8 @@ float boss2_c::anim_transitionstage2(void)
 		dprint("boss going into stage 2!\n");
 		break;
 	}
+
+	return TRUE;
 }
 
 void boss2_stage2_crystal_die(void)
@@ -2282,7 +2284,7 @@ static float boss2_orbmovements_scale[] = {
 	4,
 	2.4,
 	0.001,
-}
+};
 
 static float boss2_orbmovements_slerp[] = {
 	1,
@@ -2290,7 +2292,7 @@ static float boss2_orbmovements_slerp[] = {
 	0,
 	0,
 	0,
-}
+};
 
 static float boss2_orbmovement_relative[] = {
 	0,
@@ -2298,7 +2300,7 @@ static float boss2_orbmovement_relative[] = {
 	0.2,
 	0.4,
 	0.85,
-}
+};
 
 const float boss2_orbmovements_period = 2;
 
@@ -2378,12 +2380,13 @@ entity boss2_deathorb_spawn(vector ang)
 
 float boss2_c::anim_death(void)
 {
+	entity ghost;
 	this.enemy = boss_center;
 
 	if (this.frame == (this.animlock_end - 1))
 	{
 		///*
-		entity ghost = boss2_ghost_spawn(this.puppet);
+		ghost = boss2_ghost_spawn(this.puppet);
 		ghost.alpha = this.puppet.alpha;
 		ghost.spawnflags = 3;
 		//*/
@@ -2454,13 +2457,15 @@ float boss2_c::anim_death(void)
 
 	if ((this.frame % 2) == 0)
 	{
-		entity ghost = boss2_ghost_spawn(this.puppet);
+		ghost = boss2_ghost_spawn(this.puppet);
 		ghost.colormod[0] += random(0.2, 0.9);
 		ghost.colormod[2] -= random(0.02, 0.3);
 		ghost.scale += random(0.7);
 		ghost.alpha = 0.7;
 		return FALSE;
 	}
+
+	return TRUE;
 }
 
 float boss2_c::anim_destruction1(void)
@@ -2545,7 +2550,7 @@ float boss2_c::anim_destruction2(void)
 		entity lowest_ent = world;
 
 		entity lst = world;
-		while(lst = find(lst, ::classname, "boss2_stage2_destroy"))
+		while((lst = find(lst, ::classname, "boss2_stage2_destroy")))
 		{
 			if (lst == ignore)
 				continue;
@@ -2707,7 +2712,7 @@ float boss2_c::anim_appearwait(void)
 	float locations_total = 0;
 
 	entity oldent = world, ent = world;
-	while(ent = find(ent, ::classname, "boss2_stage2_node")) // find a valid spawn location
+	while((ent = find(ent, ::classname, "boss2_stage2_node"))) // find a valid spawn location
 	{
 		if !(ent.spawnflags & 4)
 			continue;
@@ -2730,7 +2735,7 @@ float boss2_c::anim_appearwait(void)
 	{
 		ent = locations_list;
 		float threshold = floor(random(locations_total));
-		for(float i = 0; i < threshold; i++) { ent = ent.chain; };
+		for(float i = 0; i < threshold; i++) { ent = ent.chain; }
 
 		this.appear_at_position(ent.origin, [0, ent.angles[1], 0]);
 		this.animlock_think = boss2_anim_stage2;
@@ -2782,6 +2787,7 @@ float boss2_c::anim_teleportout(void)
 
 void boss2_c::stage2_frame(void)
 {
+	float spd;
 	boss_center = find(world, ::classname, "boss_center");
 
 	// slow damage intake to max 400dps
@@ -2822,7 +2828,7 @@ void boss2_c::stage2_frame(void)
 			}
 		}
 
-		float spd = travel_speed * frametime;
+		spd = travel_speed * frametime;
 		travel_oncircle += travel_direction ? spd : -spd;
 
 		vector circle_pos = boss_center.origin + BOSS2_POINTONCIRCLE(travel_oncircle);
@@ -2852,7 +2858,7 @@ void boss2_c::stage2_frame(void)
 		if (node_next)
 		{
 			travel_speed = 700;
-			float spd = travel_speed * frametime;
+			spd = travel_speed * frametime;
 			travel_position += normalize(node_next.origin - travel_position) * spd;
 			//setorigin(this, this.origin);
 			if (vlen(node_next.origin - travel_position) <= max(32, spd))

@@ -63,6 +63,9 @@ float shepherd_dialogue_chooseline(void)
 		if (i == 5)
 			break;
 	}
+
+	error("Reached end of shepherd_dialogue_chooseline");
+	return FALSE;
 }
 
 void shepherd_dialogue_usetargets(void)
@@ -74,7 +77,7 @@ void shepherd_dialogue_usetargets(void)
 void shepherd_dialogue_use(void)
 {
 	entity lst = world;
-	while(lst = findflags(lst, flags, FL_CLIENT))
+	while((lst = findflags(lst, flags, FL_CLIENT)))
 	{
 		centerprint(lst, strcat("&", self.message));
 	}
@@ -125,7 +128,7 @@ void shepherd_usepressed(void)
 		activator = self;
 		string targ = self.targlist[line];
 		entity lst = world;
-		while(lst = find(lst, targetname, targ))
+		while((lst = find(lst, targetname, targ)))
 		{
 			self = lst;
 			lst.use();
@@ -155,7 +158,7 @@ void shepherd_approached(void)
 			activator = self;
 			string targ = self.targlist[line];
 			entity lst = world;
-			while(lst = find(lst, targetname, targ))
+			while((lst = find(lst, targetname, targ)))
 			{
 				self = lst;
 				lst.use();
@@ -174,7 +177,7 @@ void shepherd_approached(void)
 		activator = self;
 		string targ = self.target;
 		entity lst = world;
-		while(lst = find(lst, targetname, targ))
+		while((lst = find(lst, targetname, targ)))
 		{
 			self = lst;
 			lst.use();
@@ -230,9 +233,9 @@ void place_shepherd_think(void)
 		
 		// check for approach
 		entity lst = world;
-		while(lst = findflags(lst, flags, FL_CLIENT))
+		while((lst = findflags(lst, flags, FL_CLIENT)))
 		{
-			vector diff = vlen(lst.origin - self.origin);
+			vector diff = lst.origin - self.origin;
 			if (vlen(diff) > 256)
 				continue;
 			
@@ -247,9 +250,9 @@ void place_shepherd_think(void)
 			self.frame |= 0x40;
 
 		entity lst = world;
-		while(lst = findflags(lst, flags, FL_CLIENT))
+		while((lst = findflags(lst, flags, FL_CLIENT)))
 		{
-			vector diff = vlen(lst.origin - self.origin);
+			vector diff = lst.origin - self.origin;
 			if (vlen(diff) > 256)
 				continue;
 			
@@ -269,7 +272,7 @@ void place_shepherd_filter(void)
 		loc = 6;
 
 	entity lst = world;
-	while(lst = find(lst, classname, "place_shepherd"))
+	while((lst = find(lst, classname, "place_shepherd")))
 	{
 		if !(lst.spawnflags & 1)
 			continue;
@@ -390,34 +393,6 @@ void place_shepherd_predraw(void)
 		self.lerpfrac -= frametime * (1 / shepherd_blendtime);
 		self.lerpfrac = max(0, self.lerpfrac);
 	}
-
-
-	#if 0 // Reki (October 11 2023): Ethereal effect
-	vector o_org = self.origin;
-	vector o_col = self.colormod;
-	float o_alph = self.alpha;
-	float o_eff = self.effects;
-	float o_scal = self.scale;
-
-	makevectors(view_angles);
-
-	self.effects = EF_ADDITIVE | EF_DOUBLESIDED;
-	self.colormod = '0.3 0.5 0.8';
-	self.alpha = 0.1;
-	self.scale = 1.05;
-	self.origin = o_org + (v_forward * 8) + (v_right * 0.5);
-	addentity(self);
-
-	self.origin = o_org + (v_forward * 16) + (v_right * -0.5);
-	self.colormod = '0.8 0.5 0.3';
-	addentity(self);
-
-	self.origin = o_org;
-	self.colormod = o_col;
-	self.alpha = o_alph;
-	self.effects = o_eff;
-	self.scale = o_scal;
-	#endif
 }
 
 void EntUpdate_place_shepherd(float is_new)
@@ -443,6 +418,7 @@ void EntUpdate_place_shepherd(float is_new)
 	if (is_new)
 	{
 		self.classname = "place_shepherd";
+		precache_model("models/enemies/shepherd/shepherd.md3");
 		setmodel(self, "models/enemies/shepherd/shepherd.md3");
 		//self.frame1time = time;
 		self.alpha = 1;
@@ -455,14 +431,3 @@ void EntUpdate_place_shepherd(float is_new)
 #endif
 
 /* #endregion */
-
-
-
-
-
-
-
-
-
-
-

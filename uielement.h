@@ -11,15 +11,22 @@
 //
 //========================================================================
 
-#pragma once
-enum UITYPE:float {
+/*
+enum class UITYPE:float {
 	EMPTY,
 	LIST,
 	TEXT,
 	PICTURE,
 };
+*/
 
-enumflags UIFLAG:float {
+float UITYPE_EMPTY = 0;
+float UITYPE_LIST = 1;
+float UITYPE_TEXT = 2;
+float UITYPE_PICTURE = 3;
+
+/*
+enumflags class UIFLAG:float {
 	STRETCH,
 	HIDE,
 	CLICKABLE,
@@ -32,6 +39,58 @@ enumflags UIFLAG:float {
 	SETALPHA,
 	MULTALPHA,
 };
+*/
+
+float UIFLAG_STRETCH = 1;
+float UIFLAG_HIDE = 2;
+float UIFLAG_CLICKABLE = 4;
+float UIFLAG_SELECTABLE = 8;
+float UIFLAG_KEEPSELECT = 16;
+float UIFLAG_HIGHLIGHT = 32;
+float UIFLAG_FORCECURSOR = 64;
+float UIFLAG_CLIP = 128;
+float UIFLAG_INIT = 256;
+float UIFLAG_SETALPHA = 512;
+float UIFLAG_MULTALPHA = 1024;
+
+/*
+enum class CONTROLLER:float {
+	NULL,
+	GENERIC,
+	XBOX,
+	PLAYSTATION,
+	NINTENDO,
+	STEAM,
+	MAX
+};
+
+CONTROLLER controllerType;
+*/
+
+float CONTROLLER_NULL = 0;
+float CONTROLLER_GENERIC = 1;
+float CONTROLLER_XBOX = 2;
+float CONTROLLER_PLAYSTATION = 3;
+float CONTROLLER_NINTENDO = 4;
+float CONTROLLER_STEAM = 5;
+float CONTROLLER_MAX = 6;
+
+float controllerType;
+
+/*
+enum class INPUT_TYPE:float {
+	KEYBOARD,
+	MOUSE,
+	XBOX,
+	JOYSTICK,
+};
+*/
+
+float INPUT_TYPE_KEYBOARD = 0;
+float INPUT_TYPE_MOUSE = 1;
+float INPUT_TYPE_XBOX = 2;
+float INPUT_TYPE_JOYSTICK = 3;
+
 
 class uielement_c;
 
@@ -73,8 +132,10 @@ float autocvar_scr_hudscale;
 
 class uielement_c
 {
+	// UITYPE type;
 	float type;
-	UIFLAG flags;
+	// UIFLAG flags;
+	float flags;
 	float drawflags;
 
 	vector origin;
@@ -132,10 +193,10 @@ class uielement_c
 
 	// constructor
 	nonvirtual void() uielement_c {
-		if (flags & UIFLAG::INIT)
+		if (flags & UIFLAG_INIT)
 			return;
 		
-		flags |= UIFLAG::INIT;
+		flags |= UIFLAG_INIT;
 		if (!color)
 			color = '1 1 1';
 		if (!alpha)
@@ -158,10 +219,10 @@ class uielement_c
 
 	// mouse is over button
 	var virtual void(uielement_c this) m_over {
-		if !(flags & UIFLAG::CLICKABLE)
+		if !(flags & UIFLAG_CLICKABLE)
 			return;
 		
-		if (flags & UIFLAG::HIGHLIGHT)
+		if (flags & UIFLAG_HIGHLIGHT)
 		{
 			mod_col = 1.2;
 			mod_alp = 1.1;
@@ -170,7 +231,7 @@ class uielement_c
 
 	// mouse was over button, but now has moved
 	var virtual void(uielement_c this) m_leave { 
-		if (flags & UIFLAG::HIGHLIGHT)
+		if (flags & UIFLAG_HIGHLIGHT)
 		{
 			mod_col = 1;
 			mod_alp = 1;
@@ -232,7 +293,7 @@ class uilist_c : uielement_c
 
 	// constructor
 	nonvirtual void() uilist_c {
-		type = UITYPE::LIST;
+		type = UITYPE_LIST;
 		if (preloop == __NULL__)
 			preloop = list_preloop;
 		if (loopthrough == __NULL__)
@@ -277,7 +338,7 @@ class uismoothlist_c : uilist_c
 
 	// constructor
 	nonvirtual void() uismoothlist_c {
-		type = UITYPE::LIST;
+		type = UITYPE_LIST;
 		if (!smoothspeed)
 			smoothspeed = 20;
 		preloop = list_preloop_smooth;
@@ -297,7 +358,7 @@ class uipicture_c : uielement_c
 
 	// constructor
 	nonvirtual void() uipicture_c {
-		type = UITYPE::PICTURE;
+		type = UITYPE_PICTURE;
 		if (image)
 			precache_pic(image);
 		if (image2)
@@ -513,11 +574,26 @@ class uilocpicture_c : uipicture_c
 	};
 };
 
+float bind_gettype(float keycode)
+{
+	if (keycode >= K_MOUSE1 && keycode <= K_MOUSE16)
+		return INPUT_TYPE_MOUSE;
+	else if (keycode >= K_XIN_DPAD_UP && keycode <= K_XIN_RSTK_RIGHT) // xinput, nice.
+		return INPUT_TYPE_XBOX;
+	else if (keycode >= K_JOY1 && keycode <= K_AUX32) //icky, dinput :\
+		return INPUT_TYPE_JOYSTICK;
+
+	// if all else fails, assume keyboard
+	return INPUT_TYPE_KEYBOARD;
+}
+
+
+string Controller_GetGlyph(string code);
 float autocvar_joy_x360_preset;
 class uiglyph_c : uipicture_c
 {
 	string bind_cmd;
-	CONTROLLER last_controllerType;
+	float last_controllerType;
 	float last_joyPreset;
 
 	virtual void() render {
@@ -537,7 +613,7 @@ class uiglyph_c : uipicture_c
 				{
 					float num = stof(argv(j));
 					float btype = bind_gettype(num);
-					if (btype == INPUT_TYPE::XBOX)
+					if (btype == INPUT_TYPE_XBOX)
 					{
 						keynum = num;
 						break;
@@ -566,6 +642,7 @@ class uiglyph_c : uipicture_c
 		
 		if (prerender)
 			prerender(this, final_img);
+
 		if (final_img != __NULL__ && final_alpha > 0)
 		{
 			#ifdef CSQC
@@ -622,7 +699,7 @@ class uispritesheet_c : uielement_c
 
 	// constructor
 	nonvirtual void() uispritesheet_c {
-		type = UITYPE::PICTURE;
+		type = UITYPE_PICTURE;
 		if (image)
 			precache_pic(image);
 		if (image2)
@@ -674,7 +751,7 @@ class uifill_c : uielement_c
 	var virtual void(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) prerender;
 
 	nonvirtual void() uifill_c {
-		type = UITYPE::PICTURE;
+		type = UITYPE_PICTURE;
 	};
 
 	// rendering for fill or pictures
@@ -712,7 +789,7 @@ class uitext_c : uielement_c
 		#else
 			font = FONT_USER7;
 		#endif
-		type = UITYPE::TEXT;
+		type = UITYPE_TEXT;
 	};
 
 	// totalsize

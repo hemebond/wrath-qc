@@ -1,5 +1,3 @@
-#include "uielement.h"
-
 float hud_messages;
 float oldhud_messages;
 .vector imagepos;
@@ -80,11 +78,11 @@ void HUD_InitializeNotifications(void)
 			float tleft = line.skin - time;
 			if (tleft <= 0)
 			{
-				line.flags |= UIFLAG::HIDE;
+				line.flags |= UIFLAG_HIDE;
 				continue;
 			}
 			
-			line.flags &= ~UIFLAG::HIDE;
+			line.flags &= ~UIFLAG_HIDE;
 			icon.alpha = 1;
 			msg.alpha = 1;
 			msgimg.alpha = 1;

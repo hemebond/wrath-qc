@@ -252,7 +252,7 @@ void(entity attacker, entity attacked)life_siphon_gain =
 	attacked.flags = 0;
 
 	// Reki (July 17 2023): achievement logic
-	Steam_StatIncrement(self, ST_STATS::siphon_health, health_gain);
+	// Steam_StatIncrement(self, ST_STATS::siphon_health, health_gain);
 };
 
 
@@ -265,14 +265,12 @@ void();
 void()bersek_push;
 void(entity e) pop_entitycleanup;
 void(entity targ, entity attacker, float gibable) Killed = 
-{ 
-	float health_gain;
-	
+{
 	//targ.colormod = '1 0 0'; // crystallised test
 
 	if ((targ.flags &FL_MONSTER) && (targ.alreadykilled >= 1))
 		return;
-	if ((self.classentity == "corpse") &&((self.flags &FL_MONSTER))&& (!self.wrathflags & FL_CRYSTAL) )
+	if ((self.classentity == "corpse") && (self.flags & FL_MONSTER) && !(self.wrathflags & FL_CRYSTAL))
 		return;
 	if(self.buffer !=  world)
 		self.buffer.goalentity = world;	
@@ -467,12 +465,12 @@ void(entity targ, entity attacker, float gibable) Killed =
 			// Reki (May 9 2023): Achievement logic
 			if (attacker.flags & FL_CLIENT)
 			{
-				Steam_StatIncrement(attacker, ST_STATS::monsters_killed, 1);
+				// Steam_StatIncrement(attacker, ST_STATS::monsters_killed, 1);
 
 				// blade kills
 				if (time < attacker.lungetime && attacker.weapon == IT_MELEE)
 				{
-					Steam_StatIncrement(attacker, ST_STATS::blade_lunge_kills, 1);
+					// Steam_StatIncrement(attacker, ST_STATS::blade_lunge_kills, 1);
 				}
 
 				// 1hp kill
@@ -480,7 +478,7 @@ void(entity targ, entity attacker, float gibable) Killed =
 				{
 					if (time > attacker.Aegis_time + 5)
 					{
-						Steam_AchievementUnlock(attacker, ST_ACHIEVEMENTS::SP_FEAT_1HP);
+						// Steam_AchievementUnlock(attacker, ST_ACHIEVEMENTS::SP_FEAT_1HP);
 					}
 				}
 			}
@@ -488,7 +486,7 @@ void(entity targ, entity attacker, float gibable) Killed =
 			{
 				if (attacker.friendly_monster == 1)
 				{
-					Steam_StatIncrement(world, ST_STATS::confounding_kills, 1);
+					// Steam_StatIncrement(world, ST_STATS::confounding_kills, 1);
 				}
 			}
 
@@ -496,7 +494,7 @@ void(entity targ, entity attacker, float gibable) Killed =
 			{
 				if (targ.flags & FL_MONSTER)
 				{
-					Steam_StatIncrement(world, ST_STATS::animus_kills, 1);
+					// Steam_StatIncrement(world, ST_STATS::animus_kills, 1);
 				}
 			}
 			//
@@ -960,8 +958,9 @@ void(entity targ, entity inflictor, entity attacker, float damage) T_Damage =
 		{
 			//bprint(ftos(attacker.flaskrage_damagedelt), "\n");
 			attacker.flaskrage_damagedelt += take;//min(targ.health, take);
-			if (attacker.flaskrage_damagedelt > 40000)
-				Steam_AchievementUnlock(attacker, ST_ACHIEVEMENTS::SP_GRIND_FLASK);
+			if (attacker.flaskrage_damagedelt > 40000) {
+				// Steam_AchievementUnlock(attacker, ST_ACHIEVEMENTS::SP_GRIND_FLASK);
+			}
 		}
 		targ.health = targ.health - take;
 
@@ -1338,8 +1337,9 @@ void(entity inflictor, entity attacker, float damage, entity ignore, float radiu
 						{
 							if (inflictor.classname == "explosion_retcher" && inflictor.cnt == 1)
 							{
-								if (inflictor.pain_finished && (time - inflictor.pain_finished) > 1) // gotta be planted for at least 1 second
-									Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_CYST_PLANT);
+								if (inflictor.pain_finished && (time - inflictor.pain_finished) > 1) {// gotta be planted for at least 1 second
+									// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_CYST_PLANT);
+								}
 							}
 						}
 						//
@@ -1495,7 +1495,7 @@ void(entity inflictor, float damage, float damagetoplayer, entity ignore, float 
 
 					if (inflictor.classname == "monster_wretch" && inflictor.wrath_kills && head.classname == "monster_wretch" && head.health <= 0) // wretch killed another with the explosion
 					{
-						Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_JOKE_WRETCH);
+						// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_JOKE_WRETCH);
 					}
 
 					self = oldself;

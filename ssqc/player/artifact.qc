@@ -341,7 +341,7 @@ void() write_tether = {
 	stuffcmd(self, "scratch1 0\n");
 
 	// Reki (June 8 2023): Trigger trigger_soultether_checker entities
-	trigger_all_soultether_checkers();
+	trigger_all_soultether_checkers(self);
 
 	if (!(self.savedlist &SAVED_TETHER))
 		self.savedlist += SAVED_TETHER;
@@ -368,7 +368,6 @@ void() LifeSiphon_selected = { self.radialruning = 1;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void() Aegis_selected = { self.radialruning = 1;
 	sound(self, CHAN_AUTO, "items/artifacts/artifactH_use.ogg", 1, 0.25);
-	sound(self, CHAN_AUTO, "items/artifacts/aegis.ogg", 1, 0.25);
 	self.Aegis_time = time + 20.8;
 	self.radial_time = time + 21;
 	self.aegisflag = 1;
@@ -580,7 +579,8 @@ void() attar_touch =
 	{	
 		self.traileffectnum = particleeffectnum("null");
 		sound(self, CHAN_AUTO, "items/artifacts/artifactD_end.ogg", 1, 0.25);
-		setmodel(self, "models/artifacts/effects/confounding_attar_cloud.md3");	
+		precache_model("models/artifacts/effects/confounding_attar_cloud.md3");
+		setmodel(self, "models/artifacts/effects/confounding_attar_cloud.md3");
 		self.movetype = 0;
 		self.solid = SOLID_TRIGGER;
 		setsize (self, attar_bboxn, attar_bbox);
@@ -746,7 +746,7 @@ void() trinket2_touch =
 
 		other.trinket_touched = 1;
 
-		Steam_StatIncrement(self.owner, ST_STATS::projectiles_deflected, 1);
+		// Steam_StatIncrement(self.owner, ST_STATS::projectiles_deflected, 1);
 	}
 };
 void() dome_remove =
@@ -1414,57 +1414,6 @@ void() secret_mark_think =
 	self.nextthink = time + 0.05; 
 };
 
-void() info_mark_think =
-{
-	float disttoplayer;
-	if(revelation_mark == 1)
-	{
-		disttoplayer = vlen (single_player.origin - self.origin);
-		if(disttoplayer <= 1024)
-		{	
-			self.alpha = 1;
-			if(disttoplayer <= 128)
-			{
-				self.pflags = 129;
-				self.scale = 1;
-			}
-			else
-			{
-				self.pflags = 0;
-				self.scale = 0.5;	
-			}
-		}
-
-		else
-			self.alpha = -1;
-	}
-	else
-		self.alpha = -1;
-
-//	if(self.owner.secret != 1)
-//		self.think = SUB_Remove;
-//	else
-		self.think = info_mark_think;
-	self.nextthink = time + 0.05; 
-};
-
-void() info_mark =
-{
-	self.owner = find (world, targetname, self.target);
-	self.oldowner = self.owner;
-	self.effects = 512 + EF_ADDITIVE;
-	setmodel (self,"models/artifacts/mark_flame.md3");
-	self.scale =0.5;
-	self.pflags = 0;
-	self.origin_z +=7;
-	self.style = 1; 
-	self.color= '1 1 7';
-	self.light_lev = 32;
-	self.wrathflags += FL_GARBAGE;
- 	self.think = info_mark_think;
-	self.nextthink = time + 0.25; 
-};
-
 void() mark_revelation =
 {
 	revelation_mark = 1;
@@ -1484,7 +1433,7 @@ void() mark_revelation =
 
 	spawn_relevelation_particles(self.origin + self.view_ofs + v_forward * 72,24,'1 1.1 1',0);
 	stuffcmd (self, "bf 0.85 1.1 0.9 0.5 0.5\n");
-	while (secret_entity = nextent(secret_entity))
+	while ((secret_entity = nextent(secret_entity)))
 	{
 		if (secret_entity.wrathflags & FL_SECRET)
 		{
@@ -1705,7 +1654,7 @@ void()grenade_magnet_kill =
 
 	if (flyingmonsters_killed >= 3)
 	{
-		Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_GRIND_VOID);
+		// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_GRIND_VOID);
 	}
 
 	self.think = grenade_magnet_push;
@@ -2156,8 +2105,9 @@ void(entity targ) shockwave_killincrement =
 	if (targ.flags & FL_MONSTER)
 	{
 		self.shockwave_kills++;
-		if (self.shockwave_kills >= 10)
-			Steam_AchievementUnlock(self.owner, ST_ACHIEVEMENTS::SP_GRIND_SHOCKWAVE);
+		if (self.shockwave_kills >= 10) {
+			// Steam_AchievementUnlock(self.owner, ST_ACHIEVEMENTS::SP_GRIND_SHOCKWAVE);
+		}
 	}
 }
 void() shockwave_think =

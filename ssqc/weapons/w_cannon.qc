@@ -190,7 +190,7 @@ void()acelerator_think =
 			tracebox(self.owner.origin, self.owner.mins, self.owner.maxs, self.owner.origin + '0 0 150', MOVE_NOMONSTERS, self.owner); // make sure it's not a super low ceiling
 			if (trace_fraction >= 1)
 			{
-				Steam_AchievementUnlock(self.owner, ST_ACHIEVEMENTS::AL_FEAT_ROCKETJUMP);
+				// Steam_AchievementUnlock(self.owner, ST_ACHIEVEMENTS::AL_FEAT_ROCKETJUMP);
 			}
 		}
 	}
@@ -797,7 +797,6 @@ void() raise_cannon =
 	self.vweaponglowmod = '1 1 1';
     self.weapon = IT_CANNON;
 	W_SetWeapon();
-	//sound(self, CHAN_WEAPON, "weapons/cannon/raise.ogg", 1, ATTN_NORM);
 	self.vweaponglowmod = '1 1 1';
 	sound(self, CHAN_AUTO, "weapons/cannon/raise.ogg", 1, ATTN_NORM);
 	self.draw_w = 0;

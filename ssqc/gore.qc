@@ -378,7 +378,7 @@ void() gib_touch = { local vector v;
 			self.touchtime = time + 0.5 + random();
 			
 			// Reki (July 17 2023): achievement logic
-			Steam_StatIncrement(other, ST_STATS::heads_kicked, 1);
+			// Steam_StatIncrement(other, ST_STATS::heads_kicked, 1);
 		}
 
 		
@@ -1022,27 +1022,6 @@ void(entity inflictor, entity targ, float damage, float pushfactor) explo_physic
 void()gibpusher_think =
 {
 	return;
-	float gib_power = cvar ("gibpushexp");
-	entity head = findradius(self.origin, self.count);
-	float pushfactor = 5 + self.cnt * 2.5;
-	while (head)
-	{
-		if (head.wrathflags & FL_GIB)
-		{
-			head.velocity_z += 24;  
-			explo_physics_gibs (self,head,pushfactor, (self.cnt * 1.7 * gib_power)); 	
-
-			float r = random();	
-			if(r < 0.3)
-			{
-				if(!(head.wrathflags & FL_PUSHEDGIB))
-					head.wrathflags += FL_PUSHEDGIB;
-			}
-			head.movetype = MOVETYPE_TOSS;
-		}
-		head = head.chain;  // cycle to next head (entity)
-	}	
-	remove(self);	
 };
 
 void() gibtrailcontroller_think =

@@ -1,7 +1,6 @@
 // Reki (May 8 2023):
 // achievements.h
 // header file for types/structs for interacting with the steam achievements
-#pragma once
 
 #define STEAM_IS_CONNECTED (cvar_string("steam_id") != "")
 
@@ -106,15 +105,14 @@ typedef struct
 	_ACH_ID(SP_GRIND_DEFLECTION, __NULL__) /* done 7/30 */
 
 #define _ACH_ID(id, callback) id,
-enum ST_ACHIEVEMENTS:float
-{
+enum class ST_ACHIEVEMENTS:float {
 	ACHIEVEMENT_LIST
 	MAX
 };
 
 #undef _ACH_ID
 #define _ACH_ID(id, callback) { id, #id, 0, 0, __NULL__, _("ACHIEVE_NAME_" #id), _("ACHIEVE_DESC_" #id) }, // SSQC doesn't get callbacks... fixme ?
-var steamachievement_t steam_achievementlist[] = {
+steamachievement_t steam_achievementlist[] = {
 	ACHIEVEMENT_LIST
 };
 
@@ -155,7 +153,7 @@ var steamachievement_t steam_achievementlist[] = {
 	
 
 #define _STAT_ID(st, type, callback) st,
-enum ST_STATS:float
+enum class ST_STATS:float
 {
 	STAT_LIST
 	MAX
@@ -163,7 +161,6 @@ enum ST_STATS:float
 
 #undef _STAT_ID
 #define _STAT_ID(st, type, callback) { st, #st, type, 0, 0, __NULL__ }, // SSQC doesn't get callbacks... fixme ?
-var steamstat_t steam_statlist[] = {
+steamstat_t steam_statlist[] = {
 	STAT_LIST
 };
-

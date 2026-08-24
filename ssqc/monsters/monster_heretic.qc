@@ -1078,7 +1078,7 @@ float(float wdmg) heretic_melee_attack =
 	local vector delta;
 	local float dist;
 	if (!self.enemy)
-		return;	// removed before stroke
+		return FALSE;	// removed before stroke
 	delta = self.enemy.origin - self.origin;
 	dist = vlen(delta);
 	walkmove (self.angles_y, random(12,24));
@@ -1112,8 +1112,6 @@ float(float wdmg) heretic_melee_attack =
 		decal_monster2(self.enemy.origin);
 	}
 	return TRUE;
-	makevectors (self.angles);
-	heretic_subattack();
 };
 
 void() heretic_sattack =[$her_batk1, heretic_sattack2]

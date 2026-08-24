@@ -75,7 +75,7 @@ void Crystallizer_Bezier_Predraw(void)
 		"models/projectiles/beam_crystalc.md3",
 		"models/projectiles/beam_crystald.md3",
 		"models/projectiles/beam_crystale.md3",
-	}
+	};
 
 	makevectors(bez.angle);
 	vector curve_start = bez.start;

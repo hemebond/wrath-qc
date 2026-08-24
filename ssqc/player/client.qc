@@ -1,5 +1,3 @@
-	#include "localization.h"
-
 .float deadwaiting;
 .float oldwatertype;
 .float melee_jump_time;
@@ -377,7 +375,7 @@ void() WaterMove = { if (self.movetype == MOVETYPE_NOCLIP)
 
 	if (time - self.total_time_underwater >= 80)
 	{
-		Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::AL_TIME_DROWN);
+		// Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::AL_TIME_DROWN);
 	}
 
 	if (!self.waterlevel)
@@ -424,7 +422,7 @@ void() WaterMove = { if (self.movetype == MOVETYPE_NOCLIP)
 		// Reki (July 17 2023): time in lava achievement
 		if (time - self.total_time_inlava >= 15)
 		{
-			Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::AL_TIME_LAVA);
+			// Steam_AchievementUnlock(self, ST_ACHIEVEMENTS::AL_TIME_LAVA);
 		}
 	}
 	else if ((self.watertype == CONTENT_SLIME)|| (self.fakewatertype == CONTENT_SLIME))
@@ -2201,13 +2199,14 @@ void(entity e) secrets_checkperfect // Reki (July 24 2023): check for map perfec
 			e.perfect_maps |= map.bit;
 			if (total_secrets) // we only want to give the perfect map achievement on maps that actually have 'chevos
 			{
-				Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_SECRETS_LEVEL);
+				// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_SECRETS_LEVEL);
 			}
 		}
 		break;
 	}
 
-
+	return;
+	/*
 	// multi-level perfectionist achievements
 	const perfectep_t episode[] = {
 		{PERFECT_EPISODE1, ST_ACHIEVEMENTS::SP_FEAT_SECRETS_E1},
@@ -2221,21 +2220,23 @@ void(entity e) secrets_checkperfect // Reki (July 24 2023): check for map perfec
 		perfectep_t ep = episode[i];
 		if ((e.perfect_maps & ep.bits) == ep.bits) // if we have ALL the bits unlocked
 		{
-			Steam_AchievementUnlock(world, ep.ach);
+			// Steam_AchievementUnlock(world, ep.ach);
 		}
 	}
-}
+	*/
+};
+
 void(entity e) coffers_checkperfect // Reki (July 24 2023): check for coffer amounts, unlock achievements accordingly
 {
 	if (e.opened_coffers >= 25) // whoopsie :\
 	{
-		Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_COFFER_26);
+		// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_COFFER_26);
 	}
 	if (e.opened_coffers >= 50)
 	{
-		Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_COFFER_ALL);
+		// Steam_AchievementUnlock(world, ST_ACHIEVEMENTS::SP_FEAT_COFFER_ALL);
 	}
-}
+};
 
 void() loadlevel = { stuffcmd(self, "slowmo 1\n");//stuffcmd(self, "r_glsl_saturation 1\n");
 	read_currentprofileslot();
@@ -3316,7 +3317,7 @@ void() RestoreGame =
 	// this prevents an annoying engine bug where ents don't get linked on load
 	fixitems();
 	entity lst = world;
-	while(lst = nextent(lst))
+	while((lst = nextent(lst)))
 	{
 		setorigin(lst, lst.origin);
 	}
