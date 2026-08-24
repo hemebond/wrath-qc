@@ -524,9 +524,8 @@ class uilocpicture_c : uipicture_c
 			vector final_size = [size[0] * ui_scale[0], size[1] * ui_scale[1]];
 			
 			string final_img = image;
-			// FIXME: Unknown value "prerender".
-			// if (prerender)
-			// 	prerender(this, final_img);
+			if (prerender)
+				prerender(this, final_img);
 			if (final_img != __NULL__ && final_alpha > 0)
 			{
 				#ifdef CSQC
@@ -641,9 +640,9 @@ class uiglyph_c : uipicture_c
 		vector final_origin = ui_position;
 		vector final_size = [size[0] * ui_scale[0], size[1] * ui_scale[1]];
 		
-		// FIXME: Unknown value "prerender"?
-		// if (prerender)
-		// 	prerender(this, final_img);
+		if (prerender)
+			prerender(this, final_img);
+
 		if (final_img != __NULL__ && final_alpha > 0)
 		{
 			#ifdef CSQC

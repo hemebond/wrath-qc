@@ -725,11 +725,8 @@ void(entity e, float beamlenght) sub_beam2crystal =
 	local entity beam;
 
 	beam = spawn();
-	//if( beamlenght > 0)
-		setmodel(beam, "models/projectiles/boibeamb.md3");
-	//else
-	//	setmodel(beam, "models/projectiles/proj_raila.md3");
-	//beam.traileffectnum = particleeffectnum("NORMAL_BLOOD2");
+	precache_model("models/projectiles/boibeamb.md3");
+	setmodel(beam, "models/projectiles/boibeamb.md3");
 	setattachment(beam, e.lastbeam, "tag_nextbeam");
 	beam.nextthink = (time + 0.05);
 	beam.alpha = 1;

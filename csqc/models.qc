@@ -180,6 +180,7 @@ void EntUpdate_Boss3Halo(float is_new)
 		self.classname = "boss3halo";
 		self.predraw = Boss3Halo_Predraw;
 		self.drawmask = MASK_NORMAL;
+		precache_model("models/enemies/boss3/halo_boss3.md3");
 		setmodel(self, "models/enemies/boss3/halo_boss3.md3");
 	}
 }

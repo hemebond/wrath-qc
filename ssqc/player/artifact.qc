@@ -579,7 +579,8 @@ void() attar_touch =
 	{	
 		self.traileffectnum = particleeffectnum("null");
 		sound(self, CHAN_AUTO, "items/artifacts/artifactD_end.ogg", 1, 0.25);
-		setmodel(self, "models/artifacts/effects/confounding_attar_cloud.md3");	
+		precache_model("models/artifacts/effects/confounding_attar_cloud.md3");
+		setmodel(self, "models/artifacts/effects/confounding_attar_cloud.md3");
 		self.movetype = 0;
 		self.solid = SOLID_TRIGGER;
 		setsize (self, attar_bboxn, attar_bbox);
