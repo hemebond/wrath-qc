@@ -249,7 +249,8 @@ void() PlayerDeathThink = { local float forward;
 .float extraongroundtime;
 .float onground_time;
 .float jumptime;
-void() PlayerJump = { if (self.flags &FL_WATERJUMP)
+void() PlayerJump = {
+	if (self.flags &FL_WATERJUMP)
 		return;
 
 	if (self.waterlevel >= 2)
@@ -275,9 +276,11 @@ void() PlayerJump = { if (self.flags &FL_WATERJUMP)
 
 	if (!(self.flags &FL_ONGROUND))
 		return;
+
 	self.melee_released = 0;
 	if (!(self.flags &FL_JUMPRELEASED))
 		return;	// don't pogo stick
+
 	self.flags = self.flags - (self.flags &FL_JUMPRELEASED);
 	self.flags = self.flags - FL_ONGROUND;	// don't stairwalk
 	self.button2 = 0;
@@ -289,6 +292,7 @@ void() PlayerJump = { if (self.flags &FL_WATERJUMP)
 		fsnd = 1;
 	self.jmpsound = fsnd;
 	playerjumpsound();
+
 	//	local string snd;
 	//	snd = strcat ("player/jump", ftos (fsnd),".ogg");
 	//	sound (self, CHAN_VOICE, snd, 1, ATTN_NORM);
@@ -475,7 +479,7 @@ void() WaterMove = { if (self.movetype == MOVETYPE_NOCLIP)
 
 
 	if (!(self.flags &FL_WATERJUMP))
-		self.velocity = self.velocity - 0.8 *self.waterlevel *frametime *self.velocity;
+		self.velocity = self.velocity - 0.8 * self.waterlevel * frametime * self.velocity;
 };
 
 void() CheckWaterJump = { local vector start, end;
@@ -499,7 +503,7 @@ void() CheckWaterJump = { local vector start, end;
 			// open at eye level
 			self.flags = self.flags | FL_WATERJUMP;
 			self.velocity_z = 225;
-			self.flags = self.flags - (self.flags &FL_JUMPRELEASED);
+			self.flags = self.flags - (self.flags & FL_JUMPRELEASED);
 			self.teleport_time = time + 2;	// safety net
 			return;
 		}
@@ -507,38 +511,50 @@ void() CheckWaterJump = { local vector start, end;
 };
 
 
-float(entity targ) crouchcheck = { makevectors(self.v_angle);
+float crouchcheck(entity targ) {
+	makevectors(self.v_angle);
 	tracebox(self.origin, VEC_HULL_MIN, '16 16 0', self.origin + '0 0 48', FALSE, self);
-	if (trace_fraction == 1)	//hits nothing go ahead
-		{
-		self.origin_z += 16; setorigin(self,self.origin);
+
+	if (trace_fraction == 1) {
+		//hits nothing go ahead
+		self.origin_z += 16;
+		setorigin(self, self.origin);
 		return TRUE;
-		}
-	if (!trace_ent.takedamage)	//hits world or nondamagable object
-		return FALSE;
+	}
+
 	return FALSE;
-};
+}
+
+
+
 .float crouchingtime;
-void() Crouch_Off = { if (self.crouch && (crouchcheck(self)))	//get up
-	{
-		
-		if((self.groundentity.solid == SOLID_BBOX) &&  (self.flags &FL_ONGROUND))
-		self.velocity_z  = 90;
+void() Crouch_Off = {
+	if (self.crouch && (crouchcheck(self))) {
+		//get up
+
+		if((self.groundentity.solid == SOLID_BBOX) &&  (self.flags & FL_ONGROUND))
+			self.velocity_z  = 90;
 
 		if(!(self.flags & FL_JUMPRELEASED))
-		self.flags += FL_JUMPRELEASED;
+			self.flags += FL_JUMPRELEASED;
+
 		setsize(self, '-16 -16 -32', '16 16 32');	//changes the size of the player to the normal size
 		self.crouch = 0;
 		self.attemptcrouch = 0;
+
 		if (self.lspeedtime < time)
 			self.maxspeed = 1;	// multiplier of the velocity of the player
+
 		return;
 	}
 
 	self.attemptcrouch = 1;
 };
 
-void() Crouch_On = { if ((!self.crouch) /*&& (!self.velocity_z)*/)	//crouch down
+
+
+void() Crouch_On = {
+	if ((!self.crouch) /*&& (!self.velocity_z)*/)	//crouch down
 	{
 		setsize(self, '-16 -16 -16', '16 16 8');	//changes the size of the player !!! 
 
@@ -546,7 +562,7 @@ void() Crouch_On = { if ((!self.crouch) /*&& (!self.velocity_z)*/)	//crouch down
 
 		self.crouch = 1;
 		self.attemptcrouch = 1;
-		if (self.flags &FL_ONGROUND)
+		if (self.flags & FL_ONGROUND)
 		{
 			if (time < self.lspeedtime)
 				self.maxspeed = 0.5;
@@ -559,8 +575,10 @@ void() Crouch_On = { if ((!self.crouch) /*&& (!self.velocity_z)*/)	//crouch down
 
 	self.attemptcrouch = 0;
 };
-.float crushingtime;
 
+
+
+.float crushingtime;
 void() UpdateViewOfs = { if (self.crouch)
 	{
 		if(self.crushingtime > time)
@@ -989,7 +1007,6 @@ void() PlayerPreThink =
 	}
 	if (!self.crouch)
 	{
-	
 		float button7pressed;
 		{
 			if(self.togglerun != 1)
@@ -1772,20 +1789,7 @@ void() ArtifactClientModel =	//ArtifactClientModel
 .float lungefree;
 
 .float time_sea_particles;
-void() PlayerPostThink = { 
-
-	if ((world.model == "maps/sea.bsp") && (time > self.time_sea_particles))
-	{
-		vector p_pos = self.origin;
-		p_pos_x += random(-128, 128);
-		p_pos_y += random(-128, 128);
-		p_pos_z += 24; 
-		makevectors (self.angles);
-		p_pos += v_forward * random (64, 128);
-			pointparticles(particleeffectnum("sea_particles"), p_pos , '0 0 0',1);
-		self.time_sea_particles = time + random (1, 2);
-	}
-
+void() PlayerPostThink = {
 	// Reki: March 28, 2023
 	// replaced stuffcmds with .r_saturation stat
 	// added r_healthhaze for low hp
@@ -1982,22 +1986,21 @@ void() PlayerPostThink = {
 	///////
 
 	//////////////////////	
-	if ((self.flags &FL_ONGROUND) && (self.lungefree > time))
-	self.lungefree = 0;
+	if ((self.flags & FL_ONGROUND) && (self.lungefree > time)) {
+		self.lungefree = 0;
+	}
+
 	if ((self.flags &FL_ONGROUND) && (self.melee_released > 0) && (!self.button3) && (time > self.melee_jump_time))
 		self.melee_released = 0;
+
 	if ((self.fakewatertype) && (self.watertype_time < time))
 		self.fakewatertype = 0;
 
 	if (self.wrath_debug_screen)
 		checking_enemies();
 
-
-
 	ArtifactClientModel();
 	WeaponFrames();	// do weapon stuff
-
-
 
 	if(self.icetime > time)
 	{
@@ -2019,9 +2022,9 @@ void() PlayerPostThink = {
 	}
 
 	if ((self.maxspeed >= 0.75) && (self.movement))
-	PlayerFootstep();
-	// check to see if player landed and play landing sound	
+		PlayerFootstep();
 
+	// check to see if player landed and play landing sound
 	if ((self.jump_flag < -150) && (self.jumpinwatertime < time) && (self.watertype_time > time) && (self.jumpinwater == 0))
 	{
 		if ((self.fakewatertype == CONTENT_WATER) || (self.watertype == CONTENT_WATER) || (self.fakewatertype == CONTENT_BLOOD)||(self.fakewatertype == CONTENT_SLIME) || (self.watertype == CONTENT_SLIME)) 
@@ -2064,16 +2067,17 @@ void() PlayerPostThink = {
 
 		if (self.jump_flag < -650)
 			playerlandsound(2);
-		//T_Damage (self, world, world, 5); 
 
 		self.jump_flag = 0;
 	}
 
-	if ((!(self.flags &FL_ONGROUND)) && (self.movetype == MOVETYPE_WALK))
+	if (!(self.flags & FL_ONGROUND) && (self.movetype == MOVETYPE_WALK))
 	{
-		if (self.flags &FL_INWATER)
+		if (self.flags & FL_INWATER)
 			self.fall_state = FALSE;
+
 		self.jump_flag = self.velocity_z;
+
 		if (self.jump_flag < -1200)
 			self.fall_state = TRUE;
 	}
@@ -2095,6 +2099,7 @@ void() PlayerPostThink = {
 	//lmessage =strcat ((self.nearestsurface),("\n")) ;
 	//bprint (lmessage);
 };
+
 void() Check_FrikFile;
 
 string nextmap;
@@ -3901,10 +3906,10 @@ void() PutClientInServer = {
 		self.items -= IT_MELEE;
 		self.weapon = 0;
 	}
-	stuffcmd (self, "alias +button4  \"\" \n");
-	stuffcmd (self, "alias -button4  \"\" \n");
-	stuffcmd (self, "alias +jump  \"\" \n");
-	stuffcmd (self, "alias -jump  \"\" \n");
+	stuffcmd(self, "alias +button4  \"\" \n");
+	stuffcmd(self, "alias -button4  \"\" \n");
+	stuffcmd(self, "alias +jump  \"\" \n");
+	stuffcmd(self, "alias -jump  \"\" \n");
 	////lbeams
 	self.charge_shotgun = 1;
 	stuffcmd(self, "cl_movement_maxspeed 416 \n");
@@ -3947,7 +3952,7 @@ void() PutClientInServer = {
 	if (deathmatch == 1)
 	self.health =  100;	
 	self.viewzoom = 1;
-	spawn_player_model(self); // player_model
+	spawn_player_model(self);
 	setsize(self, '-16 -16 -32', '16 16 32');
 	check_custom_cvars();
 	localcmd("set cvar_nodegraph 0\n");

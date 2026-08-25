@@ -63,7 +63,7 @@ float(entity e) GetFootMaterial =
 		return lastvalidsurface;
 	}*/
 
-
+	// hemebond: hopefully obsolete because the material type apparently comes from the shader
 	if((trace_dphittexturename == "textures/common/clip_stone") || (trace_dphittexturename == "textures/common/clipall_stone"))
 		return MAT_STONE;
 	if((trace_dphittexturename == "textures/common/clip_grate") || (trace_dphittexturename == "textures/common/clipall_grate"))

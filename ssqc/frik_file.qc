@@ -39,7 +39,8 @@ float lunge_velz;
 float lunge_velzog;
 .string melee_model;
 
-void() check_melee = { self.melee_model = "models/weapons/melee/v_gauntlet.md3";	// strzone(readtext);
+void() check_melee = {
+	self.melee_model = "models/weapons/melee/v_gauntlet.md3";	// strzone(readtext);
 	self.dvweapon_x = 4;	//stof(readtext);        
 	self.dvweapon_y = -7;	// stof(readtext);         
 	self.dvweapon_z = -7;	//stof(readtext);         
@@ -618,7 +619,8 @@ local float readfrik;
 	fclose(readfrik);
 };
 
-void() Check_FrikFile = { check_melee();
+void() Check_FrikFile = {
+	check_melee();
 	check_revolver();
 	check_revolver_pos();
 	check_shotgun();
