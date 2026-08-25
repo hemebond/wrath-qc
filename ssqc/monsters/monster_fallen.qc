@@ -1678,7 +1678,8 @@ void(entity e) melon_head =
 
 };
 
-void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b.md3");
+void monster_fallen() {
+	precache_model("models/enemies/fallen/gibs/gib_torso_b.md3");
 	precache_model("models/enemies/fallen/gibs/gib_torso_a.md3");
 	precache_model("models/enemies/fallen/gibs/gib_leg_b_r.md3");
 	precache_model("models/enemies/fallen/gibs/gib_leg_b_l.md3");
@@ -1732,16 +1733,12 @@ void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b
 	precache_sound("enemies/fallen/swing3.ogg");
 
 	self.flags = self.flags | FL_MONSTER;
-	//setmodel (self, "models/enemies/fallen/fallen1out.mdl");
 	setmodel(self, "models/enemies/fallen/fallen1.md3");
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	self.classname = "monster_fallen";
 	setsize(self, '-12 -12 -32', '12 12 32');
-	//self.damagetopain = fallen_dtp;
 	self.health = 100;
-	//	self.view_ofs_z = 40; 
-	//if(self.rise == 1)
 
 	if ((self.rise != 1) || ((self.rise == 1) && (self.warped == 1)))
 		self.th_stand = fallen_stand1;
@@ -1750,8 +1747,8 @@ void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b
 	self.th_walk = fallen_walk1;
 	self.skin = 0;
 
-	local float r, rgib;
-	r = (random() *5);
+	float r, rgib;
+	r = (random() * 5);
 	if (r <= 5)
 		self.noise = "enemies/fallen/sight5.ogg";
 	if (r < 4)
@@ -1767,7 +1764,7 @@ void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b
 
 	if (!(self.type_mutilated))
 	{
-		rgib = floor(random() *3);
+		rgib = floor(random() * 3);
 		if (rgib < 1)
 			self.type_mutilated = 1;
 		if (rgib < 2)
@@ -1788,41 +1785,38 @@ void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b
 	self.th_die = fallen_death;
 	self.th_melee = fallen_attack_melee;
 	self.touch = fallen_touch;
-    //if(self.crystal == 1)
-    //    crystalized (self);
-	string smonth = strftime(TRUE, "%m");float month = stof(smonth);
-	string sday = strftime(TRUE, "%d");float day = stof(sday);
 
+	string smonth = strftime(TRUE, "%m");
+	float month = stof(smonth);
 
+	string sday = strftime(TRUE, "%d");
+	float day = stof(sday);
 
 	if((day == 27) && (month == 2)) // wraths birthday!
 	{
-        float rdate = random() * 1;
-        if (rdate < 0.4)
-		    self.melonhead = 4;
-        if (rdate < 0.3)
-	  	  self.melonhead = 3;
-        if (rdate < 0.2)
-	  	  self.melonhead = 2;
-        if (rdate < 0.1)
-	  	  self.melonhead = 1;
+		// Gives the fallen/zombies melons on their heads
+		float rdate = random() * 1;
+		if (rdate < 0.4)
+			self.melonhead = 4;
+		if (rdate < 0.3)
+			self.melonhead = 3;
+		if (rdate < 0.2)
+			self.melonhead = 2;
+		if (rdate < 0.1)
+			self.melonhead = 1;
 	}
-	//if(skill >= 3)
-	//{
-	//r = random(1,20);
-	if(self.melonhead == 1)
-    	melon_head(self);
-	if(self.melonhead == 2)
-    	melon_head(self);
 
+	if(self.melonhead == 1)
+		melon_head(self);
+	if(self.melonhead == 2)
+		melon_head(self);
 	if(self.melonhead == 3)
 		self.colormod = '1 0.3 1'; 
-
 	if(self.melonhead == 4)
 	{
 		self.colormod = '0.7 1 0.5'; 
 		spawn_cysts(self);
-	}		//}
+	}
 
 	//writethis = strftime(1,"%Y-%m-%d %H:%M:%S");
 	if (self.rise == 1)
@@ -1834,10 +1828,7 @@ void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b
 		self.origin_z += 12;
 		self.frame = 1;
 
-		if ((world.model == "maps/testboss3.bsp") || (world.model == "maps/boss3.bsp")) 
-		{
-			//if(self.lastframewarp >= 10)
-			//	self.lastframewarp = 9;
+		if ((world.model == "maps/testboss3.bsp") || (world.model == "maps/boss3.bsp")) {
 			self.frame = 116;
 			self.lastframewarp = 123;
 
@@ -1853,6 +1844,4 @@ void() monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b
 		self.think = walkmonster_start;
 		self.nextthink = time + 0.05;
 	}
-};
-
-////////////////end of qc file
+}

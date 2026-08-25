@@ -4,6 +4,7 @@
 #define DEBUG 0
 #pragma includedir "../"
 #pragma warning disable Q208
+#pragma autoproto
 
 progsdefs.qc                                             // Definitions
 dpextensions.qc
@@ -89,12 +90,9 @@ monsters/monster_fallen.qc
 monsters/monster_oppressor.qc
 monsters/monster_symbol.qc
 
-///////
 monsters/monster_brute.qc
-monsters/crawler.qc
 monsters/monster_lurker.qc
 monsters/monster_keeper.qc
-///////
 
 monsters/spawner.qc
 monsters/monster_boss1.qc

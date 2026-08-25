@@ -93,7 +93,7 @@ void(float exdmg, float range) brute_melee =
 				//snd2 = "enemies/brute/wound.ogg";
 
 				T_Damage(trace_ent, self, self, exdmg);
-				SpawnBlood(org, '0 0 0', 32, 1, 0);
+				SpawnBlood(org, '0 0 0', 32, BLOOD_NORMAL, 0);
 				r = random(); if (r < 0.75)
 				SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 				self.ammo_shotgun = 1;
@@ -1143,9 +1143,9 @@ void() brute_deathb4 =[$brt_deathb4, brute_deathb5]{
 	explo_blood(3, org);
 	explo_blood(7, org);
 
-	SpawnBlood(org, '0 0 0', 32, 1, 0);
-	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, 1, 0);
-	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, 1, 0);
+	SpawnBlood(org, '0 0 0', 32, BLOOD_NORMAL, 0);
+	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, BLOOD_NORMAL, 0);
+	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, BLOOD_NORMAL, 0);
 	SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 	SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 	SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
@@ -1190,9 +1190,9 @@ void() brute_deathb19 =[$brt_deathb19, brute_deathb20]{
 	vector org = self.origin - '0 0 16' + v_forward * 24;
 	explo_blood(3, org);
 	explo_blood(7, org);
-	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, 1, 0);
-	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, 1, 0);
-	SpawnBlood(org, '0 0 0', 32, 1, 0);
+	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, BLOOD_NORMAL, 0);
+	SpawnBlood(org + randomvector('-5 -5 0','5 5 5'), '0 0 0', 32, BLOOD_NORMAL, 0);
+	SpawnBlood(org, '0 0 0', 32, BLOOD_NORMAL, 0);
 	SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 	SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 	SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));

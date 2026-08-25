@@ -148,10 +148,13 @@ vector() wall_velocity = { local vector vel;
 	return vel;
 };
 
-void(float damage, float type) spawn_touchblood2 = { local vector vel;
-	vel = wall_velocity() *0.2;
+
+void spawn_touchblood2(float damage, float type) {
+	vector vel = wall_velocity() * 0.2;
 	SpawnBlood(self.origin + vel *0.01, vel, damage, type, 0);
-};
+}
+
+
 void() spit_touch = { local vector org;
 	org = self.origin;
 	local float tdmg;
@@ -241,7 +244,7 @@ void() spit_touch = { local vector org;
 				}
 				
 			}
-		    SpawnBlood(org, '0 0 0', tdmg, 6, 0);
+		    SpawnBlood(org, '0 0 0', tdmg, BLOOD_WHITE, 0);
         }
 		if (other.bloodimpact) // new cleaner stuff
 				explo_blood_sprite(other.bloodimpact, trace_endpos);
@@ -280,10 +283,10 @@ void(float type, float forg) W_FireSpitter = { local vector tagorg;
 	newmis = spawn();
 
 	if (type == 1)
-    flask_v_fx(0.5);
+	    flask_v_fx(0.5);
 
 	if (type == 3)
-    flask_v_fx(0.5);
+  		flask_v_fx(0.5);
 
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLY;

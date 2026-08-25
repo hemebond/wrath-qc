@@ -503,7 +503,7 @@ void() wfire_crystal =
 					if((trace_ent.flags & FL_MONSTER)|| (trace_ent.classname == "crystallised") ||((trace_ent.classname == "func_destruct") && (trace_ent.crystallized == 1)))
 					{
 
-						SpawnBlood(dorg, '0 0 0', 10, 1, 0);
+						SpawnBlood(dorg, '0 0 0', 10, BLOOD_NORMAL, 0);
 						float subbeam_count;
 						if(trace_ent.classname == "crystallised")
 							subbeam_count = 5;
@@ -631,7 +631,7 @@ void() wfire_crystal =
 					{
 						if(trace_ent.bloody == 2)
 						{
-							SpawnBlood(dorg, '0 0 0', 20, 6, 0);
+							SpawnBlood(dorg, '0 0 0', 20, BLOOD_WHITE, 0);
 							if ((bossvulnerable == 1))
 							{
 										if(trace_ent.classname == "boss_guardian2")
@@ -1434,7 +1434,7 @@ crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cys
 
 			if(trace_ent.bloody == 2)
 			{
-				SpawnBlood(trace_endpos, '0 0 0', 20, 12, 0);
+				SpawnBlood(trace_endpos, '0 0 0', 20, BLOOD_DEFAULT, 0);
 				if ((bossvulnerable == 1))
 				{
 					if(trace_ent.classname == "boss_guardian2")

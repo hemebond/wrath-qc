@@ -824,7 +824,7 @@ void() wfire_lance =
 	muzzle.nextthink = time + 0.05;
 	self.clipgroup = self.oldclipgroup;
 	if (trace_ent.bloody ==  2)
-		SpawnBlood(dorg, '0 0 0', 12, 6, 0);
+		SpawnBlood(dorg, '0 0 0', 12, BLOOD_WHITE, 0);
 };
 
 

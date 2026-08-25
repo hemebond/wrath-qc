@@ -474,11 +474,11 @@ void(float attackfloat) executioner_chargeattack =
 				{
 					makevectors (trace_ent.angles);
 					vector org = trace_ent.origin +trace_ent.view_ofs +v_forward * 7;	
-					SpawnBlood(org, '0 0 0', 32, 0, 3);
+					SpawnBlood(org, '0 0 0', 32, BLOOD_DEFAULT, 3);
 				}
 				makevectors2 (self.angles);
 				org = trace_endpos - v_forward * 7;	
-				SpawnBlood(org, '0 0 0', 32, 0, 3);
+				SpawnBlood(org, '0 0 0', 32, BLOOD_DEFAULT, 3);
 				SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 				SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 				SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
@@ -537,14 +537,14 @@ void(float attackfloat) executioner_attack = { local vector delta;
 					{
 						makevectors (trace_ent.angles);
 						vector org = trace_ent.origin +trace_ent.view_ofs +v_forward * 7;	
-						SpawnBlood(org, '0 0 0', 32, 0, 3);
+						SpawnBlood(org, '0 0 0', 32, BLOOD_DEFAULT, 3);
 					}
 
 					T_Damage(trace_ent, self, self, exec_damage);
 					float r = random(); if (r < 0.75)
 					makevectors2 (self.angles);
 					org = trace_endpos - v_forward * 7;	
-					SpawnBlood(org, '0 0 0', 32, 2, 0);
+					SpawnBlood(org, '0 0 0', 32, BLOOD_GREEN, 0);
 					SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 					if((trace_ent.flags & FL_ONGROUND) && (trace_ent.charge_time < time))
 					{

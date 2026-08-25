@@ -134,7 +134,7 @@ void() bfg_projectile_touch =
 			}
 			
 		}
-	    SpawnBlood(org, '0 0 0', 21, 6,1);
+	    SpawnBlood(org, '0 0 0', 21, BLOOD_WHITE, 1);
     }
 	if (other.bloodimpact)
 		explo_blood_sprite(other.bloodimpact, trace_endpos);
@@ -712,7 +712,7 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 		if(damg ==100)
 		spawn_shaker(self,3 + self.ammo_bfg * 1.75,0.75,512);	
 		if (trace_ent.bloody == 1)
-			SpawnBlood(org, '0 0 0', 20, 3, floor(1 + (self.ammo_bfg / 2)));
+			SpawnBlood(org, '0 0 0', 20, BLOOD_NORMAL2, floor(1 + (self.ammo_bfg / 2)));
 		if (trace_ent.flags & FL_MONSTER)
 		{
 
@@ -767,7 +767,7 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 
         if(old_ent.bloody == 2)
         {
-		    SpawnBlood(org, '0 0 0', 20, 6, 0);
+		    SpawnBlood(org, '0 0 0', 20, BLOOD_WHITE, 0);
 			if ((bossvulnerable == 1))
 			{
 				if(old_ent == trace_ent)
@@ -1303,5 +1303,3 @@ void() trigger_bfg =
 	self.touch = Tbfg_touch;
 
 };
-
-///////////////////////////////////end of qc file

@@ -247,7 +247,7 @@ void() shotgun_proj_touch = { local vector org;
 			    }
 			    
 		    }
-	        SpawnBlood(org, '0 0 0', 12, 6, 0);
+	        SpawnBlood(org, '0 0 0', 12, BLOOD_WHITE, 0);
         }
 		if (other.bloodimpact) // new cleaner stuff
 				explo_blood_sprite(other.bloodimpact, trace_endpos);

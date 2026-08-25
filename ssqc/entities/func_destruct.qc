@@ -2129,7 +2129,7 @@ void() func_pendulum_touch =
 			self.attack_finished = time + 0.1;
 
 			vector org = other.origin + '0 0 20';	
-			SpawnBlood(org, '0 0 0', 32, 1, 0);
+			SpawnBlood(org, '0 0 0', 32, BLOOD_NORMAL, 0);
 			SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 
 

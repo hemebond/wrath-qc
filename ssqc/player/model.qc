@@ -91,8 +91,6 @@ void lower_think() {
 	//setorigin (self, self.owner.origin);
 //	if((self.owner.wrathflags & FL_WONGROUND))
 
-	dprint("angles: ", vtos(self.angles), "\n");
-
 	if (self.owner.crouch) {
 		// stop the player going into the floor
 		// this is the min z-axis change between crouched and standing

@@ -706,8 +706,6 @@ void() wraith_side1;
 .float togglerun;
 .float walkingbutton;
 .float toggle_finished;
-void() check_custom_cvars;
-void() refresh_custom_cvars;
 .float buttonrelease7;
 .float lift_touch_time;
 .float on_lift;

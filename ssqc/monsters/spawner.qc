@@ -1,11 +1,3 @@
-//#pragma warning error Q208
-
-void() monster_fallen;
-void() monster_fallen_boss3;
-void() monster_prowler;
-void() monster_wraith;
-void() monster_brute;
-void() monster_executioner;
 .float rise;
 
 

@@ -111,7 +111,7 @@ void() w_melee_release_damage = { self.lungetime = time + 0.1;
 			self.meleeskin = 1;
 
 		if (trace_ent.bloody == 1)
-			SpawnBlood(org, '0 0 0', 20, 1, 0);
+			SpawnBlood(org, '0 0 0', 20, BLOOD_NORMAL, 0);
 		}
 		local float lunge_damage;
 		lunge_damage = (self.melee_ammount *30) + (self.wrath_kills + 32);
@@ -180,7 +180,7 @@ void() w_melee_release_damage = { self.lungetime = time + 0.1;
 				}
 				
 			}
-		    SpawnBlood(org, '0 0 0', 20, 6, 0);
+		    SpawnBlood(org, '0 0 0', 20, BLOOD_WHITE, 0);
         }
 		if (old_ent.bloodimpact)
 			explo_blood_sprite(old_ent.bloodimpact, trace_endpos);
@@ -485,7 +485,7 @@ void(float dmg, float dir, float dirv) w_slash = { local vector source, org, orn
 	{
 
 		if (trace_ent.bloody == 1)
-			SpawnBlood(org, '0 0 0', 20, 3, 3);
+			SpawnBlood(org, '0 0 0', 20, BLOOD_NORMAL2, 3);
 		if (trace_ent.flags &FL_MONSTER)
 		{
 
@@ -519,7 +519,7 @@ void(float dmg, float dir, float dirv) w_slash = { local vector source, org, orn
 				}
 				
 			}
-		    SpawnBlood(org, '0 0 0', 20, 6, 0);
+		    SpawnBlood(org, '0 0 0', 20, BLOOD_WHITE, 0);
         }
 		if (old_ent.bloodimpact)
 			explo_blood_sprite(old_ent.bloodimpact, trace_endpos);

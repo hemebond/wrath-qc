@@ -292,7 +292,8 @@ void(float keynumber) quitrelic = { string dthous, thous, cent, dozen, unit, slo
 .entity bkeyson;
 .entity rkeyson;
 
-void() Use_Func = { local vector source;
+void Use_Func() {
+	vector source;
 	makevectors(self.v_angle);
 	source = self.origin + self.view_ofs - v_forward * 4;	// 
 	wtraceline(source, source + v_forward *72, FALSE, self);
@@ -366,79 +367,6 @@ void() Use_Func = { local vector source;
 		self = o_self;
 		other = o_other;
 	}
-	/*
-	if (trace_ent.classname == "portalintro_a")
-	{
-		if (!(self.relics &RL_INTR))
-			return;
-		sound(trace_ent, CHAN_AUTO, "objects/intro_pillar.ogg", 1, 0.25);
-		trace_ent.owner.pillar_a_activated = 1;
-		trace_ent.usable = 0;
-		self.relics -= RL_INTR;
-		quitrelic(1);
-		return;
-	}
-
-	if (trace_ent.classname == "portalhub1_a")
-	{
-		if (!(self.relics &RL_E1M1))
-			return;
-		sound(trace_ent, CHAN_AUTO, "objects/hub1_pillar.ogg", 1, 0.25);
-		trace_ent.owner.pillar_a_activated = 1;
-		trace_ent.usable = 0;
-		self.relics -= RL_E1M1;
-		quitrelic(1);
-		return;
-	}
-
-	if (trace_ent.classname == "portalhub1_b")
-	{
-		if (!(self.relics &RL_E1M2))
-			return;
-		sound(trace_ent, CHAN_AUTO, "objects/hub1_pillar.ogg", 1, 0.25);
-		trace_ent.owner.pillar_b_activated = 1;
-		trace_ent.usable = 0;
-		self.relics -= RL_E1M2;
-		quitrelic(2);
-		return;
-	}
-
-	if (trace_ent.classname == "portalhub1_c")
-	{
-		if (!(self.relics &RL_E1M3))
-			return;
-		sound(trace_ent, CHAN_AUTO, "objects/hub1_pillar.ogg", 1, 0.25);
-		trace_ent.owner.pillar_c_activated = 1;
-		trace_ent.usable = 0;
-		self.relics -= RL_E1M3;
-		quitrelic(3);
-		return;
-	}
-
-	if (trace_ent.classname == "portalhub1_d")
-	{
-		if (!(self.relics &RL_E1M4))
-			return;
-		sound(trace_ent, CHAN_AUTO, "objects/hub1_pillar.ogg", 1, 0.25);
-		trace_ent.owner.pillar_d_activated = 1;
-		trace_ent.usable = 0;
-		self.relics -= RL_E1M4;
-		quitrelic(4);
-		return;
-	}
-
-	if (trace_ent.classname == "portalhub1_e")
-	{
-		if (!(self.relics &RL_E1M5))
-			return;
-		sound(trace_ent, CHAN_AUTO, "objects/hub1_pillar.ogg", 1, 0.25);
-		trace_ent.owner.pillar_e_activated = 1;
-		trace_ent.usable = 0;
-		self.relics -= RL_E1M5;
-		quitrelic(5);		
-		return;
-	}
-	*/
 
 	if (trace_ent.classname == "func_button")
 	{
@@ -571,5 +499,3 @@ void() Use_Func = { local vector source;
 		return;
 	}
 };
-
-//////////////end of qc file

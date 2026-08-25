@@ -21,7 +21,25 @@ var entity population_control; // tracks if we already defined population contro
 .float max_brute;
 .float max_keeper;
 
-const .float population_control_fields[] = {max_fallen, max_invader, max_wretch, max_prowler, max_widow, max_wraith, max_heretic, max_lurker, max_oppressor, max_executioner, max_stricken, max_afflicted, max_fallen, max_symbol, max_brute, max_keeper};
+const .float population_control_fields[] = {
+	max_fallen,
+	max_invader,
+	max_wretch,
+	max_prowler,
+	max_widow,
+	max_wraith,
+	max_heretic,
+	max_lurker,
+	max_oppressor,
+	max_executioner,
+	max_stricken,
+	max_afflicted,
+	max_fallen,
+	max_symbol,
+	max_brute,
+	max_keeper
+};
+
 void() info_population_control {
 	
 	if (population_control)

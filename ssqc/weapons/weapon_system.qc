@@ -13,76 +13,20 @@ float pingtimerefresh;
 .float noammobutton2;
 .float nexteffects;
 .float noltime;
-void Hud_CantUseNotification(entity ownr);
-void Hud_CantUseArtifactNotification(entity ownr);
-void Hud_CantUseSigilNotification(entity ownr);
-void(string name, float random_number)weapon_sound;
-void() wsfire_shotgun;
-void() wfire_shotgun;
-void() wfire_revolver;
-void() wsfire_revolver;
-void() wfire_cannon;
-void() wsfire_cannon;
-void() wfire_spitter;
-void() wsfire_spitter;
-void() wfire_retcher;
-void() wsfire_retcher;
-void() wfire_lance;
-void() wsfire_lance;
-void() wfire_crystal;
-void() wsfire_crystal;
 .float realoding;
-void() pick_up_retcher;
-void() pick_up_spitter;
-void() pick_up_cannon;
-void() pick_up_revolver;
-void() pick_up_shotgun;
-void() pick_up_lance;
-void() pick_up_crystal;
-void() pick_up_bfg;
-void() raise_melee;
-void() lower_melee;
-void() raise_shotgun;
-void() raise_revolver;
-void() raise_cannon;
-void() raise_spitter;
-void() raise_retcher;
-void() raise_vmodel;
-void() raise_lance;
-void() raise_crystal;
-void() lower_revolver;
-void() lower_cannon;
-void() lower_spitter;
-void() lower_retcher;
-void() lower_vmodel;
-void() lower_shotgun;
-void() lower_lance;
-void() lower_crystal;
-void() reload_retcher;
-void() w_bfg_attack;
-void() wsfire_bfg;
-void() raise_bfg;
-void() lower_bfg;
-//void()reloadrevolver;
-void() Use_Func;
 .float gameplayfix_stepdown;
 .float wsfire_crystal_dmgcnt;
-void()write_dummy_file =
-{
-};
-void() check_custom_cvars =
-{
+
+
+void check_custom_cvars() {
 	self.extraongroundtime= cvar("cl_extraongroundtime");
 	self.alwaysrun = cvar("cl_alwaysrun");
 	self.togglerun = cvar("cl_togglerun");
 	self.check_centered = 1;
 	self.gameplayfix_stepdown = 1;
-};
-void() refresh_custom_cvars =
-{
-	stuffcmd (self,strcat(("cl_alwaysrun "), ftos (self.alwaysrun), "\n"));
-	stuffcmd (self,strcat(("cl_togglerun "), ftos (self.togglerun), "\n"));
-};
+}
+
+
 void() sgib_touch =
 {
 	if (other.flags &FL_MONSTER)
@@ -191,29 +135,32 @@ void(vector org, vector vel) SpawnGib2 =
 
 
 
-void()oppressor_impact;
-void(vector org, vector vel, float damage, float type, float pcount) SpawnBlood =
-{
-	local float bparticle;
-	//
-	switch(type)
-	{
-		case 1:
+float BLOOD_DEFAULT = 0;
+float BLOOD_NORMAL = 1;
+float BLOOD_GREEN = 2;
+float BLOOD_NORMAL2 = 3;
+float BLOOD_BLUE = 4;
+float BLOOD_OPPRESSOR = 5;
+float BLOOD_WHITE = 6;
+
+void SpawnBlood(vector org, vector vel, float damage, float type, float pcount) {
+	float bparticle;
+	switch (type) {
+		case BLOOD_NORMAL:
 			bparticle = particleeffectnum("NORMAL_BLOOD");
 		break;
-		case 2:
+		case BLOOD_GREEN:
 			bparticle = particleeffectnum("GREEN_BLOOD");
 		break;
-		case 3:
+		case BLOOD_NORMAL2:
 			bparticle = particleeffectnum("NORMAL_BLOOD2");
 		break;
-		case 4:
+		case BLOOD_BLUE:
 			bparticle = particleeffectnum("BLUE_BLOOD");
 		break;
-		case 5:
+		case BLOOD_OPPRESSOR:
 			bparticle = particleeffectnum("oppressor_impact");
-			local entity impact;
-			impact = spawn();
+			entity impact = spawn();
 			float r = random() * 5;
 			if (r <= 5)
 				setmodel(impact, "particles/impact/impact_oppressor1.md3");
@@ -230,17 +177,17 @@ void(vector org, vector vel, float damage, float type, float pcount) SpawnBlood 
 			impact.think = oppressor_impact;
 			impact.nextthink = time + 0.1;
 		break;
-		case 6:
+		case BLOOD_WHITE:
 			bparticle = particleeffectnum("WHITE_BLOOD");
 		break;
 		default:
 			bparticle = particleeffectnum("NORMAL_BLOOD");
 		break;
 	}
-	if(pcount < 0)
+	if (pcount < 0)
 		pcount = 1;
 
-	pointparticles(bparticle, org, vel *0.1, pcount);
+	pointparticles(bparticle, org, vel * 0.1, pcount);
 };
 float TE_LIGHTNING4NEH = 17;
 void(string mdl, entity owner, vector start, vector end) te_custombeam  = {
@@ -517,14 +464,15 @@ void(float damage, vector dir) TraceAttack = {
 					if (self.weapon == IT_CRYSTAL)
 						te_bloodshower (trace_ent.absmin, trace_ent.absmax, 512,64);
 					if (trace_ent.classname == "monster_afflicted")
-						SpawnBlood(dorg, vel *0.2, damage, 2, 0);
+						SpawnBlood(dorg, vel *0.2, damage, BLOOD_GREEN, 0);
 					else if (trace_ent.classname == "monster_wraith")
-						SpawnBlood(dorg, vel *0.2, damage, 4, 0);
+						SpawnBlood(dorg, vel *0.2, damage, BLOOD_BLUE, 0);
 					else if (trace_ent.classname == "monster_oppressor")
-						SpawnBlood(dorg, vel *0.2, damage, 5, 0);
+						SpawnBlood(dorg, vel *0.2, damage, BLOOD_OPPRESSOR, 0);
 					else
-						SpawnBlood(dorg, vel *0.2, damage, 1, 0);
-					local float r;
+						SpawnBlood(dorg, vel *0.2, damage, BLOOD_NORMAL, 0);
+
+					float r;
 					if (self.weapon == IT_SHOTGUN)
 					{
 						r = random();
@@ -599,7 +547,7 @@ void(float damage, vector dir) TraceAttack = {
 				}
 
 				if (trace_ent.bloody ==  2)
-				SpawnBlood(dorg, vel *0.2, damage, 6, 0);
+					SpawnBlood(dorg, vel * 0.2, damage, BLOOD_WHITE, 0);
 
 				trace_ent.multi_damage = trace_ent.multi_damage + damage * dam;
 				if (trace_ent.solid == SOLID_BSP)
@@ -630,11 +578,11 @@ void(float damage, vector dir) TraceAttack = {
 
 		if (self.weapon == IT_CRYSTAL)
 		{
-				pointparticles(particleeffectnum("NORMAL_BLOOD2"),org, '0 0 0', 1);
+			pointparticles(particleeffectnum("NORMAL_BLOOD2"),org, '0 0 0', 1);
 		}
-        vector partvel =normalize(trace_plane_normal) * 92;
-		float material = GetTraceMaterial();
 
+		vector partvel =normalize(trace_plane_normal) * 92;
+		float material = GetTraceMaterial();
 
 		if(material != MAT_GENERIC)
 			material_impacts(material,org,partvel,1,0);
@@ -649,12 +597,12 @@ void(float damage, vector dir) TraceAttack = {
 
 	}
 	if (self.weapon == IT_CRYSTAL)
-	self.particle_time = time + 0.1;
+		self.particle_time = time + 0.1;
 };
+
+
 .float oldclipgroup;
-void()proj_wretch_explo;
-void() dripper_touch =
-{
+void dripper_touch() {
 	if(other.classname == "bossprojectile")
 	{
 		other.lifetime = 0;
@@ -666,7 +614,9 @@ void() dripper_touch =
 	if(other.classname ==  "dripper")
 		return;
 	remove(self);
-};
+}
+
+
 void(vector org, vector dest, entity ownr) shot_water_dripper =
 {
 
@@ -770,7 +720,6 @@ void() s_explode2 =[1, s_explode3]
 		self.effects = self.nexteffects;
 	self.nextthink = time + 0.05;
 };
-void() w_melee_slash;
 void() s_explode3 =[2, s_explode4]
 {
 	self.nextthink = time + 0.05;
@@ -807,11 +756,9 @@ void() s_explode11 =[10, SUB_Remove]
 {
 	self.nextthink = time + 0.05;
 };
-void() w_vmodel_slash;
+
+
 .float lastweapontime;
-void() nextweapon;
-//.float semi;
-//.float ssemi;
 .entity torso_model;
 .float torso_time;
 .float flaskeffecttime;
@@ -2579,8 +2526,6 @@ void() ImpulseCommands =
 	if(self.impulse == 186)
 		mark_monsters();
 
-	if(self.impulse == 194)
-		write_dummy_file();
 	if(self.impulse == 195)
 	{
 		if (self.noattack == 1)
@@ -2977,8 +2922,7 @@ void(entity who) trigger_all_soultether_checkers =
 void()Test_Sound;
 .float testsoundflag;
 
-void() WeaponFrames =
-{
+void WeaponFrames() {
 	if(self.impulse == 100)
 	{
 		self.SoulTether ++;
@@ -3673,4 +3617,3 @@ void() WeaponFrames =
 			ImpulseCommands();
 	}
 };
-///////////////////////////////////end of qc file

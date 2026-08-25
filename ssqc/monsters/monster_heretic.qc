@@ -1100,11 +1100,11 @@ float(float wdmg) heretic_melee_attack =
 		bloodvel_y = crandom() * 64;
 		bloodvel_z = random() * 128 + 64;
 		
-		SpawnBlood(tagorg, bloodvel, 0, 0, wdmg * 0.5);
-		SpawnBlood(tagorg, bloodvel, 0, 3, wdmg * 0.5);
+		SpawnBlood(tagorg, bloodvel, 0, BLOOD_DEFAULT, wdmg * 0.5);
+		SpawnBlood(tagorg, bloodvel, 0, BLOOD_NORMAL2, wdmg * 0.5);
 
 		vector org = self.origin - self.enemy.origin;
-		SpawnBlood(org, '0 0 0', 32, 1, 0);
+		SpawnBlood(org, '0 0 0', 32, BLOOD_NORMAL, 0);
 		float r = random(); if (r < 0.75)
 		SpawnGib(org + randomvector('-5 -5 8','5 5 16'),randomvector('-48 -48 32','48 48 192'));
 
