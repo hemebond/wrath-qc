@@ -400,7 +400,6 @@ void(float type, float forg) W_FireCannon = { local vector dir, rorg, tagorg;
 	newmis.wrathflags += FL_PROJECTILE;
 	if (type == 1)
 	{
-		flask_v_fx(0.5);
 		local string tagname;
 		tagname = strcat("muzzle_", ftos(forg));
 		tagindex = gettagindex(self.vweapon, tagname);
@@ -420,8 +419,7 @@ void(float type, float forg) W_FireCannon = { local vector dir, rorg, tagorg;
 	}
 	else
 	{
-		flask_v_fx(1);
-		newmis.classname = "ore2";
+				newmis.classname = "ore2";
 		tagindex = gettagindex(self.vweapon, "muzzle_4");
 		tagorg = gettaginfo(self.vweapon, tagindex);
 		newmis.scale = 1;

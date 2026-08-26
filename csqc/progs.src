@@ -4,6 +4,7 @@
 #define DEBUG 0
 #define CREDITS
 #pragma includedir "../"
+#pragma autoproto
 
 defs.qc
 constants.qc

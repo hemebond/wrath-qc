@@ -191,20 +191,19 @@ void SpawnBlood(vector org, vector vel, float damage, float type, float pcount) 
 };
 float TE_LIGHTNING4NEH = 17;
 void(string mdl, entity owner, vector start, vector end) te_custombeam  = {
-  WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-  WriteByte(MSG_BROADCAST, TE_LIGHTNING4NEH);
-  WriteString(MSG_BROADCAST, mdl);
-  WriteEntity(MSG_BROADCAST, owner);
-  WriteCoord(MSG_BROADCAST, start_x);
-  WriteCoord(MSG_BROADCAST, start_y);
-  WriteCoord(MSG_BROADCAST, start_z);
-  WriteCoord(MSG_BROADCAST, end_x);
-  WriteCoord(MSG_BROADCAST, end_y);
-  WriteCoord(MSG_BROADCAST, end_z);
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+	WriteByte(MSG_BROADCAST, TE_LIGHTNING4NEH);
+	WriteString(MSG_BROADCAST, mdl);
+	WriteEntity(MSG_BROADCAST, owner);
+	WriteCoord(MSG_BROADCAST, start_x);
+	WriteCoord(MSG_BROADCAST, start_y);
+	WriteCoord(MSG_BROADCAST, start_z);
+	WriteCoord(MSG_BROADCAST, end_x);
+	WriteCoord(MSG_BROADCAST, end_y);
+	WriteCoord(MSG_BROADCAST, end_z);
 }
 .float lance_secondary;
 .float particle_time;
-void  (entity e,vector org, vector dest) bloodparticles_beam2;
 void()explogibs =
 {
 	entity head = findradius(self.origin, 120);
@@ -260,7 +259,8 @@ void() ApplyMultiDamage =
 		e = nextent(e);
 	}
 };
-void(vector start, vector end) te_tei_g3 = { WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
+void(vector start, vector end) te_tei_g3 = {
+	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte(MSG_BROADCAST, 76);
 	WriteCoord(MSG_BROADCAST, start_x);
 	WriteCoord(MSG_BROADCAST, start_y);
@@ -762,29 +762,21 @@ void() s_explode11 =[10, SUB_Remove]
 .entity torso_model;
 .float torso_time;
 .float flaskeffecttime;
-void(float intensity) flask_v_fx =
-{
-	return;
-};
 .float reloaded;
 
 void() Weapon_Fire = {
  	float checked7;
  	checked7 = cvar("saved4");
 
-
-
 	switch (self.weapon)
 	{
 		case IT_MELEE:
 			w_melee_slash();
-			flask_v_fx(1);
 			self.attack_finished = time + 0.5;
 			self.torso_time = time + 0.5;
 		break;
 		case IT_VIEWMODEL:
 			w_vmodel_slash();
-			flask_v_fx(1);
 			self.attack_finished = time + 0.5;
 		break;
 		case IT_REVOLVER:
@@ -794,7 +786,6 @@ void() Weapon_Fire = {
 				if(checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
-				//			self.attack_finished = time +  0.2;
 				self.noammobutton = 1;
 				return;
 			}
@@ -802,7 +793,6 @@ void() Weapon_Fire = {
 			if(self.time_fire_revolver < time)
 			{
 				wfire_revolver();
-				flask_v_fx(1);
 				self.attack_finished = time + 0.35;
 				self.torso_time = time + 0.5;
 				achievement_onlybladeandmace = FALSE;
@@ -822,7 +812,6 @@ void() Weapon_Fire = {
 			{
 				self.torso_time = time + 0.5;
 				wfire_shotgun();
-				flask_v_fx(1);
 				achievement_onlybladeandmace = FALSE;
 			}
 		break;
@@ -830,7 +819,6 @@ void() Weapon_Fire = {
 		case IT_CANNON:
 			if (self.ammo_cannon <= 0)
 			{
-				//sound(self, CHAN_AUTO, "weapons/cannon/dryfire.ogg", 1, ATTN_NORM);
 				if(checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
@@ -846,7 +834,6 @@ void() Weapon_Fire = {
 		case IT_LANCE:
 			if (self.ammo_lance <= 0)
 			{
-				//sound(self, CHAN_AUTO, "weapons/lance/dryfire.ogg", 1, ATTN_NORM);
 				if(checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
@@ -857,14 +844,12 @@ void() Weapon_Fire = {
 			{
 				self.vweaponframe = 0;
 				wfire_lance();
-				flask_v_fx(1);
 				achievement_onlybladeandmace = FALSE;
 			}
 		break;
 		case IT_CRYSTAL:
 			if (self.ammo_crystal < 1)
 			{
-				//sound(self, CHAN_AUTO, "weapons/crystal/dryfire.ogg", 1, ATTN_NORM);
 				if(checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
@@ -874,13 +859,11 @@ void() Weapon_Fire = {
 			else
 			{
 				wfire_crystal();
-				flask_v_fx(1);
 				self.attack_finished = time + 0.1;
 				achievement_onlybladeandmace = FALSE;
 			}
 		break;
 		case IT_RETCHER:
-
 			if (self.ammo_retcher <= 0)
 			{
 				sound(self, CHAN_AUTO, "weapons/retcher/dryfire.ogg", 1, ATTN_NORM);
@@ -894,7 +877,6 @@ void() Weapon_Fire = {
 			{
 				self.torso_time = time + 0.5;
 				wfire_retcher();
-				flask_v_fx(1);
 				achievement_onlybladeandmace = FALSE;
 			}
 		break;
@@ -919,7 +901,6 @@ void() Weapon_Fire = {
 		break;
 		case IT_MACE:
 			w_bfg_attack();
-			flask_v_fx(1);
 			self.attack_finished = time + 0.5;
 			self.torso_time = time + 0.5;
 		break;
@@ -966,13 +947,11 @@ void() Weapon_Sfire =
 			self.torso_time = time + 0.5;
 			//self.attack_finished = time +  0.35;
 			self.attack_finished = time + 0.1;	// 0.25
-			flask_v_fx(1);
-		}
+					}
 		else
 		{
 			wsfire_revolver();
-			flask_v_fx(1);
-		}
+					}
 	}
 	else if (self.weapon == IT_RETCHER)
 	{
@@ -989,7 +968,6 @@ void() Weapon_Sfire =
 		{
 			self.torso_time = time + 0.5;
 			wsfire_retcher();
-			flask_v_fx(1);
 			achievement_onlybladeandmace = FALSE;
 		}
 	}
@@ -1011,7 +989,6 @@ void() Weapon_Sfire =
 		{
 			self.torso_time = time + 0.5;
 			wsfire_shotgun();
-			flask_v_fx(1);
 			self.attack_finished = time + self.shotgun_time1;
 			achievement_onlybladeandmace = FALSE;
 		}
@@ -1039,7 +1016,6 @@ void() Weapon_Sfire =
 	{
 		if (self.ammo_lance <= 0)
 		{
-			//sound(self, CHAN_AUTO, "weapons/lance/dryfire.ogg", 1, ATTN_NORM);
 			if(checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
@@ -1055,7 +1031,6 @@ void() Weapon_Sfire =
 	{
 		if (self.ammo_bfg <= 0)
 		{
-			//sound(self, CHAN_AUTO, "weapons/lance/dryfire.ogg", 1, ATTN_NORM);
 			if(checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
@@ -1065,15 +1040,12 @@ void() Weapon_Sfire =
 
 		self.torso_time = time + 0.5;
 		wsfire_bfg();
-		flask_v_fx(1);
-		//self.attack_finished = time + self.lance_time2;
 		self.attack_finished = time + 1.05;
 	}
 	else if (self.weapon == IT_CRYSTAL)
 	{
 		if (self.ammo_crystal < 1)
 		{
-			//sound(self, CHAN_AUTO, "weapons/lance/dryfire.ogg", 1, ATTN_NORM);
 			if((checked7) && (self.wsfire_crystal_dmgcnt <= 0))
 				nextweapon();
 			self.attack_finished = time + 0.25;
@@ -1126,7 +1098,8 @@ void() Think_Vweapon = {
 };
 .float rweapon;
 .float centered;
-void() W_SetWeapon = { local string fwmodel;
+void W_SetWeapon() {
+	string fwmodel;
 	if (self.weapon == IT_MELEE)
 		fwmodel = "models/weapons/melee/v_gauntlet.md3";
 	else if (self.weapon == IT_REVOLVER)
@@ -1336,8 +1309,6 @@ void() raise_weapon =
 	}
 	if (self.weapon == IT_SHOTGUN)
 	{
-		//		self.vweaponskin = self.revolverclip;
-		//		self.vweaponglowmod = '-0.1 -0.1 -0.1';
 		if (self.time_pickupweapon > time)
 			pick_up_shotgun();
 		else
@@ -1405,7 +1376,6 @@ void() raise_weapon =
 		self.vweaponskin = 0;
 		raise_vmodel();
 	}
-	//stuffcmd(self, "-button3\n");
 };
 void() pick_up_melee;
 .float hasmelee;
@@ -1985,47 +1955,47 @@ void() fmck_maker_touchs = {
 		}
 		spawn_attar_enemy(other);
 	}
-
-
-
-//	remove(self);
 };
-void() fmck_maker_touch = {
-if ((other.flags &FL_MONSTER) && (other.friendly_monster != 1))
-	{
+
+void fmck_maker_touch() {
+	if ((other.flags &FL_MONSTER) && (other.friendly_monster != 1)) {
 		other.friendly_monster = 1;
+
 		if(other.enemy)
-		other.exenemy = other.enemy;
+			other.exenemy = other.enemy;
+
 		other.enemy = 0;
 		other.attar_timem = time  + 1;
-		if(other.health > 0)
-		{
-		if(other.classname == "monster_heretic")
-			{
-			if(other.movetype != MOVETYPE_STEP)
-				other.movetype = MOVETYPE_STEP;
+
+		if(other.health > 0) {
+			if(other.classname == "monster_heretic") {
+				if(other.movetype != MOVETYPE_STEP)
+					other.movetype = MOVETYPE_STEP;
 			}
-			if(other.classname == "monster_stricken")
-			{
-			other.turret = 1;
-			other.th_run = stricken_preattack1;
+
+			if(other.classname == "monster_stricken") {
+				other.turret = 1;
+				other.th_run = stricken_preattack1;
 			}
 		}
+
 		other.think = find_next_enemy;
 		other.nextthink = time;
 		spawn_attar_enemy(other);
 		local entity oself;
 		oself = self;
 		self = other;
+
 		if(self.classname != "monster_stricken")
-		deactivate_turret();
+			deactivate_turret();
+
 		ai_face();
 		self = oself;
 	}
-//	remove(self);
-};
+}
 
-void() W_FireFmonster = { local vector dir, rorg;
+void() W_FireFmonster = {
+	vector dir, rorg;
 	newmis = spawn();
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLY;
@@ -2046,7 +2016,8 @@ void() W_FireFmonster = { local vector dir, rorg;
 	self.punchangle_x = -2;
 	self.vweaponframe = 3;
 };
-void() Exit_Game = { localcmd("wmenu\n");
+void() Exit_Game = {
+	localcmd("wmenu\n");
 	localcmd("menu_cmd backtomainmenu\n");
 };
 void() Toggle_Journal =
@@ -2091,7 +2062,6 @@ void CMD_dmenu_close()
 	if (self.deadmenuflag == 1)
 		self.deadmenuflag = 0;
 }
-void() empty_reload_shotgun;
 void() Toggle_HUD = { if (self.vhud == 1)
 		self.vhud = 0;
 	else
@@ -2228,7 +2198,6 @@ void() killemall2 =
 	}
 	self.killemalltime = time + 0.25;
 };
-void() nodegraph_debug_think;
 void() node_debug_think = { local entity nodes;
 	nodes = find(world,classname, "nodegraph_debug");
 	while (nodes)	//Loops through everything put in the missile entity
@@ -2261,7 +2230,6 @@ void() node_debug = { local entity nodes;
 		nodes =  find(world,classname, "info_node");
 	}
 };
-void(entity e)	spawn_bbox_collider;
 void() delebboxesandrespawnthem =
 {
 	local entity garbage;
@@ -2277,15 +2245,12 @@ void() delebboxesandrespawnthem =
 	}
 
 };
-void(float a) recount_spawner_monsters;
-void() recount_spawner_items;
 .float noattack;
-void() trinket_spawn;
 
 void() giveme_oldrelics =
 {
 	if(self.oldrelics <= 4)
-	self.oldrelics ++;
+		self.oldrelics ++;
 	centerprint(single_player, strcat("encounter number: ",ftos(self.oldrelics + 1),"\n"));
 };
 
@@ -2304,7 +2269,6 @@ void() giveme_relics =
 	relic_addtoslot(self, RL_E2M4);
 	relic_addtoslot(self, RL_E2M5);
 };
-void()ViciousIdol_selected;
 void()debugger_particles_think
 {
 	pointparticles(self.cnt,self.origin,'0 0 0',32);
@@ -2315,15 +2279,13 @@ void()debugger_particles_think
 		remove(self);
 	else
 	{
-		local string viewxanglesfactor;
-		viewxanglesfactor = strcat ((ftos (self.cnt)), (" particlecount\n"));
-		bprint (viewxanglesfactor);
+		string viewxanglesfactor;
+		viewxanglesfactor = strcat((ftos (self.cnt)), (" particlecount\n"));
+		bprint(viewxanglesfactor);
 		self.think = debugger_particles_think;
 		self.nextthink = time + 0.1;
 	}
 };
-void()recount_alive_monsters;
-void()generate_map_chain;
 void()debug_particles =
 {
 	entity debugger_particles = spawn();
@@ -2425,7 +2387,6 @@ void() mark_monsters =
 	}*/
 	centerprint(self,strcat(ftos(monster_counter_alive),": alive monsters.\n",ftos(spawner_counter_alive),": active spawners."));
 };
-void()item_donor_mapforcethink;
 
 void() fixitems =
 {
@@ -2456,7 +2417,7 @@ void() ImpulseCommands =
 	if (self.impulse == 17)
 		nextartifact();
 	if (self.impulse == 85)
-	get_texture_name();
+		get_texture_name();
 	if (self.impulse == 155)
 	{
 		rmtree("profiles");
@@ -2473,13 +2434,13 @@ void() ImpulseCommands =
 	if (self.impulse == 193)
 		ViciousIdol_selected();
 	if (self.impulse == 176)
-	debug_particle_increase();
+		debug_particle_increase();
 	if (self.impulse == 177)
-	recount_monsters();
+		recount_monsters();
 	if (self.impulse == 178)
-	debug_particle();
+		debug_particle();
 	if (self.impulse == 179)
-	debug_particles();
+		debug_particles();
 	if (self.impulse == 181)
 	{
 		ShockWave_selected();
@@ -2494,8 +2455,7 @@ void() ImpulseCommands =
 	{
 		self.wrath_time = time + 30;
 		self.wrath_active = 1;
-		local entity destructwrath;
-		destructwrath = nextent(world);
+		entity destructwrath = nextent(world);
 		while (destructwrath)
 		{
 			entity holder = nextent(destructwrath);
@@ -2513,11 +2473,13 @@ void() ImpulseCommands =
 
 	if (self.impulse == 185)
 	{
-
 		if(self.radial_time > time)
 		{
-		self.Aegis_time = 0;  self.LifeSiphon_time = 0;  self.DrownerApp_time = 0;  self.Tether_time = 0;
-		self.radial_time = 0;
+			self.Aegis_time = 0;
+			self.LifeSiphon_time = 0;
+			self.DrownerApp_time = 0;
+			self.Tether_time = 0;
+			self.radial_time = 0;
 		}
 
 		self.displacement_time = time + 20;
@@ -2531,11 +2493,11 @@ void() ImpulseCommands =
 		if (self.noattack == 1)
 		{
 			self.noattack = 0;
-			bprint ("no attack OFF\n");
+			bprint("no attack OFF\n");
 		}
 		else
 		{
-			bprint ("no attack ON\n");
+			bprint("no attack ON\n");
 			self.noattack = 1;
 		}
 	}
@@ -2556,9 +2518,9 @@ void() ImpulseCommands =
 	{
 		float deletedqng = nodegraph_graphset_remove();
 		if (deletedqng == 1)
-			bprint ("deleted qng file\n");
+			bprint("deleted qng file\n");
 		else
-			bprint ("qng file not found\n");
+			bprint("qng file not found\n");
 	}
 	if (self.impulse == 199)
 	{
@@ -2574,16 +2536,6 @@ void() ImpulseCommands =
 			return;
 		}
 	}
-	//	if (self.impulse >= 1 && self.impulse <= 9)
-	//		W_ChangeWeapon (0);
-	/*	if (self.impulse == 10)
-		{
-			if (globalfake_illumination == 1)
-				{globalfake_illumination = 0; sprint (self, "fake illumination OFF.\n");}
-			else
-				{globalfake_illumination = 1; sprint (self, "fake illumination ON.\n");}
-			self.impulse = 0;
-		}*/
 	if(self.impulse == 97)
 		giveme_oldrelics();
 	if(self.impulse == 70)
@@ -2633,25 +2585,20 @@ void() ImpulseCommands =
 		self.ViciousIdol +=1;
 		self.ShockWave +=1;
 		self.revolverclip = 3;
-		//self.tdsouls = 7;
-		//check_transformation();
-		//self.bfg = 1;
 	}
 	if (self.impulse == 11)
 	{
 		flash_toggle();
 			//node_debug();
 			//node_debug_think();
-		if (!self.wrath_debug_screen)
-			{
+		if (!self.wrath_debug_screen) {
 			self.wrath_debug_screen = 1;
 			test_ia = 1;
-			}
-		else
-			{
+		}
+		else {
 			self.wrath_debug_screen = 0;
 			test_ia = 0;
-			}
+		}
 	}
 	if (self.wrath_debug_screen == 1)
 	{
@@ -2669,29 +2616,29 @@ void() ImpulseCommands =
 		else
 			self.spitterloop = 1;
 	}
-	//if(self.impulse == 83)
-	//FireAttar();
 	if (self.impulse == 89)
 	{
-	if(!self.deadmenuflag)
-	self.deadmenuflag = 1;
-	else
-	self.deadmenuflag = 0;
-
+		if(!self.deadmenuflag)
+			self.deadmenuflag = 1;
+		else
+			self.deadmenuflag = 0;
 	}
 	if (self.impulse == 90)
 	{
-	if(self.deadmenuflag == 1)
-	self.deadmenuflag = 0;
+		if(self.deadmenuflag == 1)
+			self.deadmenuflag = 0;
 	}
 	if (self.impulse == 36)
 		empty_reload_shotgun();
+
 	float developer = cvar("developer");
 	if ((self.impulse == 235))
 	{
 		removetriggers();
 		self.impulse = 0;
 	}
+
+	// Toggle rt light editor
 	if ((self.impulse == 208) && (developer == 1))
 		Toggle_Mode();
 
@@ -2729,21 +2676,6 @@ void() ImpulseCommands =
 			Toggle_NormalLights();
 	}
 
-	/*
-		if(self.impulse == 60)
-		{
-		local string sorete;
-		local float fsorete;
-		fsorete = fcopy("data.sav","datacopy.sav");
-		sorete = ftos (fsorete);
-		sprint (self,sorete);
-		bprint (sorete);
-		}
-		if(self.impulse == 58)
-		frename("data.sav","datacopyname.sav");
-		if(self.impulse == 59)
-		fremove("data2.sav");
-	*/
 	self.impulse = 0;
 };
 .float itemtime;
@@ -2973,6 +2905,8 @@ void WeaponFrames() {
 	{
 		self.check_centered = 1;
 	}
+
+	// Reload settings from file?
 	if(self.check_centered == 1)
 	{
 		Check_FrikFile();
@@ -2980,12 +2914,16 @@ void WeaponFrames() {
 		self.impulse = 0;
 		self.check_centered = 0;
 	}
+
 	if(self.impulse == 84)
 		check_infinite_saves();
+
 	if(self.impulse == 83)
 		check_custom_cvars();
+
 	if (self.impulse == 190)
 		Exit_Game();
+
 	if((self.impulse == 81) && (time > self.totallungetime))
 	{
 		float localsoultether = self.SoulTether;

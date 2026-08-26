@@ -984,7 +984,7 @@ self.nextthink = self.ltime;
 void() rotate_stop = 
 { 
 	if (self.noise2)
-		sound(self, CHAN_VOICE, self.noise2, self.volume, self.rad_sound);
+		sound(self, CHAN_VOICE, self.noise2, self.volume, self.rad_sound);  // FIXME: attenuation should be 0-4
 	self.avelocity = '0 0 0';
 	SUB_UseTargets();
 };

@@ -6,18 +6,15 @@
 
 float (string lightstyle_character, float ammountl) glowmodstylevalue =
 {
-
-
 	float multiplier = strstrofs("abcdefghijklmnopqrstuvwxyz", lightstyle_character,0) ;
 	return (ammountl  * multiplier);
-    
 };
 
 void() item_glowmodcontroller_flicker_fade_think =
 {
 	self.owner.glowmod_x = self.owner.glowmod_x * 0.75; 
-    self.owner.glowmod_y = self.owner.glowmod_x;
-    self.owner.glowmod_z = self.owner.glowmod_x;
+	self.owner.glowmod_y = self.owner.glowmod_x;
+	self.owner.glowmod_z = self.owner.glowmod_x;
 
 
 
@@ -25,7 +22,8 @@ void() item_glowmodcontroller_flicker_fade_think =
 		self.think = SUB_Remove;
 	else
 	    self.think = item_glowmodcontroller_flicker_fade_think;
-    self.nextthink = time + 0.05;
+
+	self.nextthink = time + 0.05;
 };
 
 
@@ -179,23 +177,7 @@ void(entity e) item_colormodcontroller_pulse_spawn =
     colormod_controller.nextthink = time;
 };
 
-void() hud_message2_think = 
-{
-	if (self.owner.item_cnt)
-	{
-		self.item_cnt += self.owner.item_cnt;
-		self.owner.item_cnt = 0;
-		self.cnt = 20;
-	}
-	self.old_item_cnt = self.item_cnt;
-	self.cnt -= 1;
-	self.SendFlags |= 0x2;
-	if (self.cnt > 0)
-		self.think = hud_message2_think;
-	else
-		self.think = SUB_Remove;
-	self.nextthink = time + 0.1;
-};
+
 .float alwaystouchable;
 
 void(entity e) flash_screen_item =
@@ -210,14 +192,6 @@ void(entity e) flash_screen_item =
 }
 
 
-float() Send_Item2 = 
-{
-	WriteByte(MSG_ENTITY, ENT::HUDMSG2);
-	WriteShort(MSG_ENTITY, self.msg);
-	WriteShort(MSG_ENTITY, self.item_cnt);
-	return TRUE;
-};
-
 float(entity to, float sendflags) Send_Item =
 {
 	WriteByte(MSG_ENTITY, ENT::HUDMSG);
@@ -225,28 +199,7 @@ float(entity to, float sendflags) Send_Item =
 	return TRUE;
 };
 
-void(float mtype, vector org, entity ownr, float item_cntr) Hud_message2 = 
-{
-	//local entity HudMessage;
-	if(!(ownr.flags & FL_CLIENT))return;if (ownr.classname != "player")return;
-	#if 0
-	HudMessage = spawn();
-	HudMessage.owner = ownr;
-	HudMessage.drawonlytoclient = ownr;
-	setmodel(HudMessage, "models/misc/null.md3");
-	HudMessage.origin = org + '0 0 25';
-	HudMessage.movetype = MOVETYPE_NOCLIP;
-	HudMessage.msg = mtype;
-	HudMessage.item_cnt = item_cntr;
-	HudMessage.cnt = 20;
-	HudMessage.wrathflags += FL_MESSAGE;
-	HudMessage.SendEntity = Send_Item2;
-	//	HudMessage.SendFlags |= 0x2;
-	HudMessage.SendFlags = -1;
-	HudMessage.think = hud_message2_think;
-	HudMessage.nextthink = time;
-	#endif
-};
+
 .float fullitemtime;
 void Hud_SendNotification_Full(entity ownr, string icon, string label, string msg, float msgflags = 0)
 {
@@ -338,39 +291,15 @@ void Hud_JournalNotification(entity ownr)
 	Hud_SendNotification(ownr, "journal_update", ("$NOTIFY_JOURNALUPDATED"));
 }
 
-void(float mtype, vector org, entity ownr) Hud_message = 
-{ 
+void Hud_message(float mtype, vector org, entity ownr) {
 	if(!(ownr.flags & FL_CLIENT))
 		return;
+
 	if (ownr.classname != "player")
 		return;
 	
 	Hud_SendNotification(ownr, "gfx/hud/messages/icons/msgicon_full", "Placeholder");
-	
-	#if 0
-	ownr.stat_time_hudmessage = 1;
-	/*if(mtype == 111)
-	{
-	if(ownr.time_hudmessage > time)
-	return;
-	}*/
-	ownr.time_hudmessage = time + 2;
-	local entity HudMessage;
-	HudMessage = spawn();
-	HudMessage.classname = "hudmessage";
-	HudMessage.drawonlytoclient = ownr;
-	setmodel(HudMessage, "models/misc/null.md3");
-	HudMessage.origin = org + '0 0 25';
-	HudMessage.movetype = MOVETYPE_NOCLIP;
-	HudMessage.msg = mtype;
-	HudMessage.wrathflags += FL_MESSAGE;
-	HudMessage.SendEntity = Send_Item;
-	//	HudMessage.SendFlags  = self.SendFlags  + 1;
-	HudMessage.SendFlags = -1;
-	HudMessage.think = SUB_Remove;
-	HudMessage.nextthink = time + 2;
-	#endif
-};
+}
 
 void() Message_delay =
 {
@@ -437,10 +366,8 @@ void() twframes =
 .float rwpn;
 void() artifact_drop = 
 {
-	
-
 	if(self.flags & FL_ONGROUND)
-	self.flags -= FL_ONGROUND;
+		self.flags -= FL_ONGROUND;
 	self.movetype = MOVETYPE_TOSS;
 	self.velocity_x = crandom() *10;
 	self.velocity_y = crandom() *10;
@@ -461,10 +388,6 @@ void()check_item_onfloor =
 		self.velocity_y = crandom() *10;
 		self.velocity_z = random() *10;
 	}
-
-
-
-
 
 	if((self.flags & FL_ONGROUND) && (self.groundentity == world))	
 	{
@@ -557,13 +480,10 @@ void(float ie) StartItem = {
 		self.wrathflags += FL_ITEMS;
 
 	if(self.classname == "bbox_touch")
-	return;
-	if (ie == 1)
-	{
-	}
-	else if (ie == 2)
-	{
-	}
+		return;
+
+	if (ie == 1) {}
+	else if (ie == 2) {}
 	else if (ie == 3)	//life
 	{
 		//self.scale = 0.5;
@@ -1159,217 +1079,6 @@ void(entity ownr) spawn_bbox_collider_delay =
 };
 
 
-
-void() spawnfunc_ammo_revolver = 
-{
-	self.noise = "items/ammo_revolver.ogg";
-	self.ammo_revolver = revolver_ammount;
-	setmodel(self, "models/items/ammo_revolver.md3");
-	setsizeitem2(self, shellsl_size);
-	self.msg = 120;
-	self.msg_icon = "slugs";
-	self.msg_text = "$NOTIFY_AMMO_REVOLVER";
-	precache_sound(self.noise);
-	StartItem(1);
-	self.scale = 1;
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-};
-void() spawnfunc_ammo_shotgun = 
-{
-
-	
-	self.noise = "items/ammo_shotgun.ogg";
-	self.ammo_shotgun = shotgun_ammount;
-	setmodel(self, "models/items/ammo_shotgun.md3");
-	setsizeitem2(self, shells_size);
-	self.msg = 121;
-	self.msg_icon = "shells";
-	self.msg_text = "$NOTIFY_AMMO_SHOTGUN";
-	precache_sound(self.noise);
-	StartItem(1);
-	self.scale = 1;
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-};
-
-void() spawnfunc_ammo_spitter = 
-{
-	self.noise = "items/ammo_spitter.ogg";
-	setmodel(self, "models/items/ammo_spitter.md3");
-	setsizeitem2(self, resin_size);
-	self.ammo_spitter = spitter_ammount;
-	self.msg = 122;
-	self.msg_icon = "fangs";
-	self.msg_text = "$NOTIFY_AMMO_SPITTER";
-	precache_sound(self.noise);
-	StartItem(2);
-	self.scale = 1;
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-	
-};
-
-void() spawnfunc_ammo_retcher = 
-{
-	setmodel(self, "models/items/ammo_retcher.md3");
-	self.noise = "items/ammo_retcher.ogg";
-	setsizeitem2(self, explosives_size);
-	self.ammo_retcher = retcher_ammount;
-	precache_sound(self.noise);
-	StartItem(2);
-	self.scale = 1;
-	self.msg = 123;
-	self.msg_icon = "cysts";
-	self.msg_text = "$NOTIFY_AMMO_RETCHER";
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-};
-
-void() spawnfunc_ammo_cannon = 
-{
-	setmodel(self, "models/items/ammo_cannon.md3");
-	setsizeitem2(self, ore_size);
-	self.ammo_cannon = cannon_ammount;
-	self.noise = "items/ammo_cannon.ogg";
-	self.msg = 124;
-	self.msg_icon = "ore";
-	self.msg_text = "$NOTIFY_AMMO_SLAGCANNON";
-	precache_sound(self.noise);
-	StartItem(2);
-	item_glowmodcontroller_flicker_spawn(self);
-	self.scale = 1;
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-};
-	
-void() spawnfunc_ammo_lance = 
-{
-	setmodel(self, "models/items/ammo_lance.md3");
-	self.noise = "items/ammo_lance.ogg";
-	setsizeitem2(self, explosives_size);
-	self.ammo_lance = lance_ammount;
-	precache_sound(self.noise);
-	StartItem(2);
-	item_glowmodcontroller_pulse_spawn(self);
-	self.classname = "spore";
-	self.scale = 1;
-	self.msg = 125;
-	self.msg_icon = "plasma";
-	self.msg_text = "$NOTIFY_AMMO_LANCE";
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-};
-void() spawnfunc_ammo_crystal = 
-{
-	setmodel(self, "models/items/ammo_crystal.md3");
-	self.noise = "items/ammo_crystallizer.ogg";
-	setsizeitem2(self, explosives_size);
-	self.ammo_crystal = crystal_ammount;
-	precache_sound(self.noise);
-	StartItem(2);
-	item_glowmodcontroller_pulse_spawn(self);
-	self.classname = "crystal";
-	self.scale = 1;
-	self.msg = 126;
-	self.msg_icon = "crystals";
-	self.msg_text = "$NOTIFY_AMMO_CRYSTAL";
-	self.touch = wammo_touch;
-	self.oldtouch = self.touch;
-	spawn_bbox_collider(self);
-};
-
-void() spawnfunc_ammo_spore = 
-{
-	spawnfunc_ammo_lance();
-};
-
-void() soul_touch =
-{
-	if(other.classname != "player")
-		return;
-	if(other.ammo_bfg >= 10)
-		return;
-
-	if (other.ammo_bfg < 10)
-		other.ammo_bfg += 1;
-	te_customflash(self.origin,other.ammo_bfg * 3.5,7,'3 0 0');
-
-	string snd = strcat ("weapons/mace/mace_absorb",ftos(other.ammo_bfg ),".ogg");
-	sound(other, CHAN_AUTO, snd, 0.7, ATTN_NORM);
-	if (other.ammo_bfg == 10)
-		sound(other, CHAN_AUTO,"weapons/mace/mace_unfold1.ogg", 1, ATTN_NORM);
-
-	stuffcmd (other,"pulseammo\n");
-	flash_screen_item(other);
-	Hud_SendNotification(other, "soul", "$NOTIFY_AMMO_SOUL", HUDMSGFLAG::AGGREGATE);
-	// Steam_StatIncrement(other, ST_STATS::souls_harvested, 1);
-	remove(self);
-};
-
-void() ammo_mace_think =
-{
-	while (self.count > 0)
-	{	
-		entity dropped = spawn();
-		dropped.noise = "";
-		setmodel(dropped,"models/weapons/mace/soul.md3");
-		dropped.msg = 126;
-		dropped.msg_icon = "crystals";
-		dropped.msg_text = "$NOTIFY_AMMO_SOUL";
-		dropped.classname = "item_ammo_crystal";
-		setsizeitem2(dropped, shellsl_size);
-		dropped.alpha = 0.025;
-		local vector voffset;
-		voffset_x = random (-2,2) * self.count * 1.25;
-		voffset_y = random (-2,2) * self.count * 1.25;
-		voffset_z = random (-2,2) * self.count * 1.25;
-		
-		dropped.roaming = self.count * random(4,10);
-		dropped.msg = 126;
-		dropped.ldorigin = self.origin + voffset;
-		dropped.origin = dropped.ldorigin;
-		dropped.colormod = '1 0.5 0.5';
-		dropped.solid = SOLID_TRIGGER;
-		dropped.movetype = MOVETYPE_FLY;			
-		dropped.velocity_x = random (-24,24);
-		dropped.velocity_y = random (-24,24);
-		dropped.velocity_z = random (-24,24);
-
-		dropped.traileffectnum = particleeffectnum("soul_mace_trail");
-		dropped.lifetime = time + 0.95; 
-		dropped.alpha = 0.025;
-		dropped.cnt = 1;
-		dropped.touch = soul_touch;
-		dropped.think = soulhome;
-		dropped.nextthink = time;
-		self.count --;
-	}
-};
-void() spawnfunc_ammo_mace = 
-{
-	setmodel(self, "");
-	if(!self.count)
-		self.count = 1;
-	self.think = ammo_mace_think;
-	self.nextthink = time + 0.1;
-};
-
-
-void()wammo_special_touch =
-{
-return;
-};
-
-
-
-
 /////////////////////////
 ///armor &health///
 /////////////////////////
@@ -1876,247 +1585,10 @@ void() radial =
 	self.use = artifact_drop;
 };
 
-void() item_tether = 
-{
-	radial();
-	self.modelflags = MF_ROTATE;
-	self.noise = "items/artifacts/artifactE_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactE_use.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.SoulTether = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/soul_tether.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	//setsize (self, '-8 -8 -8', ' 9 9 9');
-
-	self.msg = 100;
-	self.msg_icon = "soul_tether";
-	self.msg_text = "$NOTIFY_SOULTETHER";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-};
 
 
-void() artifact_revelation = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactA_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactA_use.ogg";
-	self.noise2 = "items/artifacts/artifactA_end.ogg";
-	self.modelflags = MF_ROTATE;
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.MarkRevelation = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_revelation.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 101;
-	self.msg_icon = "artifactA";
-	self.msg_text = "$NOTIFY_ARTIFACT_REVELATION";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-
-};
 
 
-void() artifact_apparatus = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactB_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactB_use.ogg";
-	self.noise2 = "items/artifacts/artifactB_end.ogg";
-	self.modelflags = MF_ROTATE;
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.DrownerApp = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_apparatus.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 102;
-	self.msg_icon = "artifactB";
-	self.msg_text = "$NOTIFY_ARTIFACT_APPARATUS";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-
-};
-
-void() artifact_rage = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactC_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactC_use.ogg";
-	self.noise2 = "items/artifacts/artifactC_end.ogg";
-	self.modelflags = MF_ROTATE;
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.flaskrage = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_rage.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 103;
-	self.msg_icon = "artifactC";
-	self.msg_text = "$NOTIFY_ARTIFACT_RAGE";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-
-};
-
-
-void() artifact_attar = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactD_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactD_use.ogg";
-	self.noise2 = "items/artifacts/artifactD_end.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.modelflags = MF_ROTATE;
-	self.Attar = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_attar.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 104;
-	self.msg_icon = "artifactD";
-	self.msg_text = "$NOTIFY_ARTIFACT_ATTAR";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-};
-
-
-void() artifact_grenade = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactE_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactE_use.ogg";
-	self.noise2 = "";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.style = 1;
-	self.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | PFLAGS_LODFADE;
-	self.color = '1 0 1';
-	self.light_lev = 32; 	
-	self.modelflags = MF_ROTATE;
-	self.BlackGrenade = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_grenade.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 105;
-	self.msg_icon = "artifactE";
-	self.msg_text = "$NOTIFY_ARTIFACT_GRENADE";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-};
-
-void() artifact_TrinketofRespite = {};
-
-void() artifact_siphon = 
-{
-	radial();
-	self.modelflags = MF_ROTATE;
-	self.noise = "items/artifacts/artifactF_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactF_use.ogg";
-	self.noise2 = "items/artifacts/artifactF_end.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.LifeSiphon = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_siphon.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.traileffectnum = particleeffectnum("life_siphon");
-	self.msg = 106;
-	self.msg_icon = "artifactF";
-	self.msg_text = "$NOTIFY_ARTIFACT_SIPHON";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;
-};
-
-void artifact_life_siphon() {
-	artifact_siphon();
-}
-
-void() artifact_deflection = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactG_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactG_use.ogg";
-	self.noise2 = "items/artifacts/artifactG_end.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.modelflags = MF_ROTATE;
-	self.TrinketofRespite = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_deflection.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 107;
-	self.msg_icon = "artifactG";
-	self.msg_text = "$NOTIFY_ARTIFACT_DEFLECTION";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;	
-};
-
-
-void() artifact_aegis = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactH_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactH_use.ogg";
-	self.noise2 = "items/artifacts/artifactH_end.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.modelflags = MF_ROTATE;
-	self.Aegis = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_aegis.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 108;
-	self.msg_icon = "artifactH";
-	self.msg_text = "$NOTIFY_ARTIFACT_AEGIS";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;	
-};
-
-
-void() artifact_animus = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactI_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactI_use.ogg";
-	self.noise2 = "items/artifacts/artifactI_end.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.modelflags = MF_ROTATE;
-	self.ViciousIdol = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_animus.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 109;
-	self.msg_icon = "artifactI";
-	self.msg_text = "$NOTIFY_ARTIFACT_ANIMUS";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;	
-};
-
-
-void() artifact_shockwave = 
-{
-	radial();
-	self.noise = "items/artifacts/artifactJ_pickup.ogg";
-	self.noise1 = "items/artifacts/artifactJ_use.ogg";
-	self.noise2 = "items/artifacts/artifactJ_end.ogg";
-	precache_sound(self.noise);precache_sound(self.noise1);precache_sound(self.noise2);
-	self.modelflags = MF_ROTATE;
-	self.ShockWave = 1;
-	if (self.secret)
-		{total_secrets++;	self.wrathflags += FL_SECRET;}
-	setmodel(self, "models/artifacts/artifact_shockwave.md3");
-	setsize(self, artifact_nsize, artifact_size);
-	self.msg = 110;
-	self.msg_icon = "artifactJ";
-	self.msg_text = "$NOTIFY_ARTIFACT_SHOCKWAVE";
-	self.touch = artifact_touch;
-	self.oldtouch = self.touch;	
-};
 /////////////////////////////////////////////////////////////
 /////////////////////SPAWNER/////////////////////
 /////////////////////////////////////////////////////////////
@@ -2278,8 +1750,7 @@ void() weapon_spawner =
 .float checkweapon;
 void() item_spawner_use = 
 {
-	local entity pl;
-	pl = single_player;
+	entity pl = single_player;
 
 
 	if (pl.oldrelics)
@@ -2349,19 +1820,19 @@ void() item_spawner_use =
 	if(self.classitem1 ==  6)
 	{
 		if (!self.item_ammount)
-		self.item_ammount  = cannon_ammount;
+			self.item_ammount  = cannon_ammount;
 		self.classtype = "ammo_cannon";
 	}
 	if(self.classitem1 ==  7)
 	{
 		if (!self.item_ammount)
-		self.item_ammount  = lance_ammount;
+			self.item_ammount  = lance_ammount;
 		self.classtype = "ammo_lance";
 	}
 	if(self.classitem1 ==  8)
 	{
 		if (!self.item_ammount)
-		self.item_ammount  = crystal_ammount;
+			self.item_ammount  = crystal_ammount;
 		self.classtype = "ammo_crystal";
 	}
 	if(self.classitem1 ==  9)
@@ -2411,17 +1882,11 @@ void() item_spawner_use =
 	if (self.classitem1 == 30)
 		(self.classtype = "shockwave");
 
-
-
-
-
 	if (self.classitem1)
 	{
 		self.use = SUB_Null;
 		convert_to_item(self.origin, self.classtype, self.item_ammount, self);
 	}
-	//drop_item(self.origin, self.classtype, self.item_ammount, self);
-	//remove(self);
 };
 
 .float classitem1;
@@ -2430,31 +1895,14 @@ void() item_spawner_use =
 .float classitem4;
 .float classitem5;
 
-void() item_spawner = 
-{
-	/*	if (!self.classitem0)
-			self.classitem0 = 1;
-
-		if (!self.classitem1)
-			self.classitem1 = self.classitem0;
-		if (!self.classitem2)
-			self.classitem2 = self.classitem0;
-		if (!self.classitem3)
-			self.classitem3 = self.classitem0;
-		if (!self.classitem4)
-			self.classitem4 = self.classitem0;
-		if (!self.classitem5)
-			self.classitem5 = self.classitem0;
-	*/
-
-	if (!self.targetname)
-	{				
-		self.think = wrath_objerror;
-		self.nextthink = time + random();
+void item_spawner() {
+	if (self.targetname == "") {
+		objerror("Targetname is empty");
 	}
-	if (self.targetname)
+	else {
 		self.use = item_spawner_use;
-};
+	}
+}
 
 .float PreStartItemvalue;
 
@@ -2584,7 +2032,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	if (class == "ammo_spitter")
 	{
 		dropped.noise = "items/ammo_spitter.ogg";
-		setmodel(dropped, "models/items/ammo_spitter.md3");
+		setmodel(dropped, "models/items/ammo_spitter.md3");  // this is a triple batch of spikes
 		dropped.msg = 122;
 		dropped.msg_icon = "fangs";
 		dropped.msg_text = "$NOTIFY_AMMO_SPITTER";
@@ -2599,7 +2047,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	if (class == "ammo_spitter_drop")
 	{
 		dropped.noise = "items/ammo_spitter.ogg";
-		setmodel(dropped, "models/items/ammo_spitter_drop.md3");
+		setmodel(dropped, "models/items/ammo_spitter_drop.md3");  // this is a single batch of spikes
 		dropped.msg = 122;
 		dropped.msg_icon = "fangs";
 		dropped.msg_text = "$NOTIFY_AMMO_SPITTER";
@@ -4456,8 +3904,8 @@ void() coffer_use_next  =
 
 };
 
-void() trigger_coffer_use = 
-{ 	local entity ca, ch;
+void trigger_coffer_use() {
+	entity ca, ch;
 	self.classname = "coffer";
 
 
@@ -4589,8 +4037,7 @@ void() trigger_coffer_use =
 		self.coffer_health = 0;
 		return;		
 	}
-
-};
+}
 
 .float bestiary;
 .float jmessage;
@@ -4723,12 +4170,9 @@ void() coffer_jumpscare =
 
 void() use_coffer = 
 {
-	local float ft;
-	//	if(self.frame == -5)
-	//		sound (self, CHAN_AUTO, "objects/coffers/coffer1_locked_activate.ogg", 1, ATTN_NORM);
+	float ft;
 	self.frame += 1;
-	if (self.frame <= 10)
-	{
+	if (self.frame <= 10) {
 		self.glowmod_x -= 0.11;
 		self.glowmod_y -= 0.11;
 		self.glowmod_z -= 0.11;
@@ -4778,7 +4222,6 @@ void() use_coffer =
 		sound7 (self, CHAN_AUTO, "enemies/widow/sight1.ogg", 1, 0,120,0);
 
 		vector tagorg = self.origin + '0 0 32';
-		//vector tagorg = tag_origin("tag_items", self);
 		explo_blood(2, tagorg);	
 		explo_blood(9, tagorg);	
 		chattersound("impact/gibs/gib_explo", 3, 1);
@@ -4816,7 +4259,7 @@ void() use_coffer =
 		self.nextthink = time + ft;
 		self.think = trigger_coffer_use;
 	}
-};
+}
 
 void() object_coffer = 
 {
@@ -5035,7 +4478,8 @@ void() object_fakecoffer =
 	droptofloor();
 };
 
-void() cannon_item_think = {	//void(float effectnum, vector org, vector vel, float howmany) pointparticles 
+void() cannon_item_think = {
+	//void(float effectnum, vector org, vector vel, float howmany) pointparticles
 
 	if (self.cnt != 1)
 	{
@@ -5093,13 +4537,11 @@ void() cannon_item =
 };
 
 
-void (string classnme,vector org, float c1, float c2, float c3, float c4, float c5, float coun, float collectedrelics) write_stuff_monsters =
-{
-    local float    writeparms;
-    local string m_name; 
+void write_stuff_monsters(string classnme, vector org, float c1, float c2, float c3, float c4, float c5, float coun, float collectedrelics) {
+	float writeparms;
+	string m_name;
 
-
-    string sorg = vtos (org);
+	string sorg = vtos (org);
 	if ((c1 <0) || (c1 > 16) || ( c1 == 13))
 		c1 = 0;
 	if ((c2 <0) || (c2 > 16) || ( c2 == 13))
@@ -5111,24 +4553,24 @@ void (string classnme,vector org, float c1, float c2, float c3, float c4, float 
 	if ((c5 <0) || (c5 > 16) || ( c5 == 13))
 		c5 = 0;
 
-    string monst_lookup[] = {
-        "null",
-        "fallen",
-        "invader",
-        "wretch",
-        "incisor",
-        "widow",
-        "wraith",
-        "heretic",
-        "prowler",
-        "oppressor",
-        "executioner",
-        "stricken",
-        "afflicted",
-        "symbol",
-        "brute",
-        "keeper",
-    };
+	string monst_lookup[] = {
+		"null",
+		"fallen",
+		"invader",
+		"wretch",
+		"incisor",
+		"widow",
+		"wraith",
+		"heretic",
+		"prowler",
+		"oppressor",
+		"executioner",
+		"stricken",
+		"afflicted",
+		"symbol",
+		"brute",
+		"keeper",
+	};
 
 	if(collectedrelics == 0)
 	    m_name = monst_lookup[c1];
@@ -5156,12 +4598,11 @@ void (string classnme,vector org, float c1, float c2, float c3, float c4, float 
 
 void(float collectedrelics) recount_spawner_monsters =
 {
-	local entity spawner;
-	spawner = findradius(self.origin, 1000000);
+	entity spawner = findradius(self.origin, 1000000);
 
 	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_encounter_",ftos(collectedrelics + 1),".txt"), FILE_WRITE); 
 	fputs (writeparms,(""));
-    fclose (writeparms);
+	fclose (writeparms);
 	while (spawner)	//Loops through everything put in the missile entit
 	{
 		if ((spawner.wrathflags &FL_SPAWNER))
@@ -5218,7 +4659,7 @@ void() recount_spawner_itemss =
 
 	float writeparms = fopen (strcat (mapname, "items_list.txt"), FILE_WRITE);
 	fputs (writeparms,(""));
-    fclose (writeparms);
+	fclose (writeparms);
 
 	local entity spawner;
 	spawner = findradius(self.origin, 1000000);
@@ -5281,8 +4722,6 @@ void() recount_spawner_items =
 	float ammountq1, ammountq2, ammountq3, ammountq4, ammountq5;
 	//float ammountr1, ammountr2, ammountr3, ammountr4, ammountr5;
 
-
-
 	local entity spawner;
 	spawner = findradius(self.origin, 1000000);
 	while (spawner)	//Loops through everything put in the missile entit
@@ -5312,9 +4751,6 @@ void() recount_spawner_items =
 
 		spawner = spawner.chain;
 	}
-
-
-
 
 	string subline1 =strcat("1: Slugs-", " enc1:",(ftos (ammount1)),  " enc2:",(ftos (ammount2)),  " enc3:",(ftos (ammount3)),  " enc4");
 	string subline1b =strcat((ftos (ammount4)),  " enc5:",(ftos (ammount5)));  
@@ -5393,27 +4829,27 @@ void() recount_spawner_items =
 	string line19 = strcat (subline19, subline19b);
 
 	local float	writeparms;
-	writeparms = fopen (strcat (mapname, "items_list.txt"), FILE_APPEND);    //open what file to use in write mode
-	fputs (writeparms, strcat (line1,"\n"));
-	fputs (writeparms, strcat (line2,"\n"));
-	fputs (writeparms, strcat (line3,"\n"));
-	fputs (writeparms, strcat (line4,"\n"));
-	fputs (writeparms, strcat (line5,"\n"));
-	fputs (writeparms, strcat (line6,"\n"));
-	fputs (writeparms, strcat (line7,"\n"));
-	fputs (writeparms, strcat (line8,"\n"));
-	fputs (writeparms, strcat (line9,"\n"));
-	fputs (writeparms, strcat (line10,"\n"));
-	fputs (writeparms, strcat (line11,"\n"));
-	fputs (writeparms, strcat (line12,"\n"));
-	fputs (writeparms, strcat (line13,"\n"));
-	fputs (writeparms, strcat (line14,"\n"));
-	fputs (writeparms, strcat (line15,"\n"));
-	fputs (writeparms, strcat (line16,"\n"));
-	fputs (writeparms, strcat (line17,"\n"));
-	fputs (writeparms, strcat (line18,"\n"));
-	fputs (writeparms, strcat (line19,"\n"));
-	fclose (writeparms);
+	writeparms = fopen(strcat(mapname, "items_list.txt"), FILE_APPEND);    //open what file to use in write mode
+	fputs(writeparms, strcat(line1,"\n"));
+	fputs(writeparms, strcat(line2,"\n"));
+	fputs(writeparms, strcat(line3,"\n"));
+	fputs(writeparms, strcat(line4,"\n"));
+	fputs(writeparms, strcat(line5,"\n"));
+	fputs(writeparms, strcat(line6,"\n"));
+	fputs(writeparms, strcat(line7,"\n"));
+	fputs(writeparms, strcat(line8,"\n"));
+	fputs(writeparms, strcat(line9,"\n"));
+	fputs(writeparms, strcat(line10,"\n"));
+	fputs(writeparms, strcat(line11,"\n"));
+	fputs(writeparms, strcat(line12,"\n"));
+	fputs(writeparms, strcat(line13,"\n"));
+	fputs(writeparms, strcat(line14,"\n"));
+	fputs(writeparms, strcat(line15,"\n"));
+	fputs(writeparms, strcat(line16,"\n"));
+	fputs(writeparms, strcat(line17,"\n"));
+	fputs(writeparms, strcat(line18,"\n"));
+	fputs(writeparms, strcat(line19,"\n"));
+	fclose(writeparms);
 
 };
 
@@ -5438,47 +4874,47 @@ void() item_donor_think =
 		self.enhealth--;
 	}
 
-    if (self.fweapon_revolver > 0)
-        single_player.items |= IT_REVOLVER; 
-    if (self.fweapon_shotgun > 0)
-        single_player.items |= IT_SHOTGUN; 
-    if (self.fweapon_spitter > 0)
-        single_player.items |= IT_SPITTER; 
-    if (self.fweapon_retcher > 0)
-        single_player.items |= IT_RETCHER; 
-    if (self.fweapon_cannon > 0)
-        single_player.items |= IT_CANNON; 
-    if (self.fweapon_lance > 0)
-        single_player.items |= IT_LANCE; 
-    if (self.fweapon_crystal > 0)
-        single_player.items |= IT_CRYSTAL; 
-    if (self.fweapon_mace > 0)
-        single_player.items |= IT_MACE;
+	if (self.fweapon_revolver > 0)
+		single_player.items |= IT_REVOLVER;
+	if (self.fweapon_shotgun > 0)
+		single_player.items |= IT_SHOTGUN;
+	if (self.fweapon_spitter > 0)
+		single_player.items |= IT_SPITTER;
+	if (self.fweapon_retcher > 0)
+		single_player.items |= IT_RETCHER;
+	if (self.fweapon_cannon > 0)
+		single_player.items |= IT_CANNON;
+	if (self.fweapon_lance > 0)
+		single_player.items |= IT_LANCE;
+	if (self.fweapon_crystal > 0)
+		single_player.items |= IT_CRYSTAL;
+	if (self.fweapon_mace > 0)
+		single_player.items |= IT_MACE;
 	
-    single_player.ammo_revolver = max(single_player.ammo_revolver, self.ammo_revolver);
-    single_player.ammo_shotgun = max(single_player.ammo_shotgun, self.ammo_shotgun);
-    single_player.ammo_spitter = max(single_player.ammo_spitter, self.ammo_spitter);
-    single_player.ammo_retcher = max(single_player.ammo_retcher, self.ammo_retcher);
-    single_player.ammo_cannon = max(single_player.ammo_cannon, self.ammo_cannon);
-    single_player.ammo_lance = max(single_player.ammo_lance, self.ammo_lance);
-    single_player.ammo_crystal = max(single_player.ammo_crystal, self.ammo_crystal);
-    single_player.ammo_bfg = max(single_player.ammo_bfg, self.ammo_mace);
+	single_player.ammo_revolver = max(single_player.ammo_revolver, self.ammo_revolver);
+	single_player.ammo_shotgun = max(single_player.ammo_shotgun, self.ammo_shotgun);
+	single_player.ammo_spitter = max(single_player.ammo_spitter, self.ammo_spitter);
+	single_player.ammo_retcher = max(single_player.ammo_retcher, self.ammo_retcher);
+	single_player.ammo_cannon = max(single_player.ammo_cannon, self.ammo_cannon);
+	single_player.ammo_lance = max(single_player.ammo_lance, self.ammo_lance);
+	single_player.ammo_crystal = max(single_player.ammo_crystal, self.ammo_crystal);
+	single_player.ammo_bfg = max(single_player.ammo_bfg, self.ammo_mace);
 
 	single_player.health = max(single_player.health, self.health);
-    single_player.rarmorvalue = max(single_player.rarmorvalue, self.rarmorvalue);
-    single_player.darmorvalue = max(single_player.darmorvalue, self.darmorvalue);
+	single_player.rarmorvalue = max(single_player.rarmorvalue, self.rarmorvalue);
+	single_player.darmorvalue = max(single_player.darmorvalue, self.darmorvalue);
 
-    single_player.SoulTether = max(single_player.SoulTether, self.SoulTether);
-    single_player.LifeSiphon = max(single_player.LifeSiphon, self.LifeSiphon);
-    single_player.TrinketofRespite = max(single_player.TrinketofRespite, self.OrbOfDeflection);
-    single_player.Attar = max(single_player.Attar, self.Attar);
-    single_player.Aegis = max(single_player.Aegis, self.Aegis);
-    single_player.flaskrage = max(single_player.flaskrage, self.FlaskOfRage);
-    single_player.DrownerApp = max(single_player.DrownerApp, self.DrownerApp);
-    single_player.MarkRevelation = max(single_player.MarkRevelation, self.MarkRevelation);
-    single_player.BlackGrenade = max(single_player.BlackGrenade, self.VoidGrenade);
-    single_player.ViciousIdol = max(single_player.ViciousIdol, self.ViciousIdol);
-    single_player.ShockWave = max(single_player.ShockWave, self.ShockWave);
+	single_player.SoulTether = max(single_player.SoulTether, self.SoulTether);
+	single_player.LifeSiphon = max(single_player.LifeSiphon, self.LifeSiphon);
+	single_player.TrinketofRespite = max(single_player.TrinketofRespite, self.OrbOfDeflection);
+	single_player.Attar = max(single_player.Attar, self.Attar);
+	single_player.Aegis = max(single_player.Aegis, self.Aegis);
+	single_player.flaskrage = max(single_player.flaskrage, self.FlaskOfRage);
+	single_player.DrownerApp = max(single_player.DrownerApp, self.DrownerApp);
+	single_player.MarkRevelation = max(single_player.MarkRevelation, self.MarkRevelation);
+	single_player.BlackGrenade = max(single_player.BlackGrenade, self.VoidGrenade);
+	single_player.ViciousIdol = max(single_player.ViciousIdol, self.ViciousIdol);
+	single_player.ShockWave = max(single_player.ShockWave, self.ShockWave);
 
 	//flash_screen_item(single_player);
 	stuffcmd(single_player, "set map_command 0\n");
@@ -5517,9 +4953,6 @@ void() item_donor =
 {
 	setmodel(self,"");
 	self.enhealth = 1;
-    //self.nextthink = time + 1;
-    //self.think = item_donor_think;
-
 }; 
 
 void() item_weapon_fixer =
@@ -5570,4 +5003,3 @@ void() item_weapon_fixer =
 		spawnedweapon = holder;	
 	}
 };
-///////////////end of qc file

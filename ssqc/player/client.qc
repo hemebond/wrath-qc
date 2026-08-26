@@ -8,24 +8,11 @@
 .float underwaterdamaged;
 .float location;
 string fog_value;
-void()soundbox_visible_toggle;
 .float use_finished2;
 .float restoredgame;
-void() W_SetWeapon;
-void() Think_Vweapon;
-void() item_donor_forcethink;
-void() item_donor_mapforcethink;
-void()sigils_initializeambients;
-void()enemy_spawner_warp_use;
-void() info_player_start = {	//if(!self.location)
-	//self.effects = 1024 + 128;
-};
-void() item_weapon_fixer;
-void() info_player_deathmatch = {	//if(!self.location)
-	//self.effects = 1024 + 128;
-};
+void() info_player_start = {};
+void() info_player_deathmatch = {};
 .float walking;
-void() Player_Die;
 void() ClientKill = { /*Player_Die();*/ };
 void() ClientConnect = {
 	self.hudsync = spawn();
@@ -43,8 +30,7 @@ void() ClientDisconnect = {
 		self.hudsync = world;
 	}
 };
-void() WeaponFrames;
-void() raise_weapon;
+
 
 .float hardstoptime;
 void(string locsound, float rnd, float nchannel) playerwsound = 
@@ -91,7 +77,8 @@ void() check_infinite_saves =
 			self.playerflags -= FL_INFINITESAVES;			
 	}
 };
-void(string locsound, float rnd,float pitch) playersound7 = { local float r;
+void(string locsound, float rnd,float pitch) playersound7 = {
+	local float r;
 	local string monstersound, rsound;
 	r = floor(random() *rnd) + 1;
 	if (r == self.chattersnd)
@@ -135,8 +122,6 @@ void() delete_shrine =
 };
 
 .float playerdeadtime;
-void() PlayerDeathThink;
-void(entity ownr) client_garbage_collector;
 void() Player_Die = { 
 	delete_shrine();
 	if (self.health >= 0)
@@ -162,7 +147,6 @@ void() Player_Die = {
 		playersound("player/die", 5);
 };
 
-//void(string snd, float r, float vol) playersound;
 
 void(entity attacker, float dmg) Player_Pain = 
 {
@@ -293,16 +277,13 @@ void() PlayerJump = {
 	self.jmpsound = fsnd;
 	playerjumpsound();
 
-	//	local string snd;
-	//	snd = strcat ("player/jump", ftos (fsnd),".ogg");
-	//	sound (self, CHAN_VOICE, snd, 1, ATTN_NORM);
 	self.jumptime = time + 0.2;
 
 
 	if((self.view_ofs_z < player_zviewofs) && (self.view_ofs_z > 6))
-	self.velocity_z = 92;
+		self.velocity_z = 92;
 	else
-	self.velocity_z += 270;
+		self.velocity_z += 270;
 
 /*	if(!(self.walking))
 	{	
@@ -312,6 +293,8 @@ void() PlayerJump = {
 
 	self.onground_time = 0;
 };
+
+
 .float total_time_underwater;
 .float total_time_inlava;
 .float underwater_time;
@@ -322,7 +305,8 @@ void() PlayerJump = {
 .float glpolyblend;
 
 
-void() WaterMove = { if (self.movetype == MOVETYPE_NOCLIP)
+void() WaterMove = {
+	if (self.movetype == MOVETYPE_NOCLIP)
 		return;
 	if (self.health < 0)
 		return;
@@ -482,7 +466,8 @@ void() WaterMove = { if (self.movetype == MOVETYPE_NOCLIP)
 		self.velocity = self.velocity - 0.8 * self.waterlevel * frametime * self.velocity;
 };
 
-void() CheckWaterJump = { local vector start, end;
+void() CheckWaterJump = {
+	vector start, end;
 	// check for a jump-out-of-water
 	makevectors(self.angles);
 	start = self.origin;
@@ -579,12 +564,13 @@ void() Crouch_On = {
 
 
 .float crushingtime;
-void() UpdateViewOfs = { if (self.crouch)
+void() UpdateViewOfs = {
+	if (self.crouch)
 	{
 		if(self.crushingtime > time)
-		float minviewofsz = -4;
+			float minviewofsz = -4;
 		else
-		minviewofsz = 6;
+			minviewofsz = 6;
 
 
 		if (self.view_ofs_z == minviewofsz)
@@ -608,13 +594,17 @@ void() UpdateViewOfs = { if (self.crouch)
 			self.view_ofs_z = player_zviewofs;
 	}
 };
+
+
 .float nowatershift;
 //float autocvar_invertmouse;// = 0; 
 .float slowmouse;
 .float noshake;
 
-void() slowmovement = { self.slowmouse = 1;
-	local float invrtms;
+
+void() slowmovement = {
+	self.slowmouse = 1;
+	float invrtms;
 	if (stof(cvar_string("m_pitch")) < 0)
 		invrtms = 1;
 	else
@@ -638,7 +628,7 @@ void() slowmovement = { self.slowmouse = 1;
 void() quickmovement
 {
 	self.slowmouse = -1;
-	local float invrtmsb;
+	float invrtmsb;
 	if (stof(cvar_string("m_pitch")) < 0)
 		invrtmsb = 1;
 	else
@@ -663,7 +653,6 @@ void() quickmovement
 		self.maxspeed = 1;
 };
 
-//void(entity e, entity world)find_nearest_waypoint;
 .float releasebutton5;
 
 .float changing_level;
@@ -678,7 +667,8 @@ void() quickmovement
 .float autosaved;
 .float menuactive;
 
-void() autosave = { read_currentprofileslot();
+void() autosave = {
+	read_currentprofileslot();
 	self.autosaved = 1;
 	string saveloc;
 	saveloc = strcat("save data/profiles/", profilename, "/autosave\n");
@@ -695,7 +685,6 @@ void() autosave = { read_currentprofileslot();
 
 .float strafetime;
 .float melee_lunge;
-void() wraith_side1;
 
 .float realmaxspeed;
 .float maxspeedtime;
@@ -715,15 +704,8 @@ void() wraith_side1;
 .vector ice_velocity;
 .float frictiontime;
 .float flightflag;
-void()Apply_Lut;
-void(float type) toggle_displacement;
-void(float forceit,entity e) symbolrmovement
 
 
-void()v_cshift_changes;
-void(entity e)UpdateCameras;
-void()UpdateChannelsVolume;
-float(entity ent) boss3_crosshairhighlight;
 .float artifact_model_client;
 .float beam_time;
 .float charge_time;
@@ -731,6 +713,8 @@ float(entity ent) boss3_crosshairhighlight;
 .float aegisflag;
 .float rocketjumpcnt;
 .vector shadowangle;
+
+
 void() PlayerPreThink = 
 {
 	self.shadowangle = normalize('1 0 0'); 
@@ -800,7 +784,7 @@ void() PlayerPreThink =
 	}
 
 	if((self.flags & FL_IGNOREINPUT)&& (self.flags & FL_ONGROUND) &&(self.hardstoptime < time))
-	self.flags -= FL_IGNOREINPUT;
+		self.flags -= FL_IGNOREINPUT;
 
 	if((self.hardstoptime < time) && (self.flags & FL_IGNOREINPUT))
 	{
@@ -889,7 +873,6 @@ void() PlayerPreThink =
 		sound7(self, CHAN_SIGIL, "items/sigils/sigil_wrath_end.ogg", 1, 1, 100, 0);
 		if(time > self.flasrageflashtime)
 		{
-			//sound7 (self, CHAN_AUTO, "items/sigils/sigil_flight_start.ogg",0.35 ,1,80,0);
 			te_customflash(self.origin, 128, 1, '1 0 0');
 			string flash_command_a = strcat ("bf ",ftos(1)," ",ftos(0)," ");
 			string flash_command_b = strcat (ftos(0)," ",ftos(0.5)," ",ftos(0.5),"\n");
@@ -918,9 +901,7 @@ void() PlayerPreThink =
 	if(self.wrath_active == 1)
 	{
 		self.wrath_active = 2;
-		//self.radialactive = 22;
 		stuffcmd(self, "v_cshift 255 0 0 16\n");
-		//stuffcmd(self, "v_idlescale 15 \n"); // Reki (August 28 2023): Moved this to STAT_WRATHACTIVE logic in hud.qc
 		stuffcmd (self, "r_glsl_postprocess_uservec3_enable 1\n");
 		stuffcmd (self, strcat(("r_glsl_postprocess_uservec3 "),("\""),ftos(0.0025 * self.wrath_kills + 0.01),(" 3.5 1.25 0\"\n")));
 	}
@@ -977,14 +958,12 @@ void() PlayerPreThink =
 	{
 		toggle_displacement(0);
 		Apply_Lut();
-        stuffcmd (self, "bf 0.7 0.7 1 1.05 1\n");
+		stuffcmd (self, "bf 0.7 0.7 1 1.05 1\n");
 		stuffcmd(self, "v_cshift \n");
 		self.r_cshift = 0;
 		self.g_cshift = 0;
 		self.b_cshift = 0;
 		self.i_cshift = 0;
-		//stuffcmd(self, "r_trippy 0\n");
-		//stuffcmd(self, "r_glsl_saturation 1\n");
 		stuffcmd(self, "v_flipped 0\n");
 		stuffcmd (self, "r_glsl_postprocess_uservec3_enable 0\n");
 		stuffcmd (self, "r_glsl_postprocess_uservec3 \"0 0 0 0\"\n");
@@ -997,8 +976,6 @@ void() PlayerPreThink =
 		self.displacement_active = 1;
 		stuffcmd (self, "r_glsl_postprocess_uservec3_enable 1\n");
 		stuffcmd (self, "r_glsl_postprocess_uservec3 \"0.01 2 15 0\"\n");
-		//stuffcmd(self, "r_trippy 1\n");
-		//stuffcmd(self, "v_flipped 1\n");
 		toggle_displacement(1);
 		Apply_Lut();
 
@@ -1026,7 +1003,7 @@ void() PlayerPreThink =
 						self.walkingbutton= 0;
 					self.buttonrelease7 = 0;
 				}
-			button7pressed = self.walkingbutton;
+				button7pressed = self.walkingbutton;
 			}
 		}
 	
@@ -1085,7 +1062,7 @@ void() PlayerPreThink =
 	if ((time > self.lspeedtime) && (self.slowmouse == 1) && (self.heretic_sloweffectime < time))
 		quickmovement();
 	if(self.flags & FL_ONGROUND)
-	self.onground_time = time + 0.2;
+		self.onground_time = time + 0.2;
 
 	makevectors(self.v_angle);	// is this still used
 	if ((self.fwatershifttime > time) && (self.nowatershift != 0))
@@ -1114,6 +1091,7 @@ void() PlayerPreThink =
 		self.gravity = self.oldgravity;	// reset normal gravity
 	else
 		self.gravity = 0.0001;	// zero G (0 OR 1 is normal)
+
 	if (!self.modeeditor)
 	{
 		if (self.timefly > time)
@@ -1400,24 +1378,21 @@ void() PlayerPreThink =
 	if((self.shake_camera_time > time) && (self.charge_time < time) && (self.shake2_camera_time < time))
 	{
 		if(self.shake_camera_delay > time)
-		return;
-		if(self.shaked == 1)
-		{
-		
-		if((self.shake_camera_time - time) > 1)
-		float fade_multiplier = 1;
-		else
-		fade_multiplier = self.shake_camera_time - time;
+			return;
+		if(self.shaked == 1) {
+			if((self.shake_camera_time - time) > 1)
+				float fade_multiplier = 1;
+			else
+				fade_multiplier = self.shake_camera_time - time;
 
-		self.punchangle_x =random(self.shake_camera_ammountx * -1, self.shake_camera_ammountx * -0.5) * fade_multiplier;
-		self.punchangle_y =random(self.shake_camera_ammounty * -1, self.shake_camera_ammounty * -0.5) * fade_multiplier;
-		self.shaked = 2;
+			self.punchangle_x =random(self.shake_camera_ammountx * -1, self.shake_camera_ammountx * -0.5) * fade_multiplier;
+			self.punchangle_y =random(self.shake_camera_ammounty * -1, self.shake_camera_ammounty * -0.5) * fade_multiplier;
+			self.shaked = 2;
 		}
-		else
-		{
-		self.punchangle_x =random(self.shake_camera_ammountx * 0.5, self.shake_camera_ammountx) * fade_multiplier;
-		self.punchangle_y =random(self.shake_camera_ammounty * 0.5,self.shake_camera_ammounty) * fade_multiplier;
-		self.shaked = 1;
+		else {
+			self.punchangle_x =random(self.shake_camera_ammountx * 0.5, self.shake_camera_ammountx) * fade_multiplier;
+			self.punchangle_y =random(self.shake_camera_ammounty * 0.5,self.shake_camera_ammounty) * fade_multiplier;
+			self.shaked = 1;
 		}
 		self.shake_camera_delay = time + self.shake_camera_refresh_rate;
 	}
@@ -1471,14 +1446,15 @@ void() PlayerPreThink =
 .float checkweaponflag;
 void() nowater_type =
 {
-self.waterlevel = 0;
-self.fakewatertype = 0;
-self.zerogtime = 0;
-self.fwatershifttime = 0;
-self.fwatershift = 0;
+	self.waterlevel = 0;
+	self.fakewatertype = 0;
+	self.zerogtime = 0;
+	self.fwatershifttime = 0;
+	self.fwatershift = 0;
 }
 
-void() check_weapons = { self.checkweaponflag = 1;
+void() check_weapons = {
+	self.checkweaponflag = 1;
 };
 
 .float tether_model_client;
@@ -1571,8 +1547,7 @@ void() artifact_client_remove =
 
 void() artifact_client_think = { self.alpha += 0.1;
 
-	local float maxalpha;
-	maxalpha = 1;
+	float maxalpha = 1;
 	if (self.owner.artifact_model_client == 2)
 	{
 		maxalpha = 0.5;
@@ -1668,120 +1643,120 @@ void() sigil_client_think =
 
 .float Shrine_time;
 
-void() ArtifactClientModel =	//ArtifactClientModel
+void ArtifactClientModel() {
+	entity artifact_client2;
+	if ((self.Shrine_time > time) && (self.shrine_model_client == 0))
 	{
-		local entity artifact_client2;
-
-		if ((self.Shrine_time > time) && (self.shrine_model_client == 0))
-		{
-			artifact_client2 = spawn();
-			artifact_client2.lifetime = time + 2;
-			artifact_client2.owner = self;
-			artifact_client2.effects = 256;
-			artifact_client2.viewmodelforclient = self;
-			setorigin(artifact_client2, '0 0 0');
-			artifact_client2.oldangles = self.angles;
-			artifact_client2.frame = 0;
-			self.shrine_model_client = 1;
-			artifact_client2.alpha = 1;
-			setmodel(artifact_client2, "models/artifacts/active/soul_tether_active.md3");
-			artifact_client2.think = artifact_client_remove2;
-			artifact_client2.nextthink = time;
-		}
+		artifact_client2 = spawn();
+		artifact_client2.lifetime = time + 2;
+		artifact_client2.owner = self;
+		artifact_client2.effects = EF_NOGUNBOB;
+		artifact_client2.viewmodelforclient = self;
+		setorigin(artifact_client2, '0 0 0');
+		artifact_client2.oldangles = self.angles;
+		artifact_client2.frame = 0;
+		self.shrine_model_client = 1;
+		artifact_client2.alpha = 1;
+		setmodel(artifact_client2, "models/artifacts/active/soul_tether_active.md3");
+		artifact_client2.think = artifact_client_remove2;
+		artifact_client2.nextthink = time;
+	}
 
 
-		local entity sigil_client;
-		if((self.timefly > time) && (self.sigil_model_client == 0))
-		{
-			sigil_client = spawn();
-			sigil_client.owner = self;
-			sigil_client.effects = 256;
-			sigil_client.viewmodelforclient = self;
-			setorigin(sigil_client, '0 0 0');
-			sigil_client.oldangles = self.angles;
-			sigil_client.frame = 0;
-			sigil_client.alpha = 0.01;
-			self.sigil_model_client = 1;
-			setmodel(sigil_client, "models/artifacts/active/sigil_flight_active.md3");
-			sigil_client.think = sigil_client_think;
-			sigil_client.nextthink = time;
-		}
+	entity sigil_client;
+	if((self.timefly > time) && (self.sigil_model_client == 0))
+	{
+		sigil_client = spawn();
+		sigil_client.owner = self;
+		sigil_client.effects = EF_NOGUNBOB;
+		sigil_client.viewmodelforclient = self;
+		setorigin(sigil_client, '0 0 0');
+		sigil_client.oldangles = self.angles;
+		sigil_client.frame = 0;
+		sigil_client.alpha = 0.01;
+		self.sigil_model_client = 1;
+		setmodel(sigil_client, "models/artifacts/active/sigil_flight_active.md3");
+		sigil_client.think = sigil_client_think;
+		sigil_client.nextthink = time;
+	}
 
-		if((self.wrath_time > time) && (self.sigil_model_client == 0))
-		{
-			sigil_client = spawn();
-			sigil_client.owner = self;
-			sigil_client.effects = 256;
-			sigil_client.viewmodelforclient = self;
-			setorigin(sigil_client, '0 0 0');
-			sigil_client.oldangles = self.angles;
-			sigil_client.frame = 0;
-			sigil_client.colormod = '1 0 0.2';
-			sigil_client.alpha = 0.1;
-			self.sigil_model_client = 1;
-			setmodel(sigil_client, "models/artifacts/active/sigil_wrath_active.md3");
-			sigil_client.think = sigil_client_think;
-			sigil_client.nextthink = time;
-		}
+	if((self.wrath_time > time) && (self.sigil_model_client == 0))
+	{
+		sigil_client = spawn();
+		sigil_client.owner = self;
+		sigil_client.effects = EF_NOGUNBOB;
+		sigil_client.viewmodelforclient = self;
+		setorigin(sigil_client, '0 0 0');
+		sigil_client.oldangles = self.angles;
+		sigil_client.frame = 0;
+		sigil_client.colormod = '1 0 0.2';
+		sigil_client.alpha = 0.1;
+		self.sigil_model_client = 1;
+		setmodel(sigil_client, "models/artifacts/active/sigil_wrath_active.md3");
+		sigil_client.think = sigil_client_think;
+		sigil_client.nextthink = time;
+	}
 
-		if((self.displacement_time > time) && (self.sigil_model_client == 0))
+	if((self.displacement_time > time) && (self.sigil_model_client == 0))
+	{
+		sigil_client = spawn();
+		sigil_client.owner = self;
+		sigil_client.effects = EF_NOGUNBOB;
+		sigil_client.viewmodelforclient = self;
+		setorigin(sigil_client, '0 0 0');
+		sigil_client.oldangles = self.angles;
+		sigil_client.frame = 0;
+		sigil_client.colormod = randomvec() + '0.5 0.5 0.5';
+		sigil_client.alpha = 0.01;
+		self.sigil_model_client = 1;
+		setmodel(sigil_client, "models/artifacts/active/sigil_flight_active.md3");
+		sigil_client.think = sigil_client_think;
+		sigil_client.nextthink = time;
+	}
+
+	entity artifact_client;
+	if (self.radial_time > time)
+	{
+		if ((self.artifact_model_client == 0) && ((self.Aegis_time > time) || (self.LifeSiphon_time > time) ||(self.flaskrage_time > time) || (self.DrownerApp_time > time) || (self.Tether_time > time)))
 		{
-			sigil_client = spawn();
-			sigil_client.owner = self;
-			sigil_client.effects = 256;
-			sigil_client.viewmodelforclient = self;
-			setorigin(sigil_client, '0 0 0');
-			sigil_client.oldangles = self.angles;
-			sigil_client.frame = 0;
-			sigil_client.colormod = randomvec() + '0.5 0.5 0.5';
-			sigil_client.alpha = 0.01;
-			self.sigil_model_client = 1;
-			setmodel(sigil_client, "models/artifacts/active/sigil_flight_active.md3");
-			sigil_client.think = sigil_client_think;
-			sigil_client.nextthink = time;
-		}
-		local entity artifact_client;
-		if (self.radial_time > time)
-		{
-			if ((self.artifact_model_client == 0) && ((self.Aegis_time > time) || (self.LifeSiphon_time > time) ||(self.flaskrage_time > time) || (self.DrownerApp_time > time) || (self.Tether_time > time)))
+			artifact_client = spawn();
+			artifact_client.owner = self;
+			artifact_client.effects = EF_NOGUNBOB;
+			artifact_client.viewmodelforclient = self;
+			setorigin(artifact_client, '0 0 0');
+			artifact_client.oldangles = self.angles;
+			artifact_client.frame = 0;
+			artifact_client.alpha = 0.01;
+
+			if (self.Aegis_time > time)
 			{
-				artifact_client = spawn();
-				artifact_client.owner = self;
-				artifact_client.effects = 256;
-				artifact_client.viewmodelforclient = self;
-				setorigin(artifact_client, '0 0 0');
-				artifact_client.oldangles = self.angles;
-				artifact_client.frame = 0;
-				artifact_client.alpha = 0.01;
-
-				if (self.Aegis_time > time)
-				{
-					self.artifact_model_client = 1;
-					setmodel(artifact_client, "models/artifacts/active/cruel_aegis_active.md3");
-				}
-
-				if (self.LifeSiphon_time > time)
-				{
-					self.artifact_model_client = 2;
-					setmodel(artifact_client, "models/artifacts/active/life_siphon_active.md3");
-				}
-
-				if (self.DrownerApp_time > time)
-				{
-					self.artifact_model_client = 4;
-					setmodel(artifact_client, "models/misc/null.md3");
-				}
-				if (self.flaskrage_time > time)
-				{
-					self.artifact_model_client = 5;
-					setmodel(artifact_client, "models/artifacts/active/flask_active.md3");
-				}
-				artifact_client.lifetime = time + 30;
-				artifact_client.think = artifact_client_think;
-				artifact_client.nextthink = time;
+				self.artifact_model_client = 1;
+				setmodel(artifact_client, "models/artifacts/active/cruel_aegis_active.md3");
 			}
+
+			if (self.LifeSiphon_time > time)
+			{
+				self.artifact_model_client = 2;
+				setmodel(artifact_client, "models/artifacts/active/life_siphon_active.md3");
+			}
+
+			if (self.DrownerApp_time > time)
+			{
+				self.artifact_model_client = 4;
+				setmodel(artifact_client, "models/misc/null.md3");
+			}
+			if (self.flaskrage_time > time)
+			{
+				self.artifact_model_client = 5;
+				setmodel(artifact_client, "models/artifacts/active/flask_active.md3");
+			}
+			artifact_client.lifetime = time + 30;
+			artifact_client.think = artifact_client_think;
+			artifact_client.nextthink = time;
 		}
-	};
+	}
+};
+
 .float fakewatertype;
 .float check_centered;
 .float lungefree;
@@ -1869,7 +1844,7 @@ void() PlayerPostThink = {
 	else
 		self.r_zoom = max(zoom_wanted, self.r_zoom - (frametime * ZOOM_SPEED));
 
-	float cv_zoom = cvar ("zoom_factor");
+	float cv_zoom = cvar("zoom_factor");
 	if(cv_zoom >= 9)
 		cv_zoom = 9;
 	self.viewzoom = lerp(1 - (cv_zoom / 10), 1, self.r_zoom);
@@ -2174,8 +2149,8 @@ void() fixcofferkeys = { local entity respawneable;
 		respawneable = holder;	
 	}
 };
-void() respawn_entities = { local entity respawneable;
-	respawneable = nextent(world);
+void() respawn_entities = {
+	entity respawneable = nextent(world);
 	while (respawneable)	
 	{
 		entity holder = nextent(respawneable);
@@ -2188,7 +2163,6 @@ void() respawn_entities = { local entity respawneable;
 		respawneable = holder;	
 	}
 };
-void() SetChangeParms;
 void(entity e) secrets_checkperfect // Reki (July 24 2023): check for map perfect, and unlock achievements accordingly
 {
 	for(float i = 0; i < rmap_list.length; i++)
@@ -3161,7 +3135,7 @@ void() DecodeLevelParms =
 	if !(parm43)
 		item_donor_mapforcethink();
 };
-void() door_puse;
+
 void()door_preuse =
 {
 	if(other.classname != "player")
@@ -3173,8 +3147,6 @@ void()door_preuse =
 };
 .float oldrelics_start;
 .float notouch;
-
-void()recount_monsters;
 
 
 
@@ -3220,11 +3192,6 @@ void() Apply_Lut =
 .float sound7flags;
 .float interior;
 .float interior_time;
-void()trigger_autofog_use;
-void()soundbox_think;
-void() play_ambient_sound;
-void(entity ownr) client_shot_collector;
-
 
 void() volumecontrollerthink =
 {
@@ -3267,10 +3234,7 @@ void() loopedsoundsymbol_think =
 	//sound(self.owner, CHAN_VOICE2, "enemies/symbol/idle_loop.ogg", 0.5, 0.2);
 	remove(self);
 };
-void() fixitems;
-void soundbox_initializeambients(void);
 
-void()check_item_onfloor;
 .float rwpn;
 void() check_artifacts_physics =
 {
@@ -3296,12 +3260,11 @@ void() check_artifacts_physics =
 	}
 
 };
-void() RestoreGame = 
-{
+
+void RestoreGame() {
 	FLASKRAGECOLOR_x = 1;
 	FLASKRAGECOLOR_y = 0.7;
 	FLASKRAGECOLOR_z = 0;
-	self.check_centered = 1;
 	single_player = self;
 	localcmd("v_cshift\n");
 	timescale(1.0);

@@ -463,77 +463,9 @@ void(vector start, vector end, float noents, entity attacker) weapontraceline = 
 	self.dphitcontentsmask = o_dphitcontents;
 };
 
-vector railbbox;
-void(vector start, vector end, float noents, entity attacker) railtraceline = { local vector maxbbox, minbbox;
-	maxbbox = railbbox;
-	minbbox_x = maxbbox_x *-1;
-	minbbox_y = maxbbox_y *-1;
-	minbbox_z = maxbbox_z *-1;
-	local float s;
-	s = attacker.solid;
-	if (attacker.solid == SOLID_SLIDEBOX)
-		attacker.solid = SOLID_BBOX;
-
-	tracebox(start, minbbox, maxbbox, end, noents, attacker);
-	//	traceline(start,end, noents, attacker);
-	if(attacker != world)
-		attacker.solid = s;
-};
 
 vector coachbbox;
-void(vector start, vector end, float noents, entity attacker) wbtraceline = { local vector maxbbox, minbbox;
-	maxbbox = coachbbox;
-	minbbox_x = maxbbox_x *-1;
-	minbbox_y = maxbbox_y *-1;
-	minbbox_z = maxbbox_z *-1;
-	local float s;
-	s = attacker.solid;
-	if ((attacker.solid == SOLID_SLIDEBOX) && (attacker != world))
-		attacker.solid = SOLID_BBOX;
-
-	tracebox(start, minbbox, maxbbox, end, noents, attacker);
-	//	traceline(start,end, noents, attacker);
-	if(attacker != world)
-	attacker.solid = s;
-};
 vector shotbbox;
-
-void(vector start, vector end, float noents, entity attacker) wbtraceline2 = { local vector maxbbox, minbbox;
-	maxbbox = shotbbox;
-	minbbox_x = maxbbox_x *-1;
-	minbbox_y = maxbbox_y *-1;
-	minbbox_z = maxbbox_z *-1;
-	/*	local float s;
-		s = attacker.solid;
-		if (attacker.solid == SOLID_SLIDEBOX)
-		attacker.solid = SOLID_BBOX;
-	*/
-	//	tracebox(start,minbbox, maxbbox,end, noents, attacker);
-	traceline(start, end, noents, attacker);
-	//	if (s == SOLID_SLIDEBOX)
-	//		attacker.solid = s;
-};
-
-
-void() move_entities = 
-{ 
-
-	entity corpse;
-	vector basetop = corpse.origin;
-	basetop_z += corpse.absmin_z;
-	basetop_z -= 2;
-
-	traceline (corpse.origin,basetop,FALSE, self);
-
-	if (trace_fraction == 1)
-	{
-		if(corpse.flags &FL_ONGROUND)
-			corpse.flags -= FL_ONGROUND;
-		corpse.velocity_x = random() *5 + 2;
-		corpse.velocity_y = random() *5 + 2;
-		corpse.velocity_z = random() *5 + 2;
-	}
-};
 
 
 void() move_gibs = { if ((self.oldgroundentity != world) && (self.flags &FL_ONGROUND))
@@ -552,17 +484,20 @@ void() move_gibs = { if ((self.oldgroundentity != world) && (self.flags &FL_ONGR
 		}
 	}
 };
-vector(vector v1,vector v2)randomvector =
-{
+
+
+vector randomvector(vector v1,vector v2) {
     vector vec;
     vec_x = random(v1_x,v2_x);
     vec_y = random(v1_y,v2_y);
     vec_z = random(v1_z,v2_z);
     return vec;
-
 };
+
+
 .float alphatime;
-void(vector org, vector vel) SpawnGib3;
+
+
 void() alphafade3 = 
 { 
 	self.alpha = self.alpha - 0.2;
@@ -600,10 +535,11 @@ void() alphafade2 = { if (self.wrathflags &FL_TOSS)
 	self.nextthink = time + 0.05;
 };
 
-void() alphafade = { if (self.wrathflags &FL_TOSS)
+void() alphafade = {
+	if (self.wrathflags &FL_TOSS)
 		move_gibs();
 	if(!self.alphatime)
-	self.alphatime = 1;
+		self.alphatime = 1;
 	if (!self.alpha)
 		self.alpha = 1;
 	self.nextthink = time + 0.01;
@@ -665,16 +601,18 @@ void(entity ent) copy_old_data = { ent.effects = ent.effects;
 	ent.oldtarget = ent.target;
 	ent.oldenemy = ent.enemy;
 };
+
 .float local_classmonster;
-void() multi_touch;
-void() key_touch;
-void() coffer_key_touch;
-void() start_key;
-void(float type) StartItem; .float episode;
-void() paste_old_data = { if (self.classname == "enemy_spawner")
+.float episode;
+
+void paste_old_data() {
+	//
+	// FIXME: Does this restore previous entities when returning to a level?
+	//
+
+	if (self.classname == "enemy_spawner")
 	{
-		local entity pl;
-		pl = find(world, classname, "player");
+		entity pl = find(world, classname, "player");
 		if (!pl.oldrelics)
 			return;
 		self.use = self.olduse;

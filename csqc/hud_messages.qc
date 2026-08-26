@@ -45,7 +45,6 @@ void() check_shrine = { read_currentprofileslot();
 #define HUD_NOTIFY_FADETIME	0.3
 #define HUD_NOTIFY_FADEIN	0.1
 uielement_c ui_notify_lines[HUD_NOTIFY_LINES];
-void HUD_ShuffleNotificationsUp(void);
 void HUD_InitializeNotifications(void)
 {
 	void(uielement_c this, __inout vector position) notify_preloop = {
@@ -454,12 +453,12 @@ void() Hud_Messages_Draw =
 		check_tether2();
 		if (savingtether == 1)
 		{
-			image = strcat("gfx/hud/messages/",language_selected,"/msg_load.tga");
+			image = strcat("gfx/hud/messages/",language_selected,"/msg_load.tga");  // FIXME: does not exist
 			imageicon = "gfx/hud/messages/icons/msgicon_progress.tga";
 		}
 		else
 		{
-			image = strcat("gfx/hud/messages/",language_selected,"/msg_save_tether.tga");
+			image = strcat("gfx/hud/messages/",language_selected,"/msg_save_tether.tga");  // FIXME: does not exist
 			imageicon = "gfx/hud/messages/icons/msgicon_soul_tether.tga";
 		}
 	}
@@ -468,12 +467,12 @@ void() Hud_Messages_Draw =
 		check_shrine();
 		if (savingtether == 1)
 		{
-			image = strcat("gfx/hud/messages/",language_selected,"/msg_load.tga");
+			image = strcat("gfx/hud/messages/",language_selected,"/msg_load.tga");  // FIXME: does not exist
 			imageicon = "gfx/hud/messages/icons/msgicon_progress.tga";
 		}
 		else
 		{
-			image = strcat("gfx/hud/messages/",language_selected,"/msg_save_shrine.tga");
+			image = strcat("gfx/hud/messages/",language_selected,"/msg_save_shrine.tga");  // FIXME: does not exist
 			imageicon = "gfx/hud/messages/icons/msgicon_shrine.tga";
 		}
 	}

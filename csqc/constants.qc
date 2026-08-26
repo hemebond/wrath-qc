@@ -155,30 +155,30 @@ const float TE_LIGHTNING3					= 9;
 const float TE_LAVASPLASH					= 10;
 const float TE_TELEPORT						= 11;
 const float TE_EXPLOSION2					= 12;
-	// Darkplaces Additions
-	const float TE_EXPLOSIONRGB					= 53;
-	const float TE_GUNSHOTQUAD					= 57;
-	const float TE_EXPLOSIONQUAD 				= 70;
-	const float TE_SPIKEQUAD					= 58;
-	const float TE_SUPERSPIKEQUAD				= 59;
+// Darkplaces Additions
+const float TE_EXPLOSIONRGB   = 53;
+const float TE_GUNSHOTQUAD    = 57;
+const float TE_EXPLOSIONQUAD  = 70;
+const float TE_SPIKEQUAD      = 58;
+const float TE_SUPERSPIKEQUAD = 59;
 
 // PFlags for Dynamic Lights
-const float PFLAGS_NOSHADOW					= 1;
-const float PFLAGS_CORONA					= 2;
-const float PFLAGS_LODFADE 					= 64;
-const float PFLAGS_FULLDYNAMIC				= 128;
+const float PFLAGS_NOSHADOW    = 1;
+const float PFLAGS_CORONA      = 2;
+const float PFLAGS_LODFADE     = 64;
+const float PFLAGS_FULLDYNAMIC = 128;
 
+const float EF_NODRAW		= 16;
 const float EF_ADDITIVE		= 32;
 const float EF_BLUE		= 64;
-const float EF_FLAME		= 1024;
-const float EF_FULLBRIGHT	= 512;
-const float EF_NODEPTHTEST	= 8192;
-const float EF_NODRAW		= 16;
-const float EF_NOSHADOW		= 4096;
 const float EF_RED		= 128;
+const float EF_FULLBRIGHT	= 512;
+const float EF_FLAME		= 1024;
+const float EF_NODEPTHTEST	= 8192;
+const float EF_NOSHADOW		= 4096;
 const float EF_STARDUST		= 2048;
 const float EF_SELECTABLE 	= 16384;
-const float EF_DOUBLESIDED = 32768;
+const float EF_DOUBLESIDED      = 32768;
 
 const float PFL_ONGROUND	= 1;
 const float PFL_CROUCH		= 2;

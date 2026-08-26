@@ -1061,24 +1061,22 @@ void() info_chain_think2 =
 .float origin_offset_angle;
 .float chain_angle;
 .float fspawnflags;
-void() chain_makestatic =
-{
-
-	//makestatic(self);
-};
 
 
-void() generate_map_chain =
-{
+
+void chain_makestatic() {};
+
+
+void generate_map_chain() {
 	{
 		float writeparms = fopen ("misc_model.map", FILE_WRITE);    //open what file to use in write mode
 
-		fputs (writeparms, "{\n");
-		fputs (writeparms, "\"classname\" \"worldspawn\"");
-		fputs (writeparms, "\n");
-		fputs (writeparms, "}");
-		fputs (writeparms, "\n");                    //dont forget this
-		fclose (writeparms); 
+		fputs(writeparms, "{\n");
+		fputs(writeparms, "\"classname\" \"worldspawn\"");
+		fputs(writeparms, "\n");
+		fputs(writeparms, "}");
+		fputs(writeparms, "\n");                    //dont forget this
+		fclose(writeparms);
 	}
 
 
@@ -1094,15 +1092,15 @@ void() generate_map_chain =
 				
 				//chain_model.angles_x = chain_model.angles_x * -1;	
 
-		        fputs (writeparms, "{\n");
-		        fputs (writeparms, "\"classname\" \"misc_model\"\n");                
-		        fputs (writeparms, strcat("\"origin\"","\"",ftos(chain_model.origin_x)," " ,ftos(chain_model.origin_y)," " ,ftos(chain_model.origin_z),"\"\n"));                
-		        fputs (writeparms, strcat("\"angles\"","\"",ftos(chain_model.angles_x * -1)," ",ftos(chain_model.angles_y)," " ,ftos(chain_model.angles_z),"\"\n"));                
-		        fputs (writeparms, "\"model\" \"models/misc/chain.md3\"\n");
-		        fputs (writeparms,strcat(( "\"spawnflags\" \""),ftos(chain_model.fspawnflags),("\"\n")));                                
-		        fputs (writeparms, strcat("\"modelscale\" \"",ftos(chain_model.scale),"\"\n"));                                
-		        fputs (writeparms, "}\n");
-		        fclose (writeparms);  
+		        fputs(writeparms, "{\n");
+		        fputs(writeparms, "\"classname\" \"misc_model\"\n");
+		        fputs(writeparms, strcat("\"origin\"","\"",ftos(chain_model.origin_x)," " ,ftos(chain_model.origin_y)," " ,ftos(chain_model.origin_z),"\"\n"));
+		        fputs(writeparms, strcat("\"angles\"","\"",ftos(chain_model.angles_x * -1)," ",ftos(chain_model.angles_y)," " ,ftos(chain_model.angles_z),"\"\n"));
+		        fputs(writeparms, "\"model\" \"models/misc/chain.md3\"\n");
+		        fputs(writeparms,strcat(( "\"spawnflags\" \""),ftos(chain_model.fspawnflags),("\"\n")));
+		        fputs(writeparms, strcat("\"modelscale\" \"",ftos(chain_model.scale),"\"\n"));
+		        fputs(writeparms, "}\n");
+		        fclose(writeparms);
 		    }
 		    chain_model = holder;
 		}       

@@ -1,23 +1,13 @@
 .string link;
 .string linked;
-void() button_fire;
-void() door_puse;
 .entity followner;
 
-void() switching_following = {	//self.velocity = self.followner.velocity;
-	self.think = switching_following;
-	self.nextthink = time;
-};
 
 void() object_switch_fire_wait = { self.skin = 0;
 	self.usable = 1;
 	self.think = SUB_Null;
 };
 
-void() object_switch_fire_wait2 = { self.skin = 0;
-	SUB_UseTargets();
-	self.think = SUB_Null;
-};
 
 void() object_switch_fire1 = { self.skin = 1;
 	self.usable = 0;
@@ -57,8 +47,8 @@ void() nonsolidswitch_fire_off = { if (self.frame == 9)
 	self.nextthink = time + 0.05;
 };
 
-void() nonsolidswitch_fire = 
-{ 
+void() nonsolidswitch_fire =
+{
 
 	if((self.usable == 2)  && (self.wait == -2))
 	{
@@ -82,7 +72,7 @@ void() nonsolidswitch_fire =
 		self.nextthink = time + 0.05;
 	}
 	else
-	{	
+	{
 		self.frame += 1;
 		self.usable = 0;
 		self.pipes.usable = 0;
@@ -124,11 +114,9 @@ void() visibleswitch_think =
 	self.nextthink = time + 0.025;
 };
 
-void() object_switch = 
-{ 
-	
+void object_switch() {
 	precache_model("models/objects/switches/collisionswitch.md3");
-	
+
 	if(!self.model)
 		string selfpipesmodel = ("models/objects/switches/e1_switch1.md3");
 	else
@@ -178,16 +166,15 @@ void() object_switch =
 	visibleswitch.think = visibleswitch_think;
 	visibleswitch.nextthink = time;
 };
-void()switch_e1_switch1 = {object_switch();}
+void switch_e1_switch1() = {
+	object_switch();
+}
 
-void(entity e, vector v) SetVel = { e.velocity = v;
-};
-void() use_coffer;
 .float buttondecal;
-void() bboxbutton_think;
 .float keyrequired;
 
-void(float keynumber) quitkey = { string cent, dozen, unit, slotdigits;
+void(float keynumber) quitkey = {
+	string cent, dozen, unit, slotdigits;
 	float cent_s, dozen_s, unit_s, currentslotkeyvalue, multiplier, slotkeynumber;
 	slotdigits = ftos(self.slot_keys);
 	cent = substring(slotdigits, 0, 1);
@@ -224,60 +211,6 @@ void(float keynumber) quitkey = { string cent, dozen, unit, slotdigits;
 	self.slot_keys = slotkeynumber;
 };
 
-void(float keynumber) quitrelic = { string dthous, thous, cent, dozen, unit, slotdigits;
-	float dthous_s, thous_s, cent_s, dozen_s, unit_s, currentslotkeyvalue, multiplier, slotkeynumber;
-	slotdigits = ftos(self.slot_relics);
-	dthous = substring(slotdigits, 0, 1);
-	thous = substring(slotdigits, 1, 1);
-	cent = substring(slotdigits, 2, 1);
-	dozen = substring(slotdigits, 3, 1);
-	unit = substring(slotdigits, 4, 1);
-
-	dthous_s = stof(dthous);
-	thous_s = stof(thous);
-	cent_s = stof(cent);
-	dozen_s = stof(dozen);
-	unit_s = stof(unit);
-
-	slotkeynumber = self.slot_relics;
-	if (keynumber == dthous_s)
-	{
-		currentslotkeyvalue = (keynumber *10000);
-		slotkeynumber = (slotkeynumber - currentslotkeyvalue);
-		slotkeynumber = slotkeynumber * 10;
-	}
-
-	if (keynumber == thous_s)
-	{
-		currentslotkeyvalue = (keynumber *1000);
-		slotkeynumber = (slotkeynumber - (currentslotkeyvalue + cent_s * 100 + dozen_s *10 + unit_s)) + (cent_s *1000)  + (dozen_s *100) + (unit_s *10);
-	}
-
-	if (keynumber == cent_s)
-	{
-		currentslotkeyvalue = (keynumber *100);
-		slotkeynumber = (slotkeynumber - (currentslotkeyvalue + dozen_s *10 + unit_s)) + (dozen_s *100) + (unit_s *10);
-	}
-
-	if (keynumber == dozen_s)
-	{
-		currentslotkeyvalue = keynumber * 10;
-		slotkeynumber = (slotkeynumber - (currentslotkeyvalue + unit_s)) + (unit_s *10);
-	}
-
-	if (keynumber == unit_s)
-	{
-		currentslotkeyvalue = keynumber;
-
-		if (slotkeynumber >= 10)
-			multiplier = 1;
-		else
-			multiplier = 0;
-		slotkeynumber = (slotkeynumber - (currentslotkeyvalue)) *multiplier;
-	}
-
-	self.slot_relics = slotkeynumber;
-};
 
 .float fake_use_finished;
 .float pillar_a_activated;
@@ -292,10 +225,11 @@ void(float keynumber) quitrelic = { string dthous, thous, cent, dozen, unit, slo
 .entity bkeyson;
 .entity rkeyson;
 
+
 void Use_Func() {
 	vector source;
 	makevectors(self.v_angle);
-	source = self.origin + self.view_ofs - v_forward * 4;	// 
+	source = self.origin + self.view_ofs - v_forward * 4;
 	wtraceline(source, source + v_forward *72, FALSE, self);
 
 	self.use_finished2 = time + 0.05;
@@ -332,7 +266,7 @@ void Use_Func() {
 			}
 			else
 			{
-			
+
 				if(self.items & IT_COFFERKEY3)
 					{self.items -= IT_COFFERKEY3;self.keyson3.wrathflags -= FL_RESPAWN;}
 				else
@@ -341,7 +275,7 @@ void Use_Func() {
 						{self.items -= IT_COFFERKEY2;self.keyson2.wrathflags -= FL_RESPAWN;}
 					else
 						{self.items -= IT_COFFERKEY1; self.keyson1.wrathflags -= FL_RESPAWN;}
-				}	
+				}
 			}
 		}
 

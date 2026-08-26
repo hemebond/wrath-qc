@@ -82,8 +82,6 @@ void() pillar_usekey = {
 	other.relics &= ~self.relics;
 
 	relic_removefromslot(other, self.relics);
-	//self = other; // we need player for this 
-	//quitrelic(1); // <<
 };
 void() portal_hub1 = { precache_model("models/objects/hubs/hub1_portal.md3");
 	precache_model("models/objects/hubs/hub1_portal_pillar_a.md3");

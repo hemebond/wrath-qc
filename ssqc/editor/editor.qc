@@ -310,7 +310,6 @@ void() Toggle_Angles = { if (self.editingangles)
 
 void() Toggle_Mode = 
 {
-
 	if(world.model == "maps/boss1.bsp")
 	{
 		entity colormodel = spawn();
@@ -370,5 +369,3 @@ void() Toggle_Mode =
 		stuffcmd(self, "r_editlights \"1\"\n");
 	}
 };
-
-///////////////////////////////////end of qc file

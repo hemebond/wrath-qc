@@ -278,16 +278,11 @@ void() proj_rangles =
 	self.nextthink = time + 5;
 };
 
-void(float type, float forg) W_FireSpitter = { local vector tagorg;
-	local float sv, tagindex;
+void(float type, float forg) W_FireSpitter = {
+	vector tagorg;
+	float sv, tagindex;
+
 	newmis = spawn();
-
-	if (type == 1)
-	    flask_v_fx(0.5);
-
-	if (type == 3)
-  		flask_v_fx(0.5);
-
 	newmis.owner = self;
 	newmis.movetype = MOVETYPE_FLY;
 	newmis.dphitcontentsmask = DPCONTENTSMASK_WEAPON;
