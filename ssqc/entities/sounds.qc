@@ -1049,21 +1049,19 @@ void(vector org,string locsound, float rnd, float vol, float sspeed) randompoint
 	remove(sound_emitter);
 };
 
-void(string locsound, float rnd, float vol, float nchannel, float iswav, float atten) randomsound2 =
-{
+void randomsound2(string locsound, float rnd, float vol, float nchannel, float iswav, float atten) {
 	local float r;
 	local string soundend;
 	local string lsound;
 	local string rsound;
 
-	if (iswav)
-	{
+	if (iswav) {
 		soundend = ".wav";
 	}
-	else
-	{
+	else {
 		soundend = ".ogg";
 	}
+
 	r = floor((random() * rnd)) + TRUE;
 	if ((r == self.rsound_cntr))
 	{

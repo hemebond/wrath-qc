@@ -1924,38 +1924,7 @@ void() flash_toggle = { if (self.flash_flag == FALSE)
 		self.flash.nextthink = time + 0.01;
 	}
 };
-void() fmck_maker_touchs = {
-		if(other.warped_time > time)
-		return;
-	if ((other.flags &FL_MONSTER) && (other.friendly_monster != 1))
-	{
-		other.friendly_monster = 1;
 
-
-
-		if(other.enemy)
-		other.exenemy = other.enemy;
-		other.enemy = world;
-
-		if(other.classname == "monster_stricken")
-		{
-		other.turret = 1;
-		other.th_run = stricken_preattack1;
-		}
-		if(other.health > 0)
-		{
-		if(other.classname == "monster_heretic")
-		{
-		if(other.movetype != MOVETYPE_STEP)
-			other.movetype = MOVETYPE_STEP;
-		}
-		other.think = other.th_run;
-		other.show_hostile = time + 1;
-		other.nextthink = time + 0.1;
-		}
-		spawn_attar_enemy(other);
-	}
-};
 
 void fmck_maker_touch() {
 	if ((other.flags &FL_MONSTER) && (other.friendly_monster != 1)) {

@@ -109,23 +109,24 @@ void(entity ownr)spawn_attar_enemy =
 };
 
 
-void(entity friend) Create_friendly_monster =
-{
-
+void make_monster_friendly(entity friend) {
 	if(friend.warped == 1)
 		return;
 
 	friend.friendly_monster = 1;
+
 	if(friend.enemy)
 		friend.exenemy = friend.enemy;
 
 	friend.enemy = 0;
 	friend.attar_timem = time  + 1;
-	if(friend.classname == "monster_heretic")
-	{
-		if(friend.movetype != MOVETYPE_STEP)
-			friend.movetype = MOVETYPE_STEP;
-	}
+
+	// FIXME: What is this for?
+	// if(friend.classname == "monster_heretic") {
+	// 	if(friend.movetype != MOVETYPE_STEP)
+	// 		friend.movetype = MOVETYPE_STEP;
+	// }
+
 	friend.think = find_next_enemy;
 	friend.nextthink = time;
 	spawn_attar_enemy(friend);
@@ -137,52 +138,10 @@ void(entity friend) Create_friendly_monster =
 };
 
 
-void() 	recheck_friendly_enemies =
-{
-	entity friend = nextent(world);
-	while (friend)
-	{
-		entity holder = nextent(friend);
-		if ((friend.flags & FL_MONSTER) &&((friend.alreadykilled != 1))&&((friend.enemy.classname == "player")) && (friend.warped_time < time)&& (friend.friendly_monster == 1) &&(friend.health > 0))
-		{
-			entity oself= self;
-			self = friend;
-			FindNearestEnemy();
-			//self.colormod = '1 0 0';
-			self = oself;
-		}
-		friend = holder;
-	}
-	self.timefootstep = time + 1;
-};
-
-
-void() search_monster =
-{
-	vector source;
-	entity head;
-	source = self.origin;
-	head = findradius(source, attar_bbox_x);
-	while (head)
-	{
-		if ((head.classentity ==  "monsters") && (head.friendly_monster != 1) && (	head.warped_time < time))
-		{
-			Create_friendly_monster(head);
-		}
-		head = head.chain;
-	}
-};
 void attar_cloud_think() {
 	if(self.frame < 4)
 		self.frame ++;
 
-	if(self.classname == "AttarCloud")
-	{
-		search_monster();
-
-		if (time > self.timefootstep)
-			recheck_friendly_enemies();
-	}
 	if(time > self.lifetime)
 	{
 		self.think = alphafade;
@@ -257,7 +216,7 @@ void attar_cloud_touch() {
 		(other.friendly_monster != 1) &&
 		(other.warped_time < time)
 	)
-	Create_friendly_monster(other);
+	make_monster_friendly(other);
 }
 
 

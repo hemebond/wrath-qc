@@ -59,6 +59,8 @@ entities/trigger.qc
 entities/entity_model.qc
 entities/breakables.qc
 
+entities/projectiles/heretic.qc
+
 entities/ammo/cannon.qc
 entities/ammo/crystal.qc
 entities/ammo/lance.qc

@@ -504,7 +504,8 @@ void() heretic_flyup7 =[$her_run7, heretic_flyup8] {};
 void() heretic_flyup8 =[$her_run8, heretic_flyup9] {ai_face();};
 void() heretic_flyup9 =[$her_run9, heretic_flyup10] {ai_face();};
 void()heretic_prechase;
-void() heretic_flyup10 =[$her_run10, heretic_run11] {self.movetype = MOVETYPE_STEP;
+void() heretic_flyup10 =[$her_run10, heretic_run11] {
+	self.movetype = MOVETYPE_STEP;
 	ai_face();
 	self.movingz = 0;
 	self.gravity = 1;
@@ -515,7 +516,7 @@ void() heretic_flyup10 =[$her_run10, heretic_run11] {self.movetype = MOVETYPE_ST
 		if (enemy_range == RANGE_FAR)
 			return;
 		if (enemy_range == RANGE_MID)
-				self.think = heretic_attack;
+			self.think = heretic_attack;
 		if (enemy_range == RANGE_NEAR)
 			self.think = heretic_prechase;
 		if (enemy_range == RANGE_MELEE)
@@ -903,105 +904,6 @@ void()	heretic_run1	=[	$her_run1,	heretic_run1	]
 	}
 };
 */
-/////////////////////////////////////////////////////////////////////////////////////////////projectile attack
-.float chasetime;
-void() proj_heretic_explo = { self.alpha -= 0.1;
-	self.frame += 1;
-	if (self.alpha < 0)
-		self.think = SUB_Remove;
-	else
-		self.think = proj_heretic_explo;
-	self.nextthink = time + 0.05;
-}
-void() projectile_touch_her = { local float damg;
-	if (other == self.owner)
-		return;
-	if(other.solid == SOLID_TRIGGER)
-		return;
-	self.solid = SOLID_NOT;
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-		remove(self);
-		return;
-	}
-	damg = heretic_ad;
-	if (other.health)
-	{
-		T_Damage(other, self, self.owner, damg);
-	}
-	if ((other.classname == "player") && (other == self.owner.enemy) && (self.owner.health > 0) &&(self.owner.classname != "boss_guardian3" ))
-	{
-		if (self.owner.chasing != 1)
-		{
-			local entity oself;
-			oself = self;
-			self = self.owner;
-			monstersound6("enemies/heretic/chase_start", 5, CHAN_AUTO);
-			//sound(self, CHAN_ITEM, "enemies/heretic/chase_loop.ogg", 1, 0.25);
-			self.think = heretic_prechase;
-			self.nextthink = time;
-			self = oself;
-		}
-		//self = oself;
-		//other.heretic_sloweffectime = time + 1;
-	}
-	sound(self, CHAN_WEAPON, "misc/null.wav", 1, 1);
-	//void(string locsound, float rnd, float vol, float nchannel, float iswav, float atten) randomsound2
-	randomsound2("enemies/heretic/proj_impact", 3, 1, CHAN_WEAPON, 0, 0.25);
-	setmodel(self, "models/projectiles/proj_heretic_explo.md3");
-	pointparticles(particleeffectnum("proj_heretic_impact"), self.origin, '0 0 0', 1);
-	self.movetype = 0;
-	self.alpha = 1;
-	self.touch = SUB_Null;
-	self.nextthink = time;
-	self.think = proj_heretic_explo;
-};
-
-
-void()proj_heretic_explo_think =
-{
-	if(self.origin ==  self.oldorigin)
-	{
-		self.think = proj_heretic_explo;
-	}
-	else
-	{
-		if(self.lifetime < time)
-			self.think = proj_heretic_explo;
-		else
-			self.think = proj_heretic_explo_think;
-	}
-	self.oldorigin = self.origin;
-	self.nextthink = time + 0.1;
-};	
-
-
-void(vector org, vector dir, entity ownerproj) launch_projectile_her = { local entity projectile;
-	projectile = spawn();
-	projectile.owner = ownerproj;
-	projectile.movetype = MOVETYPE_FLYMISSILE;
-	projectile.solid = SOLID_TRIGGER;
-	projectile.scale = 1;
-	projectile.angles = vectoangles(dir);
-	projectile.touch = projectile_touch_her;
-	projectile.traileffectnum = particleeffectnum("proj_heretic_trail");
-	projectile.classname = "projectile";
-	projectile.think = proj_heretic_explo_think;
-	projectile.nextthink = time + 0.1;
-	projectile.lifetime = time + 12;
-	projectile.classentity = "projectiles";
-	projectile.wrathflags += FL_PROJECTILE;
-	local entity oself;oself = self;self = projectile;
-	randomsound2("enemies/heretic/proj_loop", 3, 1, CHAN_WEAPON, 0, 0.25);
-	self = oself;
-	setmodel(projectile, "models/projectiles/proj_heretic.md3");
-	setsize(projectile, '-6 -6 -6', '6 6 6');
-	makevectors(self.angles);
-	//org -=v_forward*order ;
-	setorigin(projectile, org);
-	projectile.velocity = dir *(heretic_projvel);
-	projectile.oldvelocity = projectile.velocity;
-};
 
 void() heretic_attack =[$her_atk1, heretic_attack2]
 {
@@ -1038,7 +940,7 @@ void() heretic_attack4 =[$her_atk4, heretic_attack5]
 		sre = self.angles;
 		makevectors2(sre);
 		dir = normalize(self.enemy.origin - tagorg);
-		launch_projectile_her(tagorg, dir, self);
+		launch_projectile_heretic(tagorg, dir, self);
 	//heretic_checkroof();
 	}
 };
@@ -1476,5 +1378,3 @@ void() monster_heretic = { precache_model("models/projectiles/proj_heretic.md3")
 	self.think = flymonster_start;
 	self.nextthink = time + 0.05;
 };
-
-////////////////end of qc file
