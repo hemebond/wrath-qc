@@ -203,17 +203,17 @@ static class setang_c : instruction_c {
 		if (is_smooth) // smooth over time
 		{
 			static void() angle_smooth_over_time = {
-				self.owner.angles += self.avelocity * 0.01;
+				this.owner.angles += this.avelocity * 0.01;
 
-				if (time >= self.attack_finished)
+				if (time >= this.attack_finished)
 				{
-					self.owner.angles = self.angles;
-					remove(self);
+					this.owner.angles = this.angles;
+					remove(this);
 					return;
 				}
 
-				self.think = angle_smooth_over_time;
-				self.nextthink = time + 0.01;
+				this.think = angle_smooth_over_time;
+				this.nextthink = time + 0.01;
 			};
 
 			entity mover = spawn();
@@ -251,18 +251,18 @@ static class move_c : instruction_c {
 		if (is_smooth) // smooth over time
 		{
 			static void() move_smooth_over_time = {
-				self.owner.origin += self.velocity * 0.01;
-				setorigin(self.owner, self.owner.origin);
+				this.owner.origin += this.velocity * 0.01;
+				setorigin(this.owner, this.owner.origin);
 
-				if (time >= self.attack_finished)
+				if (time >= this.attack_finished)
 				{
-					setorigin(self.owner, self.origin);
-					remove(self);
+					setorigin(this.owner, this.origin);
+					remove(this);
 					return;
 				}
 
-				self.think = move_smooth_over_time;
-				self.nextthink = time + 0.01;
+				this.think = move_smooth_over_time;
+				this.nextthink = time + 0.01;
 			};
 
 			entity mover = spawn();
@@ -290,7 +290,7 @@ static class setmodel_c : instruction_c {
 	nonvirtual void() setmodel_c {
 		this.type = INSTRUCTION::SETMODEL;
 
-		if (this.value)
+		if (this.value != "")
 			precache_model(this.value);
 	};
 
@@ -339,7 +339,7 @@ static class playsound_c : instruction_c {
 
 	nonvirtual void() playsound_c {
 		this.type = INSTRUCTION::PLAYSOUND;
-		if (this.value)
+		if (this.value != "")
 			precache_sound(this.value);
 	};
 

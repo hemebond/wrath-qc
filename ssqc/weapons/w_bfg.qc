@@ -292,34 +292,31 @@ void() pre_mace_projectiles =
 	self.nextthink =  time + 0.025 + (self.ammo_bfg * 0.025);
 };
 
-void(float spread, float total_to_spawn) shoot_projectiles
-{	
-	local vector dir, tagorg;
-	local float tagindex;
-	tagindex = gettagindex(self.vweapon, "tag_mace");
-	tagorg = gettaginfo(self.vweapon, tagindex);
-	local entity sotgun_projectile;
-	sotgun_projectile=  spawn();
+
+void launch_projectile_bfg(float spread, float total_to_spawn) {
+	float tagindex = gettagindex(self.vweapon, "tag_mace");
+	vector tagorg = gettaginfo(self.vweapon, tagindex);
+
+	entity sotgun_projectile = spawn();
 	sotgun_projectile.owner =  self;
 	sotgun_projectile.modelflags  = MF_TRACER3;	
-	dir = aim(self, 1000);
+	vector dir = aim(self, 1000);
 	makevectors (self.v_angle);
 	setorigin(sotgun_projectile, tagorg - v_forward * 12);
 	setmodel(sotgun_projectile, "models/projectiles/proj_mace.md3");
 	sotgun_projectile.solid = SOLID_TRIGGER;
 	setsize(sotgun_projectile,  '-5 -5 -5','5 5 5');
-	sotgun_projectile.velocity = normalize(cursor_trace_endpos_fixed (self) - tagorg) *192;
+	sotgun_projectile.velocity = normalize(cursor_trace_endpos_fixed(self) - tagorg) *192;
 	makevectors (self.angles);
-	if (spread > 1)
-	{
-		vector hspread;
-		float odd;
+
+	if (spread > 1) {
+		float odd = 0;
 		if (spread % 2)
 			odd = 1;
 		else
 			odd = -1;
 
-		hspread = v_right * (odd * random(5,7) * spread);
+		vector hspread = v_right * (odd * random(5,7) * spread);
 		sotgun_projectile.velocity += (v_up * random (-3,3) * spread) + hspread; 
 	}
 	sotgun_projectile.movetype = MOVETYPE_FLY;
@@ -399,7 +396,7 @@ void() wsfire_bfg2 =
 	float start_ammo = self.ammo_bfg;
 	while(self.ammo_bfg > 0)
 	{
-		shoot_projectiles(self.ammo_bfg, start_ammo);
+		launch_projectile_bfg(self.ammo_bfg, start_ammo);
 		self.ammo_bfg --;
 	}
 
@@ -460,9 +457,6 @@ void() bfg_angles_center =
 };
 
 .float bfg_dmg_ammount;
-void(vector org,string locsound, float rnd, float vol, float sspeed) randompointsound7;
-void(vector org, string locsound, float rnd, float vol) randompointsound;
-void(entity e)flash_screen_item;
 void() soulintag =
 {
 

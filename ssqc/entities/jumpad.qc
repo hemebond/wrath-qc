@@ -149,7 +149,7 @@ void() trigger_jumppad = { if (self.angles != '0 0 0')
 	self.touch = trigger_jumpad_touch;
 
 	// check if this is a jump pad
-	if (self.target)
+	if (self.target != "")
 	{
 		self.think = trigger_jumpad_findtarget;
 		self.nextthink = time + 0.2;
@@ -165,5 +165,3 @@ void() trigger_jumppad = { if (self.angles != '0 0 0')
 
 void() target_push = {};
 void() target_position = {}
-
-////////////////////////

@@ -1,6 +1,9 @@
 CC=fteqcc
+# CFLAGS=-Wall
 # CFLAGS=-Wno-mundane
-CFLAGS=-Wall
+CFLAGS=-Wno-Q207
+# warning F302: Potentially uninitialised variable
+# warning F314: Implicit cast from class
 
 all: progs.dat csprogs.dat menu.dat
 

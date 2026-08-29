@@ -797,7 +797,7 @@ void numfield_addtostring(__inout string numfield, float insert)
 			return;
 	}
 
-	if (numfield)
+	if (numfield != "")
 		strunzone(numfield);
 	
 	numfield = strzone(strcat(numstr, "&", ftos(floor(insert))));
@@ -806,7 +806,7 @@ void numfield_addtostring(__inout string numfield, float insert)
 void numfield_deletefromstring(__inout string numfield, float insert) 
 {
 	float argc = tokenizebyseparator(numfield, "&")-1;
-	string numstr;
+	string numstr = "";
 	
 	for(float i = 1; i <= argc; i++)
 	{
@@ -816,8 +816,9 @@ void numfield_deletefromstring(__inout string numfield, float insert)
 		numstr = strcat(numstr, "&", ftos(floor(val)));
 	}
 
-	if (numfield)
+	if (numfield != "")
 		strunzone(numfield);
+
 	numfield = strzone(numstr);
 }
 

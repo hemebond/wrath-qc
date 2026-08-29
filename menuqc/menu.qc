@@ -1,38 +1,20 @@
-void(float alternative) menu_type_confirmbind;
-void() menu_type_confirmresolution;
-void() menu_type_confirmantialias;
-void() menu_type_confirmfullscreen;
-void(vector txt_pos) menu_type_profile;
-void(vector txt_pos) menu_type_main;
-void() menu_type_resume;
-void() menu_type_options;
-void() menu_type_options_controls;
-void() menu_type_options_video;
-void() menu_type_options_resolution;
-void() menu_type_options_audio;
-void() menu_type_options_gameplay;
-void() menu_type_ingame;
-void() menu_type_difficult;
-
 float slayeralpha;
 float slayerstate;
-void()menu_type_deleteprofile;
-void()menu_type_options_controlbinds;
-void()menu_type_confirmresettodefaults;
-void() check_vectorcolors =
-{
-//	local float readparms, localmenuversion;
-// 	local string readtext;
-// 	readparms = fopen_wrath("colordata.txt", FILE_READ);	//open what file to use (THIS TIME IN READ MODE)
-// 	readtext = fgets(readparms);	//read the text
-//	vectorred = stov(readtext);	//turn the text into the float u want (by using stof: string to float)
-// 	readtext = fgets(readparms);	//read the text
-// 	vectorwhite = stov(readtext);	//turn the text into the float u want (by using stof: string to float)
-// 	fclose_wrath(readparms);
+
+
+void check_vectorcolors() {
+	// local float readparms, localmenuversion;
+	// local string readtext;
+	// readparms = fopen_wrath("colordata.txt", FILE_READ);	//open what file to use (THIS TIME IN READ MODE)
+	// readtext = fgets(readparms);	//read the text
+	// vectorred = stov(readtext);	//turn the text into the float u want (by using stof: string to float)
+	// readtext = fgets(readparms);	//read the text
+	// vectorwhite = stov(readtext);	//turn the text into the float u want (by using stof: string to float)
+	// fclose_wrath(readparms);
 	vectorred = '-1 -1 -1';
 	vectorwhite = '8 -1 -1';
-	
-};
+}
+
 
 #if NEW_MENU
 
@@ -42,13 +24,17 @@ float(uielement_c this) menu_conditional = {
 	return TRUE;
 }
 
-void(uipicture_c this, __inout string img_to_render) button_highlight = { if (ui_selected == this || ui_hover == this) img_to_render = this.image2; }
-void(uilocpicture_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) text_highlight = {
+void button_highlight(uipicture_c this, __inout string img_to_render) {
+	if (ui_selected == this || ui_hover == this) img_to_render = this.image2;
+}
+void text_highlight(uilocpicture_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) {
 	if (ui_selected == this || ui_hover == this)
 		color_to_render = HIGHLIGHT_TEXT_COLOR;
 }
-void(uipicture_c this, __inout string img_to_render) button_owner_highlight = { if (ui_selected == this.owner || ui_hover == this.owner) img_to_render = this.image2; }
-void(uilocpicture_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) text_owner_highlight = {
+void button_owner_highlight(uipicture_c this, __inout string img_to_render) {
+	if (ui_selected == this.owner || ui_hover == this.owner) img_to_render = this.image2;
+}
+void text_owner_highlight(uilocpicture_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) {
 	if (ui_selected == this.owner || ui_hover == this.owner)
 		color_to_render = HIGHLIGHT_TEXT_COLOR;
 }
@@ -87,6 +73,7 @@ string quit_taunts[] = {
 // uielement_c achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX];
 // string achnotify_icons[ST_ACHIEVEMENTS::MAX];
 
+
 static string(void) ach_getnextscroll = {
 	string pieces[] = {
 		"gfx/achievements/achievementscroll_mid_0.tga",
@@ -99,11 +86,12 @@ static string(void) ach_getnextscroll = {
 
 	static float last_piece = 0;
 	float touse;
-	while ((touse = floor(random(pieces.length))) == last_piece);
-	last_piece = touse;
+	while ((touse = floor(random(pieces.length))) == last_piece)
+		last_piece = touse;
 
 	return pieces[touse];
-};
+}
+
 
 /*
 void Achievement_CleanupBox(uielement_c cleanup)
@@ -112,11 +100,11 @@ void Achievement_CleanupBox(uielement_c cleanup)
 
 	// if (cleanstring)
 	// {
-	// 	if (((uipicture_c)cleanup.partner6).image)
-	// 	{
-	// 		strunzone(((uipicture_c)cleanup.partner6).image);
-	// 		((uipicture_c)cleanup.partner6).image = __NULL__;
-	// 	}
+	//	if (((uipicture_c)cleanup.partner6).image)
+	//	{
+	//		strunzone(((uipicture_c)cleanup.partner6).image);
+	//		((uipicture_c)cleanup.partner6).image = __NULL__;
+	//	}
 	// }
 
 	for(uipicture_c clean = (uipicture_c)cleanup.partner; clean; clean = clean.partner)
@@ -250,26 +238,26 @@ void MenuInit_Overlay(void)
 	void(uielement_c this, __inout vector position) notify_preloop = {
 
 		// if (achnotify_list[0].flags & UIFLAG_HIDE)
-		// 	return;
+		//	return;
 
 		float frac = 0;
 		// if (cltime < achievement_notify_time)
 		// {
-		// 	// move up
-		// 	frac = (achievement_notify_time - cltime) / 0.4;
-		// 	//
+		//	// move up
+		//	frac = (achievement_notify_time - cltime) / 0.4;
+		//	//
 		// }
 		// else if (cltime > (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME))
 		// {
-		// 	// move down
-		// 	frac = (cltime - (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME)) / 0.3;
-		// 	//
+		//	// move down
+		//	frac = (cltime - (achievement_notify_time + ACHIEVEMENT_NOTIFICATIONS_TIME)) / 0.3;
+		//	//
 
-		// 	if (frac > 1)
-		// 	{
-		// 		achievement_notify_time = cltime - (ACHIEVEMENT_NOTIFICATIONS_TIME - 0.9);
-		// 		Overlay_AchievementShuffleDown();
-		// 	}
+		//	if (frac > 1)
+		//	{
+		//		achievement_notify_time = cltime - (ACHIEVEMENT_NOTIFICATIONS_TIME - 0.9);
+		//		Overlay_AchievementShuffleDown();
+		//	}
 		// }
 		
 		frac = bound(0, frac, 1);
@@ -291,9 +279,9 @@ void MenuInit_Overlay(void)
 		container.partner = backdroplist = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '48 48', image: "gfx/achievements/achievementscrolls_left.tga"); xpos += 48;
 		// for(float j = 0; j < ACHIEVEMENT_NOTIFICATIONS_MAXSIZE; j++)
 		// {
-		// 	backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '16 48', image: ach_getnextscroll());
-		// 	backdroplist = backdroplist.partner;
-		// 	xpos += 16;
+		//	backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '16 48', image: ach_getnextscroll());
+		//	backdroplist = backdroplist.partner;
+		//	xpos += 16;
 		// }
 		container.partner2 = backdroplist.partner = spawn(uipicture_c, owner: container, origin: [xpos, 0], size: '48 48', image: "gfx/achievements/achievementscrolls_right.tga"); xpos += 48;
 		uipicture_c icon = spawn(uipicture_c, owner: container, origin: '8 8', size: '32 32', image: strzone("gfx/hud/messages/icons/msgicon_helm.tga"));
@@ -549,14 +537,16 @@ void MenuInit_Backdrop(void)
 
 void MenuInit_Main_Game(void)
 {
-	void(uipicture_c this, __inout string img_to_render) button_highlight = { if (ui_selected == this || ui_hover == this) img_to_render = this.image2; };
+	void button_highlight(uipicture_c this, __inout string img_to_render) {
+		if (ui_selected == this || ui_hover == this) img_to_render = this.image2;
+	};
 	menu_main_game = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_main_game.active_condition = menu_conditional;
 
 	uilist_c menu_buttons = spawn(uilist_c, owner: menu_main_game, anchor: '0.5 0.5', justify: '0.5 0.5', size: '192 150', separation: '0 50');
 	
 	// return button
-	void(uielement_c this) button_click = {
+	void button_click(uielement_c this) {
 		localsound("sounds/menu.wav");
 		m_hide();
 	};
@@ -568,7 +558,7 @@ void MenuInit_Main_Game(void)
 		container.m_click = button_click;
 	
 	// options button
-	void(uielement_c this) button_click = {
+	void button_click(uielement_c this) {
 		localsound("sounds/menu.wav");
 		menu_current = menu_options;
 	};
@@ -580,7 +570,7 @@ void MenuInit_Main_Game(void)
 		container.m_click = button_click;
 	
 	// quit button
-	void(uielement_c this) button_click = {
+	void button_click(uielement_c this) {
 		localsound("sounds/menu.wav");
 		menu_current = menu_main;
 		cmd("disconnect\n");
@@ -668,7 +658,7 @@ void MenuInit_Main(void)
 
 	// achievements
 	// float(uielement_c this) achievement_conditional = {
-	// 	return (!(STEAM_IS_CONNECTED) && cltime > steam_initTime);
+	//	return (!(STEAM_IS_CONNECTED) && cltime > steam_initTime);
 	// }
 	void(uielement_c this) button_click = {
 		localsound("sounds/menu.wav");
@@ -687,9 +677,10 @@ void MenuInit_Main(void)
 	menu_quitconfirm = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_quitconfirm.active_condition = menu_conditional;
 	
-	float(uielement_c this, float nkey, float ascii, float released) quit_input = {
+	float (uielement_c this, float nkey, float ascii, float released) quit_input = {
 		if (released)
-			return;
+			return TRUE;
+
 		if (ascii == 'n' || nkey == K_ESCAPE)
 		{
 			localsound("sounds/menu.wav");
@@ -4865,17 +4856,16 @@ void MenuInit_CreateProfile()
 float skill_outlander_unlocked;
 void MenuInit_CreateProfile_Difficulty()
 {
-	float(uielement_c this, float nkey, float ascii, float released) option_input = {
+	float option_input(uielement_c this, float nkey, float ascii, float released) {
 		if (released)
-			return;
+			return TRUE;
 		
-		if (nkey == K_ESCAPE)
-		{
+		if (nkey == K_ESCAPE) {
 			localsound("sounds/menu.wav");
 			menu_current = menu_main;
 			Run_Reinit_List(menu_current);
-			return;
-		};
+			return TRUE;
+		}
 
 		return FALSE;
 	};
@@ -4904,19 +4894,17 @@ void MenuInit_CreateProfile_Difficulty()
 		Run_Reinit_List(menu_current);
 	};
 
-	void(uielement_c this) outlander_active = {
+	float (uielement_c this) outlander_active = {
 		return skill_outlander_unlocked;
 	};
 
 	void(uielement_c this) outlander_reinit = {
-		float f;
 		skill_outlander_unlocked = 0;
 		
-		f = fopen("statistics/gamecomplete", FILE_READ);
-		if (f >= 0)
-		{
+		float f = fopen("statistics/gamecomplete", FILE_READ);
+		if (f >= 0) {
 			string str;
-			while(str = fgets(f))
+			while((str = fgets(f)))
 			{
 				float argc = tokenizebyseparator(str, ",");
 				if (argc >= 2)
@@ -4954,7 +4942,6 @@ void MenuInit_CreateProfile_Difficulty()
 		txt.active_condition = outlander_active;
 		txt.reinit = outlander_reinit;
 		Add_To_Reinit_List(menu_createprofile_difficulty, txt);
-	//
 
 	// Back
 	void(uielement_c this) button_click = {
@@ -4966,39 +4953,31 @@ void MenuInit_CreateProfile_Difficulty()
 		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
-	//
 }
 #endif
 
-void Menu_RendererRestarted()
-{
+void Menu_RendererRestarted() {
 	cmd(sprintf("set vid_conwidth %g\n", cvar("vid_width")/2));
 	cmd(sprintf("set vid_conheight %g\n", cvar("vid_height")/2));
 }
 
-float oldtime;
-void menu_anydraw(void)
-{
+
+void menu_anydraw(void) {
 	time = gettime();
 	static float oldtime;
 	oldtime = cltime;
- 	cltime = gettime();
- 	clframetime = oldtime ? cltime - oldtime : 0.1;
+	cltime = gettime();
+	clframetime = oldtime ? cltime - oldtime : 0.1;
 	input_frame(); // input handler
 
-	//
-	if (ui_usemouse && !ui_oldusemouse)
-	{
+	if (ui_usemouse && !ui_oldusemouse) {
 		thumbstick_mouse = [cvar("vid_conwidth") / 2, cvar("vid_conheight") / 2];
 	}
 	ui_oldusemouse = ui_usemouse;
-	//
 
 	// Reki (November 20 2023): Steam init for first time setup
-	if (steam_init_check)
-	{
-		if (cvar_string("steam_id") != "")
-		{
+	if (steam_init_check) {
+		if (cvar_string("steam_id") != "") {
 			steam_init_check = FALSE;
 			cmd("set steam_firsttime 1\n");
 
@@ -5013,7 +4992,6 @@ void menu_anydraw(void)
 			}
 		}
 	}
-	//
 
 	// Reki (February 28 2024): Only exec gamebuttons.cfg on first time setup
 	if (controls_init_check)
@@ -5024,19 +5002,6 @@ void menu_anydraw(void)
 		cmd("saveconfig\n");
 		controls_init_check = FALSE;
 	}
-	//
-
-	// if (cltime > statistics_FileOpTime)
-	// {
-	// 	statistics_FileOpTime = cltime + 1;
-	// 	Achievements_RunFileOperations();
-	// 	Stats_RunFileOperations();
-	// }
-
-	// if (oldtime <= steam_initTime && cltime > steam_initTime) // HACK: wait a bit then init steam
-	// {
-	// 	  Steam_InitStats();
-	// }
 
 	vid_x = cvar("vid_conwidth");
 	vid_y = cvar("vid_conheight");
@@ -5068,8 +5033,9 @@ void menu_anydraw(void)
 	#endif
 }
 
-void m_drawloading(vector screensize, float opaque)
-{
+void m_drawloading(vector screensize, float opaque) {
+	// Reki (December 13 2023): From FTE, implementation from DOOMBRINGER
+
 	in_loadingscreen = TRUE;
 	menu_anydraw();
 
@@ -5090,122 +5056,95 @@ void m_drawloading(vector screensize, float opaque)
 	#endif
 }
 
-void m_draw(float a, float b)
-{
+void m_draw(float a, float b) {
+	//
+	// Engine Entrypoint
+	//
+
 	in_loadingscreen = FALSE;
 	menu_anydraw();
 	
 	check_vectorcolors();
- 	if (slayerstate != 1)
- 	{
- 		if (slayeralpha > 1)
- 			slayerstate = 1;
+	if (slayerstate != 1)
+	{
+		if (slayeralpha > 1)
+			slayerstate = 1;
 
- 		slayeralpha += clframetime *1.5;
- 	}
- 	else
- 	{
- 		slayeralpha -= clframetime *1.5;
- 		if (slayeralpha < 0.1)
- 			slayerstate = 0;
- 	}
+		slayeralpha += clframetime *1.5;
+	}
+	else
+	{
+		slayeralpha -= clframetime *1.5;
+		if (slayeralpha < 0.1)
+			slayerstate = 0;
+	}
 
 	#if NEW_MENU
 	in_game = (isserver() || (clientstate() == CS_CONNECTED));
 	#endif
 
- 	float deadmenu;
- 	deadmenu = cvar("scratch3");
+	float deadmenu;
+	deadmenu = cvar("scratch3");
 
- 	/*	if(vid_x / vid_y == 16/9)
- 		{*/
- 		vid_rx = cvar("vid_width");
- 		vid_ry = cvar("vid_height");
+	vid_rx = cvar("vid_width");
+	vid_ry = cvar("vid_height");
 
- 		if (((vid_rx == 2560) && (vid_ry == 1440))||((vid_rx == 2560) && (vid_ry == 1080))||((vid_rx == 3440) && (vid_ry == 1440))||((vid_rx == 5120) && (vid_ry == 2160)))
-		{	
-	 	vx_rel = ((vid_x / 1134));
+	if (
+		((vid_rx == 2560) && (vid_ry == 1440)) ||
+		((vid_rx == 2560) && (vid_ry == 1080)) ||
+		((vid_rx == 3440) && (vid_ry == 1440)) ||
+		((vid_rx == 5120) && (vid_ry == 2160))
+	) {
+		vx_rel = ((vid_x / 1134));
 		vy_rel = ((vid_y / 540));
 		//smallbuttons = 0;
-		}
- 		else if ((vid_rx == 4096) && (vid_ry == 2160))
-		{	
-	 	vx_rel = ((vid_x / 1134));
+	}
+	else if ((vid_rx == 4096) && (vid_ry == 2160)) {
+		vx_rel = ((vid_x / 1134));
 		vy_rel = ((vid_y / 540));
 		//smallbuttons = 0;
-		}
- 		else if ((vid_rx == 3840) && (vid_ry == 1600))
-		{	
-	 	vx_rel = ((vid_x / 1134));
+	}
+	else if ((vid_rx == 3840) && (vid_ry == 1600)) {
+		vx_rel = ((vid_x / 1134));
 		vy_rel = ((vid_y / 540));
 		//smallbuttons = 0;
-		}
-
-		else
-		{
+	}
+	else {
 		vx_rel = ((vid_x / 960));
 		vy_rel = ((vid_y / 540));
 		//smallbuttons = 1;
-		}
-		/*	}
+	}
+	menuingame = 0;
 
- 		if(vid_x / vid_y == 4/3)
- 		{
- 		vx_rel = (vid_x / 960);
- 		vy_rel = (vid_y / 640);
- 		}
+	float imgsizex, imgsizey, img2sizex, img2sizey, img3sizex, img3sizey;
 
- 		if(vid_x / vid_y == 5/3)
- 		{
- 		vx_rel = (vid_x / 640);
- 		vy_rel = (vid_y / 384);
- 		}
+	imgsizex = 256 * vx_rel;
+	imgsizey = 32 * vy_rel;
+	img2sizex = 128 * vx_rel;
+	img2sizey = 32 * vy_rel;
+	img3sizex = 32 * vx_rel;
+	img3sizey = 32 * vy_rel;
 
- 		if(vid_x / vid_y == 5/4)
- 		{
- 		vx_rel = (vid_x / 640);
- 		vy_rel = (vid_y / 512);
- 		}
-
- 		if(vid_x / vid_y == 16/10)
- 		{
- 		vx_rel = (vid_x / 640);
- 		vy_rel = (vid_y / 400);
- 		}
-
- 	*/
- 	menuingame = 0;
-
- 	float imgsizex, imgsizey, img2sizex, img2sizey, img3sizex, img3sizey;
-
- 	imgsizex = 256 * vx_rel;
- 	imgsizey = 32 * vy_rel;
- 	img2sizex = 128 * vx_rel;
- 	img2sizey = 32 * vy_rel;
- 	img3sizex = 32 * vx_rel;
- 	img3sizey = 32 * vy_rel;
-
- 	BTT_FONT_SIZE = fixed_vector('16 16 0');
- 	BTT_IMG_SIZE_x = imgsizex;
- 	BTT_IMG_SIZE_y = imgsizey;
- 	BTT_IMG_SIZE2_x = img2sizex;
- 	BTT_IMG_SIZE2_y = img2sizey;
- 	BTT_IMG_SIZE3_x = img3sizex;
- 	BTT_IMG_SIZE3_y = img3sizey;
+	BTT_FONT_SIZE = fixed_vector('16 16 0');
+	BTT_IMG_SIZE_x = imgsizex;
+	BTT_IMG_SIZE_y = imgsizey;
+	BTT_IMG_SIZE2_x = img2sizex;
+	BTT_IMG_SIZE2_y = img2sizey;
+	BTT_IMG_SIZE3_x = img3sizex;
+	BTT_IMG_SIZE3_y = img3sizey;
 	
 	#if !NEW_MENU
- 	updateMouse();
+	updateMouse();
 	#endif
 
- 	local float w;
- 	if (Menu_Active)
- 	{
- 		if (getmousetarget() != MT_MENU || getkeydest() != KEY_MENU)
- 			m_hide();
- 	}
+	if (Menu_Active)
+	{
+		if (getmousetarget() != MT_MENU || getkeydest() != KEY_MENU)
+			m_hide();
+	}
 
- 	if (!Menu_Active)
- 	{
+	if (!Menu_Active)
+	{
 		#if NEW_MENU // render game overlay
 		ui_usemouse = FALSE;
 		ui_renderframe = TRUE;
@@ -5270,216 +5209,231 @@ void m_draw(float a, float b)
 	drawresetcliparea();
 	ui_clipsize = '0 0';
 	ui_renderframe = FALSE;
-	//
 
 	drawpic(ui_mouseposition + '-1 -1', "gfx/cursor", [24 * ui_scale[0], 24 * ui_scale[1]], ' 1 1 1', 1, DRAWFLAG_NORMAL);
 	#else
- 	local vector size, buttions_locs;
- 	size_x = vid_x;
- 	size_y = vid_y;
- 	buttions_locs_x = ((vid_x / 2) - 128) *vx_rel;
- 	buttions_locs_y = 196 * vy_rel;
+	local vector size, buttions_locs;
+	size_x = vid_x;
+	size_y = vid_y;
+	buttions_locs_x = ((vid_x / 2) - 128) *vx_rel;
+	buttions_locs_y = 196 * vy_rel;
 
- 	if (clientstate() != CS_CONNECTED)
- 	{
- 		// Draw the background
- 		drawpic('0 0 0', "gfx/conback", size, ' 1 1 1', 1, 0);
- 		local vector txt_pos;
- 		if (menutype == M_TYPE_SKILL) {}
- 		else if (menutype == M_YNQ)
- 		{
- 			drawfill('0 0 0', vid_x *'1 0 0' + vid_y *'0 1 0', '0 0 0', 0.65, 0);
- 			drawpic('0 0 0', "gfx/menu/background.tga", vid_x *'1 0 0' + vid_y *'0 1 0', '1 1 1', 1, 0);
- 			drawpic(fixed_vector('228 64 0'), "gfx/menu/logo.tga", fixed_vector('504 136 0'), '1 1 1', 1, 0);
- 			w = stringwidth("Are you sure you want to quit?", true, '8 8 0');
- 			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0' - 8 *'0 1 0', "Are you sure you want to quit?", '8 8 0', 1, 0);
- 			w = stringwidth("Press ^1Y^7 to quit, ^1N^7!", true, '8 8 0');
- 			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0', "Press ^1Y^7 to quit, ^1N^7!", '8 8 0', 1, 0);
- 		}
- 		else if (menutype == M_TYPE_CREDITS) {}
- 		else if (menutype == M_TYPE_HELP) {}
- 		else if (menutype == M_TYPE_OPTIONS)
- 			menu_type_options();
+	if (clientstate() != CS_CONNECTED)
+	{
+		// Draw the background
+		drawpic('0 0 0', "gfx/conback", size, ' 1 1 1', 1, 0);
+		local vector txt_pos;
+		if (menutype == M_TYPE_SKILL) {}
+		else if (menutype == M_YNQ)
+		{
+			drawfill('0 0 0', vid_x *'1 0 0' + vid_y *'0 1 0', '0 0 0', 0.65, 0);
+			drawpic('0 0 0', "gfx/menu/background.tga", vid_x *'1 0 0' + vid_y *'0 1 0', '1 1 1', 1, 0);
+			drawpic(fixed_vector('228 64 0'), "gfx/menu/logo.tga", fixed_vector('504 136 0'), '1 1 1', 1, 0);
+			w = stringwidth("Are you sure you want to quit?", true, '8 8 0');
+			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0' - 8 *'0 1 0', "Are you sure you want to quit?", '8 8 0', 1, 0);
+			w = stringwidth("Press ^1Y^7 to quit, ^1N^7!", true, '8 8 0');
+			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0', "Press ^1Y^7 to quit, ^1N^7!", '8 8 0', 1, 0);
+		}
+		else if (menutype == M_TYPE_CREDITS) {}
+		else if (menutype == M_TYPE_HELP) {}
+		else if (menutype == M_TYPE_OPTIONS)
+			menu_type_options();
 
- 		else if (menutype == M_TYPE_SELECT_DIFFICULT)
- 			menu_type_difficult();
+		else if (menutype == M_TYPE_SELECT_DIFFICULT)
+			menu_type_difficult();
 
- 		else if (menutype == M_TYPE_AUDIO)
- 			menu_type_options_audio();
- 		else if (menutype == M_TYPE_CONTROLS)
- 			menu_type_options_controls();
- 		else if (menutype == M_TYPE_CONTROLBINDS)
- 			menu_type_options_controlbinds();
- 		else if (menutype == M_TYPE_GAMEPLAY)
- 			menu_type_options_gameplay();
- 		else if (menutype == M_TYPE_VIDEO)
- 			menu_type_options_video();
- 		else if (menutype == M_TYPE_RESOLUTION)
- 			menu_type_options_resolution();
- 		else if (menutype == M_TYPE_CONFIRMRESOLUTION)
- 			menu_type_confirmresolution();
- 		else if (menutype == M_TYPE_CONFIRMBIND)
- 			menu_type_confirmbind(0);
- 		else if (menutype == M_TYPE_CONFIRMANTIALIAS)
- 			menu_type_confirmantialias();
- 		else if (menutype == M_TYPE_CONFIRMFULLSCREEN)
- 			menu_type_confirmfullscreen();
+		else if (menutype == M_TYPE_AUDIO)
+			menu_type_options_audio();
+		else if (menutype == M_TYPE_CONTROLS)
+			menu_type_options_controls();
+		else if (menutype == M_TYPE_CONTROLBINDS)
+			menu_type_options_controlbinds();
+		else if (menutype == M_TYPE_GAMEPLAY)
+			menu_type_options_gameplay();
+		else if (menutype == M_TYPE_VIDEO)
+			menu_type_options_video();
+		else if (menutype == M_TYPE_RESOLUTION)
+			menu_type_options_resolution();
+		else if (menutype == M_TYPE_CONFIRMRESOLUTION)
+			menu_type_confirmresolution();
+		else if (menutype == M_TYPE_CONFIRMBIND)
+			menu_type_confirmbind(0);
+		else if (menutype == M_TYPE_CONFIRMANTIALIAS)
+			menu_type_confirmantialias();
+		else if (menutype == M_TYPE_CONFIRMFULLSCREEN)
+			menu_type_confirmfullscreen();
 		else if (menutype == M_TYPE_DELETEPROFILE)
-		menu_type_deleteprofile();
+			menu_type_deleteprofile();
 		else if (menutype == M_TYPE_CONTROLRESTART)
-		menu_type_confirmresettodefaults();
- 		else if (menutype == M_TYPE_RESUME)
- 			menu_type_resume();
+			menu_type_confirmresettodefaults();
+		else if (menutype == M_TYPE_RESUME)
+			menu_type_resume();
 
- 		else if (menutype == M_TYPE_PROFILE)
- 			menu_type_profile(txt_pos);
- 		else
- 			menu_type_main(txt_pos);
- 	}
- 	else
- 	{
- 		if (menutype == M_TYPE_NONE)
- 			zmenuingame = 1;
- 		else
- 			zmenuingame = 0;
+		else if (menutype == M_TYPE_PROFILE)
+			menu_type_profile(txt_pos);
+		else
+			menu_type_main(txt_pos);
+	}
+	else
+	{
+		if (menutype == M_TYPE_NONE)
+			zmenuingame = 1;
+		else
+			zmenuingame = 0;
 
- 		if (menutype == M_TYPE_NONE)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			if (!pausesound)
- 				cmd("pausesound 1\n");
- 			pausesound = 1;
+		if (menutype == M_TYPE_NONE)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			if (!pausesound)
+				cmd("pausesound 1\n");
+			pausesound = 1;
 
- 			menu_type_ingame();
- 		}
- 		else if (menutype == M_TYPE_DNONE)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			w = stringwidth("Are you sure you returnt to main menu? Not saved progress will be lost", true, '8 8 0');
- 			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0' - 8 *'0 1 0', "Are you sure you want to quit2? Not saved progress will be lost", '8 8 0', 1, 0);
- 			w = stringwidth("Press ^1Y^7 to quit, ^1N^7!", true, '8 8 0');
- 			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0', "Press ^1Y^7 to quit, ^1N^7!", '8 8 0', 1, 0);
- 		}
- 		else if (menutype == M_TYPE_OPTIONS)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options();
- 		}
- 		else if (menutype == M_TYPE_AUDIO)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options_audio();
- 		}
+			menu_type_ingame();
+		}
+		else if (menutype == M_TYPE_DNONE)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			w = stringwidth("Are you sure you returnt to main menu? Not saved progress will be lost", true, '8 8 0');
+			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0' - 8 *'0 1 0', "Are you sure you want to quit2? Not saved progress will be lost", '8 8 0', 1, 0);
+			w = stringwidth("Press ^1Y^7 to quit, ^1N^7!", true, '8 8 0');
+			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0', "Press ^1Y^7 to quit, ^1N^7!", '8 8 0', 1, 0);
+		}
+		else if (menutype == M_TYPE_OPTIONS)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options();
+		}
+		else if (menutype == M_TYPE_AUDIO)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options_audio();
+		}
 
 		else if (menutype == M_TYPE_CONTROLS)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options_controls();
- 		}
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options_controls();
+		}
 		else if (menutype == M_TYPE_CONTROLRESTART)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
 			menu_type_confirmresettodefaults();
- 		}
- 		else if (menutype == M_TYPE_CONTROLBINDS)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options_controlbinds();
- 		}
- 		else if (menutype == M_TYPE_GAMEPLAY)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options_gameplay();
- 		}
- 		else if (menutype == M_TYPE_VIDEO)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options_video();
- 		}
- 		else if (menutype == M_TYPE_RESOLUTION)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_options_resolution();
- 		}
- 		else if (menutype == M_TYPE_CONFIRMRESOLUTION)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_confirmresolution();
- 		}
- 		else if (menutype == M_TYPE_CONFIRMBIND)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_confirmbind(0);
- 		}
- 		else if (menutype == M_TYPE_CONFIRMANTIALIAS)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_confirmantialias();
- 		}
- 		else if (menutype == M_TYPE_CONFIRMFULLSCREEN)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			menu_type_confirmfullscreen();
- 		}
- 		else if (menutype == M_YND)
- 		{
- 			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
- 			w = stringwidth("Are you sure you want to return to main menu? Not saved progress will be lost", true, '8 8 0');
- 			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0' - 8 *'0 1 0', "Are you sure you want to quit3? Not saved progress will be lost", '8 8 0', 1, 0);
- 			w = stringwidth("Press ^1Y^7 to quit, ^1N^7!", true, '8 8 0');
- 			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0', "Press ^1Y^7 to quit, ^1N^7!", '8 8 0', 1, 0);
- 		}
+		}
+		else if (menutype == M_TYPE_CONTROLBINDS)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options_controlbinds();
+		}
+		else if (menutype == M_TYPE_GAMEPLAY)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options_gameplay();
+		}
+		else if (menutype == M_TYPE_VIDEO)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options_video();
+		}
+		else if (menutype == M_TYPE_RESOLUTION)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_options_resolution();
+		}
+		else if (menutype == M_TYPE_CONFIRMRESOLUTION)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_confirmresolution();
+		}
+		else if (menutype == M_TYPE_CONFIRMBIND)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_confirmbind(0);
+		}
+		else if (menutype == M_TYPE_CONFIRMANTIALIAS)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_confirmantialias();
+		}
+		else if (menutype == M_TYPE_CONFIRMFULLSCREEN)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			menu_type_confirmfullscreen();
+		}
+		else if (menutype == M_YND)
+		{
+			drawfill('0 0 0', size, '0 0 0', 0.7, 0);
+			w = stringwidth("Are you sure you want to return to main menu? Not saved progress will be lost", true, '8 8 0');
+			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0' - 8 *'0 1 0', "Are you sure you want to quit3? Not saved progress will be lost", '8 8 0', 1, 0);
+			w = stringwidth("Press ^1Y^7 to quit, ^1N^7!", true, '8 8 0');
+			drawcolorcodedstring((vid_x - w) *'0.5 0 0' + vid_y *'0 0.5 0', "Press ^1Y^7 to quit, ^1N^7!", '8 8 0', 1, 0);
+		}
 		else		
 		{
 		cmd("menu_restart\n");
 		menutype = M_TYPE_NONE;
 		}
- 	}
+	}
 
- 	drawpic(mouse_pos + fixed_vector('16 20 0'), "gfx/cursor", fixed_vector ('24 24 0'), ' 1 1 1', 1, 0);
+	drawpic(mouse_pos + fixed_vector('16 20 0'), "gfx/cursor", fixed_vector ('24 24 0'), ' 1 1 1', 1, 0);
 	#endif
  };
 
- void() m_display = {
+void m_display() {
+	//
+	// Engine Entrypoint
+	//
+
 	vid_x = cvar("vid_conwidth");
- 	vid_y = cvar("vid_conheight");
- 	Menu_Active = true;
- 	setkeydest(KEY_MENU);
- 	setmousetarget(MT_MENU);
+	vid_y = cvar("vid_conheight");
+	Menu_Active = true;
+	setkeydest(KEY_MENU);
+	setmousetarget(MT_MENU);
 	#if NEW_MENU
 	if (in_game)
- 		menu_current = menu_main_game;
+		menu_current = menu_main_game;
 	else
 		menu_current = menu_main;
 	#endif
 	Run_Reinit_List(menu_current);
  };
 
- void() m_hide = {
-	if (pausesound)
- 	{
- 		cmd("pausesound 0\n");
+void m_hide() {
+	//
+	// Engine Entrypoint
+	//
+
+	if (pausesound) {
+		cmd("pausesound 0\n");
 		cmd("impulse 82\n");
- 		pausesound = 0;
- 	}
- 	menutype = M_TYPE_NONE;
- 	zmenuingame = 0;
- 	menuingame = 1;
- 	Menu_Active = false;
- 	setkeydest(KEY_GAME);
- 	setmousetarget(MT_CLIENT);
+		pausesound = 0;
+	}
+	menutype = M_TYPE_NONE;
+	zmenuingame = 0;
+	menuingame = 1;
+	Menu_Active = false;
+	setkeydest(KEY_GAME);
+	setmousetarget(MT_CLIENT);
 #if NEW_MENU
 	menu_current = __NULL__;
- #endif
- };
+#endif
+}
 
- void(float n) m_toggle = { menutype = M_TYPE_NONE;
- 	Menu_Active = n;
- 	if (Menu_Active)
- 		m_display();
- 	else
- 		m_hide();
- };
 
- void() m_shutdown = {};
-	///
+void m_toggle(float n) {
+	//
+	// Engine Entrypoint
+	//
+	menutype = M_TYPE_NONE;
+	Menu_Active = n;
+	if (Menu_Active)
+		m_display();
+	else
+		m_hide();
+}
+
+
+void m_shutdown() {
+	//
+	// Engine Entrypoint
+	//
+}

@@ -150,11 +150,11 @@ void() func_plat =
 	if (!self.t_width)
 		self.t_width = 10;
 
-	if(self.noise)
+	if(self.noise != "")
 	precache_sound (self.noise);
-	if(self.noise1)
+	if(self.noise1 != "")
 	precache_sound (self.noise1);
-	if(self.noise2)
+	if(self.noise2 != "")
 	precache_sound (self.noise2);
     if(!self.rad_sound)
         self.rad_sound = 1024;
@@ -193,7 +193,7 @@ void() func_plat =
 
 	plat_spawn_inside_trigger ();	// the "start moving" trigger	
 
-	if (self.targetname)
+	if (self.targetname != "")
 	{
 		self.state = STATE_UP;
 		self.use = plat_use;

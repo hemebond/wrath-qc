@@ -1,20 +1,6 @@
-void() precaches;
 .float timeflyc;
 .float vhud;
 void() main = {};
-//void() SetNewParms = {};
-//void() SetChangeParms = {};
-void() check_itemsize;
-void() check_itemflash;
-void()check_itemsigil_flash;
-void() check_coffer;
-void() check_attar;
-void() check_itemlight;
-void() check_itemammount;
-void() check_enemies_frik;
-void() Precache;
-void() check_tether;
-void()check_maxammo;
 .float message_number;
 void() CSQC_AddStats = 
 { 
@@ -112,20 +98,43 @@ void() worldspawn =
 	lastspawn = world;
 	skill = cvar("skill");
 
+	if(!(world.episode)) {
+		if (
+			(self.model == "maps/intro.bsp") ||
+			(self.model == "maps/hub1.bsp")  ||
+			(self.model == "maps/e1m1.bsp")  ||
+			(self.model == "maps/e1m2.bsp")  ||
+			(self.model == "maps/e1m3.bsp")  ||
+			(self.model == "maps/e1m4.bsp")  ||
+			(self.model == "maps/e1m5.bsp")  ||
+			(self.model == "maps/boss1.bsp")
+		) {
+			world.episode = 1;
+		}
+		else if (
+			(self.model == "maps/hub2.bsp")  ||
+			(self.model == "maps/e2m1.bsp")  ||
+			(self.model == "maps/e2m2.bsp")  ||
+			(self.model == "maps/e2m3.bsp")  ||
+			(self.model == "maps/e2m4.bsp")  ||
+			(self.model == "maps/e2m5.bsp")  ||
+			(self.model == "maps/boss2.bsp") ||
+			(self.model == "maps/urns2.bsp")
+		) {
+			world.episode = 2;
+		}
+		else if (
 
-
-
-	if(!(world.episode))
-	{
-	if ((self.model == "maps/intro.bsp") || (self.model == "maps/hub1.bsp") || (self.model == "maps/e1m1.bsp") ||
-(self.model == "maps/e1m2.bsp") || (self.model == "maps/e1m3.bsp")|| (self.model == "maps/e1m4.bsp")|| (self.model == "maps/e1m5.bsp")|| (self.model == "maps/boss1.bsp"))
-	world.episode = 1;
-	else if ( (self.model == "maps/hub2.bsp") || (self.model == "maps/e2m1.bsp") ||
-(self.model == "maps/e2m2.bsp") || (self.model == "maps/e2m3.bsp")|| (self.model == "maps/e2m4.bsp")|| (self.model == "maps/e2m5.bsp")|| (self.model == "maps/boss2.bsp")|| (self.model == "maps/urns2.bsp"))
-	world.episode = 2;
-	else if ( (self.model == "maps/hub3.bsp") || (self.model == "maps/e3m1.bsp") ||
-(self.model == "maps/e3m2.bsp") || (self.model == "maps/e3m3.bsp")|| (self.model == "maps/e3m4.bsp")|| (self.model == "maps/e3m5.bsp")|| (self.model == "maps/boss3.bsp"))
-	world.episode = 3;
+			(self.model == "maps/hub3.bsp") ||
+			(self.model == "maps/e3m1.bsp") ||
+			(self.model == "maps/e3m2.bsp") ||
+			(self.model == "maps/e3m3.bsp") ||
+			(self.model == "maps/e3m4.bsp") ||
+			(self.model == "maps/e3m5.bsp") ||
+			(self.model == "maps/boss3.bsp")
+		) {
+			world.episode = 3;
+		}
 	}
 
 	if(!(world.episode))
@@ -149,9 +158,10 @@ void() worldspawn =
 	check_shockwave();
 	check_itemlight();
 	check_maxammo();
+
 	float noqcprecaches = cvar("cl_noqcprecache");	
 	if(noqcprecaches != 1)
-	precaches();
+		precaches();
 	CSQC_AddStats();
 	//	check_tether();
 	globalfake_illumination = 1;
@@ -216,32 +226,12 @@ void() worldspawn =
 	lightstyle(63, "a");
 };
 
-void Timescale_RunFrame(void);
 void StartFrame()
 {
 	Timescale_RunFrame();
 }
 
-void() precache_monster_afflicted;
-void() precache_monster_brute;
-void() precache_monster_heretic;
-void() precache_monster_fallen;
-void() precache_monster_stricken;
-void() precache_monster_wraith;
-void() precache_monster_afflicted;
-void() precache_monster_invader;
-void() precache_monster_executioner;
-void() precache_monster_oppressor;
-void() precache_monster_widow;
-void() precache_monster_wretch;
-void() precache_monster_symbol;
-void() precache_monster_lurker;
-void() precache_monster_prowler;
-void() precache_monster_boss1;
-void() precache_monster_keeper;
-
-void() precaches = 
-{
+void precaches() {
 	precache_model ("models/player/outlander/head.md3");
 	precache_model ("models/player/outlander/lower.md3");
 	precache_model ("models/player/outlander/upper.md3");
@@ -811,6 +801,7 @@ void() precaches =
 	precache_sound ("ui/journal/journal_close.ogg");
 	precache_sound ("ui/journal/journal_open.ogg");
 	precache_sound ("ui/journal/journal_page3.ogg");
+	precache_sound ("weapons/cannon/dryfire.ogg");
 	precache_sound ("weapons/cannon/fire1_1.ogg");
 	precache_sound ("weapons/cannon/fire1_2.ogg");
 	precache_sound ("weapons/cannon/fire1_3.ogg");

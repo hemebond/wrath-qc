@@ -4,6 +4,7 @@
 #define DEBUG 0
 #pragma includedir "../"
 #pragma warning disable Q208
+#pragma warning disable F302  // potentially uninitialised
 #pragma autoproto
 
 progsdefs.qc                                             // Definitions
@@ -18,6 +19,7 @@ frik_file.qc
 
 main.qc                                             // Main subroutines
 gore.qc
+notifications.qc
 
 timescale.qc										// controls slowmo
 dmg_system.qc
@@ -30,10 +32,13 @@ editor/editor.qc
 func_readable.qc
 player/artifact.qc
 player/player.qc
+player/camera.qc
 player/model.qc                                         
 player/client.qc                                           // Client subroutines
 player/use.qc
 
+entities/projectiles/heretic.qc
+entities/projectiles/cyst.qc
 
 weapons/node_editor.qc
 weapons/weapon_system.qc
@@ -48,18 +53,14 @@ weapons/w_crystal.qc
 weapons/w_bfg.qc
 weapons/w_viewmodel.qc
 
-
-
-entities/lights.qc                                  // Light Entities
-entities/sounds.qc                                 // Ambient Sounds
-entities/func_water.qc                                 // func water
-entities/func_button.qc
-entities/func_door.qc
+entities/lights.qc  // Light Entities
+entities/sounds.qc  // Ambient Sounds
+entities/func/water.qc
+entities/func/button.qc
+entities/func/door.qc
 entities/trigger.qc
 entities/entity_model.qc
 entities/breakables.qc
-
-entities/projectiles/heretic.qc
 
 entities/ammo/cannon.qc
 entities/ammo/crystal.qc
@@ -83,11 +84,13 @@ entities/artifact/siphon.qc
 entities/artifact/tether.qc
 
 entities/items.qc
-entities/func_destruct.qc
-entities/func_trap.qc
-entities/func_bob.qc
-entities/func_plat.qc
-entities/func_weather.qc
+entities/func/destruct.qc
+entities/func/trap.qc
+entities/func/bob.qc
+entities/func/bobbing.qc
+entities/func/plat.qc
+entities/func/weather.qc
+entities/func/pendulum.qc
 entities/jumpad.qc
 entities/portal.qc
 ../orrey.qc

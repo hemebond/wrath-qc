@@ -636,42 +636,50 @@ void(vector org, vector dest, entity ownr) shot_water_dripper =
 	dripper.nextthink = time + 5;
 };
 
-void(float shotcount, vector dir, vector spread, float dmge, float spreadm) FireBullets = { local vector direction;
-	local vector src;
-	local float sv;
+void FireBullets(float shotcount, vector dir, vector spread, float dmge, float spreadm) {
+	vector direction;
+	float sv = 0;
 
-	if(self.clipgroup != 0)
-	{
+	if (self.clipgroup != 0) {
 		self.oldclipgroup = self.clipgroup;
 		self.clipgroup = 0;
 	}
+
 	makevectors(self.v_angle);
-	spread_x = spread_x *self.charge_shotgun;
-	spread_y = spread_y *self.charge_shotgun;
-	spreadm = spreadm *self.charge_shotgun;
-	src = self.origin + v_forward * 10;
-	src_z = self.absmin_z + self.size_z *0.7 + 8;
+	spread_x = spread_x * self.charge_shotgun;
+	spread_y = spread_y * self.charge_shotgun;
+	spreadm = spreadm * self.charge_shotgun;
+
+	vector src = self.origin + v_forward * 10;
+	src_z = self.absmin_z + self.size_z * 0.7 + 8;
+
 	float s = self.solid;
 	self.solid = SOLID_BBOX;
+
 	float o_dphitcontents = self.dphitcontentsmask;
 	self.dphitcontentsmask = DPCONTENTSMASK_WEAPON;
-	while (shotcount > 0)
-	{
+
+	vector minbbox = '0 0 0';
+	vector maxbbox = '0 0 0';
+	entity attacked;
+
+	while (shotcount > 0) {
 		sv += 0.0075 * spreadm;
-		if (self.weapon == IT_SHOTGUN)
-		{
+		if (self.weapon == IT_SHOTGUN) {
 			sv += 0.0005 * spreadm;
 			spread_x = spread_x *(spreadm);
 			spread_y = spread_y *(spreadm);
 		}
-		direction = dir + crandom() *(spread_x + sv + sv) *v_right + crandom() *(spread_y + sv) *v_up;
-		local vector maxbbox, minbbox;
+		direction = dir + crandom() * (spread_x + sv + sv) * v_right + crandom() * (spread_y + sv) * v_up;
+
 		maxbbox = coachbbox;
-		minbbox_x = maxbbox_x *-1;
-		minbbox_y = maxbbox_y *-1;
-		minbbox_z = maxbbox_z *-1;
+		minbbox_x = maxbbox_x * -1;
+		minbbox_y = maxbbox_y * -1;
+		minbbox_z = maxbbox_z * -1;
 		tracebox(src, minbbox, maxbbox, src + direction *2048, FALSE, self);
-		entity attacked = trace_ent;
+
+		attacked = trace_ent;
+
 		shot_water_dripper(src -'0 0 4', trace_endpos, self);
 
 		if (trace_fraction != 1.0 && !GetSkyMaterial())
@@ -687,28 +695,29 @@ void(float shotcount, vector dir, vector spread, float dmge, float spreadm) Fire
 
 			if (bossvulnerable == 1) // boss 1 legacy fallback
 			{
-				if((attacked == trace_ent) && (trace_ent.bloody == 2))
+				if ((attacked == trace_ent) && (trace_ent.bloody == 2))
 				{
 					explo_blood_sprite(5, trace_endpos);
 
 					if (random() < 0.1)
-						SpawnGib2(trace_endpos, randomvector('-32 -32 0','32 32 128'));
+						SpawnGib2(trace_endpos, randomvector('-32 -32 0', '32 32 128'));
 				}
 
 			}
 			if (attacked.bloodimpact) // new cleaner stuff
 				explo_blood_sprite(attacked.bloodimpact, trace_endpos);
 		}
-		//
 
-		//te_tei_g3 (self.origin, trace_endpos);
 		shotcount = shotcount - 1;
 	}
 	self.dphitcontentsmask = o_dphitcontents;
 	self.solid = s;
 	ApplyMultiDamage();
+
 	self.clipgroup = self.oldclipgroup;
-};
+}
+
+
 void() s_explode1 =[0, s_explode2]
 {
 	self.effects = EF_ADDITIVE;
@@ -764,12 +773,10 @@ void() s_explode11 =[10, SUB_Remove]
 .float flaskeffecttime;
 .float reloaded;
 
-void() Weapon_Fire = {
- 	float checked7;
- 	checked7 = cvar("saved4");
+void Weapon_Fire() {
+ 	float checked7 = cvar("saved4");
 
-	switch (self.weapon)
-	{
+	switch (self.weapon) {
 		case IT_MELEE:
 			w_melee_slash();
 			self.attack_finished = time + 0.5;
@@ -783,7 +790,7 @@ void() Weapon_Fire = {
 			if (self.ammo_revolver <= 0)
 			{
 				sound(self, CHAN_AUTO, "weapons/revolver/dryfire.ogg", 1, ATTN_NORM);
-				if(checked7)
+				if (checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
@@ -802,7 +809,7 @@ void() Weapon_Fire = {
 			if (self.ammo_shotgun < 2)
 			{
 				sound(self, CHAN_AUTO, "weapons/revolver/dryfire.ogg", 1, ATTN_NORM);
-				if(checked7)
+				if (checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
@@ -815,11 +822,10 @@ void() Weapon_Fire = {
 				achievement_onlybladeandmace = FALSE;
 			}
 		break;
-
 		case IT_CANNON:
 			if (self.ammo_cannon <= 0)
 			{
-				if(checked7)
+				if (checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
@@ -834,7 +840,7 @@ void() Weapon_Fire = {
 		case IT_LANCE:
 			if (self.ammo_lance <= 0)
 			{
-				if(checked7)
+				if (checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
@@ -850,7 +856,7 @@ void() Weapon_Fire = {
 		case IT_CRYSTAL:
 			if (self.ammo_crystal < 1)
 			{
-				if(checked7)
+				if (checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
@@ -864,17 +870,15 @@ void() Weapon_Fire = {
 			}
 		break;
 		case IT_RETCHER:
-			if (self.ammo_retcher <= 0)
-			{
+			if (self.ammo_retcher <= 0) {
 				sound(self, CHAN_AUTO, "weapons/retcher/dryfire.ogg", 1, ATTN_NORM);
-				if(checked7)
-				nextweapon();
+				if (checked7)
+					nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
 				return;
 			}
-			if(self.time_fire_retcher < time)
-			{
+			if (self.time_fire_retcher < time) {
 				self.torso_time = time + 0.5;
 				wfire_retcher();
 				achievement_onlybladeandmace = FALSE;
@@ -885,7 +889,7 @@ void() Weapon_Fire = {
 			if (self.ammo_spitter <= 0)
 			{
 				sound(self, CHAN_AUTO, "weapons/spitter/dryfire.ogg", 1, ATTN_NORM);
-				if(checked7)
+				if (checked7)
 				nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
@@ -907,17 +911,15 @@ void() Weapon_Fire = {
 	}
 	if (time > 2)
 		self.show_hostile = time + 1;
-};
-void() w_melee_charge;
-.float shotgun_fire1;
-//void()wsfire_crystal2;
-void() Weapon_Sfire =
-{
-	float checked7;
-	checked7 = cvar("saved4");
+}
 
-	if (self.weapon == IT_MELEE)
-	{
+
+.float shotgun_fire1;
+
+void Weapon_Sfire() {
+	float checked7 = cvar("saved4");
+
+	if (self.weapon == IT_MELEE) {
 		w_melee_charge();
 		self.torso_time = time + 0.5;
 		self.attack_finished = time + 0.05;
@@ -930,7 +932,7 @@ void() Weapon_Sfire =
 		if (self.ammo_revolver <= 0)
 		{
 			sound(self, CHAN_AUTO, "weapons/revolver/dryfire.ogg", 1, ATTN_NORM);
-			if(checked7)
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.1;	//0.25
 			self.noammobutton2 = 1;
@@ -958,7 +960,7 @@ void() Weapon_Sfire =
 		if (self.ammo_retcher <= 0)
 		{
 			sound(self, CHAN_AUTO, "weapons/retcher/dryfire.ogg", 1, ATTN_NORM);
-			if(checked7)
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
 			self.noammobutton2 = 1;
@@ -978,7 +980,7 @@ void() Weapon_Sfire =
 		if ((self.ammo_shotgun < 2) && (self.time_fire_shotgun < time))
 		{
 			sound(self, CHAN_AUTO, "weapons/revolver/dryfire.ogg", 1, ATTN_NORM);
-			if(checked7)
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
 			self.noammobutton2 = 1;
@@ -997,8 +999,8 @@ void() Weapon_Sfire =
 	{
 		if (self.ammo_cannon < 5)
 		{
-			//sound(self, CHAN_AUTO, "weapons/cannon/dryfire.ogg", 1, ATTN_NORM);
-			if(checked7)
+			sound(self, CHAN_AUTO, "weapons/cannon/dryfire.ogg", 1, ATTN_NORM);
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
 			self.noammobutton2 = 1;
@@ -1016,7 +1018,7 @@ void() Weapon_Sfire =
 	{
 		if (self.ammo_lance <= 0)
 		{
-			if(checked7)
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
 			self.noammobutton2 = 1;
@@ -1031,7 +1033,7 @@ void() Weapon_Sfire =
 	{
 		if (self.ammo_bfg <= 0)
 		{
-			if(checked7)
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
 			self.noammobutton2 = 1;
@@ -1071,7 +1073,7 @@ void() Weapon_Sfire =
 		if (self.ammo_spitter <= 0)
 		{
 			sound(self, CHAN_AUTO, "weapons/spitter/dryfire.ogg", 1, ATTN_NORM);
-			if(checked7)
+			if (checked7)
 				nextweapon();
 			self.attack_finished = time + 0.25;
 			self.noammobutton2 = 1;
@@ -1083,9 +1085,10 @@ void() Weapon_Sfire =
 		achievement_onlybladeandmace = FALSE;
 	}
 	self.show_hostile = time + 1;
-};
-void()W_SetWeapon;
-void() Think_Vweapon = {
+}
+
+
+void Think_Vweapon() {
 	if(self.owner.vhud == 3)
 		self.effects = EF_NODRAW;
 	else
@@ -1095,11 +1098,14 @@ void() Think_Vweapon = {
 	self.glowmod = self.owner.vweaponglowmod;
 	self.think = Think_Vweapon;
 	self.nextthink = time;
-};
+}
+
+
 .float rweapon;
 .float centered;
 void W_SetWeapon() {
-	string fwmodel;
+	string fwmodel = "";
+
 	if (self.weapon == IT_MELEE)
 		fwmodel = "models/weapons/melee/v_gauntlet.md3";
 	else if (self.weapon == IT_REVOLVER)
@@ -1120,8 +1126,14 @@ void W_SetWeapon() {
 		fwmodel = self.vvweapon_model;
 	else if (self.weapon == IT_MACE)
 		fwmodel = "models/weapons/mace/v_gauntlet.md3";
+
 	self.weaponmodel = "models/weapons/revolver/v_revolver.md3";
+
+	if (fwmodel == "")
+		error("Expected weapon model, got nothing");
+
 	self.vweapon.model = fwmodel;
+
 	if (self.weapon == IT_VIEWMODEL)
 	{
 		self.vweapon.scale = self.vvweapon_scale;
@@ -1161,7 +1173,7 @@ void W_SetWeapon() {
 		self.vweapon.origin_z = self.svweapon_z;
 		self.vweapon.angles = self.sweaponangles;
 		if(!(self.vweapon.effects & EF_DOUBLESIDED))
-		self.vweapon.effects += EF_DOUBLESIDED;
+			self.vweapon.effects += EF_DOUBLESIDED;
 	}
 	if (self.weapon == IT_SPITTER)
 	{
@@ -1203,8 +1215,8 @@ void W_SetWeapon() {
 		self.vweapon.origin_z = self.chvweapon_z;
 		self.vweapon.angles = self.chvweaponangles;
 	}
-	float checked6;
- 	checked6 = cvar("saved3");
+
+ 	float checked6 = cvar("saved3");
  	if ((checked6 == 1) && (self.weapon != IT_MELEE))
 	{
 		if (self.weapon == IT_VIEWMODEL)
@@ -1290,14 +1302,14 @@ void W_SetWeapon() {
 		self.centered = 1;
 	}
 	else
-	self.centered = 0;
+		self.centered = 0;
 
-	//self.colormod = '1 1 1';
 	setmodel(self.vweapon, fwmodel);
-};
+}
+
+
 .float rlastweapon;
-void() raise_weapon =
-{
+void raise_weapon() {
 	W_SetWeapon();
 	self.attack_finished = time + 0.0125;
 	self.lastweapon = self.weapon;
@@ -1376,37 +1388,39 @@ void() raise_weapon =
 		self.vweaponskin = 0;
 		raise_vmodel();
 	}
-};
-void() pick_up_melee;
+}
+
+
 .float hasmelee;
 
-void()get_texture_name;
 
-void() W_ChangeWeapon =
-{
-
+void W_ChangeWeapon() {
 	Check_FrikFile();
+
 	self.realoding = 0;
+
 	if(self.wrath_time > time)
 	{
 		if ((self.impulse > 1) && (self.impulse < 9))
 			return;
 	}
+
 	self.randomattack = 0;
+
 	if (self.draw_w != 0)
 		return;
+
 	self.hasmelee = 0;
-	local float fl, oldweapon;
+	float fl, oldweapon;
+
 	if ((time < self.timesound))
 	{
 		sound(self, CHAN_WEAPON2, "weapons/spitter/fire1_release.wav", 1, ATTN_NORM);
 		self.timesound = 0;
-		//return;
 	}
+
 	if (self.impulse == 1)
-	{
 		fl = IT_MELEE;
-	}
 	else if (self.impulse == 2)
 		fl = IT_REVOLVER;
 	else if (self.impulse == 3)
@@ -1423,20 +1437,21 @@ void() W_ChangeWeapon =
 		fl = IT_CRYSTAL;
 	else if (self.impulse == 9)
 		fl = IT_MACE;
+
 	self.impulse = 0;
 	self.noammobutton = 0;
 	self.noammobutton2 = 0;
-	if (!(self.items &fl))
-	{
+
+	if (!(self.items &fl)) {
 		// don't have the weapon or the ammo
 		sprint(self, "no weapon.\n");
 		return;
 	}
+
 	oldweapon = self.weapon;
 	if (self.weapon == fl)
 		return;
-	//		if(self.lspeedtime > time)// nice option to speedruns
-	//	self.lspeedtime = time + 0.05;
+
 	self.weapon = fl;
 	self.lastweapon = oldweapon;
 	self.rlastweapon = oldweapon;
@@ -1461,12 +1476,15 @@ void() W_ChangeWeapon =
 		lower_bfg();
 	if (oldweapon == IT_VIEWMODEL)
 		lower_vmodel();
+
 	self.switch_finished = time + 0.175;
 	self.lastweapontime = time + 0.05;
-};
-void() select_lastweapon =
-{
-	local float timpulse;
+}
+
+
+void select_lastweapon() {
+	float timpulse = 0;
+
 	if (self.rlastweapon == IT_MELEE)
 		timpulse = 1;
 	if (self.rlastweapon == IT_REVOLVER)
@@ -1485,395 +1503,394 @@ void() select_lastweapon =
 		timpulse = 8;
 	if (self.rlastweapon == IT_MACE)
 		timpulse = 9;
-	self.impulse = timpulse;
 
+	self.impulse = timpulse;
 	self.switch_finished = time + 0.175;
 	W_ChangeWeapon();
 }
-void() prevweapon = { local float timpulse;
-	if (self.weapon == IT_MELEE)
-	{
-		if(self.wrath_time > time)
-		{
-			if (self.items &IT_MACE)
+
+
+void prevweapon() {
+	float timpulse;
+
+	if (self.weapon == IT_MELEE) {
+		if(self.wrath_time > time) {
+			if (self.items & IT_MACE)
 				timpulse = 9;
 			self.impulse = timpulse;
 			W_ChangeWeapon();
-				return;
+			return;
 		}
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
 	}
-	if (self.weapon == IT_REVOLVER)
-	{
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+
+	if (self.weapon == IT_REVOLVER) {
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
 	}
 	if (self.weapon == IT_SHOTGUN)
 	{
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
 	}
 	if (self.weapon == IT_SPITTER)
 	{
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
 	}
 	if (self.weapon == IT_RETCHER)
 	{
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
 	}
 	if (self.weapon == IT_CANNON)	//retcher
 	{
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
 	}
 	if (self.weapon == IT_LANCE)	//lance
 	{
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
 	}
 	if (self.weapon == IT_CRYSTAL)	//lance
 	{
-		if ((self.items &IT_MACE))
+		if ((self.items & IT_MACE))
 			timpulse = 9;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
 	}
 	if (self.weapon == IT_MACE)	//lance
 	{
 		if(self.wrath_time > time)
 		{
-			if (self.items &IT_MELEE)
+			if (self.items & IT_MELEE)
 				timpulse = 1;
 			self.impulse = timpulse;
 			W_ChangeWeapon();
-				return;
+			return;
 		}
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
 	}
 	self.impulse = timpulse;
 	self.switch_finished = time + 0.175;
 	W_ChangeWeapon();
-	//self.attack_finished = time;
-};
+}
+
+
 void() nextweapon = {
-
-
-	local float timpulse;
+	float timpulse;
 	if (self.weapon == IT_MELEE)
 	{
-
-
 		if(self.wrath_time > time)
 		{
-			if (self.items &IT_MACE)
+			if (self.items & IT_MACE)
 				timpulse = 9;
 			self.impulse = timpulse;
 			W_ChangeWeapon();
 				return;
 		}
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
 	}
 	if (self.weapon == IT_REVOLVER)
 	{
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
 	}
 	if (self.weapon == IT_SHOTGUN)
 	{
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
 	}
 	if (self.weapon == IT_SPITTER)
 	{
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
 	}
 	if (self.weapon == IT_RETCHER)
 	{
-		if ((self.items &IT_SPITTER) && (self.ammo_spitter))
+		if ((self.items & IT_SPITTER) && (self.ammo_spitter))
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
 	}
 	if (self.weapon == IT_CANNON)	//retcher
 	{
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if (self.items &IT_SPITTER)
+		if (self.items & IT_SPITTER)
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
 	}
 	if (self.weapon == IT_LANCE)	//lance
 	{
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if (self.items &IT_SPITTER)
+		if (self.items & IT_SPITTER)
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
-		if ((self.items &IT_CRYSTAL) && (self.ammo_crystal))
+		if ((self.items & IT_CRYSTAL) && (self.ammo_crystal))
 			timpulse = 8;
 	}
 	if (self.weapon == IT_CRYSTAL)	//lance
 	{
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if (self.items &IT_SPITTER)
+		if (self.items & IT_SPITTER)
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
-		if (self.items &IT_MACE)
+		if (self.items & IT_MACE)
 			timpulse = 9;
 	}
 	if (self.weapon == IT_MACE)	//lance
 	{
 		if(self.wrath_time > time)
 		{
-			if (self.items &IT_MELEE)
+			if (self.items & IT_MELEE)
 				timpulse = 1;
 			self.impulse = timpulse;
 			W_ChangeWeapon();
 				return;
 		}
-		if (self.items &IT_CRYSTAL)
+		if (self.items & IT_CRYSTAL)
 			timpulse = 8;
-		if ((self.items &IT_LANCE) && (self.ammo_lance))
+		if ((self.items & IT_LANCE) && (self.ammo_lance))
 			timpulse = 7;
-		if ((self.items &IT_CANNON) && (self.ammo_cannon))
+		if ((self.items & IT_CANNON) && (self.ammo_cannon))
 			timpulse = 6;
-		if ((self.items &IT_RETCHER) && (self.ammo_retcher))
+		if ((self.items & IT_RETCHER) && (self.ammo_retcher))
 			timpulse = 5;
-		if (self.items &IT_SPITTER)
+		if (self.items & IT_SPITTER)
 			timpulse = 4;
-		if ((self.items &IT_SHOTGUN) && (self.ammo_shotgun))
+		if ((self.items & IT_SHOTGUN) && (self.ammo_shotgun))
 			timpulse = 3;
-		if ((self.items &IT_REVOLVER) && (self.ammo_revolver))
+		if ((self.items & IT_REVOLVER) && (self.ammo_revolver))
 			timpulse = 2;
-		if (self.items &IT_MELEE)
+		if (self.items & IT_MELEE)
 			timpulse = 1;
 	}
 
@@ -2036,34 +2053,29 @@ void() Toggle_HUD = { if (self.vhud == 1)
 	else
 		self.vhud = 1;
 };
-//transformation;
+
+
+
 .float spitterloop;
 .entity pipes;
 .float killemalltime;
-void() killemall =
-{
+
+
+void killemall() {
 	if(self.killemalltime > time)
 		return;
 
-
-	local entity monster;
-	monster = nextent(world);
-	while (monster)
-	{
-		entity holder = nextent(monster);
-		if (monster.flags &FL_MONSTER)
-		{
+	entity monster = nextent(world);
+	while (monster) {
+		entity holder = nextent(monster);  // hemebond: why here?
+		if (monster.flags & FL_MONSTER) {
 				T_Damage(monster, self, self, 100000);
 		}
-		if(monster.classname == "monster_keeper")
-		{
+		if(monster.classname == "monster_keeper") {
 				T_Damage(monster, self, self, 100000);
 		}
-		if(monster.classname == "boss_guardian1")
-		{
-
-			if(monster.bosspain_finished < time)
-			{
+		if(monster.classname == "boss_guardian1") {
+			if(monster.bosspain_finished < time) {
 				if(monster.bosscnt == 3)
 					monster.health = 19999;
 				if(monster.bosscnt == 2)
@@ -2071,36 +2083,30 @@ void() killemall =
 				if(monster.bosscnt == 1)
 					monster.health = 4999;
 			}
-			else
-			{
-				T_Damage (monster.pipes, self, self, 125);
+			else {
+				T_Damage(monster.pipes, self, self, 125);
 
 			}
 		}
 		monster = holder;
 	}
 	self.killemalltime = time + 0.25;
-};
-
-void() removefuncs =
-{
+}
 
 
+void removefuncs() {
 	string funcname;
-	local entity wrathitems;
-	wrathitems = nextent(world);
-	while (wrathitems)
-	{
+	entity wrathitems = nextent(world);
+	while (wrathitems) {
 		entity holder = nextent(wrathitems);
 		funcname = substring(wrathitems.classname, -99, 5);
-		if (funcname == "func_")
-		{
+		if (funcname == "func_") {
 				remove(wrathitems);
 		}
 		wrathitems = holder;
 	}
+}
 
-};
 
 void() removetriggers =
 {
@@ -2283,7 +2289,7 @@ void()debug_particle_increase =
 
 	pointparticles(particlenumber,self.origin + v_forward * 48 ,'0 0 0',32);
 		local string viewxanglesfactor;
-		viewxanglesfactor = strcat ((ftos (particlenumber)), (" particlecount\n"));
+		viewxanglesfactor = strcat((ftos(particlenumber)), (" particlecount\n"));
 		bprint (viewxanglesfactor);
 };
 
@@ -2340,20 +2346,6 @@ void() mark_monsters =
 		alivemonster = holder;
 	}
 
-	/*entity alivemonster = nextent(world);
-	while (alivemonster)
-	{
-		entity holder = nextent(alivemonster);
-		if ((alivemonster.classname == "monster_symbol") && (alivemonster.health > 0))
-		{
-			entity looper_sound = spawn();
-			looper_sound.owner = alivemonster;
-			looper_sound.think = alivemonster_think;
-			looper_sound.nextthink = time + 0.25;
-		}
-
-		alivemonster = holder;
-	}*/
 	centerprint(self,strcat(ftos(monster_counter_alive),": alive monsters.\n",ftos(spawner_counter_alive),": active spawners."));
 };
 
@@ -2515,23 +2507,23 @@ void() ImpulseCommands =
 	{
 		//self.darmorvalue = 100;
 		self.rarmorvalue = 100;
-		if (!(self.items &IT_REVOLVER))
+		if (!(self.items & IT_REVOLVER))
 			self.items += IT_REVOLVER;
-		if (!(self.items &IT_SPITTER))
+		if (!(self.items & IT_SPITTER))
 			self.items += IT_SPITTER;
-		if (!(self.items &IT_RETCHER))
+		if (!(self.items & IT_RETCHER))
 			self.items += IT_RETCHER;
-		if (!(self.items &IT_SHOTGUN))
+		if (!(self.items & IT_SHOTGUN))
 			self.items += IT_SHOTGUN;
-		if (!(self.items &IT_MELEE))
+		if (!(self.items & IT_MELEE))
 			self.items += IT_MELEE;
-		if (!(self.items &IT_CANNON))
+		if (!(self.items & IT_CANNON))
 			self.items += IT_CANNON;
-		if (!(self.items &IT_LANCE))
+		if (!(self.items & IT_LANCE))
 			self.items += IT_LANCE;
-		if (!(self.items &IT_CRYSTAL))
+		if (!(self.items & IT_CRYSTAL))
 			self.items += IT_CRYSTAL;
-		if (!(self.items &IT_MACE))
+		if (!(self.items & IT_MACE))
 			self.items += IT_MACE;
 		self.ammo_revolver = max_ammo_revolver;
 		self.ammo_shotgun = max_ammo_shotgun;
@@ -2557,9 +2549,9 @@ void() ImpulseCommands =
 	}
 	if (self.impulse == 11)
 	{
-		flash_toggle();
-			//node_debug();
-			//node_debug_think();
+		flash_toggle();  // FIXME: Does this do anything
+		//node_debug();
+		//node_debug_think();
 		if (!self.wrath_debug_screen) {
 			self.wrath_debug_screen = 1;
 			test_ia = 1;
@@ -2569,8 +2561,7 @@ void() ImpulseCommands =
 			test_ia = 0;
 		}
 	}
-	if (self.wrath_debug_screen == 1)
-	{
+	if (self.wrath_debug_screen == 1) {
 		if (self.impulse == 12)
 			W_FireFmonster();
 	}
@@ -2611,7 +2602,7 @@ void() ImpulseCommands =
 	if ((self.impulse == 208) && (developer == 1))
 		Toggle_Mode();
 
-	if ((self.impulse == 236)&& (developer == 1))
+	if ((self.impulse == 236) && (developer == 1))
 	{
 		killemall2();
 		self.impulse = 0;
@@ -2854,7 +2845,7 @@ void WeaponFrames() {
 	}
 	if(self.impulse == 101)
 	{
-		if(!(self.items &IT_MELEE))
+		if(!(self.items & IT_MELEE))
 		{
 			self.items += IT_MELEE;
 			self.weapon = IT_MELEE;

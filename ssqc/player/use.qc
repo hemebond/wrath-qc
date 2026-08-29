@@ -330,7 +330,7 @@ void Use_Func() {
 		trace_ent.enemy = self;
 		trace_ent.think = object_switch_fire;
 		trace_ent.nextthink = trace_ent.ltime + 0.01;
-		if (trace_ent.link)
+		if (trace_ent.link != "")
 		{
 			local entity t;
 			t = find(world, linked, trace_ent.link);

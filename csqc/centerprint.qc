@@ -15,7 +15,7 @@ uielement_c centerprint_list;
 void HUD_InitializeCenterprint(void)
 {
 	void(uielement_c this) cprint_preloop = {
-		uitext_c lst = this.partner;
+		uitext_c lst = (uitext_c)this.partner;
 
 		if (this.health && time > this.health)
 		{
@@ -26,7 +26,7 @@ void HUD_InitializeCenterprint(void)
 					strunzone(lst.text);
 				lst.text = 0;
 				lst.flags |= UIFLAG_HIDE;
-				lst = lst.partner;
+				lst = (uitext_c)lst.partner;
 			}
 		}
 	};
@@ -58,8 +58,8 @@ void centerprint(string s)
 	float argc = tokenizebyseparator(s, "\n");
 	
 	float i;
-	uitext_c txt = centerprint_list.partner;
-	for(i = 0; i < min(argc, CENTERPRINT_MAXLINES); i++, txt = txt.partner)
+	uitext_c txt = (uitext_c)centerprint_list.partner;
+	for(i = 0; i < min(argc, CENTERPRINT_MAXLINES); i++, txt = (uitext_c)txt.partner)
 	{
 		if (txt.text)
 			strunzone(txt.text);
@@ -107,7 +107,7 @@ void centerprint(string s)
 	}
 
 	// clean up any remaining lines
-	for(; i < CENTERPRINT_MAXLINES; i++, txt = txt.partner)
+	for(; i < CENTERPRINT_MAXLINES; i++, txt = (uitext_c)txt.partner)
 	{
 		if (txt.text)
 			strunzone(txt.text);

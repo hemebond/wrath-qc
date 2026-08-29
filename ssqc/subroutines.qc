@@ -1,20 +1,13 @@
-void(vector tdest, float tspeed, void() func) SUB_CalcMove;
-void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt;
-void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove;
-void() SUB_CalcMoveDone;
-void() SUB_CalcAngleMoveDone;
-void() SUB_Null;
-void() SUB_UseTargets;
-void() SUB_Remove;
-
-float(float v) mathlib_anglemod = { return v - floor(v / 360) *360;
+float(float v) mathlib_anglemod = {
+	return v - floor(v / 360) *360;
 };
 
 void makevectors2(vector ang);
 
 void() SUB_Null = {};
 
-void() SUB_Remove = { remove(self);
+void() SUB_Remove = {
+	remove(self);
 };
 
 void(entity e, float d) nullpain = {};
@@ -194,7 +187,7 @@ void() SUB_UseTargets3 = { local entity t, stemp, otemp, act;
 	//
 	// kill the killtagets
 	//
-	if (self.killtarget)
+	if (self.killtarget != "")
 	{
 		t = world;
 		do { 	t = find(t, targetname, self.killtarget);
@@ -207,7 +200,7 @@ void() SUB_UseTargets3 = { local entity t, stemp, otemp, act;
 	//
 	// fire targets
 	//
-	if (self.target)
+	if (self.target != "")
 	{
 		act = activator;
 		t = world;
@@ -279,25 +272,27 @@ void(float ldelay,string ltarget,string lkilltarget, entity lactivator)spawn_del
 		t.target = ltarget;
 };
 
-void() SUB_UseTargets = { local entity t, act, stemp, otemp;
+void() SUB_UseTargets = {
+	entity t, act, stemp, otemp;
 
 	//
 	// check for a delay
 	//
-	if(self.target2)
-        spawn_delay_entity(self.delay2,self.target2,self.killtarget2,activator);
-	if(self.target3)
-        spawn_delay_entity(self.delay3,self.target3,self.killtarget3,activator);
-	if(self.target4)
-        spawn_delay_entity(self.delay4,self.target4,self.killtarget4,activator);
-	if(self.target5)
-        spawn_delay_entity(self.delay5,self.target5,self.killtarget5,activator);
-	if(self.target6)
-        spawn_delay_entity(self.delay6,self.target6,self.killtarget6,activator);
-	if(self.target7)
-        spawn_delay_entity(self.delay7,self.target7,self.killtarget7,activator);
-	if(self.target8)
-        spawn_delay_entity(self.delay8,self.target8,self.killtarget8,activator);
+
+	if(self.target2 != "")
+        	spawn_delay_entity(self.delay2, self.target2, self.killtarget2, activator);
+	if(self.target3 != "")
+        	spawn_delay_entity(self.delay3, self.target3, self.killtarget3, activator);
+	if(self.target4 != "")
+        	spawn_delay_entity(self.delay4, self.target4, self.killtarget4, activator);
+	if(self.target5 != "")
+        	spawn_delay_entity(self.delay5, self.target5, self.killtarget5, activator);
+	if(self.target6 != "")
+        	spawn_delay_entity(self.delay6, self.target6, self.killtarget6, activator);
+	if(self.target7 != "")
+        	spawn_delay_entity(self.delay7, self.target7, self.killtarget7, activator);
+	if(self.target8 != "")
+        	spawn_delay_entity(self.delay8, self.target8, self.killtarget8, activator);
 	if (self.delay)
 	{
 		// create a temp object to fire at a later time
@@ -309,7 +304,7 @@ void() SUB_UseTargets = { local entity t, act, stemp, otemp;
 		t.message = self.message;
 		t.killtarget = self.killtarget;
 		t.target = self.target;
-        return;
+        	return;
 	}	
 
 	//
@@ -795,16 +790,15 @@ void(float type, float delay) save_screenshot =
 	fputs(writeparms, line3);
  	fputs(writeparms, "\n");
  	fclose_wrath(writeparms);
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 
 };
 
 
-float() GetSkyMaterial = 
-{ 
+float GetSkyMaterial() {
 	return (trace_dphitq3surfaceflags & Q3SURFACEFLAG_SKY) || (trace_dphitq3surfaceflags & Q3SURFACEFLAG_NOIMPACT);
-};
+}
 
 
 void() touchtriggers_think =

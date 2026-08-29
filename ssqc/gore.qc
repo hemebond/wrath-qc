@@ -1,18 +1,17 @@
-void(vector org, float class) blood_decal;
 .vector corpse_angles;
 
 vector(vector rvel, entity ent) relvel = 
 { 
-	local vector revel;
 	makevectors(ent.angles + ent.corpse_angles);
-	revel = v_forward *rvel_x + v_right *rvel_y + v_up * rvel_z;
+	vector revel = v_forward *rvel_x + v_right *rvel_y + v_up * rvel_z;
+	vector extravel = '0 0 0';
 
 	if(self.classentity == "deadurn")
 	{
 		float dhm = (self.health / 250) * -1;
 		if(dhm >= 20) 
 			dhm = 20;
-		vector extravel = revel * dhm;
+		extravel = revel * dhm;
 		extravel_z += (dhm * 75) ; 
 	}
 
@@ -231,7 +230,7 @@ void() checking_ground =
 				pointparticles(particleeffectnum("bloodtrailwall"),self.origin, '0 0 0', 1);
 			float touchingwolrd = 0;
 			vector dir ='0 0 0';
-			vector decalorg;
+			vector decalorg = '0 0 0';
 
 			traceline(self.origin, self.origin + '8 0 0', 3, self);
 			if (trace_fraction != 1.0)
@@ -262,8 +261,10 @@ void() checking_ground =
 			}	
 			else
 			{
-				if(time > self.attack_finished)
-				{blood_decal(decalorg, 10);self.attack_finished = time + random(2,3);}
+				if(time > self.attack_finished) {
+					blood_decal(decalorg, 10);
+					self.attack_finished = time + random(2,3);
+				}
 			}
 		
 		}

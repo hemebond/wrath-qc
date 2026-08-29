@@ -319,37 +319,37 @@ void() randomsoundbox_think =
 string random_sound_from_noise_fields(entity e);
 void() randomsoundbox =
 {
-	if (self.noise1)
+	if (self.noise1 != "")
 		{precache_sound(self.noise1); self.count = 1;}
-	if (self.noise2)
+	if (self.noise2 != "")
 		{precache_sound(self.noise2); if(self.count == 1) self.count = 2;}
-	if (self.noise3)
+	if (self.noise3 != "")
 		{precache_sound(self.noise3); if(self.count == 2) self.count = 3;}
-	if (self.noise4)
+	if (self.noise4 != "")
 		{precache_sound(self.noise4); if(self.count == 3) self.count = 4;}
-	if (self.noise5)
+	if (self.noise5 != "")
 		{precache_sound(self.noise5); if(self.count == 4) self.count = 5;}
-	if (self.noise6)
+	if (self.noise6 != "")
 		{precache_sound(self.noise6); if(self.count == 5) self.count = 6;}
-	if (self.noise7)
+	if (self.noise7 != "")
 		{precache_sound(self.noise7); if(self.count == 6) self.count = 7;}
-	if (self.noise8)
+	if (self.noise8 != "")
 		{precache_sound(self.noise8); if(self.count == 7) self.count = 8;}
-	if (self.noise9)
+	if (self.noise9 != "")
 		{precache_sound(self.noise9); if(self.count == 8) self.count = 9;}
-	if (self.noise10)
+	if (self.noise10 != "")
 		{precache_sound(self.noise10); if(self.count == 9) self.count = 10;}
-	if (self.noise11)
+	if (self.noise11 != "")
 		{precache_sound(self.noise11); if(self.count == 10) self.count = 11;}
-	if (self.noise12)
+	if (self.noise12 != "")
 		{precache_sound(self.noise12); if(self.count == 11) self.count = 12;}
-	if (self.noise13)
+	if (self.noise13 != "")
 		{precache_sound(self.noise13); if(self.count == 12) self.count = 13;}
-	if (self.noise14)
+	if (self.noise14 != "")
 		{precache_sound(self.noise14); if(self.count == 13) self.count = 14;}
-	if (self.noise15)
+	if (self.noise15 != "")
 		{precache_sound(self.noise15); if(self.count == 14) self.count = 15;}
-	local float attn;
+	float attn;
 	if (!self.volume)
 		self.volume = 1;
 	if (!self.rad_sound)
@@ -461,7 +461,7 @@ void() soundbox =
 
 	if(world.model == "maps/testsound.bsp")
 		testsound_frik();
-	if (self.noise)
+	if (self.noise != "")
 		precache_sound(self.noise);
 
 	/*random_sound_from_noise_fields(self);
@@ -1281,7 +1281,7 @@ void precache_noise_fields(entity e)
 		if (!e.fld)
 			continue;
 
-		if (e.fld)
+		if (e.fld != "")
 			precache_sound(e.fld);
 	}
 }

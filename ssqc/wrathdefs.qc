@@ -199,9 +199,7 @@ float globalfake_illumination;
 //
 //Weapons
 //
-//.float	ammo;
 
-//.string vweaponmodel;
 .float vweaponframe;
 .float vgearframe;
 .entity vgear;
@@ -216,7 +214,6 @@ float globalfake_illumination;
 .float vweaponskin;
 .vector vweaponglowmod;
 
-//.float timevweapon;
 .float timesound;
 .float draw_w;
 .float bloody;
@@ -275,8 +272,6 @@ vector shells_size_invader;
 //
 .float pain_finished;
 .float show_hostile;	//settotime+0.2wheneveraclientfiresa
-//weaponortakesdamage.Usedtoalert
-//monstersthatotherwisewouldlettheplayergo
 
 //
 //ai
@@ -289,19 +284,17 @@ vector shells_size_invader;
 .void() th_missile;
 .void() th_melee;
 .void(entity attacker, float damage) th_pain;
-void() th_painfixed =
-{
+void th_painfixed() {
     self.th_pain(self.enemy,1);
-};
+}
 
 
 
 
 .void() th_die;
-void(entity a, float b) th_paintodeath =
-{
+void th_paintodeath(entity a, float b) {
     self.th_die();
-};
+}
 .entity oldenemy;	//madatthisplayerbeforetakingdamage
 .float lefty;
 .float search_time;
@@ -311,7 +304,6 @@ void(entity a, float b) th_paintodeath =
 .float totallungetime;
 .float attar_timem;
 .float waitmin;
-//.float waitmax;
 float AS_STRAIGHT = 1;
 float AS_SLIDING = 2;
 float AS_MELEE = 3;
@@ -321,7 +313,6 @@ float AS_MISSILE = 4;
 .float chattersnd;
 .float attacksnd;
 .float walksnd;
-//.float sightsnd;
 .float stunned;
 .float execution_animation;
 .float execution;
@@ -363,9 +354,6 @@ float AS_MISSILE = 4;
 .float zerogtime;
 .float drag;
 .float oldgravity;
-//.float viewalpha;
-//.vector viewcolor;
-void() CheckFuncWaterDeath;
 
 .vector ldorigin;
 .vector ldtdest;
@@ -753,8 +741,8 @@ void() objerror_messages =
 	if(obj_entity9 != world)	string obj_message9 = strcat ((obj_entity9.classname), " ", vtos (obj_entity9.origin)," no targetname \n", "\n");
 	if(obj_entity10 != world)	string obj_message10 = strcat ((obj_entity10.classname), " ", vtos (obj_entity10.origin)," no targetname \n");
 	
-	string obj_messagea = strcat (obj_message1,obj_message2,obj_message3,obj_message4,obj_message5);
-	string obj_messageb = strcat (obj_message6,obj_message7,obj_message8,obj_message9,obj_message10);
+	string obj_messagea = strcat(obj_message1,obj_message2,obj_message3,obj_message4,obj_message5);
+	string obj_messageb = strcat(obj_message6,obj_message7,obj_message8,obj_message9,obj_message10);
 
 	string obj_message  = strcat (obj_messagea, obj_messageb);
 	//centerprint (pl, obj_message);
@@ -891,8 +879,6 @@ string fog_value;
 .float r_zoom;
 .float r_endscreen;
 
-void()trigger_fog_touch;
-
 .float fakewatertype;
 
 .float bosscnt;
@@ -959,16 +945,16 @@ float achievement_takendamage;
 float achievement_onlybladeandmace;
 float achievement_boss_starttime;
 
-void Hud_SendNotification(entity ownr, string icon, string msg, float msgflags = 0);
-void Hud_SendNotification_Full(entity ownr, string icon, string label, string msg, float msgflags = 0);
-void Hud_SendNotification_Note(entity ownr, string icon, float note);
-void Hud_SendNotification_Control(entity ownr, string format, string cmd);
-void Hud_SendNotification_Control2(entity ownr, string format, string cmd, string cmd2);
-void Hud_FullNotification(entity ownr);
-void Hud_JournalNotification(entity ownr);
-
-float(string filename) fexists_pak = {
+float fexists_pak(string filename) {
 	if ((whichpack(filename) != string_null) || fexists(filename))
 		return 1;
 	return 0;
-};
+}
+
+float CLIPGROUP_NONE = 0;  // disabled boss projectile?
+float CLIPGROUP_PLAYERS = 1;  // cyst_solid_field, retcher projectile?
+float CLIPGROUP_WATER = 2;  // func_water, revolver projectile
+float CLIPGROUP_MODEL = 4;  // model emitter
+float CLIPGROUP_GUARDIAN = 8;  // boss1 guardian projectile
+float CLIPGROUP_PROWLER = 16;  // prowler monster?
+float CLIPGROUP_CYSTS = 32;  // Prevent cysts from blocking each other

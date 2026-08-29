@@ -204,7 +204,7 @@ void() info_particles = { if (!self.using)
 	if(!self.clipdist)
 		self.clipdist = 2048;
 
-	if(self.noise)
+	if(self.noise != "")
 	{
 		local float attn;
 		if (!self.volume)
@@ -227,7 +227,7 @@ void() info_particles = { if (!self.using)
 
 	if(self.cnt >= 1)
 	{
-		if (self.targetname)
+		if (self.targetname != "")
 			self.use = pspawner_use;
 		else
 		{
@@ -240,7 +240,7 @@ void() info_particles = { if (!self.using)
 
 	if((self.wait == -1) )
 	{
-		if (self.targetname)
+		if (self.targetname != "")
 			self.use = pspawner_use;
 		else
 		{
@@ -270,7 +270,7 @@ void() point_particles = { if (!self.using)
 	self.use = toggle_use;
 	if(!self.clipdist)
 		self.clipdist = 2048;
-	if(self.noise)
+	if(self.noise != "")
 	{
 		local float attn;
 		if (!self.volume)
@@ -292,7 +292,7 @@ void() point_particles = { if (!self.using)
 	
 	if((self.wait == -1) )
 	{
-		if (self.targetname)
+		if (self.targetname != "")
 		self.use = pspawner_think2;
 	}
 	else
@@ -740,11 +740,11 @@ void() model_emitter_use =
 void() model_emitter =
 {
 
-	if (self.noise1)
+	if (self.noise1 != "")
 		{precache_sound(self.noise1); self.rcount = 1;}
-	if (self.noise2)
+	if (self.noise2 != "")
 		{precache_sound(self.noise2); if(self.rcount == 1) self.rcount = 2;}
-	if (self.noise3)
+	if (self.noise3 != "")
 		{precache_sound(self.noise3); if(self.rcount == 2) self.rcount = 3;}
 
 
@@ -776,7 +776,7 @@ void() model_emitter =
 	self.movetype = 0;	
 	if(!self.particle_movetype)
 		self.particle_movetype =MOVETYPE_NOCLIP;
-	if(self.model1)
+	if(self.model1 != "")
 		self.model_ammount = 1;
 	self.alpha = 0.25;	
 	//self.origin += ' 0 0 0';
@@ -1124,10 +1124,8 @@ void() restart_particle =
 
 
 
-void(entity powner) spawn_model_emitter2 =
-{
-	local entity spawned_model;
-	spawned_model = spawn ();
+void spawn_model_emitter2(entity powner) {
+	entity spawned_model = spawn ();
 	spawned_model.owner = powner;
 	spawned_model.origin_x = spawned_model.owner.origin_x + (crandom() *spawned_model.owner.originjitter_x);
 	spawned_model.origin_y = spawned_model.owner.origin_y +  (crandom() *spawned_model.owner.originjitter_y);
@@ -1164,8 +1162,8 @@ void(entity powner) spawn_model_emitter2 =
 	spawned_model.movetype = powner.particle_movetype;
 	//spawned_model.effects = EF_LOWPRECISION;	
 	spawned_model.modelflags = spawned_model.owner.particle_modelflags;
-	if(spawned_model.owner.particlename)
-	spawned_model.traileffectnum = particleeffectnum (spawned_model.owner.particlename);	
+	if (spawned_model.owner.particlename != "")
+		spawned_model.traileffectnum = particleeffectnum (spawned_model.owner.particlename);
 	spawned_model.gravity = spawned_model.owner.gravity;
 	
 	spawned_model.velocity += spawned_model.owner.velocityoffset;
@@ -1244,7 +1242,7 @@ void() model_emitter2 =
 	self.movetype = 0;	
 	if(!self.particle_movetype)
 		self.particle_movetype =MOVETYPE_NOCLIP;
-	if(self.model1)
+	if(self.model1 != "")
 		self.model_ammount = 1;
 	self.alpha = 0.25;	
 	precache_model(self.model1);	
@@ -1473,7 +1471,3 @@ void() gib_spawner =
 		self.type = 1;
 	self.use = gib_spawner_use;
 };
-
-//////////////////////end of qc file
-
-

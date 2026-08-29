@@ -287,25 +287,25 @@ void() spawn_attached_models =
 	s_model = spawn();
 	setmodel(s_model, self.attached_model);
 	setattachment(s_model, self, self.tag_name);
-	if (self.attached_model2)
+	if (self.attached_model2 != "")
 	{
 		s_model2 = spawn();
 		setmodel(s_model2, self.attached_model2);
 		setattachment(s_model2, self, self.tag_name2);
 	}
-	if (self.attached_model3)
+	if (self.attached_model3 != "")
 	{
 		s_model3 = spawn();
 		setmodel(s_model3, self.attached_model3);
 		setattachment(s_model3, self, self.tag_name3);
 	}
-	if (self.attached_model4)
+	if (self.attached_model4 != "")
 	{
 		s_model4 = spawn();
 		setmodel(s_model4, self.attached_model4);
 		setattachment(s_model4, self, self.tag_name4);
 	}
-	if (self.attached_model5)
+	if (self.attached_model5 != "")
 	{
 		s_model5 = spawn();
 		setmodel(s_model5, self.attached_model5);
@@ -398,7 +398,7 @@ void() place_model =
 	precache_model(self.model);
 	setmodel(self, self.model);
 	
-	if (self.target)
+	if (self.target != "")
 	{
 		if (self.spawnflags & 1)
 		{
@@ -430,7 +430,7 @@ void() place_model =
 		}
 		return;
 	}
-	if (self.attached_model)
+	if (self.attached_model != "")
 	{
 		self.think = spawn_attached_models;
 		self.nextthink = (time + 0.1);
@@ -522,7 +522,7 @@ void() test_model =
 		self.nextthink = (time + 0.1);
 		self.think = test_model_fix_origin;
 	}
-	if (self.target)
+	if (self.target != "")
 	{
 		if (!self.speed)
 		{
@@ -814,13 +814,12 @@ void() cyst_think =
 	self.nextthink = (time + 0.05);
 };
 
-void(entity e) spawn_cysts =
-{
-	local entity cst1;
-	local entity cst2;
-	local entity cst3;
-	local entity cst4;
-	local float pos;
+void spawn_cysts(entity e) {
+	entity cst1;
+	entity cst2;
+	entity cst3;
+	entity cst4;
+	float pos;
 
 	cst1 = spawn();
 	cst2 = spawn();
@@ -838,53 +837,53 @@ void(entity e) spawn_cysts =
 	cst2.cyst_rate_scale = 0.025;
 	cst3.cyst_rate_scale = 0.025;
 	cst4.cyst_rate_scale = 0.025;
-	cst1.count = TRUE;
-	cst2.count = FL_SWIM;
-	cst3.count = MOVETYPE_WALK;
-	cst4.count = MOVETYPE_STEP;
+	cst1.count = 1;
+	cst2.count = 2;
+	cst3.count = 3;
+	cst4.count = 4;
 	setmodel(cst1, "models/enemies/afflicted/cyst_a.md3");
 	setmodel(cst2, "models/enemies/afflicted/cyst_b.md3");
 	setmodel(cst3, "models/enemies/afflicted/cyst_c.md3");
 	setmodel(cst4, "models/enemies/afflicted/cyst_d.md3");
-	pos = ceil(((random() * MOVETYPE_FLY) + TRUE));
-	if ((pos > MOVETYPE_FLY))
+	pos = ceil(((random() * 5) + 1));
+	if ((pos > 5))
 	{
-		pos = MOVETYPE_FLY;
+		pos = 5;
 	}
-	if ((pos == TRUE))
+	if ((pos == 1))
 	{
-		cst1.cnt = MOVETYPE_STEP;
-		cst2.cnt = MOVETYPE_WALK;
-		cst3.cnt = FL_SWIM;
-		cst4.cnt = TRUE;
+		cst1.cnt = 4;
+		cst2.cnt = 3;
+		cst3.cnt = 2;
+		cst4.cnt = 1;
 	}
-	if ((pos == FL_SWIM))
+	if ((pos == 2))
 	{
-		cst1.cnt = MOVETYPE_WALK;
-		cst2.cnt = MOVETYPE_STEP;
-		cst3.cnt = FL_SWIM;
-		cst4.cnt = TRUE;
+		cst1.cnt = 3;
+		cst2.cnt = 4;
+		cst3.cnt = 2;
+		cst4.cnt = 1;
 	}
-	if ((pos == MOVETYPE_WALK))
+	if ((pos == 3))
 	{
-		cst1.cnt = FL_SWIM;
-		cst2.cnt = MOVETYPE_WALK;
-		cst3.cnt = MOVETYPE_STEP;
-		cst4.cnt = TRUE;
+		cst1.cnt = 2;
+		cst2.cnt = 3;
+		cst3.cnt = 4;
+		cst4.cnt = 1;
 	}
-	if ((pos == MOVETYPE_STEP))
+	if ((pos == 4))
 	{
-		cst1.cnt = TRUE;
-		cst2.cnt = FL_SWIM;
-		cst3.cnt = MOVETYPE_STEP;
-		cst4.cnt = MOVETYPE_WALK;
+		cst1.cnt = 1;
+		cst2.cnt = 2;
+		cst3.cnt = 4;
+		cst4.cnt = 3;
 	}
-	if ((pos == MOVETYPE_FLY))
+	if ((pos == 5))
 	{
-		cst1.cnt = TRUE;
-		cst2.cnt = FL_SWIM;
-		cst3.cnt = MOVETYPE_WALK;
-		cst4.cnt = MOVETYPE_STEP;
+		cst1.cnt = 1;
+		cst2.cnt = 2;
+		cst3.cnt = 3;
+		cst4.cnt = 4;
 	}
 	cst1.think = cyst_think;
 	cst2.think = cyst_think;
@@ -923,13 +922,13 @@ void(entity e) spawn_cysts =
 	cst3.nextthink = (time + random());
 	cst4.nextthink = (time + random());
 };
-	.float sizeflag;
+
+.float sizeflag;
 .string dmodel;
 .string gibmodel1;
 .string gibmodel2;
 .string gibmodel3;
 .string gibmodel4;
-
 .vector tagorigin;
 
 void(string tagname, entity e) setoriginbytag =
@@ -980,6 +979,7 @@ void(string gibtagname, string gibmodel, entity ownr, vector gvel) spawngibs =
 	}
 	gib.nextthink = time + 3 + random() * 5;
 };
+
 .entity lastchain;
 .float degrees_chain_constant;
 .float degrees_chain;
@@ -995,7 +995,6 @@ void() create_chain =
 	chain = spawn();
 	setmodel(chain, "models/misc/chain.md3");
 	chain.scale = FL_SWIM;
-	//chain.effects = FL_IGNOREINPUT;
 	chain.angles = (self.lastchain.angles + '0 0 90');
 	chain.angles_x = (self.hard_degrees - self.degrees_chain);
 	chain.origin = tag_origin("tag_chain", self.lastchain);
@@ -1183,7 +1182,7 @@ void() info_chain_think =
 
 void() info_chain =
 {	
-	if(self.model)
+	if(self.model != "")
 	{
 		precache_model(self.model);
 		setmodel(self, self.model);
@@ -1321,7 +1320,7 @@ void(entity attacker, float dmg) eyeball_pain
 	
 	// play sound
 	string snd = random_sound_from_noise_fields(self);
-	if (snd)
+	if (snd != "")
 	{
 		sound(self, CHAN_AUTO, snd, self.volume, self.atten);
 	}

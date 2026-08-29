@@ -504,7 +504,7 @@ void() trigger_aggro_touch =
 
 
 	local entity e;
-	if (self.target)
+	if (self.target != "")
 	{
 		e = world;
 		do { 	e = find(e, targetname, self.target);

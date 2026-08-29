@@ -1,4 +1,3 @@
-
 #if 1 // deathmenu
 #define LIST_DEATHMENU_ASSETS \
 	X(SOULTETHER) \
@@ -156,4 +155,3 @@ string journal_label_assets_string[] = {
 	#undef X
 };
 #endif // journal labels
-

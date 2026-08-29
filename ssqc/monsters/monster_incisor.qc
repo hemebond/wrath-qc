@@ -605,23 +605,23 @@ void() incisor_die =
 	self.nextthink = (time + 0.1);
 };
 
-void() clipgroup_controller_think =
-{
-	if ((self.owner.health <= 0))
-	{
+
+void clipgroup_controller_think() {
+	if ((self.owner.health <= 0)) {
 		remove(self);
 	}
-	if ((self.owner.alpha == CONTENT_EMPTY))
-	{
-		self.owner.clipgroup = FL_INWATER;
+
+	if ((self.owner.alpha == CONTENT_EMPTY)) {
+		self.owner.clipgroup = 16;
 	}
-	else
-	{
+	else {
 		self.owner.clipgroup = 0;
 	}
+
 	self.think = clipgroup_controller_think;
 	self.nextthink = time + 0.05;
-};
+}
+
 
 void() precache_monster_prowler =
 {
@@ -674,71 +674,22 @@ void() precache_monster_prowler =
 	precache_model("models/enemies/prowler/gibs/gib_leg_l_a.md3");
 	precache_model("models/enemies/prowler/gibs/gib_leg_l_b.md3");
 };
-void()xangle_controller_think;
-void() monster_prowler =
-{
-	local entity alphamodifier;
-	local float r;
-	local entity clipgroup_controller;
 
-	precache_sound("enemies/prowler/attack1.ogg");
-	precache_sound("enemies/prowler/attack2.ogg");
-	precache_sound("enemies/prowler/attack3.ogg");
-	precache_sound("enemies/prowler/die1.ogg");
-	precache_sound("enemies/prowler/die2.ogg");
-	precache_sound("enemies/prowler/die3.ogg");
-	precache_sound("enemies/prowler/attack1.ogg");
-	precache_sound("enemies/prowler/attack2.ogg");
-	precache_sound("enemies/prowler/attack3.ogg");
-	precache_sound("enemies/prowler/attack4.ogg");
-	precache_sound("enemies/prowler/attack5.ogg");
 
-	precache_sound("enemies/prowler/cloak1.ogg");
-	precache_sound("enemies/prowler/cloak2.ogg");
-	precache_sound("enemies/prowler/cloak3.ogg");
-	precache_sound("enemies/prowler/decloak1.ogg");
-	precache_sound("enemies/prowler/decloak2.ogg");
-	precache_sound("enemies/prowler/decloak3.ogg");
+void monster_prowler() {
+	precache_monster_prowler();
 
-	precache_sound("enemies/prowler/idle1.ogg");
-	precache_sound("enemies/prowler/idle2.ogg");
-	precache_sound("enemies/prowler/idle3.ogg");
-	precache_sound("enemies/prowler/idle4.ogg");
-	precache_sound("enemies/prowler/idle5.ogg");
-	precache_sound("enemies/prowler/chatter1.ogg");
-	precache_sound("enemies/prowler/chatter2.ogg");
-	precache_sound("enemies/prowler/chatter3.ogg");
-	precache_sound("enemies/prowler/chatter4.ogg");
-	precache_sound("enemies/prowler/chatter5.ogg");
-	precache_sound("enemies/prowler/pain1.ogg");
-	precache_sound("enemies/prowler/pain2.ogg");
-	precache_sound("enemies/prowler/pain3.ogg");
-	precache_sound("enemies/prowler/sight1.ogg");
-	precache_sound("enemies/prowler/sight2.ogg");
-	precache_sound("enemies/prowler/sight3.ogg");
-	precache_sound("enemies/prowler/step1.ogg");
-	precache_sound("enemies/prowler/step2.ogg");
-	precache_sound("enemies/prowler/step3.ogg");
-	precache_model("models/enemies/prowler/prowler.md3");
-	precache_model("models/enemies/prowler/gibs/gib_arm_r_a.md3");
-	precache_model("models/enemies/prowler/gibs/gib_arm_r_b.md3");
-	precache_model("models/enemies/prowler/gibs/gib_arm_l_a.md3");
-	precache_model("models/enemies/prowler/gibs/gib_arm_l_b.md3");
-	precache_model("models/enemies/prowler/gibs/gib_head.md3");
-	precache_model("models/enemies/prowler/gibs/gib_leg_r_a.md3");
-	precache_model("models/enemies/prowler/gibs/gib_leg_r_b.md3");
-	precache_model("models/enemies/prowler/gibs/gib_leg_l_a.md3");
-	precache_model("models/enemies/prowler/gibs/gib_leg_l_b.md3");
-	if (deathmatch)
-	{
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
-	self.onlymelee = TRUE;
-	alphamodifier = spawn();
+
+	entity alphamodifier = spawn();
 	alphamodifier.owner = self;
 	alphamodifier.think = alpha_modifier;
 	alphamodifier.nextthink = time;
+
+	self.onlymelee = TRUE;
 	self.solid = 3;
 	self.damagetopain = 25;
 	self.movetype = MOVETYPE_STEP;
@@ -746,13 +697,15 @@ void() monster_prowler =
 	self.bbvv = incisorbbox;
 	setsize(self, '-30 -30 -24', '30 30 24');
 	self.exec_push = FL_CLIENT;
-	r = random() * 3;
+
+	float r = random() * 3;
 	if (r < 3)
 		self.noise = "enemies/prowler/sight3.ogg";
 	if (r < 2)
 		self.noise = "enemies/prowler/sight2.ogg";
 	if (r < 1)
 		self.noise = "enemies/prowler/sight1.ogg";
+
 	self.health = incisorhealth;
 	self.touch = incisor_touch;
 	self.scale = 1;
@@ -770,12 +723,13 @@ void() monster_prowler =
 	self.th_melee = incisor_atk;
 	self.th_pain = incisor_pain;
 	self.th_die = incisor_die;
-	clipgroup_controller = spawn();
+
+	entity clipgroup_controller = spawn();
 	clipgroup_controller.owner = self;
 	clipgroup_controller.think = clipgroup_controller_think;
 	clipgroup_controller.nextthink = time;
-	if(single_player.displacement_time > time)
-	{
+
+	if (single_player.displacement_time > time) {
 		self.color = '0.225 0.237 1.3';
 		self.light_lev = 92;
 		self.pflags = 129;
@@ -783,8 +737,9 @@ void() monster_prowler =
 		self.effects = 512;
 	}
 	walkmonster_start();
+}
 
-};
+
 .float walktime2;
 .float xangle_controller_cnt;
 void()xangle_controller_think =

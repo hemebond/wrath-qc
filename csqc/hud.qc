@@ -1846,100 +1846,13 @@ void() Hud = { vector postimage;
 
 
 
-	if (health > 0)
-	{
-		#if 0
-		health_n = ftos(floor(health));
-
-		float pulse_y ;
-
-		if (pulsehealth_icon == 1)
-		{
-			fphicon = floor(phicon);
-			if (fphicon <= 1) pulse_y = 10;
-			if (fphicon == 2) pulse_y = 20;
-			if (fphicon == 3)pulse_y = 30;
-			if (fphicon == 4) pulse_y =40;
-			if (fphicon == 5) pulse_y = 50;
-			if (fphicon == 6) pulse_y = 60;
-			if (fphicon == 7) pulse_y = 70;
-			if (fphicon == 8) pulse_y = 80;
-			if (fphicon == 9) pulse_y = 90;
-			if (fphicon >= 10)
-			{
-				picofnammo = 0;
-				localcmd("impulse 200\n");
-				pulsehealth_icon = 0;
-				phicon = 0;
-			}
-		}
-		else
-				picofnammo = 0;
-
-
-		vector healthrelsep, health_relpos;
-
-		health_relpos = health_pos;
-		healthrelsep = healthsep;
-
-		if (health >= 999)
-			health = 999;
-		if (health >= 1)
-			digits = 1;
-		if (health >= 10)
-			digits = 2;
-		if (health >= 100)
-			digits = 3;
-
-
-
-		float fdigit3  = (health % 10) ;
-		float fdigit2 = (((health - fdigit3) * 0.1) %10); 
-		float fdigit1 = (health - (health % 100)) / 100;;
-		
-		
-		fdigit3 += pulse_y; 
-		fdigit2 += pulse_y;
-		fdigit1 += pulse_y;
-
-		if ((health > 30) || (pulsehealth_icon == 1))
-			vector colorhealth = '1 1 1'; 
-		else
-		{
-				colorhealth_x = 0.75 + 0.025 * pulsehealth_low;
-			if (health <= 20)
-				colorhealth_x = 0.5 + 0.05 * pulsehealth_low;
-			if (health <= 10)
-				colorhealth_x = 0.3 + 0.07 * pulsehealth_low;
-
-			colorhealth_y = colorhealth_x;
-			colorhealth_z = colorhealth_x;
-		}
-		if (digits == 1)
-		{
-			DrawSheet(health_relpos + healthrelsep + healthrelsep, "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',fdigit3,colorhealth);
-
-		}
-		else if (digits == 2)
-		{
-			DrawSheet(health_relpos + healthrelsep, "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',fdigit3,colorhealth);
-			DrawSheet(health_relpos + healthrelsep + healthrelsep, "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',fdigit2,colorhealth);
-
-		}
-		else if (digits == 3)
-		{
-			DrawSheet(health_relpos, "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',fdigit3,'1 1 1');
-			DrawSheet(health_relpos + healthrelsep, "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',fdigit2,'1 1 1');
-			DrawSheet(health_relpos + healthrelsep + healthrelsep, "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',fdigit1,'1 1 1');
-		}
-		#endif
+	if (health > 0) {
 	}
 	else
 	{
 		if(deathmatch == 1)
 			showscores = 1;
 	}
-	//	c_drmr =rint(c_drmr);
 	kitems = getstati(STAT_ITEMS);
 	vector vkeysep, realkeypos;
 	vkeysep_x = keysep;
@@ -2275,12 +2188,11 @@ void() Hud = { vector postimage;
 		{
 
 
-			local float ntimer, artalpha;
-			ntimer = radialtime;
-			local string nametimer;
-			nametimer = ftos(ntimer);
+			float artalpha = 0;
+			float ntimer = radialtime;
+			string nametimer = ftos(ntimer);
 			timer_artifact = strcat("gfx/hud/cooldown/cd", nametimer, ".tga");
-			local float da_alpha;
+			float da_alpha;
 			if (ntimer <= 134)
 				da_alpha = 1;
 			if (ntimer == 134)
@@ -3048,13 +2960,6 @@ local vector angulos, origen;
 			removingmessages -= v_sfps / 100;
 		else
 			removingmessages = 0;
-
-		#if 0 // Reki (October 6 2023): Moved this to the new hud system to fix aspect ratio issues
-		float checked5;
-		checked5 = cvar("saved1");
-		if (checked5 != 1)
-			Crosshair();
-		#endif
 		
 		if (showjournal == 1)
 		{
@@ -3095,19 +3000,6 @@ local vector angulos, origen;
 			{
 				journal_firstopen = FALSE;
 			}
-			/*	
-			if (using_cursor == 1)
-			{
-				if (journal_chapter)
-					journal_chapter = 0;
-				if (journal_page)
-					journal_page = 0;
-				if (journal_page_maps)
-					journal_page_maps = 0;
-				using_cursor = 0;
-				setcursormode(0);
-			}
-			*/
 		}
 
 		//{
@@ -3149,11 +3041,9 @@ local vector angulos, origen;
 		else if (!ui_usemouse && ui_oldusemouse)
 			setcursormode(0);
 		ui_oldusemouse = ui_usemouse;
-		//
 
 		//if (hidehud == 0)
 		{
-			//ArtifactMenu();
 			//Ammo_Hud();
 			//Hud_Armor();
 			//Hud();

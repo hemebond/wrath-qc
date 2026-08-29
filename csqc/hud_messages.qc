@@ -225,15 +225,15 @@ void HUD_ShuffleNotificationsUp(void)
 	line.skin = 0;
 	line.frame = 0;
 
-	if (stroffs_icon)
+	if (stroffs_icon != "")
 		strunzone(stroffs_icon);
-	if (stroffs_text)
+	if (stroffs_text != "")
 		strunzone(stroffs_text);
-	if (stroffs_textimg)
+	if (stroffs_textimg != "")
 		strunzone(stroffs_textimg);
-	if (stroffs_cnttext)
+	if (stroffs_cnttext != "")
 		strunzone(stroffs_cnttext);
-	if (stroffs_cntimg)
+	if (stroffs_cntimg != "")
 		strunzone(stroffs_cntimg);
 }
 
@@ -266,15 +266,17 @@ uielement_c HUD_AllocateLine(void)
 	return line;
 }
 
-void() Remove_Message = { self.removing = 1;
-
+void() Remove_Message = {
+	self.removing = 1;
 };
 
-void() Remove_Message2 = { self.removing = 1;
+void() Remove_Message2 = {
+	self.removing = 1;
 };
 
 .float deleted;
-void() MessageThink2 = { if (self.removing == 1)
+void() MessageThink2 = {
+	if (self.removing == 1)
 	{
 		self.iflag = 0;
 		self.msgalpha -= ap;
@@ -302,7 +304,9 @@ void() MessageThink2 = { if (self.removing == 1)
 	}
 };
 
-void() Hud_Messages_Draw2 = { local string image;
+void() Hud_Messages_Draw2 = {
+	string image = "";
+
 	if (self.msg == 17)
 		image = "gfx/hud/msg_shells.tga";
 	string str;
@@ -311,7 +315,8 @@ void() Hud_Messages_Draw2 = { local string image;
 	DString(self.imagepos + '130 8 0', str, self.msgalpha, 1, '1 1 1', '12 12 12');	//void(vector pos, string str, float alph, float escala, vector coloracion, vector siz) 
 };
 
-void() MessageThink = { local float alphaincreaser, alphafading, yfading;
+void() MessageThink = {
+	float alphaincreaser, alphafading, yfading;
 
 	if (clframetime < 0.05)
 		alphaincreaser = api + 0.025;
@@ -723,19 +728,24 @@ void() Hud_Messages_Draw =
 
 };
 
-void(float newent) Hud_Messages = { self.msg = ReadShort();
-	if (newent)
-	{
-		local vector ar;
+void(float newent) Hud_Messages = {
+	self.msg = ReadShort();
+	if (newent) {
+		vector ar = '0 0 0';
 		ar_x = hmsgpos_x;
+
 		vid_height = cvar("vid_conheight");
 		ar_y = hmsgpos_y + (hud_messages *hms) + (540 - vid_height);
+
 		self.imagepos = ar;
+
 		if (self.msg < 255)
-		hud_messages += 1;
+			hud_messages += 1;
+
 		self.msgalpha = 0;
 		self.iflag = 0;
 		self.icolor = '1 1 1';
+
 		if (self.msg == 255)
 		{
 			///////////// Key "Journal");
@@ -832,11 +842,13 @@ void(float newent) Hud_Messages = { self.msg = ReadShort();
 	}
 };
 
-void(float newent) Hud_Messages2 = { self.msg = ReadShort();
+void(float newent) Hud_Messages2 = {
+	self.msg = ReadShort();
 	self.item_cnt = ReadShort();
+
 	if (newent)
 	{
-		local vector ar;
+		vector ar = '0 0 0';
 		ar_x = hmsgpos_x;
 		ar_y = hmsgpos_y + (hud_messages *hms) + (540 - vid_height);
 		self.imagepos = ar;
@@ -847,7 +859,6 @@ void(float newent) Hud_Messages2 = { self.msg = ReadShort();
 		self.icolor = '1 1 1';
 		self.draw2d = Hud_Messages_Draw2;
 		self.predraw = MessageThink2;
-		//self.nextthink = time + 0.03;
 	}
 };
 
@@ -883,43 +894,6 @@ void(float newent) Health_Indicator = { self.origin_x = ReadCoord();
 		self.draw2d = Health_Messages_Draw;
 	}
 };
-/*
-.float alpha;
-void() Artifact_Think =
-{
-if(self.frame == 1)
-self.alpha = 0.1;
-if(self.frame == 2)
-self.alpha = 0.2;
-if(self.frame == 3)
-self.alpha = 0.4;
-if(self.frame == 4)
-self.alpha = 0.6;
-if(self.frame == 5)
-self.alpha = 0.8;
-if(self.frame == 6)
-self.alpha = 1;
-
-setorigin (self,VF_ORIGIN);
-
-};
-
-void(float newent)artifact_spawn =
-{
-	self.origin_x = ReadCoord();
-	self.origin_y = ReadCoord();
-	self.origin_z = ReadCoord();
-	self.frame = ReadShort();
-	if (newent)
-	{
-		self.classname = "artifact";
-		self.drawmask = MASK_NORMAL;	// makes the entity visible
-		setmodel(self, "models/artifacts/active/cruel_aegis_active.md3");
-		self.think = Artifact_Think;
-		self.nextthink = time;
-		}
-};
-*/
 
 float mrmenualpha;
 
@@ -931,59 +905,10 @@ void() show_messages_ui =
 	drawfill('0 0 0', vid_width *'1 0 0' + vid_height *'0 1 0', '0 0 0', 0.65, 0);
 	DImage3((posimage), ui_image, 1, '1 1 1', ('512 400 0'));
 
-
 	vector colorimg;
 	colorimg = '0.82 0.82 0.82';
 	posimage2 = fixed_vector('-40 -480 0');
 	posimage2 += fixed_vector( '0 40 0');
 
-
 	float message_number = getstatf(STAT_NORMAL_MESSAGES);
-
-	#if 0
-	if(message_number == 1)
-	{
-	DString(posimage2, _("Message Text1line 1"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 2"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 3"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 4"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 5"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 6"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 7"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 8"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 9"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 10"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 11"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 12"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 13"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 14"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 15"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 16"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 17"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text1line 18"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	}
-	if(message_number == 2)
-	{
-	DString(posimage2, _("Message Text2line 1"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 2"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 3"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 4"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 5"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 6"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 7"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 8"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 9"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 10"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 11"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 12"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 13"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 14"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 15"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 16"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 17"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	DString(posimage2, _("Message Text2line 18"), 1, 1, colorimg, ' 14 14 0');posimage2 += fixed_vector('0 20 0');
-	}
-	#endif
 };
-
-////////////////end of qc file

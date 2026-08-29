@@ -1,7 +1,5 @@
-/*
-==============================================================================
-AFFLICTED CODE
-==============================================================================
+/*FGD
+@PointClass base(Monster) color(1 0 0) size(-10 -10 -32, 10 10 32) model({"path": "models/enemies/afflicted/afflicted.md3"}) = monster_afflicted : "Monster: Afflicted" []
 */
 
 $frame pose0
@@ -17,19 +15,47 @@ $frame painc1 painc2 painc3 painc4 painc5 painc6 painc7 painc8
 $frame paind1 paind2 paind3 paind4 paind5 paind6 paind7 paind8
 $frame run1 run2 run3 run4 run5 run6 run7 run8 run9
 
-float(vector end) ai_recheable; 
-////////////////////////////////////////////////////////////////////////////////////
-void() afflicted_run1;
-void() afflicted_runb1;
-void() afflicted_atk1;
-void() afflicted_atk7;
+// affwvel1                   = 6 			//wve1
+// affwvel2                   = 5.5 		//wve2
+// affwvel3                   = 5	 		//wve3
+// affwvel4                   = 4 			//wve4
+// affwvel5                   = 5 			//wve5
+// affwvel6                   = 6.5 		//wve6
+// affwvel7                   = 6 			//wve7
+// affwvel8                   = 6 			//wve8
+// affwvel9                   = 5.5 		//wve9
+// affwvel10                  = 5.5 		//wve10
+// affwvel11                  = 4	 		//wve11
+// affwvel12                  = 3.5 		//wve12
+// affwvel13                  = 5 			//wve13
+// affwvel14                  = 5.5 		//wve14
+// afflictedhealth            = 150			//health
+// afflicteddamage            = 15			//damage projectile
+// afflicteddamage2           = 100			//damage explosion
+// afflictednbbox             = '-10 -10 -32'	//bbox negative
+// afflictedbbox              = '10 10 32'	//bbox
+// afflictedpbbox             = '4 4 4'		//projectile bbox
+// afflictedpvel              = 768			//proj_vel
+// aff_dr_idle                = 0			//dice roll idle, 70% attack instead walk
+// aff_dr_walk                = 0.8			//dice roll walk, 80% attack instead walk
+// aff_dr_attack              = 0.8			//dice roll attack, 80% run instead attack (fire)
+// aff_dr_run                 = 0.5			//dice roll aa, 80% attack instead run
+// damageexplosionafflicted   = 0
+// radiusexplosionafflicted   = 0
+// affpl                      = 25			// pain damage low
+// affpm                      = 50			// pain damage medium
+// affph                      = 75			// pain damage high
+// damagedexplosionafflicted  = 200			// death explosion monster damage
+// radiusdexplosionafflicted  = 64			// death explosion radius
+// afflicted_damagetomonsters = 50          // attack damage to monsters (PROJECTILE)
+// afflicted_pushfactor       = 3           //  explo push factor
+// afflicted_suicide_distance = 512       //  distance to suicide
+
 
 .float idle_time;
 void() afflicted_stand1 =[$idle1, afflicted_stand2]
 {
 	self.nopain = 0;
-	//r = random() *15;
-	//if ((r < 15) && (!(self.spawnflags &1)))
 	if ((self.idle_time < time) && !(self.spawnflags &1))
 	{
 		chattersound("enemies/afflicted/idle", 3, 1);
@@ -441,10 +467,10 @@ void() afflicted_run14 = { local float r;
 };
 //===========================================================================
 .float heretic_suicide;
-void() afflicted_explosion = { local vector tagorg;
-
+void() afflicted_explosion = {
 	vector chestorg = rorigin(self) + '0 0 24';
 
+	vector tagorg;
 	tagorg = tag_origin("tag_head", self);
 	ThrowGib2("models/enemies/afflicted/gibs/gib_head.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(aff_gib1, self), 0, 1);
 	tagorg = tag_origin("tag_arm_r_a", self);
@@ -458,8 +484,6 @@ void() afflicted_explosion = { local vector tagorg;
 	explo_blood(3, chestorg);
 	pointparticles(particleeffectnum("gib3"), chestorg , v_forward *(-550), 1);
 	tagorg = tag_origin("tag_leg_r_a", self);
-	//explo_blood (3, tagorg);
-	//pointparticles(particleeffectnum("gib3"), tagorg, v_forward*(-550), 1);
 	ThrowGib2("models/enemies/afflicted/gibs/gib_leg_r_a.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(aff_gib6, self), 0, 0);
 	tagorg = tag_origin("tag_leg_r_b", self);
 	ThrowGib2("models/enemies/afflicted/gibs/gib_leg_r_b.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(aff_gib7, self), 0, 0);
@@ -467,8 +491,6 @@ void() afflicted_explosion = { local vector tagorg;
 	ThrowGib2("models/enemies/afflicted/gibs/gib_leg_l_a.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(aff_gib8, self), 0, 0);
 	tagorg = tag_origin("tag_leg_l_b", self);
 	ThrowGib2("models/enemies/afflicted/gibs/gib_leg_l_b.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(aff_gib9, self), 0, 0);
-	//explo_blood (3, tagorg);
-	//	pointparticles(particleeffectnum("gib3"), tagorg, v_forward*(-550), 1);
 	explo_blood(8, chestorg);
 	ThrowGib2("models/gibs/gib_small.md3", self.health *0.25, 0.75, 1, 1, rorigin(self), relvel(aff_gib10, self), 0, 0);
 	ThrowGib2("models/gibs/gib_small.md3", self.health *0.25, 0.75, 1, 1, rorigin(self), relvel(aff_gib12, self), 0, 0);
@@ -476,21 +498,16 @@ void() afflicted_explosion = { local vector tagorg;
 	ThrowGib2("models/gibs/gib_med.md3", self.health *0.25, 0.75, 1, 1, rorigin(self), relvel(aff_gib13, self), 0, 0);
 
 	self.movetype = 0;
-	//drop_item(rorigin(self)+ '0 0 -10', "ammo_retcher", 1, self);
-	local string diesound, r;
-	r = ftos(floor(random() *3) + 1);
-	diesound = strcat("enemies/afflicted/die", r, ".ogg");
+	string r = ftos(floor(random() *3) + 1);
+	string diesound = strcat("enemies/afflicted/die", r, ".ogg");
 	msound(self, CHAN_VOICE, diesound, 1, 0.25);
-	//	pointparticles(particleeffectnum("GREEN_BLOOD"), self.origin, '0 0 0', 32); 
-	local float rv, rv2, gv;
-	rv = (random() *6 + 17) *-1;
-	rv2 = (random() *10 + 30) *-1;
-	gv = 0.6 + (random() *0.1);
-	//T_RadiusDamage (self, self.enemy, afflicteddamage2, world);
 
-	//void(entity inflictor, entity attacker, float damage, entity ignore, float radius, float toplayer) T_SplashDamageMonster =
+	float rv = (random() *6 + 17) *-1;
+	float rv2 = (random() *10 + 30) *-1;
+	float gv = 0.6 + (random() *0.1);
+
 	if(self.killer.wrath_inv > time)
-	self.heretic_suicide = -1;
+		self.heretic_suicide = -1;
 	if(self.heretic_suicide != -1)
 	{
 		if(self.heretic_suicide == 1)
@@ -533,7 +550,8 @@ void() afflicted_die = { self.think = afflicted_explosion;
 };
 .float vtorg;
 //===========================================================================
-void() afflicted_check_explode = { if (visibleinfront(self.enemy, 64))
+void() afflicted_check_explode = {
+	if (visibleinfront(self.enemy, 64))
 	{
 		self.heretic_suicide = 1;
 		Killed(self, world, 1);
@@ -542,12 +560,11 @@ void() afflicted_check_explode = { if (visibleinfront(self.enemy, 64))
 
 .float afflicted_run_sound_lenght;
 .float afflicted_run_sound_number;
-void() afflicted_run_sound = { if (self.afflicted_run_sound_lenght > time)
+void() afflicted_run_sound = {
+	if (self.afflicted_run_sound_lenght > time)
 		return;
-	local float rf;
-	rf = (floor(random() *3) + 1);
-	local string r, snd;
 
+	float rf = (floor(random() *3) + 1);
 	if (rf == self.afflicted_run_sound_number)
 		rf += 1;
 
@@ -555,9 +572,8 @@ void() afflicted_run_sound = { if (self.afflicted_run_sound_lenght > time)
 		rf = 1;
 	self.afflicted_run_sound_number = rf;
 
-	r = ftos(rf);
-
-	snd = strcat("enemies/afflicted/run", r, ".ogg");
+	string r = ftos(rf);
+	string snd = strcat("enemies/afflicted/run", r, ".ogg");
 	self.afflicted_run_sound_lenght = time + soundlength(snd);
 	msound(self, CHAN_VOICE, snd, 1, 0.25);
 };
@@ -611,7 +627,7 @@ void() afflicted_runb8 =[$run8, afflicted_runb9]
 	walksound("enemies/afflicted/step", 3);
 };
 
-void() afflicted_runb9 = { local float r;
+void() afflicted_runb9 = {
 	self.frame = $run9;
 	afflicted_check_explode();
 	ai_runwalk(22);
@@ -620,7 +636,6 @@ void() afflicted_runb9 = { local float r;
 		suicide_distance = afflicted_suicide_distance * 2;
 
 	float enreachable = ai_recheable(self.enemy.origin);
-
 
 	if(self.likecharge != 1)
 	{
@@ -634,7 +649,7 @@ void() afflicted_runb9 = { local float r;
 					self.think = afflicted_runb1;
 				else
 				{
-					r = random();
+					float r = random();
 					if (r >= aff_dr_run)
 						self.think = afflicted_run1;
 					else
@@ -1096,14 +1111,13 @@ void() afflicted_paind8 =[$paind8, afflicted_run1]
 	}
 };
 
-void() afflicted_rpain = { local string r, snd;
-	r = ftos(floor(random() *3) + 1);
-	snd = strcat("enemies/afflicted/pain", r, ".ogg");
+void() afflicted_rpain = {
+	string r = ftos(floor(random() *3) + 1);
+	string snd = strcat("enemies/afflicted/pain", r, ".ogg");
 	msound(self, CHAN_VOICE, snd, 1, 0.25);
 	self.pain_finished = time + 1;
-	local float rnd;
-	rnd = random();
 
+	float rnd = random();
 	if (rnd < 0.75)
 		afflicted_paina1();
 	else if (rnd < 0.5)
@@ -1114,26 +1128,30 @@ void() afflicted_rpain = { local string r, snd;
 		afflicted_paind1();
 };
 
-void(entity attacker, float damage) afflicted_pain = { if (self.pain_finished > time)
+void afflicted_pain(entity attacker, float damage) {
+	if (self.pain_finished > time)
 		return;
 	if (self.nopain == 1)
 		return;
 	self.sustained_damage = 0;
-	local float pp, rp;
+
+	float pp;
 	if (damage >= affph)
 		pp = hpdmg;
 	if ((damage <= affpm) && (damage > affpl))
 		pp = mpdmg;
 	if (damage <= affpl)
 		pp = lpdmg;
-	rp = random();
+
+	float rp = random();
 	if (rp > pp)
 		return;
 
 	afflicted_rpain();
 };
 
-void() precache_monster_afflicted = { precache_sound("enemies/afflicted/attack1.ogg");
+void() precache_monster_afflicted = {
+	precache_sound("enemies/afflicted/attack1.ogg");
 	precache_sound("enemies/afflicted/attack2.ogg");
 	precache_sound("enemies/afflicted/attack3.ogg");
 	precache_sound("enemies/afflicted/chatter1.ogg");
@@ -1180,24 +1198,26 @@ void() precache_monster_afflicted = { precache_sound("enemies/afflicted/attack1.
 	precache_model("models/enemies/afflicted/gibs/gib_leg_l_b.md3");
 	precache_model("models/enemies/afflicted/gibs/gib_head.md3");
 	precache_model("particles/explo/explo_afflicted.md3");
-
 };
-void() monster_afflicted = { precache_monster_afflicted();
+void monster_afflicted() {
+	precache_monster_afflicted();
+
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	self.flags = self.flags | FL_MONSTER;
 	setmodel(self, "models/enemies/afflicted/afflicted.md3");
-	local float r;
-	r = (random() *3);
+
+	float r = (random() *3);
 	if (r < 3)
 		self.noise = "enemies/afflicted/sight3.ogg";	
 	if (r < 2)
 		self.noise = "enemies/afflicted/sight2.ogg";	
 	if (r < 1)
 		self.noise = "enemies/afflicted/sight1.ogg";	
-	setsize(self, afflictednbbox, afflictedbbox);
-	self.health = afflictedhealth;
-	//self.damagetopain = opp_dtp;
+
+	setsize(self, '-10 -10 -32', '10 10 32');
+
+	self.health = 150;
 	self.view_ofs = ' 0 0 64';
 	self.classname = "monster_afflicted";
 	self.th_stand = afflicted_stand1;
@@ -1214,9 +1234,8 @@ void() monster_afflicted = { precache_monster_afflicted();
 	self.th_missile = afflicted_atk1;
 	self.think = self.th_stand;
 	self.nextthink = time;
-	spawn_cysts(self);
-	walkmonster_start();
-};
 
-////////////////end of qc file
-////////////////end of qc file
+	spawn_cysts(self);  // Attach some cysts to the monster
+
+	walkmonster_start();
+}

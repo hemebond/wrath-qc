@@ -23,7 +23,7 @@ void Journal_ScrollToCurrentMap(void)
 	((uismoothlist_c)journal_world_list).scroll_smooth = journal_world_list.scroll;
 }
 
-void read_frik_stats(string mapname, __out string enemies, __out string secrets, __out string relics, __out string time)
+void read_frik_stats(string map_name, __out string enemies, __out string secrets, __out string relics, __out string time)
 {
 	enemies = "0/0";
 	secrets = "0/0";
@@ -32,7 +32,7 @@ void read_frik_stats(string mapname, __out string enemies, __out string secrets,
 
 	float filehandle;
 	read_currentprofileslot();
-	filehandle = fopen((strcat("profiles/", profilename, "/maps/", mapname, ".stats")), FILE_READ);
+	filehandle = fopen((strcat("profiles/", profilename, "/maps/", map_name, ".stats")), FILE_READ);
 	if (filehandle < 0)
 		return;
 
@@ -684,7 +684,7 @@ void Journal_RenderNote(journalentry_c note, vector drawoffset, vector drawscale
 			// RENDER JOURNAL TEXT
 			case JOURNAL_ETYPE_TEXT:
 				journaltext_c txt = (journaltext_c)el;
-				vector sz = [txt.fontsize[0] * drawscale[0], txt.fontsize[1] * drawscale[1]];;
+				vector sz = [txt.fontsize[0] * drawscale[0], txt.fontsize[1] * drawscale[1]];
 				drawfont = txt.font;
 				
 				vector fixed_color = CONVERT_TO_DP_SHITTY_COLOR(txt.fontcolor); // dp... WTF is this??

@@ -225,7 +225,7 @@ void() check_tether = {
 	setorigin(tether_mark, tether_org);
 	tether_mark.think = tether_mark_think;
 	tether_mark.nextthink = time + 0.1;
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 };
 void() check_tether_inmap = { entity tm;
@@ -269,7 +269,7 @@ void() check_tether_inmap = { entity tm;
 	setorigin(tether_mark, tether_org);
 	tether_mark.think = tether_mark_think;
 	tether_mark.nextthink = time + 0.1;
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 };
 
@@ -367,7 +367,7 @@ void() write_tether = {
 
 	update_latest_saveslot(1);
 
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 	save_screenshot(2,0);
 	writedates(2);
@@ -751,7 +751,6 @@ void spawn_rage_weapon(entity ownr) {
 		bvmelee.alpha = wrath_vweapon.alpha;
 		bvmelee.think = Think_RageSubweapon;
 		bvmelee.nextthink = time;
-		bvmelee.scale = 1.5;
 	}		
 	else if (ownr.weapon == IT_REVOLVER)
 	{

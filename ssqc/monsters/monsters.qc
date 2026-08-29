@@ -22,12 +22,12 @@ void() monster_death_use = { if (self.flags &FL_FLY)
 
 	if ((!self.target) && (!self.death_target))
 			return;
-	if(self.target)
+	if(self.target != "")
 	{
 		activator = self.enemy;
 		SUB_UseTargets();
 	}
-	if(self.death_target)
+	if(self.death_target != "")
 	{
 		self.target = self.death_target;
 		activator = self.enemy;

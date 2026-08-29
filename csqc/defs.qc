@@ -1,3 +1,5 @@
+#pragma warning disable Q302  // ignore variables without references
+
 /*
 ==============================================================================
 

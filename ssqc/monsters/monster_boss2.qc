@@ -763,9 +763,9 @@ float boss2_c::anim_hitscan_direct(void)
 	if (trace_ent.flags & FL_CLIENT)
 		hitscandirect_player_lasthit = time;
 	
-	entity o_self = self; // wtf??? why is this messing up self value
+	entity o_self = this; // wtf??? why is this messing up self value
 	boss2_hitscandamage(from, to, this, (this.stage == 2) ? (boss2_beamdamage) : (boss2_beamdamage * 0.5));
-	self = (boss2_c)o_self;
+	this = (boss2_c)o_self;
 	this.beam_controller.attack_finished = time + 0.15;
 
 	return FALSE;
@@ -889,9 +889,9 @@ float boss2_c::anim_hitscan_spam(void)
 
 	to = from + (dir * 2048);
 
-	entity o_self = self; // wtf??? why is this messing up self value
+	entity o_self = this; // wtf??? why is this messing up self value
 	boss2_hitscandamage(from, to, this, boss2_beamdamage);
-	self = (boss2_c)o_self;
+	this = (boss2_c)o_self;
 	
 	traceline(from, to, MOVE_NORMAL, this);
 	to = trace_endpos;
@@ -999,9 +999,9 @@ float boss2_c::anim_hitscan_chain(void)
 		hitscanchain_player_lasthit = time;
 	vector epos = trace_endpos;
 	
-	entity o_self = self; // wtf??? why is this messing up self value
+	entity o_self = this; // wtf??? why is this messing up self value
 	boss2_hitscandamage(from, to, this, boss2_beamdamage * 0.25);
-	self = (boss2_c)o_self;
+	this = (boss2_c)o_self;
 
 	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
 	WriteByte(MSG_BROADCAST, TEMPENT::BOSS_BEAM);
@@ -2840,14 +2840,14 @@ void boss2_c::stage2_frame(void)
 		{
 			if (travel_direction)
 			{
-				if (node_current.connect2)
+				if (node_current.connect2 != "")
 					node_next = find(world, ::targetname, node_current.connect2);
 				else
 					node_next = find(world, ::targetname, node_current.connect1);
 			}
 			else
 			{
-				if (node_current.connect1)
+				if (node_current.connect1 != "")
 					node_next = find(world, ::targetname, node_current.connect1);
 				else
 					node_next = find(world, ::targetname, node_current.connect2);
@@ -2925,7 +2925,7 @@ void boss2_c::stage2(void)
 					travel_direction = !travel_direction;
 				
 				travel_time = random(3, 6);
-				self.attack_finished = max(self.attack_finished, time + (travel_time * 0.4));
+				this.attack_finished = max(this.attack_finished, time + (travel_time * 0.4));
 			}
 		}
 	}

@@ -99,13 +99,11 @@ float(string locsound, float rnd, float vol, float nchannel, float iswav, float 
 	//pointsound(self.origin + '0 0 128', lsound, vol, 0);
 };
 
-void()projectile_guardian1_think =
-{
+void projectile_guardian1_think() {
 	if(self.frame < 3)
 		self.frame ++;
 	if(self.enemy.health < 0)
 		self.lifetime = 0;
-	//self.count ++;
 
 	if(self.origin ==  self.oldorigin)
 	{
@@ -118,7 +116,7 @@ void()projectile_guardian1_think =
 
 	if ((self.trinket_touched == 1) && (self.solid != SOLID_BBOX))
 	{
-		self.clipgroup = 0;		
+		self.clipgroup = 0;
 		self.solid = SOLID_BBOX;
 		self.touch = spit_touch;
 		self.guardian_shoot_cnt = 0;
@@ -158,7 +156,7 @@ void()projectile_guardian1_think =
 			self.velocity_y = (self.oldvelocity_y * 0.5) +  (wishvel_y * 0.5);
 			if(self.magnetized == 2 )
 				self.velocity_z =( (self.oldvelocity_z * 0.5) +  (wishvel_z * 0.5) );
-			else				
+			else
 				self.velocity_z = (self.oldvelocity_z * 0.7) +  (wishvel_z * 0.3);
 
 			self.nextthink = time + 0.05;
@@ -181,7 +179,7 @@ void()projectile_guardian1_think =
 	self.oldorigin = self.origin;
 
 
-};	
+};
 
 void()projectile_guardian1_prethink =
 {
@@ -191,11 +189,9 @@ void()projectile_guardian1_prethink =
 	self.nextthink = time;
 };
 
-void(vector org,vector dir, float proj_angles, entity ownerproj, float proj_type,float projdelay, string tagname) launch_projectile_guardian1 = 
-{ 
-	local entity guardian1_projectile;
-	monstersound3("enemies/wretch/fire", 5, CHAN_AUTO);	
-	guardian1_projectile = spawn();	
+void launch_projectile_guardian1(vector org,vector dir, float proj_angles, entity ownerproj, float proj_type,float projdelay, string tagname) {
+	monstersound3("enemies/wretch/fire", 5, CHAN_AUTO);
+	entity guardian1_projectile = spawn();
 	guardian1_projectile.origin = org;
 	if((ownerproj.magnetized != 0))
 		guardian1_projectile.magnetized = ownerproj.magnetized;
@@ -209,8 +205,9 @@ void(vector org,vector dir, float proj_angles, entity ownerproj, float proj_type
 		guardian1_projectile.scale = 3;
 	if(proj_type == 2)
 		guardian1_projectile.scale = 4;
-		
-    self.clipgroup = 8;    
+
+	self.clipgroup = 8;
+
 	guardian1_projectile.traileffectnum = particleeffectnum("proj_guardian1_trail1");
 
 	guardian1_projectile.colormod = '3 0.2 0.2';
@@ -273,9 +270,9 @@ void(vector org,vector dir, float proj_angles, entity ownerproj, float proj_type
 		guardian1_projectile.ammo_revolver = 192;
 		if(zdist > 500)
 		guardian1_projectile.ammo_revolver = 512;
-	
+
 	  	guardian1_projectile.velocity = dir * (boss1_proj2_vel);
-		guardian1_projectile.guardian_shoot_cnt = boss1_proj2_homingcount; 
+		guardian1_projectile.guardian_shoot_cnt = boss1_proj2_homingcount;
 	}
 	guardian1_projectile.oldvelocity = guardian1_projectile.velocity;
 	guardian1_projectile.think = projectile_guardian1_prethink;
@@ -287,11 +284,11 @@ void(string tagname, float offset,float projdelay) guardian_attack_spread =
 	ai_face_boss();
 	self.colormod = '0 0 0';
 	float playerspeed = (vlen (self.enemy.velocity)) * 0.5;
-	vector nextpos = (normalize (self.enemy.velocity)) * playerspeed ;	
+	vector nextpos = (normalize (self.enemy.velocity)) * playerspeed ;
 
 
 
-	vector newplayerorg =self.enemy.origin + nextpos;	
+	vector newplayerorg =self.enemy.origin + nextpos;
 
 
 	vector org = tag_origin(tagname, self);
@@ -299,18 +296,18 @@ void(string tagname, float offset,float projdelay) guardian_attack_spread =
 
 	if(!(custom_infront(self.enemy,self.angles, self.origin, 16)))
 	{
-		newplayerorg =v_forward * 1024;	
-		newplayerorg_z = self.enemy.origin_z;	
-	}	
+		newplayerorg =v_forward * 1024;
+		newplayerorg_z = self.enemy.origin_z;
+	}
 	vector aim_org = self.origin;
 	aim_org_z = org_z;
 
 	vector player_offset = '0 0 12';
 
-	if((self.classname == "boss_guardian2") &&(self.origin_z > (self.enemy.origin_z + 12))) 
+	if((self.classname == "boss_guardian2") &&(self.origin_z > (self.enemy.origin_z + 12)))
 		newplayerorg_z += random (24,64);
 	else
-	{	
+	{
 		if(self.origin_z > (self.enemy.origin_z + 1))
 			newplayerorg_z += random (-64,24);
 		else
@@ -347,7 +344,7 @@ void(string tagname, float offset,float projdelay) guardian_attack_spread =
 
 
 
-	if(self.origin_z > (self.enemy.origin_z + 64)) 
+	if(self.origin_z > (self.enemy.origin_z + 64))
 	{
 		if(self.bosscnt == 3)
 			player_offset = '0 0 -32';
@@ -356,14 +353,14 @@ void(string tagname, float offset,float projdelay) guardian_attack_spread =
 
 		if(self.magnetized == 1)
 		{
-			if(self.origin_z > (self.enemy.origin_z + 350)) 
-			{				
+			if(self.origin_z > (self.enemy.origin_z + 350))
+			{
 				player_offset += '0 0 -256';
 				self.magnetized = 2;
-			}		
-			if(self.origin_z > (self.enemy.origin_z + 700)) 
+			}
+			if(self.origin_z > (self.enemy.origin_z + 700))
 					player_offset += '0 0 -128';
-		}	
+		}
 		else
 		{
 			if(self.bosscnt == 2)
@@ -373,12 +370,12 @@ void(string tagname, float offset,float projdelay) guardian_attack_spread =
 
 	vector dir = normalize( (newplayerorg +player_offset) - aim_org  );
 	org += v_right * (offset * 1.25);
-	
+
 	if(tagname == "tag_left_hand")
 		org += v_up * (offset * 0.75);
 	else
 		org += v_up * (offset * -0.75);
-	
+
 	float proj_type = 0;
 	if(self.vweaponframe == 10)
 		proj_type =  1;
@@ -408,7 +405,7 @@ void()guardian1_scatter_left =
 		self.think = guardian1_scatter_left;
 		self.nextthink = time + 0.01;
 		return;
-	}	
+	}
 	if(self.bosscnt >= 3)
 		self.guardian_frame_time = time + 0.09;
 	if(self.bosscnt == 2)
@@ -418,7 +415,7 @@ void()guardian1_scatter_left =
 
 
 	if(self.frame == $boss1_scattleft16)
-	{	
+	{
 
 		float proj_ammount = boss1_proj1_ammount;
 		float proj_angle_dif;
@@ -468,7 +465,7 @@ void()guardian1_scatter_right =
 		self.think = guardian1_scatter_right;
 		self.nextthink = time + 0.01;
 		return;
-	}	
+	}
 	if(self.bosscnt >= 3)
 		self.guardian_frame_time = time + 0.09;
 	if(self.bosscnt == 2)
@@ -478,7 +475,7 @@ void()guardian1_scatter_right =
 
 
 	if(self.frame == $boss1_scattright16)
-	{	
+	{
 		float proj_ammount = boss1_proj1_ammount;
 		float proj_angle_dif;
 		float proj_delay;
@@ -528,7 +525,7 @@ void()guardian1_hurl_left =
 		self.think = guardian1_hurl_left;
 		self.nextthink = time + 0.01;
 		return;
-	}	
+	}
 	if(self.bosscnt >= 3)
 		self.guardian_frame_time = time + 0.09;
 	if(self.bosscnt == 2)
@@ -580,7 +577,7 @@ void()guardian1_hurl_left =
 
 	if(self.frame == $boss1_hurlleft20)
 	{
-		self.guardian_attack_finished = time + attackedfinished;		
+		self.guardian_attack_finished = time + attackedfinished;
 		self.think = guardian1_float;
 		self.nextthink = time + 0.1;
 	}
@@ -600,7 +597,7 @@ void()guardian1_hurl_right =
 		self.think = guardian1_hurl_right;
 		self.nextthink = time + 0.01;
 		return;
-	}	
+	}
 	if(self.bosscnt >= 3)
 		self.guardian_frame_time = time + 0.09;
 	if(self.bosscnt == 2)
@@ -650,7 +647,7 @@ void()guardian1_hurl_right =
 
 	if(self.frame == $boss1_hurlright20)
 	{
-		self.guardian_attack_finished = time + attackedfinished;	
+		self.guardian_attack_finished = time + attackedfinished;
 		self.think = guardian1_float;
 		self.nextthink = time + 0.1;
 	}
@@ -668,7 +665,7 @@ float  (vector ent_org)behindapillar
 	spot1_z = ent_org_z + 16;
 	spot2 = ent_org + '0 0 16';
 
-	tracebox(spot1,'-4 -4 -4', '4 4 4', spot2, TRUE, world); 
+	tracebox(spot1,'-4 -4 -4', '4 4 4', spot2, TRUE, world);
 
 	if (trace_fraction == 1)
 		return FALSE;
@@ -684,14 +681,14 @@ void()guardian1_shot =
 		self.think = guardian1_shot;
 		self.nextthink = time + 0.01;
 		return;
-	}	
+	}
 	if(self.bosscnt >= 3)
 		self.guardian_frame_time = time + 0.09;
 	if(self.bosscnt == 2)
 		self.guardian_frame_time = time + 0.07;
 	if(self.bosscnt == 1)
 		self.guardian_frame_time = time + 0.04;
-	
+
 	if(behindapillar (self.enemy.origin))
 	{
 		float r_spread = random();
@@ -752,7 +749,7 @@ void()guardian1_shot =
 };
 
 
-void()guardian1_attack = 
+void()guardian1_attack =
 {
 	self.magnetized = 0;
 
@@ -769,14 +766,14 @@ void()guardian1_attack =
 		float diceshot = 0.1;
 	if (self.bosscnt == 1)
 		float diceshot = 0.2;
-	
+
 	if(((self.watching_player < time) || ( r2 < diceshot)) && (self.enemy.timefly < time))
-	{	
+	{
 		self.think = guardian1_shot;
-		self.frame = $boss1_shot1; 
+		self.frame = $boss1_shot1;
 		bosssound("enemies/boss1/voicing_blue", 3, 1, CHAN_VOICE, 0, 0.05);
 		self.watching_player = 0;
-	}	
+	}
 	else
 	{
 		if(r < 0.5)
@@ -785,10 +782,10 @@ void()guardian1_attack =
 			self.think = guardian1_scatter_right;
 			bosssound("enemies/boss1/voicing_red", 8, 1, CHAN_VOICE, 0, 0.05);
 		}
-		else 
+		else
 		{
 			bosssound("enemies/boss1/voicing_red", 8, 1, CHAN_VOICE, 0, 0.05);
-			self.frame = $boss1_scattleft1;	
+			self.frame = $boss1_scattleft1;
 			self.think = guardian1_scatter_left;
 		}
 	}
@@ -801,19 +798,19 @@ void()guardian1_attack =
 void() guardian1_rise =
 {
 	self.frame = $boss1_rise;
-	if(self.target)
+	if(self.target != "")
 	{
 		SUB_UseTargets();
 		self.target = "";
 	}
 	self.timefly = 0;
-	self.attached_cloud.count = 0.01;	
+	self.attached_cloud.count = 0.01;
 
 	/*
-	if(self.bosscnt == 2) 
-		self.health = 19999;	
-	if(self.bosscnt == 1) 
-		self.health = 9999;	
+	if(self.bosscnt == 2)
+		self.health = 19999;
+	if(self.bosscnt == 1)
+		self.health = 9999;
 	*/
 
 
@@ -838,19 +835,19 @@ void() guardian1_weep_loop =
 	self.frame = $boss1_weeploop;//$boss1_weepc_loop;
 	if (self.bosspain_finished < time)
 	{
-		if(self.bosscnt == 3) 
-			self.health = 25000;	
-		if(self.bosscnt == 2) 
-			self.health = 15000;	
-		if(self.bosscnt == 1) 
-			self.health = 7500;	
+		if(self.bosscnt == 3)
+			self.health = 25000;
+		if(self.bosscnt == 2)
+			self.health = 15000;
+		if(self.bosscnt == 1)
+			self.health = 7500;
 		setsize (self,'-80 -80 -128','80 80 256');
 		self.think = guardian1_weep_end;
 	}
 	else
 	{
 		if(self.timefly == 1)
-		{	
+		{
 			setsize (self,'-80 -80 -128','80 80 256');
 			self.think = guardian1_rise;
 		}
@@ -921,7 +918,7 @@ void() guardian1_rotate_right =
 void() guardian1_rotate =
 {
 	float rotate_left;
-	
+
 	makevectors (self.angles);
 	self.yaw_speed = 3;
 	ai_face_boss();
@@ -932,9 +929,9 @@ void() guardian1_rotate =
 	distl = vlen((self.origin + v_right * -30) - self.enemy.origin);
 
 	if(distl > distr)
-		rotate_left = 1;	
-	else	
-		rotate_left = 0;	
+		rotate_left = 1;
+	else
+		rotate_left = 0;
 
 	if(rotate_left == 1)
 		self.think = guardian1_rotate_left;
@@ -966,7 +963,7 @@ void() guardian1_float =
 	if(self.guardian_facing_time < time)
 	{
 		ai_face_boss();
-		self.guardian_facing_time = time + 0.01; 
+		self.guardian_facing_time = time + 0.01;
 	}
 	if((self.bosscnt == 3) && (self.health < 20000))
 	{
@@ -975,7 +972,7 @@ void() guardian1_float =
 		self.think = guardian1_weep;
 		return;
 	}
-	
+
 	if((self.bosscnt == 2) && (self.health < 10000))
 	{
 		bosssound("enemies/boss1/weak", 3, 1, CHAN_VOICE, 0, 0.05);
@@ -1036,7 +1033,7 @@ void() guardian1_float =
 	}
 	else
 		self.think = guardian1_rotate;
-	
+
 	self.nextthink = time + 0.01;
 };
 
@@ -1053,7 +1050,7 @@ void() guardian1_wakeupb =
 	}
 	else
 	{
-		self.think = guardian1_wakeupb;	
+		self.think = guardian1_wakeupb;
 	}
 	self.nextthink = time  + 0.01;
 };
@@ -1068,7 +1065,7 @@ void() guardian1_wakeupa =
 	bosssound("enemies/boss1/sight", 1, 1, CHAN_VOICE, 0, 0.05);
 };
 
-void() guardian1_idle = 
+void() guardian1_idle =
 {
 	self.frame = $boss1_idle;
 	self.bosscnt = 3;
@@ -1097,13 +1094,13 @@ void()boss2_path_determine_oldenemies =
 {
 	local entity head, near;
 	local float dist, low;
-	low = 9999;	
+	low = 9999;
 	head = find(world, classname, "boss_path");
 	while (head)
 	{
 		if(((custom_infront(head,self.angles + '0 -90 0', self.origin, 90)) == 1) && (head.spawnflags & 1))
 		{
-			 
+
 			dist = vlen(head.origin - self.origin);
 			if ((dist < low) && (head != self.enemy))
 			{
@@ -1122,7 +1119,7 @@ void()boss2_path_determine_enemies =
 
 	local entity head, near;
 	local float dist, low;
-	low = 9999;	
+	low = 9999;
 	head = find(world, classname, "boss_path");
 	while (head)
 	{
@@ -1160,10 +1157,10 @@ void()boss_path_touch =
 		other.think = guardian1_float;
 		other.nextthink = time + 0.1;
 
-		if(other.bosscnt == 2) 
-			other.health = 20000;	
-		if(other.bosscnt == 1) 
-			other.health = 10000;	
+		if(other.bosscnt == 2)
+			other.health = 20000;
+		if(other.bosscnt == 1)
+			other.health = 10000;
 
 
 		remove(self);
@@ -1172,7 +1169,7 @@ void()boss_path_touch =
 	if((other.classname == "boss_guardian3") && (other.target != self.target))
 	{
 		other.velocity = '0 0 0';
-		other.pipes = world; 
+		other.pipes = world;
 		other.target = self.target;
 		other.target2 = self.target2;
 
@@ -1228,7 +1225,7 @@ void()boss_path =
 	self.target2 = self.target;
 	if(!self.using)
 		self.using = 1;
-	if(self.spawnflags & 1)	
+	if(self.spawnflags & 1)
 	{
 		setsize (self,'-8 -8 -256','8 8 256');
 		self.think = boss2_path_determine_enemies;
@@ -1243,7 +1240,7 @@ void()boss1_head_die =
 {
 
 	pointparticles(particleeffectnum("boss1_head"), self.origin,'0 0 0', 1);
-	if(self.owner.bosscnt != 1) 
+	if(self.owner.bosscnt != 1)
 	{
 
 		bosssound("enemies/boss1/pain", 3, 1, CHAN_VOICE, 0, 0.05);
@@ -1280,7 +1277,7 @@ void() guardian_bbox_think =
 			self.owner.takedamage = 0;
 			bossvulnerable = 0;
 			//self.owner.vgear.count = 0.5;
-		}	
+		}
 
 	}
 	else
@@ -1306,7 +1303,7 @@ void() guardian_bbox_think =
 };
 
 
-void() boss1gib_think  = 
+void() boss1gib_think  =
 {
 
 	if(self.count != 1)
@@ -1324,7 +1321,7 @@ void() boss1gib_think  =
 	self.think = boss1gib_think;
 	self.nextthink =  time + 0.1;
 };
-void(vector org, vector vel) SpawnBossGib2 = 
+void(vector org, vector vel) SpawnBossGib2 =
 {
  	local entity gib;
 	gib = spawn();
@@ -1340,14 +1337,14 @@ void(vector org, vector vel) SpawnBossGib2 =
 	gib.colormod = '2.5 2.5 2.5';
 	gib.classname = "finalbossgibs";
 	gib.traileffectnum = particleeffectnum("boss1_gib_trail");
-	gib.avelocity = vel * (random(-50,50));	
+	gib.avelocity = vel * (random(-50,50));
 	gib.avelocity_z += random(-256,256);
 	gib.think = boss1gib_think;
 	gib.nextthink = time + random(0,0.5);
 	gib.touch = sgib2_touch;
 };
 
-void(vector org, vector vel,float tmodel) SpawnBossGib3 = 
+void(vector org, vector vel,float tmodel) SpawnBossGib3 =
 {
  	local entity gib;
 	gib = spawn();
@@ -1393,7 +1390,7 @@ void() boss1_die_end =
 		SpawnBossGib3(org,vel,3);
 		lgibcount --;
 	}
-	
+
 	lgibcount = 32;
 
 	while(lgibcount > 0)
@@ -1444,10 +1441,10 @@ void() boss1_die_end =
 		secret_mark2.angles_z = random (0,360);
 		//setorigin (secret_mark2,dir);
 		secret_mark2.think = spawned_relevelation_particles_think;
-		secret_mark2.nextthink = time + 1.5; 
+		secret_mark2.nextthink = time + 1.5;
 		particleclount --;
 	}
-	spawn_shaker(self,32,1.25,768);  
+	spawn_shaker(self,32,1.25,768);
 
 	te_customflash (self.origin,512,0.55,'0.9 0.9 1');
  	stuffcmd (single_player, "bf 0.95 0.95 1 0.9 0.45\n");
@@ -1474,12 +1471,12 @@ void() boss_lightning_think =
 		self.nextthink = time;
 };
 
-void() boss1_die_pre = 
+void() boss1_die_pre =
 {
 	entity boss1lightning = spawn();
 	setmodel(boss1lightning,"");
 	boss1lightning.noise = "env/amb/thunder1.ogg";
-	boss1lightning.origin = self.origin;	
+	boss1lightning.origin = self.origin;
 	boss1lightning.noise1 = "env/amb/thunder2.ogg";
 	boss1lightning.noise2 = "env/amb/thunder3.ogg";
 	boss1lightning.using = 1;
@@ -1495,8 +1492,8 @@ void() boss1_die_pre =
 
 void()bosssoulthink =
 {
-	
-	
+
+
 	if(self.origin_z >= 3240)
  	{
 		self.owner.attached_cloud.count = 0;
@@ -1522,7 +1519,7 @@ void()bosssoulthink =
 	}
 };
 
-void() prebosssoulthink = 
+void() prebosssoulthink =
 {
 	//self.alpha += 0.005;
 	self.colormod_x = self.alpha;
@@ -1536,7 +1533,7 @@ void() prebosssoulthink =
 	}
 	else
 	{
-		self.think = bosssoulthink;		
+		self.think = bosssoulthink;
 		entity siphon_effect = spawn();
 		siphon_effect.origin = self.origin;
 		siphon_effect.alpha = 0.01;
@@ -1566,9 +1563,9 @@ void()model_boss1wave_think =
 	self.scale += final_scale / total_cycles;
 
 
-	self.colormod_x -= 0.03;	
-	self.colormod_y -= 0.03;	
-	self.colormod_z -= 0.03;	
+	self.colormod_x -= 0.03;
+	self.colormod_y -= 0.03;
+	self.colormod_z -= 0.03;
 
 
 	self.alpha -= 0.0125;
@@ -1585,9 +1582,9 @@ void()model_boss1wave_think =
 
 };
 
-void() boss1_die_think = 
+void() boss1_die_think =
 {
-	
+
 	if(self.attached_cloud.count == 0.1)
 		self.attached_cloud.count = 0.01;
 	else
@@ -1597,9 +1594,9 @@ void() boss1_die_think =
 	self.colormod_x += 0.0125;
 	self.colormod_y += 0.0125;
 	self.colormod_z += 0.01255;
-	self.light_lev += 16;	
+	self.light_lev += 16;
 	self.think = boss1_die_pre;
-	
+
 	local vector tagorg;
 	local float tagindex;
 	tagindex = gettagindex(self, "tag_neck");
@@ -1669,7 +1666,7 @@ void() boss_copymodel_think =
 	self.alpha -= 0.0125;
 	self.glowmod = self.owner.glowmod;
 	self.think = boss_copymodel_think;
-	self.cnt = self.cnt * 0.85; 
+	self.cnt = self.cnt * 0.85;
 	self.nextthink = time + self.cnt;
 };
 
@@ -1692,7 +1689,7 @@ void() boss1_die =
 	copymodel.nextthink = time;
 	copymodel.lifetime = time + 5.2;
 	self.colormod = '1 1 1';
-	spawn_shaker(self,10,6,768);  
+	spawn_shaker(self,10,6,768);
 	self.pflags =129;
 	self.light_lev = 0;
 	self.style = 1;
@@ -1704,7 +1701,7 @@ void() boss1_die =
 	self.movetype = MOVETYPE_FLY;
 	self.takedamage = 0;
 	self.enemy = world;
-	self.target = self.deadtarget;	
+	self.target = self.deadtarget;
 	self.avelocity = '0 180 0';
 	sound(self, CHAN_VOICE, "enemies/boss1/die1.ogg", 1, 0.05);
 	SUB_UseTargets();
@@ -1714,7 +1711,7 @@ void() boss1_die =
 	self.lifetime = time + 5.4;
 
 };
-void() fog_controller_think = 
+void() fog_controller_think =
 {
 	float fog_intensity;
 	fog_intensity = self.cnt * 0.25;
@@ -1724,8 +1721,8 @@ void() fog_controller_think =
 	stuffcmd (single_player, strfog);
 	if(self.cnt == self.count)
 	{
-		self.lip = 0;	
-	}	
+		self.lip = 0;
+	}
 	else
 	{
 
@@ -1741,7 +1738,7 @@ void() fog_controller_think =
 		self.cnt += fog_value_variation;
 		self.lip = 1;
 	}
-	
+
 	self.nextthink = time + 0.02;
 };
 void()glowmodcontrollerboss1_think =
@@ -1836,7 +1833,7 @@ void() boss_guardian1 =
 	bbox.alpha = 0.75;
 	bbox.scale = 1;
 	bbox.frame = 8;
-	bbox.th_die = boss1_head_die;	
+	bbox.th_die = boss1_head_die;
 	bbox.think = guardian_bbox_think;
 	self.pipes = bbox;
 	makevectors(self.angles);
@@ -1847,7 +1844,7 @@ void() boss_guardian1 =
 	self.use = toggle_use;
 	self.using = 0;
 	self.frame = $boss1_idle;
-	self.th_die = boss1_die;	
+	self.th_die = boss1_die;
 	self.think = guardian1_idle;
 	self.nextthink = time + 1;
 	self.bloody = 2;

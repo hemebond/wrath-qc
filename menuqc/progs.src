@@ -2,6 +2,7 @@
 
 #define MENU
 #pragma includedir "../"
+#pragma autoproto
 
 #define NEW_MENU 1
 #define DEBUG 0

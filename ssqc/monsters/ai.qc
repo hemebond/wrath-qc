@@ -2875,7 +2875,7 @@ void() trigger_angle =
 	self.alpha = -1;
 	self.touch = trigger_angle_touch;
 
-	if(self.targetname)
+	if(self.targetname != "")
 	{
 		self.think = determine_subangle;
 		self.nextthink = self.ltime + 0.1;

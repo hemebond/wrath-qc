@@ -175,7 +175,7 @@ void() trigger_once =
 	trigger_multiple();
 	if (self.sounds == 1)
 		self.noise = "misc/centerprint.ogg";
-	if (self.noise)
+	if (self.noise != "")
 		precache_sound(self.noise);
 
 	if (self.respawnable)
@@ -445,7 +445,7 @@ void() teleporter_active =
 	setsize(self, '-16 -16 -32', '16 16 32');
 	item_colormodcontroller_pulse_spawn(self);
 	self.solid = SOLID_TRIGGER;
-	if (self.target)
+	if (self.target != "")
 		self.touch = teleport_touch;
 };
 
@@ -463,7 +463,7 @@ void() teleporter =
 	setsize(self, '-16 -16 -32', '16 16 32');
 	self.solid = SOLID_TRIGGER;
 	item_colormodcontroller_pulse_spawn(self);
-	if (self.target)
+	if (self.target != "")
 		self.touch = teleport_touch;
 };
 
@@ -1009,7 +1009,7 @@ void() trigger_shrine_touch =
 	writeprofilesavedlist(savestotalnumber);
 	update_latest_saveslot(2);
 
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 
 	other.shrine = 1;
@@ -1327,7 +1327,7 @@ void() trigger_turret_touch =
 
 	if((self.target)||(self.turret_enemy_visible))
 	{
-		if(self.target)
+		if(self.target != "")
 		{
 			other.minorangle =( (-1 * self.angle_deviance) + 180 )* (2/360);
 			determine_subangle();

@@ -55,7 +55,7 @@ $frame her_painc1 her_painc2 her_painc3 her_painc4 her_painc5
 
 $frame her_paind1 her_paind2 her_paind3 her_paind4 her_paind5
 
-	.float runing_time;
+.float runing_time;
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void() heretic_checkidle = { local float r;
@@ -1152,7 +1152,7 @@ void(entity enemy, float dmg) heretic_pain =
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-void() tonge_think = { 
+void() heretic_tongue_think = {
 
 
 	if (self.owner.wrathflags & FL_CRYSTAL)
@@ -1166,7 +1166,7 @@ void() tonge_think = {
 	if (self.owner.health < 0)
 		remove(self);
 
-	self.think = tonge_think;
+	self.think = heretic_tongue_think;
 	self.nextthink = time + 0.025;
 }
 
@@ -1261,8 +1261,8 @@ void() heretic_diea1 = { self.solid = 0;
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 /*WRATHED monster_heretic (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
-.vector bbvv;
-void() precache_monster_heretic = { precache_model("models/enemies/heretic/heretic.md3");
+void() precache_monster_heretic = {
+	precache_model("models/enemies/heretic/heretic.md3");
 	precache_model("models/enemies/heretic/tongues.md3");
 	precache_model("models/projectiles/proj_heretic_explo.md3");
 	precache_model("models/enemies/heretic/gibs/gib_backa.md3");
@@ -1317,34 +1317,22 @@ void() precache_monster_heretic = { precache_model("models/enemies/heretic/heret
 	precache_sound("enemies/heretic/end_chase.ogg");
 };
 
-void() monster_heretic = { precache_model("models/projectiles/proj_heretic.md3");
-	precache_model("models/enemies/heretic/heretic.md3");
-	precache_model("models/enemies/heretic/tongues.md3");
-	precache_model("models/projectiles/proj_heretic_explo.md3");
-	precache_model("models/enemies/heretic/gibs/gib_backa.md3");
-	precache_model("models/enemies/heretic/gibs/gib_backb.md3");
-	precache_model("models/enemies/heretic/gibs/gib_heada.md3");
-	precache_model("models/enemies/heretic/gibs/gib_headb.md3");
-	precache_model("models/enemies/heretic/gibs/gib_headc.md3");
-	precache_model("models/enemies/heretic/gibs/gib_jawa.md3");
-	precache_model("models/enemies/heretic/gibs/gib_jawb.md3");
-	precache_model("models/enemies/heretic/gibs/gib_jawc.md3");
-	precache_model("models/enemies/heretic/gibs/gib_tongue_left.md3");
-	precache_model("models/enemies/heretic/gibs/gib_tongue_right.md3");
-	precache_model("particles/explo/explo_heretic.md3");
-	local float r;
-	r = (random() *3);
+void() monster_heretic = {
+	precache_monster_heretic();
+
+	float r = random() *3;
 	if (r <= 3)
 		self.noise = "enemies/heretic/sight3.ogg";
 	if (r < 2)
 		self.noise = "enemies/heretic/sight2.ogg";
 	if (r < 1)
 		self.noise = "enemies/heretic/sight1.ogg";
-	if (deathmatch)
-	{
+
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
+
 	if (self.waypointed != 1)
 		self.waypointed = 0;
 	self.flyer = 1;
@@ -1352,7 +1340,8 @@ void() monster_heretic = { precache_model("models/projectiles/proj_heretic.md3")
 	self.movetype = MOVETYPE_FLY;
 	self.oldmovetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/heretic/heretic.md3");
-	setsize(self, heretic_bbox *-0.5, heretic_bbox *0.5);
+	// setsize(self, heretic_bbox *-0.5, heretic_bbox *0.5);
+	setsize(self, '-32 -32 -32', '32 32 32');
 	self.health = heretic_health;
 	self.damagetopain = heretic_dtp;
 	self.classname = "monster_heretic";
@@ -1368,13 +1357,13 @@ void() monster_heretic = { precache_model("models/projectiles/proj_heretic.md3")
 	self.glowmod = '-1 -1 -1';
 	self.bloody = 1;
 	self.yaw_speed = 5;
-	local entity tonge;
-	tonge = spawn();
-	tonge.owner = self;
-	setmodel(tonge, "models/enemies/heretic/tongues.md3");
-	setattachment(tonge, self, "tag_tongues");
-	tonge.think = tonge_think;
-	tonge.nextthink = time;
+
+	entity tongue = spawn();
+	tongue.owner = self;
+	setmodel(tongue, "models/enemies/heretic/tongues.md3");
+	setattachment(tongue, self, "tag_tongues");
+	tongue.think = heretic_tongue_think;
+	tongue.nextthink = time;
 	self.think = flymonster_start;
 	self.nextthink = time + 0.05;
 };

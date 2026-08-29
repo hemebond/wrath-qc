@@ -62,7 +62,7 @@ void() trap_wait =
 	if(self.classname != "damage_bbox")
 		sound(self, CHAN_VOICE, self.noise2, self.volume, self.atten);
 
-	if ((self.particlename) )
+	if (self.particlename != "")
 		func_trap_particlespawner();
 
 	self.think = trap_return;
@@ -216,7 +216,7 @@ void() trap_return =
 void() trap_fire = 
 { 
 
-    if((self.target))
+    if(self.target != "")
     {
         local entity t;
         t = find(world,targetname,self.target);
@@ -472,7 +472,7 @@ void() func_trap =
 		self.nextthink = self.ltime + self.wait2 + self.delay;
 		self.think = trap_fire;
 	}	
-    if(self.atmodel)
+    if (self.atmodel != "")
     {
         precache_model(self.atmodel);
         entity attached = spawn();
@@ -520,8 +520,13 @@ void() misc_cyst_wait_die =
 	self.nextthink = time + delaytodie;
 };
 
-void() misc_cyst = 
-{
+
+void misc_cyst() {
+	//
+	// Static cysts that can't be interacted with directly
+	// but explode when used
+	//
+
 	if(!self.type)
 		self.type = 1;
 	if(!self.scale)
@@ -541,8 +546,6 @@ void() misc_cyst =
 		setmodel(self, "models/enemies/afflicted/cyst_d.md3");
 	else
 		setmodel(self, "models/enemies/afflicted/cyst_a.md3");
-
-
 
 	self.solid = SOLID_BBOX;	
 

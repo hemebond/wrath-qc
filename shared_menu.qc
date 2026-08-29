@@ -15,16 +15,17 @@ void(float fhandle) fclose_wrath = { if (fhandle != -1)
 		fclose(fhandle);
 }
 
-void() read_currentprofileslot = { float readparms;
-	string readtext;
-	readparms = fopen_wrath("profiles/currentprofileslot.txt", FILE_READ);	
-	readtext = fgets(readparms);	
+
+void read_currentprofileslot() {
+	float readparms = fopen_wrath("profiles/currentprofileslot.txt", FILE_READ);
+	string readtext = fgets(readparms);
 	profileslot = stof(readtext);	
 	readtext = fgets(readparms);
 	profilename = (readtext);
 	profilename = strzone(profilename);
 	fclose_wrath(readparms);
-};
+}
+
 
 void(float totalsaves) writeprofilesavedlist = { float profilenamef;
 	string writethis, profilenamestring;
@@ -76,18 +77,18 @@ void(float val) write_shrine_user = { read_currentprofileslot();
 	fclose_wrath(writeparms);
 };
 
-void() Kill_Tether = { read_currentprofileslot();
-	string campaignloc;
-	campaignloc = strcat("profiles/", profilename, "/tether.txt");
+void() Kill_Tether = {
+	read_currentprofileslot();
 
-	float writeparms;
-	string writethis;
-	writeparms = fopen_wrath(campaignloc, FILE_WRITE);	
-	writethis = ftos(0);	
+	string campaignloc = strcat("profiles/", profilename, "/tether.txt");
+	float writeparms = fopen_wrath(campaignloc, FILE_WRITE);
+	string writethis = ftos(0);
+
 	fputs(writeparms, writethis);	
 	fputs(writeparms, "\n");	
 	fclose_wrath(writeparms);
-	if (profilename)
+
+	if (profilename != "")
 		strunzone(profilename);
 };
 
@@ -259,13 +260,17 @@ void fcopy_wrath(string filefrom, string fileto) {
 void(float istether) copy_save_maps = { 
 	read_currentprofileslot();
 
-	string foldername;	
+	string foldername = "";
 	if (istether == 2)
 		foldername = "autosave";
 	if (istether == 1)
 		foldername = "tether";
 	if (istether == 0)
 		foldername = "shrine";
+
+	if (foldername == "" ) {
+		error("istether must be 0-3");
+	}
 
 	// episode 1
 	string intromap, hub1map, e1m1map, e1m2map, e1m3map, e1m4map, e1m5map, boss1map;
@@ -526,7 +531,7 @@ void(float type) writedates =
 		fputs(writeparms, shrine_date);
  	fputs(writeparms, "\n");
  	fclose_wrath(writeparms);
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
  };
 

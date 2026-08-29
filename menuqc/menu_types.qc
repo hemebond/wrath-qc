@@ -2020,7 +2020,7 @@ void() menu_type_resume =
 
 
 
- if (oldtotalprofileslots > 0)
+	if (oldtotalprofileslots > 0)
 		oldtotalprofileslots = 0;
 
 	local vector size, buttions_locs;
@@ -2032,8 +2032,8 @@ void() menu_type_resume =
 
 	drawpic('0 0 0', "gfx/menu/background.tga", vid_x *'1 0 0' + vid_y *'0 1 0', '0.65 0.65 0.65', 1, 0);
 
-	float vid_rwidth = cvar("vid_width");
-	float vid_rheight = cvar("vid_height");
+	vid_rwidth = cvar("vid_width");
+	vid_rheight = cvar("vid_height");
 
 	vector journalpos, sizeimage;
 	journalpos = (journalpos);

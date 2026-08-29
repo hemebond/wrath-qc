@@ -832,5 +832,3 @@ void() lower_cannon = {
 	self.vweaponstate = 2;
 	self.nextthink = time + 0.0125;
 };
-
-///////////////////////////////////end of qc file

@@ -96,7 +96,7 @@ void(float istether) load_save_maps =
 	fcopy(fromboss1map, toboss1map);
 
 
-	local string introstat, hub1stat, e1m1stat, e1m2stat, e1m3stat, e1m4stat, e1m5stat, boss1stat;
+	string introstat, hub1stat, e1m1stat, e1m2stat, e1m3stat, e1m4stat, e1m5stat;
 
 	introstat = strcat("profiles/", profilename, "/maps/intro.stats");
 	hub1stat = strcat("profiles/", profilename, "/maps/hub1.stats");
@@ -174,7 +174,7 @@ void(float istether) load_save_maps =
 
 	// episode 2
 
-	local string hub2map, e2m1map, e2m2map, e2m3map, e2m4map, e2m5map,boss2map;
+	string hub2map, e2m1map, e2m2map, e2m3map, e2m4map, e2m5map,boss2map;
 
 	hub2map = strcat("data/profiles/", profilename, "/maps/hub2.sav");
 	e2m1map = strcat("data/profiles/", profilename, "/maps/e2m1.sav");
@@ -242,7 +242,7 @@ void(float istether) load_save_maps =
 	fcopy(fromboss2map, toboss2map);
 
 
-	local string hub2stat, e2m1stat, e2m2stat, e2m3stat, e2m4stat, e2m5stat, boss2stat;
+	string hub2stat, e2m1stat, e2m2stat, e2m3stat, e2m4stat, e2m5stat, boss2stat;
 
 	hub2stat = strcat("profiles/", profilename, "/maps/hub2.stats");
 	e2m1stat = strcat("profiles/", profilename, "/maps/e2m1.stats");
@@ -315,7 +315,7 @@ void(float istether) load_save_maps =
 
 	// episode 3
 
-	local string hub3map, e3m1map, e3m2map, e3m3map, e3m4map, e3m5map,boss3map;
+	string hub3map, e3m1map, e3m2map, e3m3map, e3m4map, e3m5map,boss3map;
 
 	hub3map = strcat("data/profiles/", profilename, "/maps/hub3.sav");
 	e3m1map = strcat("data/profiles/", profilename, "/maps/e3m1.sav");
@@ -383,7 +383,7 @@ void(float istether) load_save_maps =
 	fcopy(fromboss3map, toboss3map);
 
 
-	local string hub3stat, e3m1stat, e3m2stat, e3m3stat, e3m4stat, e3m5stat, boss3stat;
+	string hub3stat, e3m1stat, e3m2stat, e3m3stat, e3m4stat, e3m5stat, boss3stat;
 
 	hub3stat = strcat("profiles/", profilename, "/maps/hub3.stats");
 	e3m1stat = strcat("profiles/", profilename, "/maps/e3m1.stats");

@@ -2152,13 +2152,13 @@ float DPCONTENTS_DONOTENTER = 1024; // AI hint brush
 float DPCONTENTS_LIQUIDSMASK = 14; // WATER | SLIME | LAVA
 float DPCONTENTS_BOTCLIP = 2048; // AI hint brush
 float DPCONTENTS_OPAQUE = 4096; // only fully opaque brushes get this (may be useful for line of sight checks)
-float DPCONTENTS_INTERACTCLIP 	= 0x00002000;
-float DPCONTENTS_WEAPONCLIP 	= 0x00004000;
-float DPCONTENTS_BOSSCLIP 		= 0x00008000;
-float DPCONTENTS_WRATHUNUSED3 	= 0x00010000;
-float DPCONTENTS_WRATHUNUSED4 	= 0x00020000;
+float DPCONTENTS_INTERACTCLIP = 0x00002000;
+float DPCONTENTS_WEAPONCLIP = 0x00004000;
+float DPCONTENTS_BOSSCLIP = 0x00008000;
+float DPCONTENTS_WRATHUNUSED3 = 0x00010000;
+float DPCONTENTS_WRATHUNUSED4 = 0x00020000;
 
-float DPCONTENTSMASK_WEAPON		= DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_WEAPONCLIP;
+float DPCONTENTSMASK_WEAPON = DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_WEAPONCLIP;
 
 float Q3SURFACEFLAG_NODAMAGE = 1;
 float Q3SURFACEFLAG_SLICK = 2; // low friction surface
@@ -2967,6 +2967,3 @@ float CLIPGROUP_W = 8388608;
 
 //description:
 //If two entities have this field set to the same non-zero integer value, they won't collide with each other.
-
-
-///////////////end qc file///////////////end qc file

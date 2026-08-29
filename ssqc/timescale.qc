@@ -9,21 +9,25 @@ float timescale_players;
 #define TIMESCALE_STEPSIZE	0.05	// run time steps at 20hz as to not spam localcmd too much
 #define TIMESCALE_SPEED 2
 
-void Timescale_RunFrame(void)
-{
+void Timescale_RunFrame(void) {
+	if (deathmatch) {
+		timescale_current = 1.0;
+		return;
+	}
+
 	if (time < timescale_nextstep)
 		return;
-	
+
 	float players = 0;
 	timescale_wanted = 1;
 
-	for(float i = 1; i < 32; i++) // loop through ents, break when you run out of players, establish a timescale to use
-	{
+	// loop through ents, break when you run out of players, establish a timescale to use
+	for (float i = 1; i < 32; i++)  {
 		entity edict = edict_num(i);
 		if !(edict.flags & FL_CLIENT)
 			continue;
 		players++;
-		
+
 		if (edict.rmenu)
 		{
 			if (timescale_players > 1) // in coop, lets not quite slow down so much
@@ -47,25 +51,13 @@ void Timescale_RunFrame(void)
 		spd = 3;
 	else if (fabs(timescale_current - timescale_wanted) > 0.2)
 		spd = 2;
-	
-	if (timescale_current < timescale_wanted)
-	{
-		//timescale_current = timescale_wanted;
+
+	if (timescale_current < timescale_wanted) {
 		timescale_current = min(timescale_wanted, timescale_current + (TIMESCALE_SPEED * TIMESCALE_STEPSIZE * spd * 1.5));
 	}
-	else if (timescale_current > timescale_wanted)
-	{
+	else if (timescale_current > timescale_wanted) {
 		timescale_current = max(timescale_wanted, timescale_current - (TIMESCALE_SPEED * TIMESCALE_STEPSIZE * spd));
 	}
 	timescale(timescale_current);
-	timescale_nextstep = time + (TIMESCALE_STEPSIZE * timescale_current); 
+	timescale_nextstep = time + (TIMESCALE_STEPSIZE * timescale_current);
 }
-
-
-
-
-
-
-
-
-

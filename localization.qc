@@ -143,7 +143,7 @@ void Localization_LoadFile(string path, string lang)
 	fclose(f);
 }
 
-string Localization_FindFile(string path, float primaryonly = FALSE)
+string Localization_FindFile(string path, optional float primaryonly = FALSE)
 {
 	string langpath = cvar_string("prvm_language");
 	string fallbackpath = cvar_string("prvm_language_fallback");

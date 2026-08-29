@@ -306,7 +306,8 @@ void() check_retcher_pos = { local float readfrik;
 	self.rweaponangles_z = stof(readtext);	fclose(readfrik);
 };
 
-void() check_retcher = { local float readfrik;
+void() check_retcher = {
+	local float readfrik;
 	local string readtext;
 	readfrik = fopen_wrath("weapons/retcher.txt", FILE_READ);
 	readtext = fgets(readfrik);

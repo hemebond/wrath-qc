@@ -118,34 +118,24 @@ void() csqc_precaches =
 	precache_model("progs/flame.mdl");
 	precache_pic("gfx/artifactmenu/artifactA_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactA_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactA_info.tga");
 	precache_pic("gfx/artifactmenu/artifactB_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactB_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactB_info.tga");
 	precache_pic("gfx/artifactmenu/artifactC_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactC_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactC_info.tga");
 	precache_pic("gfx/artifactmenu/artifactD_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactD_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactD_info.tga");
 	precache_pic("gfx/artifactmenu/artifactE_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactE_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactE_info.tga");
 	precache_pic("gfx/artifactmenu/artifactF_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactF_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactF_info.tga");
 	precache_pic("gfx/artifactmenu/artifactG_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactG_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactG_info.tga");
 	precache_pic("gfx/artifactmenu/artifactH_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactH_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactH_info.tga");
 	precache_pic("gfx/artifactmenu/artifactI_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactI_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactI_info.tga");
 	precache_pic("gfx/artifactmenu/artifactJ_icon_large.tga");
 	precache_pic("gfx/artifactmenu/artifactJ_icon.tga");
-	precache_pic("gfx/artifactmenu/artifactJ_info.tga");
 	precache_pic("gfx/artifactmenu/artifact_marker.tga");
 	precache_pic("gfx/artifactmenu/artifact_menu.tga");
 	precache_pic("gfx/artifactmenu/artifact_num0.tga");
@@ -158,70 +148,35 @@ void() csqc_precaches =
 	precache_pic("gfx/artifactmenu/artifact_num7.tga");
 	precache_pic("gfx/artifactmenu/artifact_num8.tga");
 	precache_pic("gfx/artifactmenu/artifact_num9.tga");
-	//precache_pic("gfx/deathmenu/deathmenuA.tga");
-	//precache_pic("gfx/deathmenu/deathmenuB.tga");
-	//precache_pic("gfx/deathmenu/deathmenuC.tga");
-	//precache_pic("gfx/deathmenu/deathmenuD.tga");
 
-	precache_pic("gfx/hud/coffer_key.tga");
 	precache_pic("gfx/hud/crosshair1_active.tga");
 	precache_pic("gfx/hud/crosshair1.tga");
 	precache_pic("gfx/hud/crosshair1_use.tga");
-	precache_pic("gfx/hud/relic_e1m1.tga");
-	precache_pic("gfx/hud/relic_e1m2.tga");
-	precache_pic("gfx/hud/relic_e1m3.tga");
-	precache_pic("gfx/hud/relic_e1m4.tga");
-	precache_pic("gfx/hud/relic_e1m5.tga");
 
 	precache_pic("gfx/hud/armor_sheet.tga");
 	precache_pic("gfx/hud/darmor_sheet.tga");
 	precache_pic("gfx/hud/cyst_sheet.tga");
-	precache_pic("gfx/hud/shellls_sheet.tga");
+	precache_pic("gfx/hud/shells_sheet.tga");
 	precache_pic("gfx/hud/slugs_sheet.tga");
 	precache_pic("gfx/hud/ore_sheet.tga");
 	precache_pic("gfx/hud/lances_sheet.tga");
 	precache_pic("gfx/hud/fangs_sheet.tga");
 
 	precache_pic("gfx/hud/cooldown/artifactA_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactA_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactA_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactB_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactB_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactB_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactC_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactC_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactC_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactD_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactD_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactD_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactE_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactE_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactE_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactF_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactF_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactF_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactG_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactG_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactG_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactH_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactH_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactH_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactI_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactI_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactI_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/artifactJ_hud.tga");
-	precache_pic("gfx/hud/cooldown/artifactJ_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/artifactJ_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/cd_sheet.tga");
-	precache_pic("gfx/hud/cooldown/cd_pulse.tga");
 	precache_pic("gfx/hud/cooldown/sigil_flight_hud.tga");
-	precache_pic("gfx/hud/cooldown/sigil_flight_pulseA.tga");
-	precache_pic("gfx/hud/cooldown/sigil_flight_pulseB.tga");
 	precache_pic("gfx/hud/cooldown/soul_tether_hud.tga");
 	precache_pic("gfx/hud/cooldown/soul_tether_pulseA.tga");
 	precache_pic("gfx/hud/cooldown/soul_tether_pulseB.tga");
-
-
 
 	precache_pic("gfx/journal/arrow_down_active.tga");
 	precache_pic("gfx/journal/arrow_down.tga");
@@ -237,7 +192,7 @@ void() csqc_precaches =
 
 
 
-	string language_selected = 	cvar_string("prvm_language");
+	string language_selected = cvar_string("prvm_language");
 
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_armor.tga"));
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_artifactA.tga"));
@@ -263,7 +218,6 @@ void() csqc_precaches =
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_key_yellow.tga"));
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_helm.tga"));
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_journal_update.tga"));
-	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_lances.tga"));
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_lifeblood_beaker.tga"));
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_lifeblood_vial.tga"));
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_load.tga"));

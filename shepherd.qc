@@ -137,10 +137,12 @@ void shepherd_usepressed(void)
 	}
 }
 
-void shepherd_approached(void)
-{
+void shepherd_approached(void) {
 	if (time < shepherd_speak_cooldown)
 		return;
+
+	string targ;
+	entity lst;
 
 	if (self.spawnflags & 1)
 	{
@@ -156,8 +158,8 @@ void shepherd_approached(void)
 			shepherd_hublines_lastspoken = line;
 
 			activator = self;
-			string targ = self.targlist[line];
-			entity lst = world;
+			targ = self.targlist[line];
+			lst = world;
 			while((lst = find(lst, targetname, targ)))
 			{
 				self = lst;
@@ -175,8 +177,8 @@ void shepherd_approached(void)
 		self.shepherd_thisautomatic = TRUE;
 
 		activator = self;
-		string targ = self.target;
-		entity lst = world;
+		targ = self.target;
+		lst = world;
 		while((lst = find(lst, targetname, targ)))
 		{
 			self = lst;

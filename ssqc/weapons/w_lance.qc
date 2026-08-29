@@ -7,8 +7,8 @@
 .float lance_reloadtime;
 
 
-void() idle_lance_glow_controller = 
-{ 
+void() idle_lance_glow_controller =
+{
 
 	if(self.owner.weapon !=  IT_LANCE)
 		remove(self);
@@ -46,8 +46,8 @@ void() spawn_glowmod_lance_controller =
 
 void()wfire_post_lance;
 
-void() idle_lance = 
-{ 
+void() idle_lance =
+{
 	if(self.reloaded != 1)
 	{
 		//self.attack_finished = time + self.lance_time + 0.05;
@@ -106,17 +106,17 @@ void() beam_update_view =
 			beam.lastbeam_view = self.owner.lastbeam_view;
 			self.owner.lastbeam_view = beam;
 			setattachment (beam,self,"tag_nextbeam");
-			beam.nextthink = time; 
+			beam.nextthink = time;
 			beam.alpha = 1;
 			beam.think = beam_update_view;
 		}
-		
-	}		
+
+	}
 	if(!self.owner.spawnedlance)
 		self.think = alphafade3;
 	else
-		self.think = beam_update_view;	
-	self.nextthink = time + 0.0125; 
+		self.think = beam_update_view;
+	self.nextthink = time + 0.0125;
 };
 
 
@@ -159,17 +159,17 @@ void() beam_update =
 			beam.lastbeam = self.owner.lastbeam;
 			self.owner.lastbeam = beam;
 			setattachment (beam,self,"tag_nextbeam");
-			beam.nextthink = time; 
+			beam.nextthink = time;
 			beam.alpha = 1;
 			beam.think = beam_update;
 		}
-		
-	}		
+
+	}
 	if(!self.owner.spawnedlance)
 		self.think = alphafade3;
 	else
-		self.think = beam_update;	
-	self.nextthink = time + 0.0125; 
+		self.think = beam_update;
+	self.nextthink = time + 0.0125;
 };
 
 
@@ -224,7 +224,7 @@ self.nextthink = time + 0.1;
 self.solid = SOLID_SLIDEBOX;
 self.think = backtonormal;
 }
-void() field_shockwave_touch = 
+void() field_shockwave_touch =
 {
 	if( (other.classname == "breakable_urn_large") || (other.classname == "breakable_urn_medium") || (other.classname == "breakable_urn_small") || (other.classname == "func_destruct"))
 	{
@@ -232,7 +232,7 @@ void() field_shockwave_touch =
 		T_Damage(self.owner, self, self, 2);	// its damage
 	}
 }
-void()follow_head = 
+void()follow_head =
 {
 	if(vlen(self.origin - self.owner.origin) > 16)
 	setorigin (self, self.owner.origin);
@@ -241,14 +241,14 @@ void()follow_head =
 	self.think = follow_head;
 	else
 	self.think = SUB_Remove;
-	
+
 	self.nextthink = time + 0.05;
 
 }
 .entity field_point;
 
 void() removebylifetime =
-{		
+{
 	if(self.lifetime < time)
 		self.think = SUB_Remove;
 	else
@@ -270,7 +270,7 @@ void() projectile_redirect =
 	vector dir = normalize(cursor_trace_endpos_forced (self.owner) - self.origin);
     float speed_factor = vlen (self.owner.velocity) * 5;
 	self.velocity = dir * self.oldspeed;
-    self.velocity += v_up * random(-speed_factor,speed_factor)+ v_right* random(-speed_factor,speed_factor);	
+    self.velocity += v_up * random(-speed_factor,speed_factor)+ v_right* random(-speed_factor,speed_factor);
 
 	self.v_angle = '0 0 0';
 	self.angles = '0 0 0';
@@ -295,7 +295,7 @@ void() check_newprojectile =
 if(self.owner.button3)
 	self.think = check_newprojectile;
 else
-{	
+{
 	self.think = projectile_redirect;
 }
 self.nextthink = time + 0.05;
@@ -316,8 +316,8 @@ self.nextthink = time + 0.05;
 }
 void()projectile_touch_str2;
 
-float(entity targ, entity viewer) infront2 = 
-{ 
+float(entity targ, entity viewer) infront2 =
+{
 	local vector vec;
 	local float dot;
 	makevectors (self.v_angle);
@@ -359,7 +359,7 @@ void() projectile_field_touch =
 
 		if(other.think)
 			other.oldthink = other.think;
-		float bparticle = particleeffectnum("lanceforcefield"); 
+		float bparticle = particleeffectnum("lanceforcefield");
 
 		// Reki (May 16 2023): Only subtract ammo when reflecting a projectile
 		// Reki (July 21 2023): Added .deflection_cost, which is a cost 0-127 with flags
@@ -367,7 +367,7 @@ void() projectile_field_touch =
 		float should_deflect = ((time > self.owner.lance_reflecttime) || (other.deflection_cost & DEFLECTION::BYPASSTIMER));
 		if (other.deflection_cost)
 				amt = max(0, other.deflection_cost & 127);
-			
+
 		if (self.owner.weapon == IT_LANCE && should_deflect)
 		{
 			//Steam_StatIncrement(self.owner, ST_STATS::projectiles_deflected, 1);
@@ -422,7 +422,7 @@ void()lance_premuzzle_think =
 				self.cnt = 0;
 			else
 				self.cnt = 1;
-			
+
 			if(self.skin == 1)
 				{self.skin = 0;}
 			else
@@ -432,10 +432,10 @@ void()lance_premuzzle_think =
 			//self.owner.ammo_lance --;
 			Controller_Rumble(self.owner, random(0.0, 0.2), random(0.0, 0.3), 250);
 
-			self.ammo_lance_timing = time + 0.2; 
-		}	
+			self.ammo_lance_timing = time + 0.2;
+		}
 		/*if(self.cnt == 1)
-		{	
+		{
 			if(self.alpha < 0.35)
 				self.alpha += 0.005;
 		}
@@ -449,7 +449,7 @@ void()lance_premuzzle_think =
 			self.think = lance_premuzzle_think;
 	}
 	else
-	{	
+	{
 		remove(self.muzzlelight);
 		self.owner.soundfade = 2;
 		float wvol = cvar ("weapons_fire_volume");
@@ -461,13 +461,13 @@ void()lance_premuzzle_think =
 		{
 			if (head.wrathflags & FL_GIB)
 			{
-				explo_physics_gibs (self.owner,head,150,3); 	
+				explo_physics_gibs (self.owner,head,150,3);
 			}
 			head = head.chain;  // cycle to next head (entity)
 		}
 
 		self.owner.vweaponglowmod = '0.75 0.75 0.75';
-		self.think = lance_muzzle_think;	
+		self.think = lance_muzzle_think;
 	}
 	self.nextthink = time + 0.005;
 };
@@ -482,7 +482,7 @@ void() wsfire_lance =
 		string muzzlemodel = "models/weapons/lance/barrier.md3";
 		entity muzzle = spawn();
 		muzzle.owner = self;
-		muzzle.scale = self.lance_muzzle_scale;	
+		muzzle.scale = self.lance_muzzle_scale;
 		muzzle.count = 1;
 		muzzle.cnt = 0;
 		muzzle.classname = "secondary_muzzle_lance";
@@ -513,7 +513,7 @@ void() wsfire_lance =
 		muzzle.muzzlelight = plight;
 
 		makevectors(self.v_angle);
-			
+
 		entity fieldpoint =spawn();
 		fieldpoint.effects = 128;
 		fieldpoint.viewmodelforclient = self;
@@ -530,13 +530,13 @@ void() wsfire_lance =
 
 		entity projectile_field = spawn();
 		setsize (projectile_field, '-96 -96 -96','96 96 96');
-		projectile_field.owner = self;		
-		projectile_field.solid =SOLID_TRIGGER;		
+		projectile_field.owner = self;
+		projectile_field.solid =SOLID_TRIGGER;
 		projectile_field.origin = view_origin;
 		projectile_field.touch = projectile_field_touch;
 		projectile_field.originoffset= tag_origin("tag_muzzle2", self.vweapon);
 		projectile_field.think = check_projectile_field;
-		projectile_field.nextthink = time; 
+		projectile_field.nextthink = time;
 	}
 };
 
@@ -552,7 +552,7 @@ void() ws_release_fire =
 
 		if (head.wrathflags & FL_GIB)
 		{
-	    	explo_physics_gibs (self,head,150,3); 	
+	    	explo_physics_gibs (self,head,150,3);
 		}
 		head = head.chain;  // cycle to next head (entity)
 	}
@@ -572,13 +572,13 @@ void() wsfire_lance2 =
 			if (trace_fraction != 1.0)
 				TraceAttack(self.lance_damage2, direction);
 			ApplyMultiDamage();
-			weapontraceline(tagorg, t_dest, MOVE_WORLDONLY, self);	
+			weapontraceline(tagorg, t_dest, MOVE_WORLDONLY, self);
 			self.beam_lenght = vlen (tagorg - trace_endpos) / 64;
 			if(self.beam_lenght > 64)
-				self.beam_lenght = 64;					
+				self.beam_lenght = 64;
 			self.beamtime = time +self.lance_time2;
 			if(!self.spawnedlance)
-			{	
+			{
 				self.beam_counter = 0;
 				self.beam_counter_view = 0;
 				te_lance(self);
@@ -590,8 +590,8 @@ void() wsfire_lance2 =
 	self.lance_viewzoom_time = time +0.1;
 	}
 	else
-	{	
-		self.spawnedlance = 0;	
+	{
+		self.spawnedlance = 0;
 		self.think = idle_lance;
 	}
 	self.nextthink = time + 0.01;
@@ -648,7 +648,7 @@ void()trail_remove =
 {
 	if(other != world)
 		return;
-	else 
+	else
 		remove(self);
 }
 
@@ -681,7 +681,7 @@ void()wfire_post_lance =
 			self.vweaponglowmod = '-0.05 -0.05 -0.05';
 
 		self.think = wfire_post_lance;
-	}	
+	}
 	else
 	{
 		self.think = idle_lance;
@@ -689,39 +689,36 @@ void()wfire_post_lance =
 	self.nextthink = time + 0.05;
 };
 
-void() wfire_lance =
-{
-
-
-	// Reki (December 1 2023): Fixed this not having punch angle
-	if(cvar("cl_punch"))
-	{
+void wfire_lance() {
+	if (cvar("cl_punch")) {
 		self.punchangle_x += -5;
-
 		Controller_Rumble(self, 0.7, 0.3, 170);
 		Controller_RumbleTriggers(self, 0.7, 0, 50);
 	}
-	vector tagorg = tag_origin("tag_muzzle",self.vweapon);
+
+	vector tagorg = tag_origin("tag_muzzle", self.vweapon);
 	makevectors(self.v_angle);
-	vector t_dest = self.origin + self.view_ofs + v_forward *8192;
-	if(self.clipgroup != 0)
-	{
+	vector t_dest = self.origin + self.view_ofs + v_forward * 8192;
+
+	if (self.clipgroup != 0) {
 		self.oldclipgroup = self.clipgroup;
 		self.clipgroup = 0;
 	}
-	
+
 	vector direction = aim(self, 100000);
 	self.lance_secondary = 0;
 	weapontraceline(tagorg, t_dest, MOVE_HITMODEL, self);
 	vector forg = trace_endpos;
 	if ((trace_ent.takedamage))
-		entity attacked = trace_ent;	
+		entity attacked = trace_ent;
+
 	weapontraceline(tagorg, t_dest, FALSE, self);
+
 	if(trace_ent != attacked)
 		forg = trace_endpos;
 
 	if(!GetSkyMaterial())
-	{	
+	{
 		if(self.lance_secondary == 1)
 			pointparticles(particleeffectnum("beam_impact"),forg, '0 0 0', 1);
 		else
@@ -740,7 +737,7 @@ void() wfire_lance =
 			trace_ent.monster_long_pain = 1;
 		if((trace_ent.classname == "monster_brute"))
 			trace_ent.monster_long_pain = 1;
-	
+
 
 		vector old_impact = trace_endpos;
 
@@ -755,8 +752,8 @@ void() wfire_lance =
 		else
 			TraceAttack(self.lance_damage, direction);
 
-		
-		
+
+
 		if ((bossvulnerable == 1 && attacked.bloody == 2))
 		{
 			if(attacked == trace_ent)
@@ -777,7 +774,7 @@ void() wfire_lance =
 	}
 	self.beam_lenght = vlen (tagorg - trace_endpos) / 64;
 	if(self.beam_lenght > 64)
-		self.beam_lenght = 64;		
+		self.beam_lenght = 64;
 	self.vweaponframe = 2;
 	self.vweaponglowmod -= '0.25 0.25 0.25';
 	self.beam_counter = 0;
@@ -789,7 +786,7 @@ void() wfire_lance =
 	randomsound2("weapons/lance/fire",3,wvol,CHAN_WEAPON,0,0.25);
 	sound7(self, CHAN_AUTO, "weapons/lance/fire1.ogg", 1, 0.25,512,0);
 	vector dir = normalize(trace_endpos - tagorg);
-	vector teangles = vectoangles(dir);	
+	vector teangles = vectoangles(dir);
 	te_railgun(self, tagorg, teangles);
 	//te_railgun2(self);
 	self.think = wfire_post_lance;

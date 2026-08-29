@@ -27,6 +27,37 @@ stricken
 secondary attack is always melee
 */
 
+// stricken_health                   = 1600            //  health
+// stricken_wth                      = 50              //  walk think % chance to attack, else keep walking
+// stricken_rth                      = 50              //  run think % chance to attack, else keep running
+// stricken_ad                       = 30              //  attack damage (PROJECTILE)
+// stricken_ath                      = 50				//  attack think % chance to attack, else keep running
+// stricken_sad                      = 40              //	secondary attack damage (MELEE)
+// stricken_dtp                      = 400             //	damage needed to pain
+// stricken_rtp                      = 100				//	roll dice (pain chance)
+// stricken_pth                      = 100             //  pain think % chance to attack, else run
+// stricken_bbox                     = 48 48 44        //  bbox
+// stricken_nbbox                    = -48 -48 -32     //  negative bbox
+// stricken_far                      = 4096            //  far
+// stricken_mid                      = 2048            //  mid
+// stricken_near                     = 128             //  near
+// stricken_projvel                  = 1200            //  PROJECTILE velocity
+// stricken_splashdmg                = 0             	//  splash damage
+// stricken_splashradius             = 64              //  splash radius
+// stricken_zzc                      = 100        		//  zigzag chance
+// stricken_zzd                      = 45        		//  zigzag max deviance
+// stricken_zzmd                     = 10        		//  zigzag min deviance
+// stricken_heightstep               = 14        		//  stepheight (added to sv_stepheight 16)
+// stricken_lowhealth                = 1000        	//  "low health" attack health threshold
+// stricken_spreadintensity          = 135				//	"low health" attack spread deviance
+// stricken_dexplosionradius         = 256            	//	death explosion radius
+// stricken_dexplosiondamage         = 100            	//	death explosion damage
+// stricken_dexplosiondamagemonsters = 300            	//	death explosion monster damage
+// stricken_walkradius               = 96 				//  walk radius destruction
+// stricken_damagetomonsters         = 100             //  attack damage to monsters (PROJECTILE)
+// stricken_pushfactor               = 4               //  explo pushfactor
+
+
 $frame pose0
 
 $frame str_idle1 str_idle2 str_idle3 str_idle4 str_idle5 str_idle6 str_idle7 str_idle8 str_idle9 str_idle10 str_idle11 str_idle12 str_idle13 str_idle14 str_idle15 str_idle16 str_idle17 str_idle18 str_idle19 str_idle20
@@ -411,7 +442,6 @@ void() projectile_touch_str2 =
 {
 	if(other.solid == SOLID_TRIGGER)
 		return;
-	//	self.solid = SOLID_NOT;
 	if (pointcontents(self.origin) == CONTENT_SKY)
 	{
 		remove(self);
@@ -432,14 +462,13 @@ void() projectile_touch_str2 =
 };
 
 void() CheckCysStricken = { 
-	if (self.flags &FL_ONGROUND)
-	{
+	if (self.flags & FL_ONGROUND) {
 		self.traileffectnum = particleeffectnum("null");
 	}
 	else
 		self.traileffectnum = particleeffectnum("retchertrail");
-	local float distancedelta;
-	distancedelta = vlen(self.enemy.origin - self.origin);
+
+	float distancedelta = vlen(self.enemy.origin - self.origin);
 	if (distancedelta < 24)
 		self.lifetime = 0;
 	if (self.lifetime < time)
@@ -648,25 +677,20 @@ void() stricken_attack10 =[$str_atk10, stricken_attack1]
 	}
 };
 
-void() stricken_preattack1 =[$str_patk1, stricken_preattack2]
-{
+void() stricken_preattack1 =[$str_patk1, stricken_preattack2] {
 	ai_face();
 	sound(self, CHAN_AUTO, "enemies/stricken/preattack.ogg", 1, 0.25);
 };
-void() stricken_preattack2 =[$str_patk2, stricken_preattack3]
-{
+void() stricken_preattack2 =[$str_patk2, stricken_preattack3] {
 	ai_face();
 };
-void() stricken_preattack3 =[$str_patk3, stricken_preattack4]
-{
+void() stricken_preattack3 =[$str_patk3, stricken_preattack4] {
 	ai_face();
 };
-void() stricken_preattack4 =[$str_patk4, stricken_preattack5]
-{
+void() stricken_preattack4 =[$str_patk4, stricken_preattack5] {
 	ai_face();
 };
-void() stricken_preattack5 =[$str_patk5, stricken_attack1]
-{
+void() stricken_preattack5 =[$str_patk5, stricken_attack1] {
 	ai_face();
 	enemy_range = range(self.enemy);
 	if (enemy_range == RANGE_MELEE)
@@ -674,66 +698,55 @@ void() stricken_preattack5 =[$str_patk5, stricken_attack1]
 	self.nextthink = time + 0.1;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////melee attack
 
-void(float wdmg) stricken_melee_attack = { local vector delta;
-	local float dist;
+void stricken_melee_attack(float wdmg) {
+	vector delta;
+	float dist;
 	if (!self.enemy)
 		return;	// removed before stroke
 	delta = self.enemy.origin - self.origin;
 	dist = vlen(delta);
-	if (dist > stricken_near)
-	{
+	if (dist > stricken_near) {
 		return;
 	}
 	else
 	{
 		T_Damage(self.enemy, self, self, wdmg);
 	}
-};
+}
 
-void() stricken_sattack1 =[$str_satk1, stricken_sattack2]
-{
+void() stricken_sattack1 =[$str_satk1, stricken_sattack2] {
 	ai_face();
 	if((self.oldturret == 2) && (self.turret == 1))
 	{self.turret = 0; self.oldturret = 0;}
 	monstersound3("enemies/stricken/bite", 3, CHAN_WEAPON);
 };
-void() stricken_sattack2 =[$str_satk2, stricken_sattack3]
-{
+void() stricken_sattack2 =[$str_satk2, stricken_sattack3] {
 	ai_face();
 	stricken_melee_attack(stricken_sad);
 };
-void() stricken_sattack3 =[$str_satk3, stricken_sattack4]
-{
+void() stricken_sattack3 =[$str_satk3, stricken_sattack4] {
 	ai_face();
 };
-void() stricken_sattack4 =[$str_satk4, stricken_sattack5]
-{
+void() stricken_sattack4 =[$str_satk4, stricken_sattack5] {
 	ai_face();
 };
-void() stricken_sattack5 =[$str_satk5, stricken_sattack6]
-{
+void() stricken_sattack5 =[$str_satk5, stricken_sattack6] {
 	ai_face();
 };
-void() stricken_sattack6 =[$str_satk6, stricken_sattack7]
-{
+void() stricken_sattack6 =[$str_satk6, stricken_sattack7] {
 	ai_face();
 };
-void() stricken_sattack7 =[$str_satk7, stricken_sattack8]
-{
+void() stricken_sattack7 =[$str_satk7, stricken_sattack8] {
 	ai_face();
 };
-void() stricken_sattack8 =[$str_satk8, stricken_sattack9]
-{
+void() stricken_sattack8 =[$str_satk8, stricken_sattack9] {
 	ai_face();
 };
-void() stricken_sattack9 =[$str_satk9, stricken_sattack10]
-{
+void() stricken_sattack9 =[$str_satk9, stricken_sattack10] {
 	ai_face();
 };
-void() stricken_sattack10 =[$str_satk10, stricken_run1]
-{
+void() stricken_sattack10 =[$str_satk10, stricken_run1] {
 	ai_face();
 	enemy_range = range(self.enemy);
 	if ((enemy_range == RANGE_MELEE) && (self.turret != 1))
@@ -742,16 +755,13 @@ void() stricken_sattack10 =[$str_satk10, stricken_run1]
 		self.think = stricken_run1;
 };
 
-void() stricken_spreattack1 =[$str_spatk1, stricken_spreattack2]
-{
+void() stricken_spreattack1 =[$str_spatk1, stricken_spreattack2] {
 	ai_face();
 };
-void() stricken_spreattack2 =[$str_spatk2, stricken_sattack1]
-{
+void() stricken_spreattack2 =[$str_spatk2, stricken_sattack1] {
 	ai_face();
 };
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 
 void() stricken_postpain = { self.painframe += 1;
 
@@ -785,46 +795,42 @@ void() stricken_postpain = { self.painframe += 1;
 
 };
 .float painanim;
-void(entity enemy, float dmg) stricken_pain = { if (self.pain_finished > time)
+void stricken_pain(entity enemy, float dmg) {
+	if (self.pain_finished > time)
 		return;
-	if(enemy.weapon != IT_CRYSTAL)
-	{
-	local float rp;
-	rp = random() *100;
-	if (stricken_rtp <= rp)
-		return;
+
+	if(enemy.weapon != IT_CRYSTAL) {
+		float rp = random() *100;
+		if (stricken_rtp <= rp)
+			return;
 	}
-	if(enemy.flags & FL_MONSTER)
-		{
+
+	if(enemy.flags & FL_MONSTER){
 		self.pain_finished = time + 1.75;
 		if(self.turret >= 1)
-		return;// prevent get stuck
-		}
+			return;  // prevent get stuck
+	}
 	else
 		self.pain_finished = time + 0.25;	// 1.75
 	
 	self.sustained_damage = 0;
-	local float rpf;
-	rpf = floor(random() *3) + 1;
+	float rpf = floor(random() *3) + 1;
 	if (rpf == self.painanim)
 		rpf += 1;
 	if (rpf > 3)
 		rpf = 1;
 	self.painanim = rpf;
-	if (rpf == 1)
-	{
+	if (rpf == 1) {
 		self.frame = $str_paina1;
 		self.painanim = 1;
 	}
 
-	if (rpf == 2)
-	{
+	if (rpf == 2) {
 		self.frame = $str_painb1;
 		self.painanim = 2;
 	}
 
-	if (rpf == 3)
-	{
+	if (rpf == 3) {
 		self.frame = $str_painc1;
 		self.painanim = 3;
 	}
@@ -834,10 +840,11 @@ void(entity enemy, float dmg) stricken_pain = { if (self.pain_finished > time)
 	self.think = stricken_postpain;
 	self.nextthink = time + 0.1;
 
-};
+}
 
-///////////////////////////////////////////////////////////////////////////////////////////
-void() stricken_diea1 = { drop_item(self.origin + '0 0 40', "ammo_retcher", 3, self);
+
+void stricken_diea1() {
+	drop_item(self.origin + '0 0 40', "ammo_retcher", 3, self);
 	decal_monster_gib(self.origin + '0 0 12');
 	self.solid = 0;
 	self.takedamage = 0;
@@ -853,7 +860,7 @@ void() stricken_diea1 = { drop_item(self.origin + '0 0 40', "ammo_retcher", 3, s
 	self.th_die = null;
 	setsize(self, '0 0 0', '0 0 0');
 
-	local vector tagorg;
+	vector tagorg;
 	tagorg = tag_origin("tag_arm_l_a", self);
 	ThrowGib3(self, "models/enemies/stricken/gibs/gib_arm_l_a.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(str_gib1, self), 0, 3);	// relvel: forward, right, up
 	tagorg = tag_origin("tag_arm_l_b", self);
@@ -903,16 +910,22 @@ void() stricken_diea1 = { drop_item(self.origin + '0 0 40', "ammo_retcher", 3, s
 
 	sound(self, CHAN_AUTO, "enemies/stricken/explode.ogg", 1, 0.25);
 	T_SplashDamageMonster(self, stricken_dexplosiondamagemonsters, stricken_dexplosiondamage, world, stricken_dexplosionradius, stricken_pushfactor);	// to player
-	pointparticles(particleeffectnum("afflictedaoe"), self.origin, v_forward *(-550), 1);
-	aoe_spawn(self);
+	pointparticles(particleeffectnum("afflictedaoe"), self.origin, v_forward * -550, 1);
+	// aoe_spawn(self);  // replaced with monster_stricken_explode
+	monster_stricken_explode();
 	remove(self);
-};
+}
 
-///////////////////////////////////////////////////////////////////////////////////////////
+
+void monster_stricken_explode() {
+	aoe_spawn(self);
+}
+
 
 /*WRATHED monster_stricken (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
 .vector bbvv;
-void() precache_monster_stricken = { precache_model("models/enemies/stricken/gibs/gib_arm_l_a.md3");
+void precache_monster_stricken() {
+	precache_model("models/enemies/stricken/gibs/gib_arm_l_a.md3");
 	precache_model("models/enemies/stricken/gibs/gib_arm_l_b.md3");
 	precache_model("models/enemies/stricken/gibs/gib_arm_r_a.md3");
 	precache_model("models/enemies/stricken/gibs/gib_arm_r_b.md3");
@@ -950,61 +963,26 @@ void() precache_monster_stricken = { precache_model("models/enemies/stricken/gib
 	precache_sound("enemies/stricken/step5.ogg");
 	precache_sound("enemies/stricken/die.ogg");
 	precache_sound("enemies/stricken/explode.ogg");
-};
-void() monster_stricken = { precache_model("models/enemies/stricken/gibs/gib_arm_l_a.md3");
-	precache_model("models/enemies/stricken/gibs/gib_arm_l_b.md3");
-	precache_model("models/enemies/stricken/gibs/gib_arm_r_a.md3");
-	precache_model("models/enemies/stricken/gibs/gib_arm_r_b.md3");
-	precache_model("models/enemies/stricken/gibs/gib_head.md3");
-	precache_model("models/enemies/stricken/gibs/gib_jaw.md3");
-	precache_model("models/enemies/stricken/gibs/gib_side_l.md3");
-	precache_model("models/enemies/stricken/gibs/gib_side_r.md3");
-	precache_model("models/enemies/stricken/gibs/gib_tail.md3");
-	precache_model("models/enemies/stricken/stricken.md3");
-	precache_model("particles/explo/explo_stricken.md3");
-	precache_sound("enemies/stricken/idle1.ogg");
-	precache_sound("enemies/stricken/idle2.ogg");
-	precache_sound("enemies/stricken/idle3.ogg");
-	precache_sound("enemies/stricken/chatter1.ogg");
-	precache_sound("enemies/stricken/chatter2.ogg");
-	precache_sound("enemies/stricken/chatter3.ogg");
-	precache_sound("enemies/stricken/preattack.ogg");
-	precache_sound("enemies/stricken/attack1.ogg");
-	precache_sound("enemies/stricken/attack2.ogg");
-	precache_sound("enemies/stricken/attack3.ogg");
-	precache_sound("enemies/stricken/cyst1.ogg");
-	precache_sound("enemies/stricken/cyst2.ogg");
-	precache_sound("enemies/stricken/cyst3.ogg");
-	precache_sound("enemies/stricken/bite1.ogg");
-	precache_sound("enemies/stricken/bite2.ogg");
-	precache_sound("enemies/stricken/bite3.ogg");
-	precache_sound("enemies/stricken/pain1.ogg");
-	precache_sound("enemies/stricken/pain2.ogg");
-	precache_sound("enemies/stricken/pain3.ogg");
-	precache_sound("enemies/stricken/sight.ogg");
-	precache_sound("enemies/stricken/step1.ogg");
-	precache_sound("enemies/stricken/step2.ogg");
-	precache_sound("enemies/stricken/step3.ogg");
-	precache_sound("enemies/stricken/step4.ogg");
-	precache_sound("enemies/stricken/step5.ogg");
-	precache_sound("enemies/stricken/die.ogg");
-	precache_sound("enemies/stricken/explode.ogg");
-	if (deathmatch)
-	{
+}
+void monster_stricken() {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
 
+	precache_monster_stricken();
+
 	self.noise = "enemies/stricken/sight.ogg";
-	self.damagetopain = stricken_dtp;
+	self.damagetopain = 400;
 	if (self.waypointed != 1)
 		self.waypointed = 0;
-	self.stepheight_delta = stricken_heightstep;
+	self.stepheight_delta = 14;
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/stricken/stricken.md3");
-	setsize(self, stricken_nbbox, stricken_bbox);
-	self.health = stricken_health;
+	setsize(self, '-48 -48 -32', '48 48 44');
+
+	self.health = 1600;
 	self.classname = "monster_stricken";
 	self.th_stand = stricken_stand1;
 	self.th_walk = stricken_walk1;
@@ -1012,96 +990,32 @@ void() monster_stricken = { precache_model("models/enemies/stricken/gibs/gib_arm
 		self.th_run = stricken_run1;
 	else
 		self.th_run = stricken_preattack1;
+	self.oldturret = self.turret;
 	self.turretable = 1;
-	self.oldturret  =self.turret;
 	self.th_missile = stricken_preattack1;
 	self.th_melee = stricken_spreattack1;
 	self.th_pain = stricken_pain;
-    //self.scale = 5;
 	self.th_die = stricken_diea1;
 	self.heavymonster = 1;
 	walkmonster_start();
-};
-void() fstricken_stand1 =[$str_idle1, fstricken_stand2]
-{
-
-};
-void() fstricken_stand2 =[$str_idle2, fstricken_stand3]
-{
-	
-};
-void() fstricken_stand3 =[$str_idle3, fstricken_stand4]
-{
-	
-};
-void() fstricken_stand4 =[$str_idle4, fstricken_stand5]
-{
-	
-};
-void() fstricken_stand5 =[$str_idle5, fstricken_stand6]
-{
-	
-};
-void() fstricken_stand6 =[$str_idle6, fstricken_stand7]
-{
-	
-};
-void() fstricken_stand7 =[$str_idle7, fstricken_stand8]
-{
-	
-};
-void() fstricken_stand8 =[$str_idle8, fstricken_stand9]
-{
-	
-};
-void() fstricken_stand9 =[$str_idle9, fstricken_stand10]
-{
-	
-};
-void() fstricken_stand10 =[$str_idle10, fstricken_stand11]
-{
-	
-};
-void() fstricken_stand11 =[$str_idle11, fstricken_stand12]
-{
-	
-};
-void() fstricken_stand12 =[$str_idle12, fstricken_stand13]
-{
-	
-};
-void() fstricken_stand13 =[$str_idle13, fstricken_stand14]
-{
-	
-};
-void() fstricken_stand14 =[$str_idle14, fstricken_stand15]
-{
-	
-};
-void() fstricken_stand15 =[$str_idle15, fstricken_stand16]
-{
-	
-};
-void() fstricken_stand16 =[$str_idle16, fstricken_stand17]
-{
-	
-};
-void() fstricken_stand17 =[$str_idle17, fstricken_stand18]
-{
-	
-};
-void() fstricken_stand18 =[$str_idle18, fstricken_stand19]
-{
-	
-};
-void() fstricken_stand19 =[$str_idle19, fstricken_stand20]
-{
-	
-};
-void() fstricken_stand20 =[$str_idle20, fstricken_stand1]
-{
-	
-};
-
-
-////////////////end of qc file
+}
+void() fstricken_stand1 = [$str_idle1, fstricken_stand2] {};
+void() fstricken_stand2 = [$str_idle2, fstricken_stand3] {};
+void() fstricken_stand3 = [$str_idle3, fstricken_stand4] {};
+void() fstricken_stand4 = [$str_idle4, fstricken_stand5] {};
+void() fstricken_stand5 = [$str_idle5, fstricken_stand6] {};
+void() fstricken_stand6 = [$str_idle6, fstricken_stand7] {};
+void() fstricken_stand7 = [$str_idle7, fstricken_stand8] {};
+void() fstricken_stand8 = [$str_idle8, fstricken_stand9] {};
+void() fstricken_stand9 = [$str_idle9, fstricken_stand10] {};
+void() fstricken_stand10 = [$str_idle10, fstricken_stand11] {};
+void() fstricken_stand11 = [$str_idle11, fstricken_stand12] {};
+void() fstricken_stand12 = [$str_idle12, fstricken_stand13] {};
+void() fstricken_stand13 = [$str_idle13, fstricken_stand14] {};
+void() fstricken_stand14 = [$str_idle14, fstricken_stand15] {};
+void() fstricken_stand15 = [$str_idle15, fstricken_stand16] {};
+void() fstricken_stand16 = [$str_idle16, fstricken_stand17] {};
+void() fstricken_stand17 = [$str_idle17, fstricken_stand18] {};
+void() fstricken_stand18 = [$str_idle18, fstricken_stand19] {};
+void() fstricken_stand19 = [$str_idle19, fstricken_stand20] {};
+void() fstricken_stand20 = [$str_idle20, fstricken_stand1] {};

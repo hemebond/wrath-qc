@@ -12,7 +12,7 @@ float (string lightstyle_character, float ammountl) glowmodstylevalue =
 
 void() item_glowmodcontroller_flicker_fade_think =
 {
-	self.owner.glowmod_x = self.owner.glowmod_x * 0.75; 
+	self.owner.glowmod_x = self.owner.glowmod_x * 0.75;
 	self.owner.glowmod_y = self.owner.glowmod_x;
 	self.owner.glowmod_z = self.owner.glowmod_x;
 
@@ -27,7 +27,7 @@ void() item_glowmodcontroller_flicker_fade_think =
 };
 
 
-void() item_glowmodcontroller_flicker_think = 
+void() item_glowmodcontroller_flicker_think =
 {
 
 	if(self.cnt2 >= 4)
@@ -70,13 +70,13 @@ void() item_glowmodcontroller_flicker_think =
 	}
 
 	if(self.owner.classname == "func_destruct")
-		self.owner.glowmod_x = self.owner.glowmod_x; 
+		self.owner.glowmod_x = self.owner.glowmod_x;
     self.owner.glowmod_y = self.owner.glowmod_x;
     self.owner.glowmod_z = self.owner.glowmod_x;
 
 
     self.think = item_glowmodcontroller_flicker_think;
-    self.nextthink = time + 0.025; 
+    self.nextthink = time + 0.025;
 };
 
 void(entity e) item_glowmodcontroller_flicker_spawn =
@@ -92,7 +92,7 @@ void(entity e) item_glowmodcontroller_flicker_spawn =
 	    glowmod_multiplier = 2/22;
 	else
 	    glowmod_multiplier = 2/26;
-	glowmod_controller.classname = "glowmod_controller_pipes";	
+	glowmod_controller.classname = "glowmod_controller_pipes";
     glowmod_controller.count = glowmod_multiplier;
 	glowmod_controller.old_cnt = strlen("spmnpmkmonlnqpnopnmpqrq");
     glowmod_controller.think = item_glowmodcontroller_flicker_think;
@@ -101,7 +101,7 @@ void(entity e) item_glowmodcontroller_flicker_spawn =
 
 void() item_glowmodcontroller_pulse_think =
 {
-	
+
 	if(!(self.owner.wrathflags & FL_MISCCONTROLLER))
 		remove(self);
 
@@ -109,14 +109,14 @@ void() item_glowmodcontroller_pulse_think =
 	{
 		if(self.owner.glowmod_x >= 1)
 			self.cnt = 0;
-		else  
+		else
 			self.owner.glowmod_x += 0.05;
 	}
 	else
 	{
 		if(self.owner.glowmod_x <= 0.5)
 			self.cnt = 1;
-		else  
+		else
 			self.owner.glowmod_x -= 0.05;
 	}
 
@@ -124,7 +124,7 @@ void() item_glowmodcontroller_pulse_think =
     self.owner.glowmod_y = self.owner.glowmod_x;
     self.owner.glowmod_z = self.owner.glowmod_x;
     self.think = item_glowmodcontroller_pulse_think;
-    self.nextthink = time + 0.05; 
+    self.nextthink = time + 0.05;
 };
 
 void(entity e) item_glowmodcontroller_pulse_spawn =
@@ -140,7 +140,7 @@ void(entity e) item_glowmodcontroller_pulse_spawn =
 
 void() item_colormodcontroller_pulse_think =
 {
-	
+
 	if(!(self.owner.wrathflags & FL_MISCCONTROLLER))
 		remove(self);
 
@@ -148,14 +148,14 @@ void() item_colormodcontroller_pulse_think =
 	{
 		if(self.owner.colormod_x >= 1)
 			self.cnt = 0;
-		else  
+		else
 			self.owner.colormod_x += 0.025;
 	}
 	else
 	{
 		if(self.owner.colormod_x <= 0.75)
 			self.cnt = 1;
-		else  
+		else
 			self.owner.colormod_x -= 0.025;
 	}
 
@@ -163,7 +163,7 @@ void() item_colormodcontroller_pulse_think =
     self.owner.colormod_y = self.owner.colormod_x;
     self.owner.colormod_z = self.owner.colormod_x;
     self.think = item_colormodcontroller_pulse_think;
-    self.nextthink = time + 0.05; 
+    self.nextthink = time + 0.05;
 };
 
 void(entity e) item_colormodcontroller_pulse_spawn =
@@ -200,106 +200,6 @@ float(entity to, float sendflags) Send_Item =
 };
 
 
-.float fullitemtime;
-void Hud_SendNotification_Full(entity ownr, string icon, string label, string msg, float msgflags = 0)
-{
-	msg_entity = ownr;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TEMPENT::NOTIFICATION);
-	WriteByte(MSG_ONE, msgflags);
-	WriteString(MSG_ONE, icon);
-	WriteString(MSG_ONE, label);
-	WriteString(MSG_ONE, msg);
-}
-
-void Hud_SendNotification(entity ownr, string icon, string msg, float msgflags = 0)
-{
-	Hud_SendNotification_Full(ownr, icon, icon, msg, msgflags);
-};
-
-void Hud_SendNotification_Note(entity ownr, string icon, float note)
-{
-	msg_entity = ownr;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TEMPENT::NOTIFICATION_NOTE);
-	WriteString(MSG_ONE, icon);
-	WriteByte(MSG_ONE, note);
-};
-
-void Hud_SendNotification_Control(entity ownr, string format, string cmd)
-{
-	msg_entity = ownr;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TEMPENT::NOTIFICATION_CONTROL);
-	WriteByte(MSG_ONE, 0);
-	WriteString(MSG_ONE, format);
-	WriteString(MSG_ONE, cmd);
-};
-
-void Hud_SendNotification_Control2(entity ownr, string format, string cmd, string cmd2)
-{
-	msg_entity = ownr;
-	WriteByte(MSG_ONE, SVC_TEMPENTITY);
-	WriteByte(MSG_ONE, TEMPENT::NOTIFICATION_CONTROL);
-	WriteByte(MSG_ONE, 1);
-	WriteString(MSG_ONE, format);
-	WriteString(MSG_ONE, cmd);
-	WriteString(MSG_ONE, cmd2);
-};
-
-
-void Hud_CantUseSigilNotification(entity ownr)
-{
-	if(ownr.time_hudmessage < time)
-	{
-		stuffcmd (ownr, "bf 0 0 0 0.75 1.5\n");
-		sound7(self,CHAN_AUTO,"enemies/keeper/shield_ricochet2.ogg",0.75,0.25,120,0);
-		Hud_SendNotification_Full(ownr, "full", "cannotuse_sigils", ("$NOTIFY_CANTUSE_SIGILS"), 0);
-		ownr.time_hudmessage = time + 1;
-	}
-}
-
-void Hud_CantUseArtifactNotification(entity ownr)
-{
-	if(ownr.time_hudmessage < time)
-	{
-		stuffcmd (ownr, "bf 0 0 0 0.75 1.5\n");
-		sound7(self,CHAN_AUTO,"enemies/keeper/shield_ricochet2.ogg",0.75,0.25,120,0);
-		Hud_SendNotification_Full(ownr, "full", "cannotuse_artifacts", ("$NOTIFY_CANTUSE_ARTIFACTS"), 0);
-		ownr.time_hudmessage = time + 2;
-	}
-}
-
-void Hud_CantUseNotification(entity ownr)
-{
-	if(ownr.time_hudmessage < time)
-	{
-		stuffcmd (ownr, "bf 0 0 0 0.75 1.5\n");
-		sound7(self,CHAN_AUTO,"enemies/keeper/shield_ricochet2.ogg",0.75,0.25,120,0);
-		Hud_SendNotification_Full(ownr, "full", "cantuse", ("$NOTIFY_CANTUSE"), 0);
-		ownr.time_hudmessage = time + 2;
-	}
-}
-
-void Hud_FullNotification(entity ownr)
-{
-	Hud_SendNotification(ownr, "full", "$NOTIFY_FULL");
-}
-
-void Hud_JournalNotification(entity ownr)
-{
-	Hud_SendNotification(ownr, "journal_update", ("$NOTIFY_JOURNALUPDATED"));
-}
-
-void Hud_message(float mtype, vector org, entity ownr) {
-	if(!(ownr.flags & FL_CLIENT))
-		return;
-
-	if (ownr.classname != "player")
-		return;
-	
-	Hud_SendNotification(ownr, "gfx/hud/messages/icons/msgicon_full", "Placeholder");
-}
 
 void() Message_delay =
 {
@@ -309,13 +209,18 @@ void() Message_delay =
 	self.SendFlags = -1;
 	self.think = SUB_Remove;
 	self.nextthink = time + 2;
-}	
+}
 
-void(float mtype, vector org, entity ownr) Hud_message_delay = 
+void(float mtype, vector org, entity ownr) Hud_message_delay =
 {
-	
 
-	if(!(ownr.flags & FL_CLIENT))return;if (ownr.classname != "player")return;
+
+	if (!(ownr.flags & FL_CLIENT))
+		return;
+
+	if (ownr.classname != "player")
+		return;
+
 	ownr.stat_time_hudmessage = 1;
 	ownr.time_hudmessage = time + 2;
 	local entity HudMessage;
@@ -329,25 +234,25 @@ void(float mtype, vector org, entity ownr) Hud_message_delay =
 	HudMessage.msg = mtype;
 	HudMessage.nextthink = time + 0.5;
 	HudMessage.think = Message_delay;
-	
+
 };
 
 
-void() respawn_items = 
-{ 
+void() respawn_items =
+{
 	self.pflags =  self.oldpflags;
-	self.touch = self.oldtouch; 
+	self.touch = self.oldtouch;
 	self.solid = self.oldsolid;
 	self.colormod = '1 1 1';
 	self.alpha = 1;
 	self.think = SUB_Null;
-	self.nextthink = time; 
+	self.nextthink = time;
 };
 
-void() siframes = 
+void() siframes =
 {
 	/*if (self.frame >= 16)
-		self.frame = 0; 
+		self.frame = 0;
 	self.frame += 1;
 	*/
 
@@ -355,7 +260,7 @@ void() siframes =
 	self.think = siframes;
 };
 
-void() twframes = 
+void() twframes =
 {
 	if (self.frame >= 20)
 		self.frame = 0;
@@ -364,7 +269,7 @@ void() twframes =
 	self.think = twframes;
 };
 .float rwpn;
-void() artifact_drop = 
+void() artifact_drop =
 {
 	if(self.flags & FL_ONGROUND)
 		self.flags -= FL_ONGROUND;
@@ -389,19 +294,19 @@ void()check_item_onfloor =
 		self.velocity_z = random() *10;
 	}
 
-	if((self.flags & FL_ONGROUND) && (self.groundentity == world))	
+	if((self.flags & FL_ONGROUND) && (self.groundentity == world))
 	{
-		self.think = SUB_Null; 
+		self.think = SUB_Null;
 		self.nextthink = time  + 0.05;
 		if(self.movetype == MOVETYPE_TOSS)
 			self.movetype = MOVETYPE_NONE;
-		
-		return;		
+
+		return;
 	}
 
-	if((self.oldorigin == self.origin))	
+	if((self.oldorigin == self.origin))
 	{
-		self.think = SUB_Null; 
+		self.think = SUB_Null;
 		vector sor;
 		sor_z = (self.mins_z - 2) * -1;
 		if(self.rwpn != 3)
@@ -412,22 +317,22 @@ void()check_item_onfloor =
 				if((self.movetype == MOVETYPE_TOSS)||(self.movetype == MOVETYPE_BOUNCE))
 					self.movetype = MOVETYPE_NONE;
 			}
-			self.rwpn = 3;	
+			self.rwpn = 3;
 		}
 		self.velocity = '0 0 0';
-	
+
 	}
 	else
 		self.think = check_item_onfloor;
-	
+
 	self.oldorigin = self.origin;
 	self.nextthink = time  + 0.05;
 };
 
-void() vel_item = 
+void() vel_item =
 {
 	self.solid = SOLID_TRIGGER;
-	
+
 	local vector rintvelocity;
 	rintvelocity_x = rint(self.velocity_x);
 	rintvelocity_y = rint(self.velocity_y);
@@ -439,8 +344,8 @@ void() vel_item =
 	self.velocity_y = crandom() *10;
 	self.velocity_z = random() *10;
 	}
-	
-	if((self.flags & FL_ONGROUND) && (self.oldgroundentity == world))	
+
+	if((self.flags & FL_ONGROUND) && (self.oldgroundentity == world))
 	self.think = SUB_Null;
 	else
 	self.think = vel_item;
@@ -518,7 +423,7 @@ void(float ie) StartItem = {
 	self.think = PlaceItem;
 };
 
-void() start_key = 
+void() start_key =
 {
 	copy_old_data(self);
 		self.use = artifact_drop;
@@ -533,11 +438,11 @@ void() start_key =
 ////////////////////////////////
 ///weapons and ammo///
 ////////////////////////////////
-void() wammo_touch = 
+void() wammo_touch =
 {
 	if((self.owner.effects & EF_NODRAW) && (self.owner.wrathflags & FL_INVISIBLE))
 		return;
-		
+
 	if(!(other.flags & FL_CLIENT))
 		return;
 	if (other.classname != "player")
@@ -550,7 +455,7 @@ void() wammo_touch =
 	}
 	if ((other.attack_finished > time) && (self.itemisweapon == 1))
 		return;
-	
+
 	if (self.msg == 89)
 	{
 		other.time_pickupweapon = time + 0.75;
@@ -602,7 +507,7 @@ void() wammo_touch =
 		other.time_pickupweapon = time + 0.75;
 		if (self.spawnflags &1)
 			other.time_pickupweapon = 0;
-		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))		
+		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))
 		other.oldimpulse = 4;
 		other.itemtime = time + 0.5;
 		Hud_JournalNotification(other);
@@ -612,7 +517,7 @@ void() wammo_touch =
 		other.time_pickupweapon = time + 0.75;
 		if (self.spawnflags &1)
 			other.time_pickupweapon = 0;
-		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))		
+		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))
 		other.oldimpulse = 5;
 		other.itemtime = time + 0.5;
 		Hud_JournalNotification(other);
@@ -624,7 +529,7 @@ void() wammo_touch =
 		if (self.spawnflags &1)
 			other.time_pickupweapon = 0;
 
-		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))		
+		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))
 		other.oldimpulse = 6;
 		other.itemtime = time + 0.5;
 		Hud_JournalNotification(other);
@@ -635,7 +540,7 @@ void() wammo_touch =
 		if (self.spawnflags &1)
 			other.time_pickupweapon = 0;
 
-		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))		
+		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))
 		other.oldimpulse = 7;
 		other.itemtime = time + 0.5;
 		Hud_JournalNotification(other);
@@ -646,7 +551,7 @@ void() wammo_touch =
 		if (self.spawnflags &1)
 			other.time_pickupweapon = 0;
 
-		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))		
+		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))
 		other.oldimpulse = 8;
 		other.itemtime = time + 0.5;
 		Hud_JournalNotification(other);
@@ -657,7 +562,7 @@ void() wammo_touch =
 		if (self.spawnflags &1)
 			other.time_pickupweapon = 0;
 
-		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))		
+		//if ((time > other.attack_finished) && (!other.button0) && (!other.button3))
 		other.oldimpulse = 9;
 		other.itemtime = time + 0.5;
 		Hud_JournalNotification(other);
@@ -751,7 +656,7 @@ void() wammo_touch =
 		Hud_SendNotification(other, self.msg_icon, self.msg_text, HUDMSGFLAG::AGGREGATE);
 	else if (self.msg)
 		Hud_message(self.msg, other.origin, other);
-	if(self.noise)
+	if(self.noise != "")
 	 	sound(self,CHAN_AUTO,self.noise,1,0);
 	SUB_UseTargets();
 
@@ -820,7 +725,7 @@ void() wammo_touch =
 		self.owner.solid = SOLID_NOT;
 		self.owner.think = respawn_items;
 		self.owner.nextthink = time + 25;
-		}	
+		}
 	}
 	else
 	{
@@ -833,7 +738,7 @@ void() wammo_touch =
 
 };
 
-void() weapon_blade = 
+void() weapon_blade =
 {
 	self.items = IT_MELEE;
 	self.itemisweapon = 1;
@@ -851,7 +756,7 @@ void() weapon_blade =
 	setsize(self, '-12 -12 -24' ,'12 12 8');
 };
 
-void() weapon_revolver = 
+void() weapon_revolver =
 {
 	self.items = IT_REVOLVER;
 	self.itemisweapon = 1;
@@ -870,7 +775,7 @@ void() weapon_revolver =
 	setsize(self, '-12 -12 -24' ,'12 12 8');
 };
 
-void() weapon_shotgun = 
+void() weapon_shotgun =
 {
 	self.items = IT_SHOTGUN;
 	self.itemisweapon = 1;
@@ -889,7 +794,7 @@ void() weapon_shotgun =
 	setsize(self, '-12 -12 -24' ,'12 12 8');
 };
 
-void() weapon_spitter = 
+void() weapon_spitter =
 {
 	self.items = IT_SPITTER;
 	self.itemisweapon = 1;
@@ -907,7 +812,7 @@ void() weapon_spitter =
 	self.msg_icon = "spitter";
 	self.msg_text = "$NOTIFY_WEP_SPITTER";
 };
-void() weapon_retcher = 
+void() weapon_retcher =
 {
 	self.items = IT_RETCHER;
 	self.itemisweapon = 1;
@@ -926,7 +831,7 @@ void() weapon_retcher =
 	self.msg_text = "$NOTIFY_WEP_RETCHER";
 };
 
-void() weapon_cannon = 
+void() weapon_cannon =
 {
 	self.items = IT_CANNON;
 	self.itemisweapon = 1;
@@ -945,7 +850,7 @@ void() weapon_cannon =
 	self.msg_text = "$NOTIFY_WEP_SLAGCANNON";
 };
 
-void() weapon_lance = 
+void() weapon_lance =
 {
 	self.items = IT_LANCE;
 	self.itemisweapon = 1;
@@ -964,7 +869,7 @@ void() weapon_lance =
 	self.msg_text = "$NOTIFY_WEP_LANCE";
 };
 
-void() weapon_crystal = 
+void() weapon_crystal =
 {
 	self.items = IT_CRYSTAL;
 	self.itemisweapon = 1;
@@ -983,11 +888,11 @@ void() weapon_crystal =
 	self.msg_text = "$NOTIFY_WEP_BOILER";
 };
 
-void() weapon_mace = 
+void() weapon_mace =
 {
 	self.items = IT_MACE;
 	self.itemisweapon = 1;
-	
+
 	//setmodel(self, "models/weapons/mace/w_mace_open.md3");
 	setmodel(self, "models/weapons/mace/w_mace.md3");
 	setsize(self, '-12 -12 -24' ,'12 12 8');
@@ -1017,7 +922,7 @@ void(entity ownr) spawn_bbox_collider =
 		ownr.movetype = 0;
 		ownr.wrathflags += FL_INVISIBLE;
 		ownr.effects = EF_NODRAW;
-	}	
+	}
 	ownr.wrathflags += FL_PICKUPABLE;
 	entity bbox_touch;
 	ownr.th_melee = ownr.touch;
@@ -1038,7 +943,7 @@ void(entity ownr) spawn_bbox_collider =
 	ownr.touch = null;
 };
 
-void() rbboxthink = 
+void() rbboxthink =
 {
 	self.solid = SOLID_TRIGGER;
 	setmodel(self,"models/misc/null.md3");
@@ -1062,7 +967,7 @@ void(entity ownr) spawn_bbox_collider_delay =
 		ownr.movetype = 0;
 		ownr.wrathflags += FL_INVISIBLE;
 		ownr.effects = EF_NODRAW;
-	}	
+	}
 	ownr.wrathflags += FL_PICKUPABLE;
 	entity bbox_touch;
 	ownr.th_melee = ownr.touch;
@@ -1082,21 +987,21 @@ void(entity ownr) spawn_bbox_collider_delay =
 /////////////////////////
 ///armor &health///
 /////////////////////////
-void() larmor_touch = 
+void() larmor_touch =
 {
 
 	if((self.owner.effects & EF_NODRAW) && (self.owner.wrathflags & FL_INVISIBLE))
 		return;
 	if (other.classname != "player")
 		return;
-	if(!(other.flags & FL_CLIENT))		
+	if(!(other.flags & FL_CLIENT))
 		return;
 
 	float maxhealthvalue;
 
 	if(self.msg == 40)
 		maxhealthvalue = 999;
-	else	
+	else
 		maxhealthvalue = 100;
 
 	if ((other.health >= maxhealthvalue) && (self.msg != 40) && (self.health))
@@ -1109,7 +1014,7 @@ void() larmor_touch =
 	other.health += self.health;
 	if(self.msg == 40)
 		other.meaxhealth_finished = time + 1;
-	
+
 	if ((other.health > maxhealthvalue) && (self.health > 0))
 		other.health = maxhealthvalue;
 
@@ -1180,7 +1085,7 @@ void() larmor_touch =
 		self.owner.solid = SOLID_NOT;
 		self.owner.think = respawn_items;
 		self.owner.nextthink = time + 25;
-		}	
+		}
 	}
 	else
 	{
@@ -1192,7 +1097,7 @@ void() larmor_touch =
 
 };
 
-void() health_life_vial = 
+void() health_life_vial =
 {
 	self.noise = "items/lifeblood_vial1.ogg";
 	self.health = 10;
@@ -1212,10 +1117,10 @@ void() health_life_vial =
 
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() health_life_beaker = 
+void() health_life_beaker =
 {
 	local float r;
 	r = random() *3;
@@ -1243,10 +1148,10 @@ void() health_life_beaker =
 //	self.think = PlaceItem;
 	spawn_bbox_collider(self);
 	self.oldtouch = self.touch;
-	
+
 };
 
-void() health_life_chalice2 = 
+void() health_life_chalice2 =
 {
 	self.noise = "items/lifeblood_vial3.ogg";
 	self.health = 50;
@@ -1266,10 +1171,10 @@ void() health_life_chalice2 =
 
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() health_life_chalice = 
+void() health_life_chalice =
 {
 	float r = random();
 	if(r < 1)
@@ -1296,7 +1201,7 @@ void() health_life_chalice =
 	//spawn_bbox_collider(self);
 };
 
-void() armor_shard = 
+void() armor_shard =
 {
 	local float r;
 	r = floor(random() *3);
@@ -1311,7 +1216,7 @@ void() armor_shard =
 	setmodel(self, "models/items/armor_shard.md3");
 	setsize2(self, shard_nsize, shard_size);
 	self.touch = larmor_touch;
-	
+
 	SET_DYNAMIC_LIGHT_PROPERTIES(self, dl_armor_shard)
 	self.color = shard_light_col;
 	self.light_lev = shard_lightlev;
@@ -1321,10 +1226,10 @@ void() armor_shard =
 	self.msg_text = "$NOTIFY_ARMOR_SHARD";
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() armor_helm = 
+void() armor_helm =
 {
 	self.noise = "items/helm1.ogg";
 	precache_sound(self.noise);
@@ -1341,10 +1246,10 @@ void() armor_helm =
 	self.msg_text = "$NOTIFY_ARMOR_HELM";
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() armor_armor = 
+void() armor_armor =
 {
 	self.noise = "items/armor1.ogg";
 	precache_sound(self.noise);
@@ -1361,10 +1266,10 @@ void() armor_armor =
 	self.msg_text = "$NOTIFY_ARMOR";
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() armor_shard_dark = 
+void() armor_shard_dark =
 {
 	local float r;
 	r = floor(random() *3);
@@ -1389,10 +1294,10 @@ void() armor_shard_dark =
 	self.msg_text = "$NOTIFY_DARKARMOR_SHARD";
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() armor_armor_dark = 
+void() armor_armor_dark =
 {
 	self.noise = "items/armor_dark1.ogg";
 	precache_sound(self.noise);
@@ -1410,10 +1315,10 @@ void() armor_armor_dark =
 	self.msg_text = "$NOTIFY_DARKARMOR";
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
-void() armor_helm_dark = 
+void() armor_helm_dark =
 {
 	self.noise = "items/helm_dark1.ogg";
 	precache_sound(self.noise);
@@ -1430,7 +1335,7 @@ void() armor_helm_dark =
 	self.msg_text = "$NOTIFY_DARKARMOR_HELM";
 	self.oldtouch = self.touch;
 	spawn_bbox_collider(self);
-	
+
 };
 
 void() guardian_shield = {};
@@ -1441,12 +1346,12 @@ void() guardian_shield = {};
 /////////////////////////////////////////////////////////////
 ////////////////////ARTIFACTS////////////////////
 /////////////////////////////////////////////////////////////
-	
-void() artifact_touch = 
+
+void() artifact_touch =
 {
 	if (other.classname != "player")
 		return;
-	if(!(other.flags & FL_CLIENT))		
+	if(!(other.flags & FL_CLIENT))
 		return;
 	if ((other.Attar >= 9) && (self.Attar))
 		{if(other.time_emptymessage < time)Hud_FullNotification(other);other.time_emptymessage = time + 2.1;return;}
@@ -1493,7 +1398,7 @@ void() artifact_touch =
 		other.centerprint_messages += 1;
 	}
 	if((self.SoulTether) && (!(other.centerprint_messages &4)) )
-	{	
+	{
 		//Hud_message(260, other.origin, other);
 		//Hud_SendNotification_Control(other, "$HELP_SAVEGAME"), "impulse 81";
 		centerprint(other, "$HELP_SAVEGAME");
@@ -1502,7 +1407,7 @@ void() artifact_touch =
 
 	other.MarkRevelation += self.MarkRevelation;
 	other.LifeSiphon += self.LifeSiphon;
-	other.Attar += self.Attar;	
+	other.Attar += self.Attar;
 	other.TrinketofRespite += self.TrinketofRespite;
 	other.DrownerApp += self.DrownerApp;
 	other.Aegis += self.Aegis;
@@ -1563,7 +1468,7 @@ void() artifact_touch =
 			self.owner.solid = SOLID_NOT;
 			self.owner.think = respawn_items;
 			self.owner.nextthink = time + 25;
-		}	
+		}
 	}
 	else
 	{
@@ -1574,7 +1479,7 @@ void() artifact_touch =
 
 };
 
-void() radial = 
+void() radial =
 {
 	self.scale = 1;
 	self.movetype = MOVETYPE_TOSS;
@@ -1601,7 +1506,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item;
 .float classweapon4;
 .float classweapon5;
 void(vector origin, string classt, float item_amm, entity slf) convert_to_item;
-void() weapon_spawner_use = 
+void() weapon_spawner_use =
 {
 	local entity pl;
 	pl = single_player;
@@ -1617,7 +1522,7 @@ void() weapon_spawner_use =
 		if (pl.oldrelics == 4)
 			self.cnt = self.classweapon5;
 	}
-	if (self.cnt == 1) 
+	if (self.cnt == 1)
 	{
 		if (!(pl.items &IT_REVOLVER))
 			self.classtype = "revolver";
@@ -1625,21 +1530,21 @@ void() weapon_spawner_use =
 		{	self.classtype = "ammo_revolver";
 			self.item_ammount = revolver_ammount;
 			self.alwaystouchable = 1;
-			isitem = 1;	
+			isitem = 1;
 		}
 	}
-	if (self.cnt == 2) 
+	if (self.cnt == 2)
 	{
 		if (!(pl.items &IT_SHOTGUN))
 			self.classtype = "shotgun";
 		else
-		{	self.classtype = "ammo_shotgun";	
+		{	self.classtype = "ammo_shotgun";
 			self.item_ammount = shotgun_ammount;
 			self.alwaystouchable = 1;
 			isitem = 1;
 		}
 	}
-	if (self.cnt == 3) 
+	if (self.cnt == 3)
 	{
 		if (!(pl.items &IT_SPITTER))
 			self.classtype = "spitter";
@@ -1650,7 +1555,7 @@ void() weapon_spawner_use =
 			isitem = 1;
 		}
 	}
-	
+
 	if (self.cnt == 4)
 	{
 		if (!(pl.items &IT_RETCHER))
@@ -1724,16 +1629,16 @@ void() weapon_spawner_preuse =
 	self.think = weapon_spawner_use;
 	self.use = SUB_Null;
 };
-void() weapon_spawner = 
+void() weapon_spawner =
 {
 
-	if (self.targetname)
+	if (self.targetname != "")
 		self.use = weapon_spawner_use;
-	if(self.delay) 
+	if(self.delay)
 		self.use = weapon_spawner_preuse;
 	self.cnt = self.classweapon1;
 	if (!self.targetname)
-	{				
+	{
 		self.use = SUB_Null;
 		self.think = wrath_objerror;
 		self.nextthink = time + random();
@@ -1748,7 +1653,7 @@ void() weapon_spawner =
 .float classitem5;
 
 .float checkweapon;
-void() item_spawner_use = 
+void() item_spawner_use =
 {
 	entity pl = single_player;
 
@@ -1768,7 +1673,7 @@ void() item_spawner_use =
 	}
 
 
-	
+
 	if(self.checkweapon == 1)
 	{
 		float removed;
@@ -1906,14 +1811,14 @@ void item_spawner() {
 
 .float PreStartItemvalue;
 
-void() PreStartItem = 
+void() PreStartItem =
 {
 	StartItem(self.PreStartItemvalue);
 };
 .float counter_coffer_use;
 .float counter_coffer_ammount;
 
-entity(vector org, string class, float ammount, entity ownr) drop_item = 
+entity(vector org, string class, float ammount, entity ownr) drop_item =
 {
 
 	entity dropped;
@@ -1924,8 +1829,8 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	dropped.angles = ownr.angles;
 	dropped.angles_x = 0;
 	dropped.angles_z = 0;
-	
-	
+
+
 	vector revel;
 	makevectors(ownr.angles);
 
@@ -1941,7 +1846,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 	}
 	else
 	{
-		if (self.owner.target)
+		if (self.owner.target != "")
 			dropped.target = self.owner.target;
 	}
 	if(ownr.classname == "coffer")
@@ -1951,7 +1856,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.bouncefactor = coffer_item_bounce;
 		makevectors(ownr.angles);
 		float right_vel;
-		
+
 		if(ownr.counter_coffer_ammount == 4)
 		{
 			if(ownr.counter_coffer_use == 4)
@@ -1961,21 +1866,21 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 			if(ownr.counter_coffer_use == 2)
 				right_vel = 22.5;
 			if(ownr.counter_coffer_use == 1)
-				right_vel = 67.5;			
+				right_vel = 67.5;
 		}
 		if(ownr.counter_coffer_ammount == 3)
 		{
 			if(ownr.counter_coffer_use == 3)
 				right_vel = -45;
 			if(ownr.counter_coffer_use == 1)
-				right_vel = 45;			
+				right_vel = 45;
 		}
 		if(ownr.counter_coffer_ammount == 2)
 		{
 			if(ownr.counter_coffer_use == 2)
 				right_vel = -22.5;
 			if(ownr.counter_coffer_use == 1)
-				right_vel = 22.5;			
+				right_vel = 22.5;
 		}
 		revel = (v_forward * coffer_item_vel) + v_right * (right_vel) * 2;
 		revel_z += (coffer_item_vel);
@@ -1996,7 +1901,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		spawn_bbox_collider(dropped);
 		dropped.classname = "item_ammo_revolver";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "ammo_revolver_inv")
 	{
@@ -2012,7 +1917,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		spawn_bbox_collider(dropped);
 		dropped.classname = "item_ammo_revolverinv";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "ammo_shotgun")
 	{
@@ -2027,7 +1932,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		spawn_bbox_collider(dropped);
 		dropped.classname = "item_ammo_shotgun";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "ammo_spitter")
 	{
@@ -2042,7 +1947,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		spawn_bbox_collider(dropped);
 		dropped.classname = "item_ammo_spitter";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "ammo_spitter_drop")
 	{
@@ -2057,7 +1962,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		spawn_bbox_collider(dropped);
 		dropped.classname = "item_ammo_spitter";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "ammo_retcher")
@@ -2074,7 +1979,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		spawn_bbox_collider(dropped);
 		dropped.classname = "item_ammo_retcher";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "ammo_cannon")
 	{
@@ -2090,7 +1995,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.classname = "item_ammo_cannon";
 		item_glowmodcontroller_flicker_spawn(dropped);
 		dropped.oldtouch = dropped.touch;
-	}	
+	}
 	if (class == "ammo_lance")
 	{
 		dropped.noise = "items/ammo_lance.ogg";
@@ -2105,7 +2010,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.touch = wammo_touch;
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-	}	
+	}
 	if (class == "ammo_crystal")
 	{
 		dropped.noise = "items/ammo_crystallizer.ogg";
@@ -2120,7 +2025,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.touch = wammo_touch;
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-	}	
+	}
 
 	if (class == "ammo_soul")
 	{
@@ -2138,17 +2043,17 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 
 		dropped.think = soulhome;
 		dropped.solid = SOLID_NOT;
-		dropped.movetype = MOVETYPE_FLY;			
+		dropped.movetype = MOVETYPE_FLY;
 		dropped.traileffectnum = particleeffectnum("soul_mace_trail");
 		dropped.velocity_z = 32;
-		dropped.lifetime = time + 0.95; 
+		dropped.lifetime = time + 0.95;
 		dropped.alpha = 0.025;
 		dropped.nextthink = time;
 
 		//dropped.touch = wammo_touch;
 		//spawn_bbox_collider(dropped);
 		//dropped.oldtouch = dropped.touch;
-	}	
+	}
 
 	if (class == "shard")
 	{
@@ -2165,7 +2070,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_ARMOR_SHARD";
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "armor")
 	{
@@ -2182,7 +2087,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_ARMOR";
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "helm")
@@ -2200,7 +2105,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_ARMOR_HELM";
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "shard_dark")
 	{
@@ -2225,7 +2130,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_DARKARMOR_SHARD";
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "armor_dark")
 	{
@@ -2242,7 +2147,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_DARKARMOR";
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "helm_dark")
@@ -2260,7 +2165,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_DARKARMOR_HELM";
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "vial")
@@ -2282,7 +2187,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		SET_DYNAMIC_LIGHT_PROPERTIES(dropped, dl_hpvial)
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "beaker")
@@ -2304,7 +2209,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		}*/
 		spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 	if (class == "chalice")
 	{
@@ -2320,7 +2225,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		SET_DYNAMIC_LIGHT_PROPERTIES(dropped, dl_hpchalice)
 		//spawn_bbox_collider(dropped);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	dropped.nextthink = time + 0.1;	// items start after other solids
@@ -2344,7 +2249,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 
 	if (class == "apparatus")
@@ -2365,7 +2270,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 	if (class == "theter")
 	{
@@ -2425,7 +2330,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.msg_text = "$NOTIFY_ARTIFACT_ATTAR";
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
-		dropped.nextthink = time + 3;		
+		dropped.nextthink = time + 3;
 	}
 		if (class == "trinket")
 	{
@@ -2446,7 +2351,7 @@ entity(vector org, string class, float ammount, entity ownr) drop_item =
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 if (class == "mark")
 	{
@@ -2467,7 +2372,7 @@ if (class == "mark")
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 	if (class == "flaskrage")
 	{
@@ -2488,7 +2393,7 @@ if (class == "mark")
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 
 	if (class == "grenade")
@@ -2510,8 +2415,8 @@ if (class == "mark")
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
-	}	
+
+	}
 
 	if (class == "vicious")
 	{
@@ -2532,7 +2437,7 @@ if (class == "mark")
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 	if (class == "shockwave")
 	{
@@ -2553,11 +2458,11 @@ if (class == "mark")
 		dropped.touch = artifact_touch;
 		dropped.oldtouch = dropped.touch;
 		dropped.nextthink = time + 3;
-		
+
 	}
 
 	dropped.think = check_item_onfloor;
-	
+
 	if (class == "shotgun")
 	{
 		dropped.items = IT_SHOTGUN;
@@ -2576,7 +2481,7 @@ if (class == "mark")
 		dropped.msg_text = "$NOTIFY_WEP_SHOTGUN";
 		setsize(dropped, coach_nsize, coach_size);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "revolver")
@@ -2597,7 +2502,7 @@ if (class == "mark")
 		dropped.msg_text = "$NOTIFY_WEP_REVOLVER";
 		setsize(dropped, coach_nsize, coach_size);
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "retcher")
@@ -2618,7 +2523,7 @@ if (class == "mark")
 		dropped.msg_icon = "lace";
 		dropped.msg_text = "$NOTIFY_WEP_LANCE";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "spitter")
@@ -2639,7 +2544,7 @@ if (class == "mark")
 		dropped.msg_icon = "spitter";
 		dropped.msg_text = "$NOTIFY_WEP_SPITTER";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	if (class == "cannon")
@@ -2660,13 +2565,13 @@ if (class == "mark")
 		dropped.msg_icon = "slagcannon";
 		dropped.msg_text = "$NOTIFY_WEP_SLAGCANNON";
 		dropped.oldtouch = dropped.touch;
-		
+
 	}
 
 	dropped.velocity = revel;
 	dropped.solid = SOLID_TRIGGER;
-	
-	
+
+
  	if(dropped.owner.classname == "coffer")
 	{
 		dropped.solid = SOLID_NOT;
@@ -2702,7 +2607,7 @@ void() mace_full_touch =
 };
 
 
-void(vector org, string class, float ammount, entity slf) convert_to_item = 
+void(vector org, string class, float ammount, entity slf) convert_to_item =
 {
 	self.origin = org;
 	self.movetype = MOVETYPE_TOSS;
@@ -2721,7 +2626,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 	float hascollider;
 	if (class == "ammo_revolver")
 	{
-	
+
 		setmodel(self, "models/items/ammo_revolver.md3");
 		self.noise = "items/ammo_revolver.ogg";
 		self.classname = "ammo_revolver";
@@ -2844,14 +2749,14 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.touch = wammo_touch;
 		hascollider = 1;
 	}
-	
+
 	if (class == "ammo_mace")
 	{
 		self.count = ammount;
 		self.think  = spawnfunc_ammo_mace;
 		self.nextthink = time;
-		return;		
-	}	
+		return;
+	}
 
 	if (class == "shard")
 	{
@@ -2979,7 +2884,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_icon = "lifeblood_vial";
 		self.msg_text = "$NOTIFY_HEALTH_VIAL";
 		SET_DYNAMIC_LIGHT_PROPERTIES(self, dl_hpvial)
-		hascollider = 1;	
+		hascollider = 1;
 	}
 
 	if (class == "beaker")
@@ -2995,7 +2900,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_icon = "lifeblood_beaker";
 		self.msg_text = "$NOTIFY_HEALTH_BEAKER";
 		SET_DYNAMIC_LIGHT_PROPERTIES(self, dl_hpbeaker)
-		hascollider = 1;		
+		hascollider = 1;
 	}
 	if (class == "chalice")
 	{
@@ -3037,7 +2942,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_SIPHON";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 
 
@@ -3059,7 +2964,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_REVELATION";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "apparatus")
 	{
@@ -3079,7 +2984,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_APPARATUS";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "flaskrage")
 	{
@@ -3099,7 +3004,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_RAGE";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "attar")
 	{
@@ -3119,7 +3024,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_ATTAR";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "grenade")
 	{
@@ -3139,8 +3044,8 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_GRENADE";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
-	}	
+		self.think = check_item_onfloor;
+	}
 	if (class == "trinket")
 	{
 		self.scale = 1;
@@ -3159,8 +3064,8 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_DEFLECTION";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
-	}	
+		self.think = check_item_onfloor;
+	}
 	if (class == "aegis")
 	{
 		self.scale = 1;
@@ -3179,7 +3084,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_AEGIS";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "vicious")
 	{
@@ -3199,7 +3104,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_ANIMUS";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "shockwave")
 	{
@@ -3219,7 +3124,7 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 		self.msg_text = "$NOTIFY_ARTIFACT_SHOCKWAVE";
 		self.touch = artifact_touch;
 		self.nextthink = time + 0.1;	// items start after other solids
-		self.think = check_item_onfloor;		
+		self.think = check_item_onfloor;
 	}
 	if (class == "theter")
 	{
@@ -3430,17 +3335,17 @@ void(vector org, string class, float ammount, entity slf) convert_to_item =
 
 
 	self.oldtouch = self.touch;
-	
+
 };
 
-void() item_Sigil = 
+void() item_Sigil =
 {
 	StartItem(6);
 	self.touch = artifact_touch;
 	setsize(self, '-14 -14 -14', '14 14 14');
 };
 
-void() key_touch = 
+void() key_touch =
 {
 	if (other.classname != "player")
 		return;
@@ -3508,15 +3413,15 @@ void() key_touch =
 	}
 };
 
-void() coffer_key_touch = 
+void() coffer_key_touch =
 {
 	if (other.classname != "player")
 		return;
 	if ((other.items &IT_COFFERKEY3))
 	{if(other.time_emptymessage < time)Hud_FullNotification(other);other.time_emptymessage = time + 2.1;return;}
 
-	
-	
+
+
 	if (!(other.items & IT_COFFERKEY1))
 		{other.items += self.items;other.keyson1 = self;}
 	else
@@ -3564,7 +3469,7 @@ void() coffer_key_touch =
 	}
 };
 .float episode;
-void() key_coffer = 
+void() key_coffer =
 {
 	self.modelflags = MF_ROTATE;
 	self.rwpn = 1;
@@ -3574,7 +3479,7 @@ void() key_coffer =
 
 	if(!self.episode)
 		self.episode = world.episode;
-	
+
 	if(self.episode == 1)
 		setmodel(self, "models/keys/key_1_coffer.md3");
 	if(self.episode == 2)
@@ -3607,7 +3512,7 @@ Hud element (icon in upper right hand corner where coffer key icon goes) gfx/hud
 Show message on pick up (gfx/hud/msg_glyph_blue.tga)
 */
 
-void() key_red = 
+void() key_red =
 {
 	self.noise = "items/glyph.ogg";
 	precache_sound(self.noise);
@@ -3615,7 +3520,7 @@ void() key_red =
 	self.modelflags = MF_ROTATE;
 	if(!self.episode)
 		self.episode = world.episode;
-	
+
 	if(self.episode == 1)
 		setmodel(self, "models/keys/key_1_red.md3");
 	if(self.episode == 2)
@@ -3626,7 +3531,7 @@ void() key_red =
 	setsize(self, coffer_key_nsize, coffer_key_size);
 	StartItem(1);
 	self.scale = 1;
-	
+
 	SET_DYNAMIC_LIGHT_PROPERTIES(self, dl_redkey)
 
 	self.touch = key_touch;
@@ -3640,14 +3545,14 @@ void() key_red =
 	copy_old_data(self);
 };
 
-void() key_blue = 
+void() key_blue =
 {
 	self.noise = "items/glyph.ogg";
 	precache_sound(self.noise);
 	self.items = IT_KEY2;
 	if(!self.episode)
 		self.episode = world.episode;
-	
+
 	self.pflags = 129;
 	self.light_lev = 48;
 	self.color = '0 0 1';
@@ -3677,16 +3582,16 @@ void() key_blue =
 	copy_old_data(self);
 };
 
-void() key_yellow = 
+void() key_yellow =
 {
 	self.noise = "items/glyph.ogg";
 	precache_sound(self.noise);
 	self.items = IT_KEY3;
 	self.modelflags = MF_ROTATE;
-	
+
 	if(!self.episode)
 		self.episode = world.episode;
-		
+
 	self.pflags = 129;
 	self.light_lev = 48;
 	self.color = '1 1 0';
@@ -3720,7 +3625,7 @@ void() key_yellow =
 .float relic_doze;
 .float relic_unit;
 
-void() relic_touch = 
+void() relic_touch =
 {
 	if (other.classname != "player")
 		return;
@@ -3733,7 +3638,7 @@ void() relic_touch =
 		other.relics |= self.relics;
 		other.foundedrelics |= self.relics;
 		relic_addtoslot(other, self.relics);
-	
+
 		if (self.msg_icon != "relic_intro") // Reki (September 18 2023): Fixed encounter number erroneously incrementing during intro map
 			other.oldrelics++;
 
@@ -3769,104 +3674,104 @@ void(float num) relic_generic =
 	self.msg = 50 + num;
 }
 
-void() relic_e1m1 = 
+void() relic_e1m1 =
 {
 	relic_generic(1);
 	self.msg_icon = "relic_e1m1";
 	self.msg_text = "$NOTIFY_RELIC_E1M1";
 };
-void() relic_e1m2 = 
+void() relic_e1m2 =
 {
 	relic_generic(2);
 	self.msg_icon = "relic_e1m2";
 	self.msg_text = "$NOTIFY_RELIC_E1M2";
 };
-void() relic_e1m3 = 
+void() relic_e1m3 =
 {
 	relic_generic(3);
 	self.msg_icon = "relic_e1m3";
 	self.msg_text = "$NOTIFY_RELIC_E1M3";
 };
-void() relic_e1m4 = 
+void() relic_e1m4 =
 {
 	relic_generic(4);
 	self.msg_icon = "relic_e1m4";
 	self.msg_text = "$NOTIFY_RELIC_E1M4";
 };
-void() relic_e1m5 = 
+void() relic_e1m5 =
 {
 	relic_generic(5);
 	self.msg_icon = "relic_e1m5";
 	self.msg_text = "$NOTIFY_RELIC_E1M5";
 };
-void() relic_e2m1 = 
+void() relic_e2m1 =
 {
 	relic_generic(6);
 	self.msg_icon = "relic_e2m1";
 	self.msg_text = "$NOTIFY_RELIC_E2M1";
 };
-void() relic_e2m2 = 
+void() relic_e2m2 =
 {
 	relic_generic(7);
 	self.msg_icon = "relic_e2m2";
 	self.msg_text = "$NOTIFY_RELIC_E2M2";
 };
-void() relic_e2m3 = 
+void() relic_e2m3 =
 {
 	relic_generic(8);
 	self.msg_icon = "relic_e2m3";
 	self.msg_text = "$NOTIFY_RELIC_E2M3";
 };
-void() relic_e2m4 = 
+void() relic_e2m4 =
 {
 	relic_generic(9);
 	self.msg_icon = "relic_e2m4";
 	self.msg_text = "$NOTIFY_RELIC_E2M4";
 };
-void() relic_e2m5 = 
+void() relic_e2m5 =
 {
 	relic_generic(10);
 	self.msg_icon = "relic_e2m5";
 	self.msg_text = "$NOTIFY_RELIC_E2M5";
 };
-void() relic_e3m1 = 
+void() relic_e3m1 =
 {
 	relic_generic(11);
 	self.msg_icon = "relic_e3m1";
 	self.msg_text = "$NOTIFY_RELIC_E3M1";
 };
-void() relic_e3m2 = 
+void() relic_e3m2 =
 {
 	relic_generic(12);
 	self.msg_icon = "relic_e3m2";
 	self.msg_text = "$NOTIFY_RELIC_E3M2";
 };
-void() relic_e3m3 = 
+void() relic_e3m3 =
 {
 	relic_generic(13);
 	self.msg_icon = "relic_e3m3";
 	self.msg_text = "$NOTIFY_RELIC_E3M3";
 };
-void() relic_e3m4 = 
+void() relic_e3m4 =
 {
 	relic_generic(14);
 	self.msg_icon = "relic_e3m4";
 	self.msg_text = "$NOTIFY_RELIC_E3M4";
 };
-void() relic_e3m5 = 
+void() relic_e3m5 =
 {
 	relic_generic(15);
 	self.msg_icon = "relic_e3m5";
 	self.msg_text = "$NOTIFY_RELIC_E3M5";
 };
-void() relic_intro = 
+void() relic_intro =
 {
 	relic_generic(16);
 	self.msg_icon = "relic_intro";
 	self.msg_text = "$NOTIFY_RELIC_INTRO";
 };
 
-void() coffer_item_think = 
+void() coffer_item_think =
 {
 	local entity pl;
 	pl = find(world, classname, "player");
@@ -3897,7 +3802,7 @@ void() coffer_use_next  =
 		remove(self.pipes);
 		self.think = SUB_Remove;
 		self.nextthink = time + 0.5;
-	}		
+	}
 	else
 		self.think = coffer_use_next;
 	self.nextthink = time + 0.025;
@@ -3947,7 +3852,7 @@ void trigger_coffer_use() {
 				drop_item(tagorg, "flaskrage", 1, self);
 			if (self.coffer_artifacts == 4)
 				drop_item(tagorg, "attar", 1, self);
-			if (self.coffer_artifacts == 11)			
+			if (self.coffer_artifacts == 11)
 				drop_item(tagorg, "grenade", 1, self);
 			if (self.coffer_artifacts == 6)
 				drop_item(tagorg, "siphon", 1, self);
@@ -3966,8 +3871,8 @@ void trigger_coffer_use() {
 			drop_item(tagorg, "helm_dark", 1, self);
 
 		self.coffer_artifacts = 0;
-		return;		
-	}		
+		return;
+	}
 	if (self.coffer_ammo)
 	{
 		self.counter_coffer_use ++;
@@ -3994,7 +3899,7 @@ void trigger_coffer_use() {
 			drop_item(tagorg, "armor_dark", 1, self);
 
 		self.coffer_ammo = 0;
-		return;		
+		return;
 	}
 	if (self.coffer_armor)
 	{
@@ -4017,7 +3922,7 @@ void trigger_coffer_use() {
 		else
 			drop_item(tagorg, "shard_dark", 1, self);
 		self.coffer_armor = 0;
-		return;		
+		return;
 	}
 	if (self.coffer_health)
 	{
@@ -4035,7 +3940,7 @@ void trigger_coffer_use() {
 		else
 			drop_item(tagorg, "shard_dark", 1, self);
 		self.coffer_health = 0;
-		return;		
+		return;
 	}
 }
 
@@ -4044,7 +3949,7 @@ void trigger_coffer_use() {
 .float jmessagem;
 
 .float note;
-void() readable_touch = 
+void() readable_touch =
 {
 	if (other.classname != "player")
 		return;
@@ -4084,13 +3989,13 @@ void() item_readable =
 
 	vector bbmin = '-8 -8 -0';
 	vector bbmax = '8 8 6';
-	
+
 	if(self.spawnflags & 1)
 	{
 		bbmax_z += 24;
 		bbmin_z += 12;
 		self.origin_z -= 12;
-	} 
+	}
 	if(self.spawnflags & 2)
 	{
 		bbmin -= '4 4 0';
@@ -4102,7 +4007,7 @@ void() item_readable =
 
 	self.noise = "ui/journal/journal_open.ogg";
 	precache_sound(self.noise);
-	
+
 	if(self.note <= 24)
 		self.journal_jmessages = 1 << (self.note - 1);
 	else
@@ -4134,7 +4039,7 @@ void() item_readable =
 	item_glowmodcontroller_pulse_spawn(self);
 };
 
-void() coffer_model_think = 
+void() coffer_model_think =
 {
 	self.frame = self.owner.frame;
 	self.glowmod = self.owner.glowmod;
@@ -4168,7 +4073,7 @@ void() coffer_jumpscare =
 	self.think = use_coffer;
 }
 
-void() use_coffer = 
+void() use_coffer =
 {
 	float ft;
 	self.frame += 1;
@@ -4207,7 +4112,7 @@ void() use_coffer =
 			self.think = coffer_jumpscare;
 			self.nextthink = time + 0.3;
 			return;
-		}	
+		}
 		if(self.episode == 1)
 			ft = 0.4;
 		else
@@ -4222,8 +4127,8 @@ void() use_coffer =
 		sound7 (self, CHAN_AUTO, "enemies/widow/sight1.ogg", 1, 0,120,0);
 
 		vector tagorg = self.origin + '0 0 32';
-		explo_blood(2, tagorg);	
-		explo_blood(9, tagorg);	
+		explo_blood(2, tagorg);
+		explo_blood(9, tagorg);
 		chattersound("impact/gibs/gib_explo", 3, 1);
 
 		ThrowGib3(self, "models/gibs/gib_small.md3", 0, 0.75, 1, 2, tagorg, relvel('164 0 164', self), 0, 3);	// relvel: forward, right, up
@@ -4238,7 +4143,7 @@ void() use_coffer =
 	}
 
 	if (self.frame == 18)
-	{		
+	{
 		SUB_UseTargets();
 	}
 	self.nextthink = time + ft;
@@ -4261,7 +4166,7 @@ void() use_coffer =
 	}
 }
 
-void() object_coffer = 
+void() object_coffer =
 {
 
 	string coffermodel, collisionmodel;
@@ -4276,20 +4181,20 @@ void() object_coffer =
 	{
 		coffermodel = "models/objects/coffers/coffer2_locked.md3";
 		collisionmodel = "models/objects/coffers/coffer2_collision.md3";
-	
+
 	}
 	if(self.episode == 3)
 	{
 		coffermodel = "models/objects/coffers/coffer3_locked.md3";
 		collisionmodel = "models/objects/coffers/coffer3_collision.md3";
-	
+
 	}
 	precache_model(coffermodel);
 	precache_model(collisionmodel);
 	precache_sound ("objects/coffers/coffer2_locked.ogg");
-	
+
 	self.glowmod = '1 1 1';
-	//self.noise = 
+	//self.noise =
 	self.noise2 = "objects/coffers/coffer1_locked.ogg";
 	self.classname = "coffer";
 	self.frame = 0;
@@ -4311,7 +4216,7 @@ void() object_coffer =
 		self.wrathflags += FL_INVISIBLE;
 		self.effects = EF_NODRAW;
 		self.solid = 0;
-	}	
+	}
 
 	setmodel(self, collisionmodel);
 	self.use = use_coffer;
@@ -4342,7 +4247,7 @@ void(float velf) spawn_spining_head =
 	new.flags = 0;
 };
 .entity ent_light;
-void() use_fakecoffer = 
+void() use_fakecoffer =
 {
 	local float ft;
 	//	if(self.frame == -5)
@@ -4382,7 +4287,7 @@ void() use_fakecoffer =
 			sound7 (self, CHAN_AUTO, "enemies/widow/sight2.ogg", 1, 0,120,0);
 			sound7 (self, CHAN_AUTO, "enemies/widow/sight1.ogg", 1, 0,105,0);
 			sound7 (self, CHAN_AUTO, "enemies/widow/sight1.ogg", 1, 0,120,0);
-		}	
+		}
 		self.solid = SOLID_NOT;
 	}
 	if (self.frame > 16)
@@ -4393,8 +4298,8 @@ void() use_fakecoffer =
 
 		vector tagorg = self.origin + '0 0 32';
 		pointparticles(particleeffectnum("wretch_bloodshower"), tagorg , '0 0 0', 1);
-		explo_blood(2, tagorg);	
-		explo_blood(9, tagorg);	
+		explo_blood(2, tagorg);
+		explo_blood(9, tagorg);
 		chattersound("impact/gibs/gib_explo", 3, 1);
 
 		ThrowGib3(self, "models/gibs/gib_small.md3", 0, 0.75, 1, 2, tagorg, relvel('164 0 164', self), 0, 3);	// relvel: forward, right, up
@@ -4410,7 +4315,7 @@ void() use_fakecoffer =
 		spawn_spining_head (1);
 	}
 	if (self.frame == 18)
-	{		
+	{
 		if(self.type == 1)
 		spawn_spining_head (1.5);
 		ft = 0.4;
@@ -4423,7 +4328,7 @@ void() use_fakecoffer =
 		sound(self, CHAN_WEAPON, "misc/null.wav", 1, 1);
 		self.attached_cloud.think = alphafade;
 		self.attached_cloud.nextthink = time;
-		remove(self.ent_light);	
+		remove(self.ent_light);
 		remove(self);
 
 	}
@@ -4432,14 +4337,14 @@ void() use_fakecoffer =
 	self.nextthink = time + ft;
 };
 
-void() object_fakecoffer = 
+void() object_fakecoffer =
 {
 
 	precache_model("models/objects/coffers/coffer1_collision.md3");
 
 
 	self.glowmod = '1 1 1';
-	//self.noise = 
+	//self.noise =
 	self.noise2 = "objects/coffers/coffer1_locked.ogg";
 	self.classname = "coffer_trap";
 	self.usable = 1;
@@ -4523,7 +4428,7 @@ void() cannon_item_think = {
 	self.think = cannon_item_think;
 	self.nextthink = time + 0.1;
 };
-void() cannon_item = 
+void() cannon_item =
 {
 	setmodel(self, "models/projectiles/proj_cyst.md3");
 	self.glowmod = '0.2 0.2 0.2';
@@ -4572,18 +4477,18 @@ void write_stuff_monsters(string classnme, vector org, float c1, float c2, float
 		"keeper",
 	};
 
-	if(collectedrelics == 0)
+	if (collectedrelics == 0)
 	    m_name = monst_lookup[c1];
-	if(collectedrelics == 1)
+	if (collectedrelics == 1)
 	    m_name = monst_lookup[c2];
-	if(collectedrelics == 2)
+	if (collectedrelics == 2)
 	    m_name = monst_lookup[c3];
-	if(collectedrelics == 3)
+	if (collectedrelics == 3)
 	    m_name = monst_lookup[c4];
-	if(collectedrelics == 4)
+	if (collectedrelics == 4)
 	    m_name = monst_lookup[c5];
 
-	if(m_name != "null")
+	if (m_name != "null")
 	{
 		while (coun > 0)
 		{
@@ -4600,7 +4505,7 @@ void(float collectedrelics) recount_spawner_monsters =
 {
 	entity spawner = findradius(self.origin, 1000000);
 
-	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_encounter_",ftos(collectedrelics + 1),".txt"), FILE_WRITE); 
+	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_encounter_",ftos(collectedrelics + 1),".txt"), FILE_WRITE);
 	fputs (writeparms,(""));
 	fclose (writeparms);
 	while (spawner)	//Loops through everything put in the missile entit
@@ -4625,7 +4530,7 @@ void() recount_alive_monsters =
 	entity alivemonster;
 	alivemonster = findradius(self.origin, 1000000);
 
-	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_alive_monsters",".txt"), FILE_WRITE); 
+	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_alive_monsters",".txt"), FILE_WRITE);
 	fputs (writeparms,(""));
     fclose (writeparms);
 	while (alivemonster)	//Loops through everything put in the missile entit
@@ -4640,7 +4545,7 @@ void() recount_alive_monsters =
 void (vector org, float c1, float c2,float c3,float c4,float c5) write_stuff_items =
 {
 	local float	writeparms;
-	local string	s1, s2, s3, s4, s5; 
+	local string	s1, s2, s3, s4, s5;
 	writeparms = fopen (strcat ("reportmonsters/",mapname, "items_list.txt"), FILE_APPEND);    //open what file to use in write mode
 	string sorg = vtos (org);
 	s1 =  ftos (c1);
@@ -4728,100 +4633,100 @@ void() recount_spawner_items =
 	{
 		if ((spawner.classname == "item_spawner"))
 		{
-			if(spawner.classitem1 == 1) ammount1 ++;		if(spawner.classitem2 == 1) ammount2 ++;		if(spawner.classitem3 == 1) ammount3 ++;		if(spawner.classitem4 == 1) ammount4 ++; if(spawner.classitem5 == 1) ammount5 ++;	
-			if(spawner.classitem1 == 2) ammounta1 ++;	if(spawner.classitem2 == 2) ammounta2 ++;	if(spawner.classitem3 == 2) ammounta3 ++;	if(spawner.classitem4 == 2) ammounta4 ++; if(spawner.classitem5 == 2) ammounta5 ++;	
-			if(spawner.classitem1 == 3) ammountb1 ++;	if(spawner.classitem2 == 3) ammountb2 ++;	if(spawner.classitem3 == 3) ammountb3 ++;	if(spawner.classitem4 == 3) ammountb4 ++; if(spawner.classitem5 == 3) ammountb5 ++;	
-			if(spawner.classitem1 == 4) ammountc1 ++;	if(spawner.classitem2 == 4) ammountc2 ++;	if(spawner.classitem3 == 4) ammountc3 ++;	if(spawner.classitem4 == 4) ammountc4 ++; if(spawner.classitem5 == 4) ammountc5 ++;	
-			if(spawner.classitem1 == 25) ammountd1 ++;	if(spawner.classitem2 == 25) ammountd2 ++;	if(spawner.classitem3 == 25) ammountd3 ++;	if(spawner.classitem4 == 25) ammountd4 ++; if(spawner.classitem5 == 25) ammountd5 ++;	
-			if(spawner.classitem1 == 26) ammounte1 ++;	if(spawner.classitem2 == 26) ammounte2 ++;	if(spawner.classitem3 == 26) ammounte3 ++;	if(spawner.classitem4 == 26) ammounte4 ++; if(spawner.classitem5 == 26) ammounte5 ++;	
-			if(spawner.classitem1 == 5) ammountf1 ++;	if(spawner.classitem2 == 5) ammountf2 ++;	if(spawner.classitem3 == 5) ammountf3 ++;	if(spawner.classitem4 == 5) ammountf4 ++; if(spawner.classitem5 == 5) ammountf5 ++;	
-			if(spawner.classitem1 == 6) ammountg1 ++;	if(spawner.classitem2 == 6) ammountg2 ++;	if(spawner.classitem3 == 6) ammountg3 ++;	if(spawner.classitem4 == 6) ammountg4 ++; if(spawner.classitem5 == 6) ammountg5 ++;	
-			if(spawner.classitem1 == 7) ammounth1 ++;	if(spawner.classitem2 == 7) ammounth2 ++;	if(spawner.classitem3 == 7) ammounth3 ++;	if(spawner.classitem4 == 7) ammounth4 ++; if(spawner.classitem5 == 7) ammounth5 ++;	
-			if(spawner.classitem1 == 8) ammountz1 ++;	if(spawner.classitem2 == 8) ammountz2 ++;	if(spawner.classitem3 == 8) ammountz3 ++;		if(spawner.classitem4 == 8) ammountz4 ++; if(spawner.classitem5 == 8) ammountz5 ++;	
-			if(spawner.classitem1 == 9) ammounti1 ++;	if(spawner.classitem2 == 9) ammounti2 ++;	if(spawner.classitem3 == 9) ammounti3 ++;	if(spawner.classitem4 == 9) ammounti4 ++; if(spawner.classitem5 == 9) ammounti5 ++;	
-			if(spawner.classitem1 == 10) ammountj1 ++;	if(spawner.classitem2 == 10) ammountj2 ++;	if(spawner.classitem3 == 10) ammountj3 ++;	if(spawner.classitem4 == 10) ammountj4 ++; if(spawner.classitem5 == 10) ammountj5 ++;	
-			if(spawner.classitem1 == 11) ammountk1 ++;	if(spawner.classitem2 == 11) ammountk2 ++;	if(spawner.classitem3 == 11) ammountk3 ++;	if(spawner.classitem4 == 11) ammountk4 ++; if(spawner.classitem5 == 11) ammountk5 ++;	
-			if(spawner.classitem1 == 12) ammountl1 ++;	if(spawner.classitem2 == 12) ammountl2 ++;	if(spawner.classitem3 == 12) ammountl3 ++;	if(spawner.classitem4 == 12) ammountl4 ++; if(spawner.classitem5 == 12) ammountl5 ++;	
-			if(spawner.classitem1 == 20) ammountm1 ++;	if(spawner.classitem2 == 20) ammountm2 ++;	if(spawner.classitem3 == 20) ammountm3 ++;	if(spawner.classitem4 == 20) ammountm4 ++; if(spawner.classitem5 == 20) ammountm5 ++;	
-			if(spawner.classitem1 == 21) ammountn1 ++;	if(spawner.classitem2 == 21) ammountn2 ++;	if(spawner.classitem3 == 21) ammountn3 ++;	if(spawner.classitem4 == 21) ammountn4 ++; if(spawner.classitem5 == 21) ammountn5 ++;	
-			if(spawner.classitem1 == 22) ammounto1 ++;	if(spawner.classitem2 == 22) ammounto2 ++;	if(spawner.classitem3 == 22) ammounto3 ++;	if(spawner.classitem4 == 22) ammounto4 ++; if(spawner.classitem5 == 22) ammounto5 ++;	
-			if(spawner.classitem1 == 23) ammountp1 ++;	if(spawner.classitem2 == 23) ammountp2 ++;	if(spawner.classitem3 == 23) ammountp3 ++;	if(spawner.classitem4 == 23) ammountp4 ++; if(spawner.classitem5 == 23) ammountp5 ++;	
-			if(spawner.classitem1 == 24) ammountq1 ++;	if(spawner.classitem2 == 24) ammountq2 ++;	if(spawner.classitem3 == 24) ammountq3 ++;	if(spawner.classitem4 == 24) ammountq4 ++; if(spawner.classitem5 == 24) ammountq5 ++;	
+			if(spawner.classitem1 == 1) ammount1 ++;		if(spawner.classitem2 == 1) ammount2 ++;		if(spawner.classitem3 == 1) ammount3 ++;		if(spawner.classitem4 == 1) ammount4 ++; if(spawner.classitem5 == 1) ammount5 ++;
+			if(spawner.classitem1 == 2) ammounta1 ++;	if(spawner.classitem2 == 2) ammounta2 ++;	if(spawner.classitem3 == 2) ammounta3 ++;	if(spawner.classitem4 == 2) ammounta4 ++; if(spawner.classitem5 == 2) ammounta5 ++;
+			if(spawner.classitem1 == 3) ammountb1 ++;	if(spawner.classitem2 == 3) ammountb2 ++;	if(spawner.classitem3 == 3) ammountb3 ++;	if(spawner.classitem4 == 3) ammountb4 ++; if(spawner.classitem5 == 3) ammountb5 ++;
+			if(spawner.classitem1 == 4) ammountc1 ++;	if(spawner.classitem2 == 4) ammountc2 ++;	if(spawner.classitem3 == 4) ammountc3 ++;	if(spawner.classitem4 == 4) ammountc4 ++; if(spawner.classitem5 == 4) ammountc5 ++;
+			if(spawner.classitem1 == 25) ammountd1 ++;	if(spawner.classitem2 == 25) ammountd2 ++;	if(spawner.classitem3 == 25) ammountd3 ++;	if(spawner.classitem4 == 25) ammountd4 ++; if(spawner.classitem5 == 25) ammountd5 ++;
+			if(spawner.classitem1 == 26) ammounte1 ++;	if(spawner.classitem2 == 26) ammounte2 ++;	if(spawner.classitem3 == 26) ammounte3 ++;	if(spawner.classitem4 == 26) ammounte4 ++; if(spawner.classitem5 == 26) ammounte5 ++;
+			if(spawner.classitem1 == 5) ammountf1 ++;	if(spawner.classitem2 == 5) ammountf2 ++;	if(spawner.classitem3 == 5) ammountf3 ++;	if(spawner.classitem4 == 5) ammountf4 ++; if(spawner.classitem5 == 5) ammountf5 ++;
+			if(spawner.classitem1 == 6) ammountg1 ++;	if(spawner.classitem2 == 6) ammountg2 ++;	if(spawner.classitem3 == 6) ammountg3 ++;	if(spawner.classitem4 == 6) ammountg4 ++; if(spawner.classitem5 == 6) ammountg5 ++;
+			if(spawner.classitem1 == 7) ammounth1 ++;	if(spawner.classitem2 == 7) ammounth2 ++;	if(spawner.classitem3 == 7) ammounth3 ++;	if(spawner.classitem4 == 7) ammounth4 ++; if(spawner.classitem5 == 7) ammounth5 ++;
+			if(spawner.classitem1 == 8) ammountz1 ++;	if(spawner.classitem2 == 8) ammountz2 ++;	if(spawner.classitem3 == 8) ammountz3 ++;		if(spawner.classitem4 == 8) ammountz4 ++; if(spawner.classitem5 == 8) ammountz5 ++;
+			if(spawner.classitem1 == 9) ammounti1 ++;	if(spawner.classitem2 == 9) ammounti2 ++;	if(spawner.classitem3 == 9) ammounti3 ++;	if(spawner.classitem4 == 9) ammounti4 ++; if(spawner.classitem5 == 9) ammounti5 ++;
+			if(spawner.classitem1 == 10) ammountj1 ++;	if(spawner.classitem2 == 10) ammountj2 ++;	if(spawner.classitem3 == 10) ammountj3 ++;	if(spawner.classitem4 == 10) ammountj4 ++; if(spawner.classitem5 == 10) ammountj5 ++;
+			if(spawner.classitem1 == 11) ammountk1 ++;	if(spawner.classitem2 == 11) ammountk2 ++;	if(spawner.classitem3 == 11) ammountk3 ++;	if(spawner.classitem4 == 11) ammountk4 ++; if(spawner.classitem5 == 11) ammountk5 ++;
+			if(spawner.classitem1 == 12) ammountl1 ++;	if(spawner.classitem2 == 12) ammountl2 ++;	if(spawner.classitem3 == 12) ammountl3 ++;	if(spawner.classitem4 == 12) ammountl4 ++; if(spawner.classitem5 == 12) ammountl5 ++;
+			if(spawner.classitem1 == 20) ammountm1 ++;	if(spawner.classitem2 == 20) ammountm2 ++;	if(spawner.classitem3 == 20) ammountm3 ++;	if(spawner.classitem4 == 20) ammountm4 ++; if(spawner.classitem5 == 20) ammountm5 ++;
+			if(spawner.classitem1 == 21) ammountn1 ++;	if(spawner.classitem2 == 21) ammountn2 ++;	if(spawner.classitem3 == 21) ammountn3 ++;	if(spawner.classitem4 == 21) ammountn4 ++; if(spawner.classitem5 == 21) ammountn5 ++;
+			if(spawner.classitem1 == 22) ammounto1 ++;	if(spawner.classitem2 == 22) ammounto2 ++;	if(spawner.classitem3 == 22) ammounto3 ++;	if(spawner.classitem4 == 22) ammounto4 ++; if(spawner.classitem5 == 22) ammounto5 ++;
+			if(spawner.classitem1 == 23) ammountp1 ++;	if(spawner.classitem2 == 23) ammountp2 ++;	if(spawner.classitem3 == 23) ammountp3 ++;	if(spawner.classitem4 == 23) ammountp4 ++; if(spawner.classitem5 == 23) ammountp5 ++;
+			if(spawner.classitem1 == 24) ammountq1 ++;	if(spawner.classitem2 == 24) ammountq2 ++;	if(spawner.classitem3 == 24) ammountq3 ++;	if(spawner.classitem4 == 24) ammountq4 ++; if(spawner.classitem5 == 24) ammountq5 ++;
 		}
 
 		spawner = spawner.chain;
 	}
 
 	string subline1 =strcat("1: Slugs-", " enc1:",(ftos (ammount1)),  " enc2:",(ftos (ammount2)),  " enc3:",(ftos (ammount3)),  " enc4");
-	string subline1b =strcat((ftos (ammount4)),  " enc5:",(ftos (ammount5)));  
+	string subline1b =strcat((ftos (ammount4)),  " enc5:",(ftos (ammount5)));
 	string line1 = strcat (subline1, subline1b);
 
 	string subline2 =strcat("2: Cysts -", " enc1:",(ftos (ammounta1)),  " enc2:",(ftos (ammounta2)),  " enc3:",(ftos (ammounta3)),  " enc4");
-	string subline2b =strcat((ftos (ammounta4)),  " enc5:",(ftos (ammounta5)));  
+	string subline2b =strcat((ftos (ammounta4)),  " enc5:",(ftos (ammounta5)));
 	string line2 = strcat (subline2, subline2b);
 
 	string subline3 =strcat("3: Shells -", " enc1:",(ftos (ammountb1)),  " enc2:",(ftos (ammountb2)),  " enc3:",(ftos (ammountb3)),  " enc4");
-	string subline3b =strcat((ftos (ammountb4)),  " enc5:",(ftos (ammountb5)));  
-	string line3 = strcat (subline3, subline3b); 
+	string subline3b =strcat((ftos (ammountb4)),  " enc5:",(ftos (ammountb5)));
+	string line3 = strcat (subline3, subline3b);
 
 	string subline4 =strcat("4: Fans -", " enc1:",(ftos (ammountc1)),  " enc2:",(ftos (ammountc2)),  " enc3:",(ftos (ammountc3)),  " enc4");
-	string subline4b =strcat((ftos (ammountc4)),  " enc5:",(ftos (ammountc5)));  
+	string subline4b =strcat((ftos (ammountc4)),  " enc5:",(ftos (ammountc5)));
 	string line4 = strcat (subline4, subline4b);
 
 	string subline5 =strcat("25: Ammo Cannon -", " enc1:",(ftos (ammountd1)),  " enc2:",(ftos (ammountd2)),  " enc3:",(ftos (ammountd3)),  " enc4");
-	string subline5b =strcat((ftos (ammountd4)),  " enc5:",(ftos (ammountd5)));  
+	string subline5b =strcat((ftos (ammountd4)),  " enc5:",(ftos (ammountd5)));
 	string line5 = strcat (subline5, subline5b);
 
 	string subline6 =strcat("26: Ammo Lance -", " enc1:",(ftos (ammounte1)),  " enc2:",(ftos (ammounte2)),  " enc3:",(ftos (ammounte3)),  " enc4");
-	string subline6b =strcat((ftos (ammounte4)),  " enc5:",(ftos (ammounte5)));  
+	string subline6b =strcat((ftos (ammounte4)),  " enc5:",(ftos (ammounte5)));
 	string line6 = strcat (subline6, subline6b);
 
 	string subline7 =strcat("5: Armor Shard -", " enc1:",(ftos (ammountf1)),  " enc2:",(ftos (ammountf2)),  " enc3:",(ftos (ammountf3)),  " enc4");
-	string subline7b =strcat((ftos (ammountf4)),  " enc5:",(ftos (ammountf5)));  
+	string subline7b =strcat((ftos (ammountf4)),  " enc5:",(ftos (ammountf5)));
 	string line7 = strcat (subline7, subline7b);
 
 	string subline8 =strcat("6: Armor Armor -", " enc1:",(ftos (ammountg1)),  " enc2:",(ftos (ammountg2)),  " enc3:",(ftos (ammountg3)),  " enc4");
-	string subline8b =strcat((ftos (ammountg4)),  " enc5:",(ftos (ammountg5)));  
+	string subline8b =strcat((ftos (ammountg4)),  " enc5:",(ftos (ammountg5)));
 	string line8 = strcat (subline8, subline8b);
 
 	string subline9 =strcat("7: Armor Helm -", " enc1:",(ftos (ammounth1)),  " enc2:",(ftos (ammounth2)),  " enc3:",(ftos (ammounth3)),  " enc4");
-	string subline9b =strcat((ftos (ammounth4)),  " enc5:",(ftos (ammounth5)));  
+	string subline9b =strcat((ftos (ammounth4)),  " enc5:",(ftos (ammounth5)));
 	string line9 = strcat (subline9, subline9b);
 
 	string subline10 =strcat("8: Dark Armor Shard -", " enc1:",(ftos (ammountz1)),  " enc2:",(ftos (ammountz2)),  " enc3:",(ftos (ammountz3)),  " enc4");
-	string subline10b =strcat((ftos (ammountz4)),  " enc5:",(ftos (ammountz5)));  
+	string subline10b =strcat((ftos (ammountz4)),  " enc5:",(ftos (ammountz5)));
 	string line10 = strcat (subline10, subline10b);
 
 	string subline11 =strcat("9: Dark Armor Armor -", " enc1:",(ftos (ammounti1)),  " enc2:",(ftos (ammounti2)),  " enc3:",(ftos (ammounti3)),  " enc4");
-	string subline11b =strcat((ftos (ammounti4)),  " enc5:",(ftos (ammounti5)));  
+	string subline11b =strcat((ftos (ammounti4)),  " enc5:",(ftos (ammounti5)));
 	string line11 = strcat (subline11, subline11b);
 
 	string subline12 =strcat("10: Dark Armor Helm -", " enc1:",(ftos (ammountj1)),  " enc2:",(ftos (ammountj2)),  " enc3:",(ftos (ammountj3)),  " enc4");
-	string subline12b =strcat((ftos (ammountj4)),  " enc5:",(ftos (ammountj5)));  
+	string subline12b =strcat((ftos (ammountj4)),  " enc5:",(ftos (ammountj5)));
 	string line12 = strcat (subline12, subline12b);
 
 	string subline13 =strcat("11: Health Vial -", " enc1:",(ftos (ammountk1)),  " enc2:",(ftos (ammountk2)),  " enc3:",(ftos (ammountk3)),  " enc4");
-	string subline13b =strcat((ftos (ammountk4)),  " enc5:",(ftos (ammountk5)));  
+	string subline13b =strcat((ftos (ammountk4)),  " enc5:",(ftos (ammountk5)));
 	string line13 = strcat (subline13, subline13b);
 
 	string subline14 =strcat("12: Health Baker -", " enc1:",(ftos (ammountl1)),  " enc2:",(ftos (ammountl2)),  " enc3:",(ftos (ammountl3)),  " enc4");
-	string subline14b =strcat((ftos (ammountl4)),  " enc5:",(ftos (ammountl5)));  
+	string subline14b =strcat((ftos (ammountl4)),  " enc5:",(ftos (ammountl5)));
 	string line14 = strcat (subline14, subline14b);
 
 	string subline15 =strcat("20: Artifact Apparatus -", " enc1:",(ftos (ammountm1)),  " enc2:",(ftos (ammountm2)),  " enc3:",(ftos (ammountm3)),  " enc4");
-	string subline15b =strcat((ftos (ammountm4)),  " enc5:",(ftos (ammountm5)));  
+	string subline15b =strcat((ftos (ammountm4)),  " enc5:",(ftos (ammountm5)));
 	string line15 = strcat (subline15, subline15b);
 
 	string subline16 =strcat("21: Artifact Theter -", " enc1:",(ftos (ammountn1)),  " enc2:",(ftos (ammountn2)),  " enc3:",(ftos (ammountn3)),  " enc4");
-	string subline16b =strcat((ftos (ammountn4)),  " enc5:",(ftos (ammountn5)));  
+	string subline16b =strcat((ftos (ammountn4)),  " enc5:",(ftos (ammountn5)));
 	string line16 = strcat (subline16, subline16b);
 
 	string subline17 =strcat("22: Artifact Siphon -", " enc1:",(ftos (ammounto1)),  " enc2:",(ftos (ammounto2)),  " enc3:",(ftos (ammounto3)),  " enc4");
-	string subline17b =strcat((ftos (ammounto4)),  " enc5:",(ftos (ammounto5)));  
+	string subline17b =strcat((ftos (ammounto4)),  " enc5:",(ftos (ammounto5)));
 	string line17 = strcat (subline17, subline17b);
 
 	string subline18 =strcat("23: Artifact Aegis -", " enc1:",(ftos (ammountp1)),  " enc2:",(ftos (ammountp2)),  " enc3:",(ftos (ammountp3)),  " enc4");
-	string subline18b =strcat((ftos (ammountp4)),  " enc5:",(ftos (ammountp5)));  
+	string subline18b =strcat((ftos (ammountp4)),  " enc5:",(ftos (ammountp5)));
 	string line18 = strcat (subline18, subline18b);
 
 	string subline19 =strcat("24: Confounding Attar -", " enc1:",(ftos (ammountq1)),  " enc2:",(ftos (ammountq2)),  " enc3:",(ftos (ammountq3)),  " enc4");
@@ -4890,7 +4795,7 @@ void() item_donor_think =
 		single_player.items |= IT_CRYSTAL;
 	if (self.fweapon_mace > 0)
 		single_player.items |= IT_MACE;
-	
+
 	single_player.ammo_revolver = max(single_player.ammo_revolver, self.ammo_revolver);
 	single_player.ammo_shotgun = max(single_player.ammo_shotgun, self.ammo_shotgun);
 	single_player.ammo_spitter = max(single_player.ammo_spitter, self.ammo_spitter);
@@ -4926,7 +4831,7 @@ void() item_donor_think =
 void() item_donor_forcethink =
 {
 	for(entity itemdonor = findchain(::classname, "item_donor"); itemdonor; itemdonor = itemdonor.chain)
-	{		
+	{
 		itemdonor.think = item_donor_think;
 		itemdonor.nextthink = time + 1;
 	}
@@ -4946,19 +4851,19 @@ void() item_donor_map = // link it to set new parms
 {
 	setmodel(self,"");
     //self.nextthink = time + 1;
-    //self.think = item_donor_think;	
+    //self.think = item_donor_think;
 };
 
 void() item_donor =
 {
 	setmodel(self,"");
 	self.enhealth = 1;
-}; 
+};
 
 void() item_weapon_fixer =
-{	
+{
 	entity spawnedweapon = nextent(world);
-	while (spawnedweapon)	
+	while (spawnedweapon)
 	{
 		entity holder = nextent(spawnedweapon);
 		if (spawnedweapon.itemisweapon == 1)
@@ -5000,6 +4905,6 @@ void() item_weapon_fixer =
 				remove(spawnedweapon);
 			}
 		}
-		spawnedweapon = holder;	
+		spawnedweapon = holder;
 	}
 };

@@ -1065,8 +1065,11 @@ void() symbolshoot12a =[$symbolshoot11, symbolshoot12]
 	if(self.ammo_revolver < cnttimer)
 		self.think = symbolshoot12a;
 };
-void() symbolshoot12 =[$symbolshoot12, symbolshoot13a]{self.glowmod = '1.05 1.05 1.05';self.nextthink = time + 0.05;
-	self.velocity * 0.95;
+void() symbolshoot12 =[$symbolshoot12, symbolshoot13a]{
+	self.glowmod = '1.05 1.05 1.05';
+	self.nextthink = time + 0.05;
+	self.velocity *= 0.95;
+
 	if(self.movetype == MOVETYPE_FLY) 
 		self.velocity = '0 0 256';
 	if(self.movetype == MOVETYPE_WALK) 
@@ -1101,8 +1104,8 @@ void() symbolshoot13a =[$symbolshoot12, symbolshoot13]
 	self.ammo_revolver ++;	
 	float cnttimer = 3;
 	if(self.movetype == MOVETYPE_STEP)
-	cnttimer = 2;
-	self.velocity * 0.95;
+		cnttimer = 2;
+	self.velocity *= 0.95;
 	if(self.ammo_revolver < cnttimer)
 		self.think = symbolshoot13a;
 };
@@ -1137,7 +1140,7 @@ void() symbolshoot13 =[$symbolshoot13, symbolshoot14]{self.glowmod = '1 1 1';sel
 		self.attack_finished = time + random(0,1);
 		self.pflags = 0;
 	}
-	self.velocity * 0.95;
+	self.velocity *= 0.95;
 };
 
 

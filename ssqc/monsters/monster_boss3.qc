@@ -1148,7 +1148,7 @@ float() boss3_c::anim_monologue {
 		return TRUE;
 	}
 
-	if (sample)
+	if (sample != "")
 		sound(this, CHAN_AUTO, sample, 1, ATTN_NONE);
 
 	this.monologue_frames++;
@@ -1830,7 +1830,7 @@ void() boss3_c::stage1 {
 		return;
 	}
 
-	if (!self.flail_bbox)
+	if (!this.flail_bbox)
 	{
 		const vector padding = '96 96 24';
 		entity bbox = this.flail_bbox = spawn();
@@ -2085,13 +2085,13 @@ void(entity attacker, float dmg) boss3_c::pain_stage2 {
 		{
 			soundwrath(this, CHAN_VOICE, "enemies/boss3/pain1.ogg", 1, 0.125, 0, 0, 0.5);
 
-			vector tagorg = tag_origin("tag_claw_r",self);
+			vector tagorg = tag_origin("tag_claw_r",this);
 			explo_blood(2, tagorg);	
-			ThrowGib3(self, "models/enemies/boss3/gibs/claw_r.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , self.origin) * random(128,192), 0, 3);	 
-			tagorg = tag_origin("tag_flip_l",self);
+			ThrowGib3(this, "models/enemies/boss3/gibs/claw_r.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , this.origin) * random(128,192), 0, 3);
+			tagorg = tag_origin("tag_flip_l", this);
 			explo_blood(2, tagorg);	
-			ThrowGib3(self, "models/enemies/boss3/gibs/flip_l.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , self.origin)* random(128,192), 0, 3);
-			tagorg = tag_origin("tag_clwarm_r",self);
+			ThrowGib3(this, "models/enemies/boss3/gibs/flip_l.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , this.origin)* random(128,192), 0, 3);
+			tagorg = tag_origin("tag_clwarm_r",this);
 			explo_blood(9, tagorg);	
 			this.animation_start(boss3d_mutil1, boss3d_mutil20, __NULL__);
 		}
@@ -2099,15 +2099,15 @@ void(entity attacker, float dmg) boss3_c::pain_stage2 {
 		{
 			soundwrath(this, CHAN_VOICE, "enemies/boss3/pain2.ogg", 1, 0.125, 0, 0, 0.5);
 
-			tagorg = tag_origin("tag_claw_l",self);
+			tagorg = tag_origin("tag_claw_l",this);
 			explo_blood(2, tagorg);	
-			ThrowGib3(self, "models/enemies/boss3/gibs/claw_l.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , self.origin) * random(128,192), 0, 3);	 
-			tagorg = tag_origin("tag_flip_r",self);
+			ThrowGib3(this, "models/enemies/boss3/gibs/claw_l.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , this.origin) * random(128,192), 0, 3);
+			tagorg = tag_origin("tag_flip_r",this);
 			explo_blood(2, tagorg);	
-			ThrowGib3(self, "models/enemies/boss3/gibs/flip_r.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , self.origin)* random(128,192), 0, 3);
-			tagorg = tag_origin("tag_clwarm_l1",self);
+			ThrowGib3(this, "models/enemies/boss3/gibs/flip_r.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , this.origin)* random(128,192), 0, 3);
+			tagorg = tag_origin("tag_clwarm_l1",this);
 			explo_blood(9, tagorg);	
-			tagorg = tag_origin("tag_clwarm_l2",self);
+			tagorg = tag_origin("tag_clwarm_l2",this);
 			explo_blood(9, tagorg);	
 			this.animation_start(boss3e_mutil1, boss3e_mutil20, __NULL__);
 		}
@@ -2137,7 +2137,8 @@ void() monster_fallen_boss3 { // Reki (July 9 2023): we use this wrapper functio
 	self.th_die = monster_fallen_boss3_die;
 }
 
-void() boss3_proj_turnintoexplosion { // change 'self' to the visual effect of the boss 3 projectile explosion
+void() boss3_proj_turnintoexplosion {
+	// change 'self' to the visual effect of the boss 3 projectile explosion
 	spawn_shaker (self, 12, 0.5, 256);
 	pointparticles(particleeffectnum("bruteproj"), self.origin, '0 0 0', 3);
 	setmodel(self, "models/projectiles/proj_slag1_explo.md3");
@@ -2665,7 +2666,7 @@ class boss3_homingprojectile_c {
 
 void() boss3_homingprojectile_c::explode {
 	
-	if (self.owner && other == self.owner)
+	if (this.owner && other == this.owner)
 		return;
 	if (other.solid == SOLID_TRIGGER)
 		return;
@@ -2673,16 +2674,16 @@ void() boss3_homingprojectile_c::explode {
 		return;
 
 	// sound
-	sound(self, CHAN_BODY, "misc/null.wav", 0, 0); // stop loop
-	sound7(self, CHAN_AUTO, "enemies/symbol/impact.ogg", 1, 0.25, random(95,105), 0);
-	sound7(self, CHAN_AUTO, "enemies/wraith/pain2.ogg", 1, 0.25, random(105,120), 0);
+	sound(this, CHAN_BODY, "misc/null.wav", 0, 0); // stop loop
+	sound7(this, CHAN_AUTO, "enemies/symbol/impact.ogg", 1, 0.25, random(95,105), 0);
+	sound7(this, CHAN_AUTO, "enemies/wraith/pain2.ogg", 1, 0.25, random(105,120), 0);
 	//
 
 	// deal damage
 	float dmg_to_players = 0; // we need to track this to adjust our attack priorities
 	float dmg = boss3_homingprojsplashdamage;
 	float range = boss3_homingprojsplashradius;
-	for(entity lst = findradius(self.origin, range + 32); lst; lst = lst.chain)
+	for(entity lst = findradius(this.origin, range + 32); lst; lst = lst.chain)
 	{
 		if (lst.takedamage == DAMAGE_NO)
 			continue;
@@ -2690,7 +2691,7 @@ void() boss3_homingprojectile_c::explode {
 			continue;
 
 		vector center_point = ((lst.absmin + lst.absmax)/2);
-		float dmg_mult = 1 - (vlen(self.origin - center_point) / range);
+		float dmg_mult = 1 - (vlen(this.origin - center_point) / range);
 		if (dmg_mult <= 0) // ent was out of range
 			continue;
 		if (lst.flags & FL_MONSTER) // monsters should take reduced splash damage
@@ -2728,7 +2729,7 @@ void() boss3_homingprojectile_c::explode {
 			float old_vel = vlen(lst.velocity);
 			lst.flags &= ~FL_ONGROUND;
 			lst.velocity[2] += 350 * dmg_mult;
-			lst.velocity += normalize(center_point - self.origin) * 700 * dmg_mult;
+			lst.velocity += normalize(center_point - this.origin) * 700 * dmg_mult;
 			if (vlen(lst.velocity) > 800)
 				lst.velocity = normalize(lst.velocity) * max(800, old_vel);
 
@@ -2736,7 +2737,7 @@ void() boss3_homingprojectile_c::explode {
 		}
 		//
 
-		T_Damage(lst, self, self.owner, dmg * dmg_mult);
+		T_Damage(lst, this, this.owner, dmg * dmg_mult);
 	}
 
 	dmg = boss3_homingprojdamage;
@@ -2747,20 +2748,20 @@ void() boss3_homingprojectile_c::explode {
 			float old_vel = vlen(other.velocity);
 			other.flags &= ~FL_ONGROUND;
 			other.velocity[2] += 450;
-			other.velocity += normalize(((other.absmin + other.absmax)/2) - self.origin) * 800;
+			other.velocity += normalize(((other.absmin + other.absmax)/2) - this.origin) * 800;
 			if (vlen(other.velocity) > 800)
 				other.velocity = normalize(other.velocity) * max(800, old_vel);
 
 			dmg_to_players += dmg;
 		}
 
-		T_Damage(other, self, self.owner, dmg);
+		T_Damage(other, this, this.owner, dmg);
 	}
 
 	// adjust the boss' attack priority, to tell him these attack types are working (so keep it up)
 	if (random() < 0.5)
 	{
-		boss3_c boss = (boss3_c)self.owner;
+		boss3_c boss = (boss3_c)this.owner;
 		boss.attack_score[BOSS3_ATTACKFLUSH] += (dmg_to_players > 0) * 2;
 	}
 	//
@@ -2772,7 +2773,7 @@ void() boss3_homingprojectile_c::explode {
 	}
 
 	boss3_proj_turnintoexplosion();
-	self.scale = 4;
+	this.scale = 4;
 }
 
 void() boss3_homingprojectile_c::phys {
@@ -2995,7 +2996,7 @@ void() boss3_c::stage2 {
 		vector tagorg = tag_origin("tag_crown_l", this);
 		explo_blood(2, tagorg);	
 		ThrowGib3(this, "models/enemies/boss3/gibs/crown_l.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , this.origin) * random(128,192), 0, 3);	 
-		tagorg = tag_origin("tag_crown_r",self);
+		tagorg = tag_origin("tag_crown_r", this);
 		explo_blood(2, tagorg);	
 		ThrowGib3(this, "models/enemies/boss3/gibs/crown_r.md3", 0, 0.75, 1, 1, tagorg, centervel(tagorg , this.origin)* random(128,192), 0, 3);
 		//
@@ -3373,13 +3374,14 @@ void() boss3_c::attack_spam {
 		this.s3_projectiletype = 0;
 
 	vector mouthorigin =  tag_origin("tag_mouth", this);
+	vector dir;
 	if(this.s3_projectiletype == 0)
 	{
 		wraith_StartFast();
 	}
 	else if(this.s3_projectiletype == 1)
 	{
-		vector dir = normalize(this.enemy.origin - mouthorigin);
+		dir = normalize(this.enemy.origin - mouthorigin);
 		launch_projectile_wre(mouthorigin, dir, this);
 	}
 	else if(this.s3_projectiletype == 2)
@@ -3394,7 +3396,7 @@ void() boss3_c::attack_spam {
 	}
 	else if(this.s3_projectiletype == 4)
 	{
-		vector dir = normalize(this.enemy.origin - mouthorigin);
+		dir = normalize(this.enemy.origin - mouthorigin);
 		launch_projectile_heretic(mouthorigin, dir, this);
 	}
 	else if(this.s3_projectiletype == 5)
