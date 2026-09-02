@@ -1295,7 +1295,6 @@ float(string name, string value) registercvar = #93;
 
 //DP_SND_FAKETRACKS
 //idea: requested
-
 //darkplaces implementation: Elric
 //description:
 //the engine plays sound/cdtracks/track001.wav instead of cd track 1 and so on if found, this allows games and mods to have music tracks without using ambientsound.

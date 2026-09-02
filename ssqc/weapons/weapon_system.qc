@@ -18,6 +18,20 @@ float pingtimerefresh;
 .float wsfire_crystal_dmgcnt;
 
 
+// self.revolver_damage1 = 60				//	damage mutiplier fire1 (1 projectile 200 DPS )
+// self.revolver_damage1_mp = 25				//	damage mutiplier fire1 (1 projectile 83 DPS )MULTIPLAYER
+// self.revolver_damage2 = 50				//	damage multiplier fire2 (3 projectiles, 300 DPS)
+// self.revolver_damage2_mp = 20				//	damage multiplier fire2 (3 projectiles, 120 DPS)MULTIPLAYER
+// self.revolver_time1 = 0.3				//	time fire 1
+// self.revolver_time2 = 0.5				//	time fire 2
+// self.revolver_spread1 = 0.1	 			//	revolver spread fire 1
+// self.revolver_spread2 = .1				//	revolver spread fire 2
+// self.cgvweapon_scale = 0				//	scale
+// coachbbox = '2 2 2' 		//	bbox for tracebox (positive values)
+// coach_proj_vel = 3072			//	projectile vel
+
+
+
 void check_custom_cvars() {
 	self.extraongroundtime= cvar("cl_extraongroundtime");
 	self.alwaysrun = cvar("cl_alwaysrun");
@@ -245,15 +259,11 @@ void(vector org, float sdelay)spawn_explogibs =
 	explosion.nextthink = time + sdelay;
 }
 .float orb_time;
-void() ApplyMultiDamage =
-{
-	local entity e;
-	e = nextent(world);
-	while (e)
-	{
-		if ((e.multi_damage) )
-		{
-			T_Damage (e, self, self, e.multi_damage);
+void ApplyMultiDamage() {
+	entity e = nextent(world);
+	while (e) {
+		if ((e.multi_damage)) {
+			T_Damage(e, self, self, e.multi_damage);
 			e.multi_damage = 0;
 		}
 		e = nextent(e);
@@ -272,11 +282,8 @@ void(vector start, vector end) te_tei_g3 = {
 	WriteCoord(MSG_BROADCAST, 0);
 	WriteCoord(MSG_BROADCAST, 0);
 };
-void(vector org,string locsound, float rnd, float vol, float sspeed) randompointsound7;
-
 
 /*
-
 float    MAT_GENERIC = 0;
 float    MAT_DIRT = 64;// 0x40
 float    MAT_GRASS = 32768; // 0x8000
@@ -292,7 +299,6 @@ float    MAT_STONE = 294976; // 262144 + 32768 +64, 0x48040
 float    MAT_WOOD = 393216; // 262144 + 131072, 0x60000
 float    MAT_BFLESH= 425984; // 262144 + 131072+ 32768;, 0x68000
 float    MAT_MASK = 426048 ; //  262144 + 131072+ 32768 +64, 0x68040
-
 */
 
 void(float material, vector org,vector partvel,float pammount, float miscf) material_impacts =
@@ -640,10 +646,8 @@ void FireBullets(float shotcount, vector dir, vector spread, float dmge, float s
 	vector direction;
 	float sv = 0;
 
-	if (self.clipgroup != 0) {
-		self.oldclipgroup = self.clipgroup;
-		self.clipgroup = 0;
-	}
+	self.oldclipgroup = self.clipgroup;
+	self.clipgroup = 0;
 
 	makevectors(self.v_angle);
 	spread_x = spread_x * self.charge_shotgun;
@@ -657,12 +661,9 @@ void FireBullets(float shotcount, vector dir, vector spread, float dmge, float s
 	self.solid = SOLID_BBOX;
 
 	float o_dphitcontents = self.dphitcontentsmask;
-	self.dphitcontentsmask = DPCONTENTSMASK_WEAPON;
+	self.dphitcontentsmask = DPCONTENTSMASK_WEAPON | DPCONTENTS_CORPSE;
 
-	vector minbbox = '0 0 0';
-	vector maxbbox = '0 0 0';
 	entity attacked;
-
 	while (shotcount > 0) {
 		sv += 0.0075 * spreadm;
 		if (self.weapon == IT_SHOTGUN) {
@@ -672,15 +673,11 @@ void FireBullets(float shotcount, vector dir, vector spread, float dmge, float s
 		}
 		direction = dir + crandom() * (spread_x + sv + sv) * v_right + crandom() * (spread_y + sv) * v_up;
 
-		maxbbox = coachbbox;
-		minbbox_x = maxbbox_x * -1;
-		minbbox_y = maxbbox_y * -1;
-		minbbox_z = maxbbox_z * -1;
-		tracebox(src, minbbox, maxbbox, src + direction *2048, FALSE, self);
+		tracebox(src, '-2 -2 -2', '2 2 2', src + direction * 2048, FALSE, self);
 
 		attacked = trace_ent;
 
-		shot_water_dripper(src -'0 0 4', trace_endpos, self);
+		shot_water_dripper(src - '0 0 4', trace_endpos, self);
 
 		if (trace_fraction != 1.0 && !GetSkyMaterial())
 			TraceAttack(dmge, direction);
@@ -689,7 +686,7 @@ void FireBullets(float shotcount, vector dir, vector spread, float dmge, float s
 		if (self.weapon != IT_SHOTGUN || (random() < 0.5))
 		{
 			vector old_impact = trace_endpos;
-			tracebox(src, minbbox, maxbbox, src + direction *2048, MOVE_HITMODEL, self);
+			tracebox(src, '-2 -2 -2', '2 2 2', src + direction * 2048, MOVE_HITMODEL, self);
 			if (trace_ent != attacked)
 				trace_endpos = old_impact;
 
@@ -926,9 +923,6 @@ void Weapon_Sfire() {
 	}
 	else if (self.weapon == IT_REVOLVER)
 	{
-		//if(!self.ssemi)
-		//{
-		//self.ssemi = 1;
 		if (self.ammo_revolver <= 0)
 		{
 			sound(self, CHAN_AUTO, "weapons/revolver/dryfire.ogg", 1, ATTN_NORM);
@@ -947,13 +941,12 @@ void Weapon_Sfire() {
 		{
 			wfire_revolver();
 			self.torso_time = time + 0.5;
-			//self.attack_finished = time +  0.35;
 			self.attack_finished = time + 0.1;	// 0.25
-					}
+		}
 		else
 		{
 			wsfire_revolver();
-					}
+		}
 	}
 	else if (self.weapon == IT_RETCHER)
 	{

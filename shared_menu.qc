@@ -480,7 +480,7 @@ void parse_last_saveslot(void)
 	last_saveslot_used = stof(fgets(f));
 	fclose(f);
 
-	if (profilename) // WHY
+	if (profilename != "") // WHY
 		strunzone(profilename);
 }
 #endif

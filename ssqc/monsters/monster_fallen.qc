@@ -4,6 +4,7 @@ fallen CODE
 ==============================================================================
 */
 .float melonhead;
+.float crystal;
 $frame fn_pose
 $frame fn_idle1 fn_idle2 fn_idle3 fn_idle4 fn_idle5 fn_idle6 fn_idle7 fn_idle8 fn_idle9 fn_idle10
 $frame fn_walk1 fn_walk2 fn_walk3 fn_walk4 fn_walk5 fn_walk6 fn_walk7 fn_walk8 fn_walk9 fn_walk10
@@ -21,180 +22,161 @@ $frame fn_painc1 fn_painc2 fn_painc3 fn_painc4 fn_painc5
 $frame cr_walk1 cr_walk2 cr_walk3 cr_walk4 cr_walk5 cr_walk6 cr_walk7 cr_walk8
 $frame cr_fall1 cr_fall2 cr_fall3 cr_fall4 cr_fall5 cr_fall6 cr_fall7 cr_fall9 cr_fall10 cr_fall11 cr_fall12 cr_fall14
 
-void() fallen_run1;
-void() fallen_run;
-void() fallen_check = { ai_stand();
-	//if (visibleinfront(self.enemy, 768))
-	//self.	 = fallen_run1;
-};
-.float crystal;
 
-void() fallen_touch = { if (other.classname != "monster_fallen")
+void fallen_check() {
+	ai_stand();
+}
+
+
+void fallen_touch() {
+	if (other.classname != "monster_fallen")
 		return;
 
 	self.timeroaming = time + 5;
 	other.timeroaming = time + 5;
+}
 
-};
 
-void() fallen_stand1 =[$fn_idle1, fallen_stand2]
-{
+void() fallen_stand1 =[$fn_idle1, fallen_stand2] {
 	ai_stand();
 
-	if ((self.idle_time < time) && !(self.spawnflags &1))
+	if ((self.idle_time < time) && !(self.spawnflags & SF_MONSTER_AMBUSH))
 	{
 		chattersound("enemies/fallen/idle", 3, 0.5);
 		self.idle_time = time + 4;
 	}
-
 };
-void() fallen_stand2 =[$fn_idle2, fallen_stand3]
-{
+void() fallen_stand2 =[$fn_idle2, fallen_stand3] {
 	fallen_check();
 };
-void() fallen_stand3 =[$fn_idle3, fallen_stand4]
-{
+void() fallen_stand3 =[$fn_idle3, fallen_stand4] {
 	fallen_check();
 };
-void() fallen_stand4 =[$fn_idle4, fallen_stand5]
-{
+void() fallen_stand4 =[$fn_idle4, fallen_stand5] {
 	fallen_check();
 };
-void() fallen_stand5 =[$fn_idle5, fallen_stand6]
-{
+void() fallen_stand5 =[$fn_idle5, fallen_stand6] {
 	fallen_check();
 };
-void() fallen_stand6 =[$fn_idle6, fallen_stand7]
-{
+void() fallen_stand6 =[$fn_idle6, fallen_stand7] {
 	fallen_check();
 };
-void() fallen_stand7 =[$fn_idle7, fallen_stand8]
-{
+void() fallen_stand7 =[$fn_idle7, fallen_stand8] {
 	fallen_check();
 };
-void() fallen_stand8 =[$fn_idle8, fallen_stand9]
-{
+void() fallen_stand8 =[$fn_idle8, fallen_stand9] {
 	fallen_check();
 };
-void() fallen_stand9 =[$fn_idle9, fallen_stand10]
-{
+void() fallen_stand9 =[$fn_idle9, fallen_stand10] {
 	fallen_check();
 };
-void() fallen_stand10 =[$fn_idle10, fallen_stand1]
-{
+void() fallen_stand10 =[$fn_idle10, fallen_stand1] {
 	fallen_check();
 };
 
-void(float exdmg, float range) fallen_attack = { local vector delta;
-	local float dist;
+
+void fallen_attack(float exdmg, float range) {
 	if (self.enemy.crouch == 1)
 		range += 32;
 
 	if (!self.enemy)
 		return;	// removed before stroke
-	delta = (self.enemy.origin) - rorigin(self);	// + '0 0 32');
-	dist = vlen(delta);
 
-	if (exdmg != 0)
-	{
-		if (dist < range)
-		{
+	vector delta = self.enemy.origin - rorigin(self);
+	float dist = vlen(delta);
+
+	if (exdmg != 0) {
+		if (dist < range) {
 			makevectors(self.v_angle);
-			local vector source, org;
-			source = rorigin(self) + '0 0 16';
+			vector source = rorigin(self) + '0 0 16';
 			traceline(source, self.enemy.origin, FALSE, self);
-			if (trace_fraction != 1.0)
-			{
-				org = trace_endpos - v_forward * 4;
-				if ((trace_ent.takedamage))
-				{
-					//				trace_ent.axhitme = 1;
+			if (trace_fraction != 1.0) {
+				vector org = trace_endpos - v_forward * 4;
+				if ((trace_ent.takedamage)) {
 					T_Damage(trace_ent, self, self, exdmg);
 				}
 			}
 		}
 	}
-};
+}
 
 
+void fallen_beam_face() {
+	ai_face();
+	vector dorg = tag_origin("tag_head", self) + '0 0 5';
 
-
-void() fallen_beam_face =
-{
-    ai_face();
-    vector dorg = tag_origin("tag_head",self) + '0 0 5';
-
-    vector direction = normalize (dorg - self.enemy_org);
-    wtraceline(dorg, self.enemy_org, FALSE, self);
+	vector direction = normalize(dorg - self.enemy_org);
+	wtraceline(dorg, self.enemy_org, FALSE, self);
 	vector tracedest = trace_endpos;
-    if (trace_fraction != 1.0)
-	    TraceAttackBeam(random(15,50), direction,self.oldorigin );
-    ApplyMultiDamage();
-    te_crystal2(dorg, tracedest,12,0.01,random(0.1, 0.25),1,world,trace_endpos);
+	if (trace_fraction != 1.0)
+		TraceAttackBeam(random(15, 50), direction, self.oldorigin);
 
-    self.enemy_org_x += random (-24,24); 
-    self.enemy_org_y += random (-24,24);
-    self.enemy_org_z += random (-24,24);
-};
+	ApplyMultiDamage();
 
-void()fallen_beam1=[$fn_paina1, fallen_beam2]
-{	
+	te_crystal2(dorg, tracedest, 12, 0.01, random(0.1, 0.25), 1, world, trace_endpos);
+
+	self.enemy_org_x += random(-24, 24);
+	self.enemy_org_y += random(-24, 24);
+	self.enemy_org_z += random(-24, 24);
+}
+
+
+void() fallen_beam1 =[$fn_paina1, fallen_beam2] {
 	sound7(self,CHAN_WEAPON,"weapons/crystal/crystallizer_fire_alt_loop.ogg",1,0.25,100,0);
+
+	// FIXME: Refactor this so that it doesn't create a new flash every time
 	entity muzzle = spawn();
 	muzzle.scale = random (1.5,2);
 	setmodel(muzzle, "models/projectiles/proj_crystal.md3");
 	setattachment(muzzle, self, "tag_head");
-	//muzzle.origin =  dorg;
 	self.flash = muzzle;
 	muzzle.scale = 0.25;
 	muzzle.alpha = 0.1;
 	muzzle.colormod = '2.25 0.5 1.5';
-
 };
-void()fallen_beam2 =[$fn_paina2, fallen_beam3]{ ai_face();self.flash.alpha = 0.1;};
-void()fallen_beam3 =[$fn_paina3, fallen_beam4]{ ai_face();self.flash.alpha = 0.2;};
-void()fallen_beam4 =[$fn_paina4, fallen_beam5]{ ai_face();self.flash.alpha = 0.3;};
-void()fallen_beam5 =[$fn_paina5, fallen_beam6]{ ai_face();self.flash.alpha = 0.4;};
-void()fallen_beam6 =[$fn_paina4, fallen_beam7]{ ai_face();self.flash.alpha = 0.5;};
-void()fallen_beam7 =[$fn_paina3, fallen_beam8]{ ai_face();self.flash.alpha = 0.5;};
-void()fallen_beam8 =[$fn_paina2, fallen_beam9]{ ai_face();self.flash.alpha = 0.7;};
-void()fallen_beam9 =[$fn_paina1, fallen_beam10]{ ai_face();self.flash.alpha = 0.8;};
-void()fallen_beam10 =[$fn_paina2, fallen_beam11]{ ai_face();self.flash.alpha = 0.9;};
-void()fallen_beam11 =[$fn_paina2, fallen_beam12]{ ai_face();self.flash.alpha = 1;
-
-vector dorg = tag_origin("tag_head",self) + '0 0 5';
-pointparticles(particleeffectnum("crystalls_muzzle"), dorg, '0 0 0', 1);
-
+void() fallen_beam2 =[$fn_paina2, fallen_beam3]{ ai_face();self.flash.alpha = 0.1;};
+void() fallen_beam3 =[$fn_paina3, fallen_beam4]{ ai_face();self.flash.alpha = 0.2;};
+void() fallen_beam4 =[$fn_paina4, fallen_beam5]{ ai_face();self.flash.alpha = 0.3;};
+void() fallen_beam5 =[$fn_paina5, fallen_beam6]{ ai_face();self.flash.alpha = 0.4;};
+void() fallen_beam6 =[$fn_paina4, fallen_beam7]{ ai_face();self.flash.alpha = 0.5;};
+void() fallen_beam7 =[$fn_paina3, fallen_beam8]{ ai_face();self.flash.alpha = 0.5;};
+void() fallen_beam8 =[$fn_paina2, fallen_beam9]{ ai_face();self.flash.alpha = 0.7;};
+void() fallen_beam9 =[$fn_paina1, fallen_beam10]{ ai_face();self.flash.alpha = 0.8;};
+void() fallen_beam10 =[$fn_paina2, fallen_beam11]{ ai_face();self.flash.alpha = 0.9;};
+void() fallen_beam11 =[$fn_paina2, fallen_beam12]{ ai_face();self.flash.alpha = 1.0;
+	vector dorg = tag_origin("tag_head",self) + '0 0 5';
+	pointparticles(particleeffectnum("crystalls_muzzle"), dorg, '0 0 0', 1);
 };
-void()fallen_beam12 =[$fn_paina2, fallen_beam13]{ ai_face();};
-void()fallen_beam13 =[$fn_paina2, fallen_beam14]{ ai_face();};
-void()fallen_beam14 =[$fn_paina3, fallen_beam15]{ai_face();self.enemy_org = self.enemy.origin;
-	sound7(self,CHAN_WEAPON,"weapons/lance/fire3.ogg.ogg",1,0.25,150,0);
-fallen_beam_face();
-remove(self.flash);
+void() fallen_beam12 =[$fn_paina2, fallen_beam13]{ ai_face();};
+void() fallen_beam13 =[$fn_paina2, fallen_beam14]{ ai_face();};
+void() fallen_beam14 =[$fn_paina3, fallen_beam15]{
+	ai_face();
+	self.enemy_org = self.enemy.origin;
+	sound7(self, CHAN_WEAPON, "weapons/lance/fire3.ogg", 1, 0.25, 150, 0);
+	fallen_beam_face();
+	remove(self.flash);
 };
 void()fallen_beam15 =[$fn_paina4, fallen_run1]{};
 
 void()fallen_cyst1=[$fn_paina1, fallen_cyst2]{ai_face();};
 void()fallen_cyst2 =[$fn_paina2, fallen_cyst3]{ ai_face();};
 void()fallen_cyst3 =[$fn_paina3, fallen_cyst4]{ ai_face();
-Afflicted_Fire();
+	Afflicted_Fire();
 };
 void()fallen_cyst4 =[$fn_paina4, fallen_cyst5]{ ai_face();};
 void()fallen_cyst5 =[$fn_paina5, fallen_cyst6]{ ai_face();};
 void()fallen_cyst6 =[$fn_paina4, fallen_cyst7]{ ai_face();};
 void()fallen_cyst7 =[$fn_paina3, fallen_cyst8]{ ai_face();
-Afflicted_Fire();
+	Afflicted_Fire();
 };
 void()fallen_cyst8 =[$fn_paina2, fallen_cyst9]{ ai_face();};
 void()fallen_cyst9 =[$fn_paina1, fallen_cyst10]{ ai_face();};
 void()fallen_cyst10 =[$fn_paina2, fallen_cyst11]{ ai_face();};
 void()fallen_cyst11 =[$fn_paina3, fallen_run1]{ ai_face();
-Afflicted_Fire();
+	Afflicted_Fire();
 };
 
 .float headless_time;
-void() fallen_attack_melee;
 
 void() fallen_run1 =[$fn_walk11, fallen_run2]
 {
@@ -501,8 +483,7 @@ void() fallen_attackb10 =[$fn_attackb10, fallen_run]
 };
 
 void() fallen_attack_melee = { ai_face();
-	local float r;
-	r = random();
+	float r = random();
 	if (r < 0.5)
 		self.think = fallen_attacka1;
 	else
@@ -587,34 +568,36 @@ void() fallen_walk = { local float r;
 
 .string particleffect2;
 .float gibtimer;
-void() gib_prefade =	// avoid gib levitation
+void gib_prefade() {
+	// avoid gib levitation
+	self.gibtimer -= 0.1;
+
+	if (self.velocity == '0 0 0')
 	{
-		self.gibtimer -= 0.1;
+		self.velocity_x = random() *5;
+		self.velocity_y = random() *5;
+		if (self.count != 1)
+			self.velocity_z = random() *5;
+	}
 
-		if (self.velocity == '0 0 0')
+	if (self.glowmod_x > 1)
+		self.think = gibalphafade3;
+	else
+	{
+		if (self.gibtimer <= 0)
 		{
-			self.velocity_x = random() *5;
-			self.velocity_y = random() *5;
-			if (self.count != 1)
-				self.velocity_z = random() *5;
+			self.velocity = '0 0 0';
+			self.think = gibalphafade2;
+			self.nextthink = time;
 		}
-
-		if (self.glowmod_x > 1)
-			self.think = gibalphafade3;
 		else
-		{
-			if (self.gibtimer <= 0)
-			{
-				self.velocity = '0 0 0';
-				self.think = gibalphafade2;
-				self.nextthink = time;
-			}
-			else
-				self.think = gib_prefade;
-		}
+			self.think = gib_prefade;
+	}
 
-		self.nextthink = time + 0.1;
-	};
+	self.nextthink = time + 0.1;
+};
+
+
 void() bleedzthink = { local float nparticles;
 	nparticles = particleeffectnum(self.particleffect2);
 
@@ -636,7 +619,7 @@ void() bleedzthink = { local float nparticles;
 		arm.model = self.model2;
 		arm.lifetime = self.lifetime;
 		arm.lavatime = self.lavatime;
-		arm.wrathflags += FL_GIB;	
+		arm.wrathflags += FL_GIB;
 		arm.gibowner = self.owner;
 		setmodel(arm, arm.model);
 		arm.origin = tagorg;
@@ -688,10 +671,11 @@ void() bleedzthink = { local float nparticles;
 	self.nextthink = time + 0.05;
 };
 
-void(string location, string gibmodel, string bleffect, vector vel, entity gwner, float bscale, string addeffect) spawn_gib_stuff = { 
+
+void spawn_gib_stuff(string location, string gibmodel, string bleffect, vector vel, entity gwner, float bscale, string addeffect) {
 	if (!(vel == '0 0 0'))
 	{
-		
+
 		local entity bleed;
 		bleed = spawn();
 		bleed.owner = gwner;
@@ -909,33 +893,35 @@ void() fallen_deatha = {
 	self.nextthink = time + 0.25;
 };
 
+
 .float death_legs;
 .entity cyst;
-void() fallen_death = 
-{ 
-	local float r;
-	r = random();
-	msound7(self,CHAN_WEAPON,"misc/null.wav",0,0.25,100,0);
+
+
+void fallen_death() {
+	msound7(self, CHAN_WEAPON, "misc/null.wav", 0, 0.25, 100, 0);
 	monstersound5("enemies/fallen/die", 3, CHAN_VOICE);
-	if(self.flash)
-	remove(self.flash);
+
+	if (self.flash)
+		remove(self.flash);  // FIXME: this throws a "VM_remove: tried to remove an already freed entity!" error even with the check
+
+	entity explosion;
 	if(self.cyst)
 	{
-		 if (self.melonhead == 1)
+		if (self.melonhead == 1)
 		{
 			self.cyst.think = SUB_Remove;
 			self.cyst.nextthink = time;
-			entity explosion = spawn();
-			local vector tagorg;
-			tagorg = tag_origin("tag_head", self);		
+			vector tagorg = tag_origin("tag_head", self);
+			explosion = spawn();
 			explosion.origin = tagorg;
 			explosion.think = PreCyExplosion;
 			explosion.nextthink = time;
 		}
 		else
-		{	
+		{
 			explosion = spawn();
-			tagorg = tag_origin("tag_head", self);		
+			tagorg = tag_origin("tag_head", self);
 			explosion.origin = tagorg;
 			explosion.classname = "explosion_oreb";
 			T_SplashDamage(explosion, explosion, slagsplashdamage2, world, slagsplashradius2);
@@ -953,7 +939,7 @@ void() fallen_death =
 				if (head.wrathflags & FL_GIB)
 				{
 					head.effects = EF_FLAME;
-					explo_physics_gibs (self,head,150,3); 	
+					explo_physics_gibs (self,head,150,3);
 				}
 				head = head.chain;  // cycle to next head (entity)
 			}
@@ -964,6 +950,7 @@ void() fallen_death =
 		monstersound4("impact/gibs/gib_hit", 5, CHAN_AUTO);
 
 	self.chatter_time = 0;
+	float r = random();
 	if (r > 0.2)
 		self.think = fallen_deatha;
 	else
@@ -982,23 +969,20 @@ void() fallen_death =
 
 	self.nextthink = time + 0.05;
 
-};
+}
+
+
 .float lastpain;
-void() fallen_paina1 =[$fn_mutilatea1, fallen_paina2]
-{
+void() fallen_paina1 =[$fn_mutilatea1, fallen_paina2] {
 	self.mutilated = 1;
 	self.skin = 1;
 	self.lastpain = 3;
 
 	spawn_gib_stuff("tag_head", "models/misc/null.md3", "fallen_blood_spurt_neck", '50 0 100', self, 0.55, "fallen_blood_spurt_neck");
-	local vector tagorg;
-	local float tagindex;
-	local string tagname;
-	tagname = ("tag_head");
-	tagindex = gettagindex(self, tagname);
-	tagorg = gettaginfo(self, tagindex);
-	ThrowGib2("models/enemies/fallen/gibs/gib_head.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel('50 0 100', self), 0, 1);
 
+	float tagindex = gettagindex(self, "tag_head");
+	vector tagorg = gettaginfo(self, tagindex);
+	ThrowGib2("models/enemies/fallen/gibs/gib_head.md3", self.health * 0.25, 0.75, 1, 1, tagorg, relvel('50 0 100', self), 0, 1);
 };
 void() fallen_paina2 =[$fn_mutilatea2, fallen_paina3] {};
 void() fallen_paina3 =[$fn_mutilatea3, fallen_paina4] {};
@@ -1008,8 +992,7 @@ void() fallen_paina6 =[$fn_mutilatea6, fallen_paina7] {};
 void() fallen_paina7 =[$fn_mutilatea7, fallen_paina8] {};
 void() fallen_paina8 =[$fn_mutilatea8, fallen_paina9] {};
 void() fallen_paina9 =[$fn_mutilatea9, fallen_paina10] {};
-void() fallen_paina10 =[$fn_mutilatea10, fallen_run]
-{
+void() fallen_paina10 =[$fn_mutilatea10, fallen_run] {
 	if ((visible2(self.enemy, 64, 0.3)))
 	{
 		ai_face();
@@ -1123,7 +1106,7 @@ void() fallen_prepainc5 =[$fn_painc5, fallen_run]
 	}
 };
 
-//void() crawler_run1 
+//void() crawler_run1
 void() crawler_death = { chattersound("enemies/fallen/die", 3, 1);
 	self.solid = SOLID_NOT;
 	self.movetype = MOVETYPE_TOSS;
@@ -1145,7 +1128,7 @@ void() crawler_death = { chattersound("enemies/fallen/die", 3, 1);
 
 void() ai_crawler_face = { /*
 	local entity pl;
-	pl = find(world, classname, "player"); 
+	pl = find(world, classname, "player");
 	*/
 
 	local vector vec;
@@ -1166,56 +1149,6 @@ void() blood_frames = { if (self.frame <= 12)
 		self.think = alphafade;
 		self.nextthink = time + random() *10;
 	}
-};
-
-void(vector org, entity e) drop_blood = { return;
-	/*
-	local entity blood;
-	blood = spawn();
-	blood.solid = SOLID_NOT;
-	blood.movetype = MOVETYPE_TOSS;
-	blood.colormod = '1 0.3 0';
-
-	local float r;
-
-	traceline (org, org - '0 0 256', TRUE, blood);
-	if(trace_fraction != 1)
-	{
-	local vector ang, coplanar,tpn;
-	ang = blood.angles;
-	tpn = trace_plane_normal;
-	ang = blood.angles;
-	ang_x = ang_x *-1;
-	makevectors(ang);
-	coplanar = v_forward-(v_forward*tpn)*tpn;
-	blood.angles = vectoangles2(coplanar, tpn);
-	}
-
-	local vector org2;
-	org2 = trace_endpos;
-	setorigin(blood, org2);
-	blood.alpha =  1;
-
-	setmodel (blood, "models/misc/null.md3");
-
-	r = random();
-	if(r < 0.25)
-	{
-	blood.angles_y  = random()*360;
-	blood.think = blood_frames;
-	blood.nextthink = time + 0.1;
-	}
-	else
-	{
-	blood.angles_y  = e.angles_y;
-	blood.skin = 1;
-	blood.scale = 0.5* random() + 0.5;
-	blood.frame = 12;
-	blood.think = alphafade;
-	blood.nextthink = time + 10 + random () *10;
-	}
-
-	*/
 };
 
 void() crawler_run1 =[$cr_walk1, crawler_run2]
@@ -1253,12 +1186,6 @@ void() crawler_run8 =[$cr_walk8, crawler_run1]
 {
 	ai_runwalk(16);
 	ai_crawler_face();
-	local vector org;
-	org = rorigin(self);
-	local float r;
-	r = random();
-	if (r > 0.25)
-		drop_blood(org, self);
 };
 
 void() crawler_start = { self.frame += 1;	//
@@ -1310,7 +1237,7 @@ void(entity e) fallen_crawler = { local entity crawler;
 	crawler.angles = e.angles;
 	crawler.health = 100;
 
-	//	self.view_ofs_z = 40; 
+	//	self.view_ofs_z = 40;
 	crawler.skin = 5;
 	crawler.th_pain = null_pain;
 	crawler.th_die = crawler_death;
@@ -1361,14 +1288,15 @@ void() fallen_paind20 =[$fn_mutilated20, fallen_paind20]
 
 .float type_mutilated;
 
-void(entity attacker, float damage) fallen_pain = { if ((time < self.pain_finished) && (self.enemy.weapon != IT_REVOLVER))
+void fallen_pain(entity attacker, float damage) {
+	if ((time < self.pain_finished) && (self.enemy.weapon != IT_REVOLVER))
 		return;
-	if ((self.health <= 75) && (!self.mutilated))
-	{
-		self.pain_finished = time + 0.4;
-		local float r;
-		r = random();
 
+	float r;
+
+	if ((self.health <= 75) && (!self.mutilated)) {
+		self.pain_finished = time + 0.4;
+		r = random();
 		if (r > 0.66)
 			self.think = fallen_paina1;
 		else
@@ -1378,9 +1306,6 @@ void(entity attacker, float damage) fallen_pain = { if ((time < self.pain_finish
 			else
 				self.think = fallen_painc1;
 		}
-
-		//else
-		//self.think = fallen_paind1;
 
 		if ((self.randomattacked <= 0) && (self.enemy.randomattack <= 0))
 		{
@@ -1392,9 +1317,6 @@ void(entity attacker, float damage) fallen_pain = { if ((time < self.pain_finish
 				self.think = fallen_painc1;
 		}
 
-		//if(self.type_mutilated == 4)
-		//self.think = fallen_paind1;
-
 		if ((self.headless_time < time) && (self.skin == 1))
 		{
 			msound(self, CHAN_VOICE, "enemies/fallen/headless.ogg", 1, 0.25);
@@ -1403,8 +1325,7 @@ void(entity attacker, float damage) fallen_pain = { if ((time < self.pain_finish
 		else
 			monstersound3("enemies/fallen/pain", 3, CHAN_VOICE);
 	}
-	else
-	{
+	else {
 		self.pain_finished = time + 0.5;
 		r = random();
 		if (r > 0.66)
@@ -1441,13 +1362,11 @@ void(entity attacker, float damage) fallen_pain = { if ((time < self.pain_finish
 
 .float risenframe;
 
-void(float material, vector org,float pammount) rise_impacts =
-{
+void rise_impacts(float material, vector org,float pammount) {
 	float r= random();
-    vector partvel =normalize(trace_plane_normal) * 128;
+	vector partvel =normalize(trace_plane_normal) * 128;
 
-	if (material == MAT_GENERIC)
-	{
+	if (material == MAT_GENERIC) {
 		if(world.episode == 2)
 			pointparticles(particleeffectnum("fallenspuff2"), trace_endpos + '0 0 16', '0 0 0', 2);
 		else
@@ -1472,19 +1391,19 @@ void(float material, vector org,float pammount) rise_impacts =
 	else if (material == MAT_WOOD)
 		pointparticles(particleeffectnum("woodparticles"),org, partvel * random (1,1.5), pammount* 32);
 	else if (material == MAT_GRATE)
-	{	
+	{
 		pointparticles(particleeffectnum("gravelparticles"),org, partvel * random (1,1.5), pammount* 32);
 		pointparticles(particleeffectnum("metalfragment"),org, partvel * random (1,1.5), pammount);
 	}
 	else if (material == MAT_METAL)
-	{	
+	{
 		pointparticles(particleeffectnum("gravelparticles"),org, partvel * random (1,1.5), pammount* 32);
 		pointparticles(particleeffectnum("metalfragment"),org, partvel * random (1,1.5), pammount);
 	}
 	else if (material == MAT_BFLESH)
 	{
 		pointparticles(particleeffectnum("NORMAL_BLOOD"),org, partvel * 0.5, pammount* 32);
-		pointparticles(particleeffectnum("NORMAL_BLOOD2"),org, partvel, pammount* 32);		
+		pointparticles(particleeffectnum("NORMAL_BLOOD2"),org, partvel, pammount* 32);
 	}
 	else
 		pointparticles(particleeffectnum("gravelparticles"),org, partvel * random (1,1.5), pammount* 32);
@@ -1512,7 +1431,7 @@ void() fallen_rise = { self.risenframe += 1;
 		{
 			pointparticles(particleeffectnum("fallendecal"), trace_endpos, '0 0 0', 2);
 			rise_impacts(material,trace_endpos +  randomvector('0 0 0','0 0 12'),1);
-		}		
+		}
 		if (r < 0.5)
 			rise_impacts(material,trace_endpos +  randomvector('0 0 0','0 0 12'),1);
 	}
@@ -1571,114 +1490,7 @@ void()check_jump =
 	}
 };
 
-void() precache_monster_fallen = { precache_model("models/enemies/fallen/gibs/gib_torso_b.md3");
-	precache_model("models/enemies/fallen/gibs/gib_torso_a.md3");
-	precache_model("models/enemies/fallen/gibs/gib_leg_b_r.md3");
-	precache_model("models/enemies/fallen/gibs/gib_leg_b_l.md3");
-	precache_model("models/enemies/fallen/gibs/gib_leg_a_r.md3");
-	precache_model("models/enemies/fallen/gibs/gib_leg_a_l.md3");
-	precache_model("models/enemies/fallen/gibs/gib_head.md3");
-	precache_model("models/enemies/fallen/gibs/gib_arm_b_r.md3");
-	precache_model("models/enemies/fallen/gibs/gib_arm_b_l.md3");
-	precache_model("models/enemies/fallen/gibs/gib_arm_a_r.md3");
-	precache_model("models/enemies/fallen/gibs/gib_arm_a_l.md3");
-	precache_model("models/enemies/fallen/fallen1.md3");
-	precache_model("models/enemies/fallen/fallen1.md3");
-	precache_sound("enemies/fallen/attack1.ogg");
-	precache_sound("enemies/fallen/attack2.ogg");
-	precache_sound("enemies/fallen/attack3.ogg");
-	precache_sound("enemies/fallen/attack4.ogg");
-	precache_sound("enemies/fallen/attack5.ogg");
-	precache_sound("enemies/fallen/chatter1.ogg");
-	precache_sound("enemies/fallen/chatter2.ogg");
-	precache_sound("enemies/fallen/chatter3.ogg");
-	precache_sound("enemies/fallen/chatter4.ogg");
-	precache_sound("enemies/fallen/chatter5.ogg");
-	precache_sound("enemies/fallen/collapse.ogg");
-	precache_sound("enemies/fallen/collapse.ogg");
-	precache_sound("enemies/fallen/die1.ogg");
-	precache_sound("enemies/fallen/die2.ogg");
-	precache_sound("enemies/fallen/die3.ogg");
-	precache_sound("enemies/fallen/headless.ogg");
-	precache_sound("enemies/fallen/idle1.ogg");
-	precache_sound("enemies/fallen/idle2.ogg");
-	precache_sound("enemies/fallen/idle3.ogg");
-	precache_sound("enemies/fallen/idle4.ogg");
-	precache_sound("enemies/fallen/idle5.ogg");
-	precache_sound("enemies/fallen/pain1.ogg");
-	precache_sound("enemies/fallen/pain2.ogg");
-	precache_sound("enemies/fallen/pain3.ogg");
-	precache_sound("enemies/fallen/pain4.ogg");
-	precache_sound("enemies/fallen/pain5.ogg");
-	precache_sound("enemies/fallen/sight1.ogg");
-	precache_sound("enemies/fallen/sight2.ogg");
-	precache_sound("enemies/fallen/sight3.ogg");
-	precache_sound("enemies/fallen/sight4.ogg");
-	precache_sound("enemies/fallen/sight5.ogg");
-	precache_sound("enemies/fallen/step1.ogg");
-	precache_sound("enemies/fallen/step2.ogg");
-	precache_sound("enemies/fallen/step3.ogg");
-	precache_sound("enemies/fallen/step4.ogg");
-	precache_sound("enemies/fallen/step5.ogg");
-	precache_sound("enemies/fallen/swing1.ogg");
-	precache_sound("enemies/fallen/swing2.ogg");
-	precache_sound("enemies/fallen/swing3.ogg");
-};
-void() melon_head_think = 
-{
-	if (self.cyst_flag)
-	{
-		//self.scale -= self.cyst_rate_glowmod / 15;
-		self.glowmod_x -= self.cyst_rate_glowmod;
-		self.glowmod_y -= self.cyst_rate_glowmod;
-		self.glowmod_z -= self.cyst_rate_glowmod;
-
-		if (self.glowmod_x <= 0.5)
-			self.cyst_flag = 0;
-	}
-	else
-	{
-		self.glowmod_x += self.cyst_rate_glowmod;
-		self.glowmod_y += self.cyst_rate_glowmod;
-		self.glowmod_z += self.cyst_rate_glowmod;
-
-		if (self.glowmod_x >= 1)
-			self.cyst_flag = 1;
-	}
-	if((self.owner.health > 0) && (self.owner.melonhead == 2))
-	{
-		float tagindex = gettagindex(self.owner, "tag_head");
-		vector tagorg = gettaginfo(self.owner, tagindex);
-		makevectors (self.owner.angles);
-		pointparticles(particleeffectnum("flame"), tagorg + v_forward * 2, '0 0 0', 1);
-	}
-	self.think = melon_head_think;
-	self.nextthink = time + 0.1;
-};
-
-void(entity e) melon_head = 
-{
-	entity cst1 = spawn();
-	if(e.melonhead == 1)
-	    setmodel(cst1, "models/enemies/afflicted/cyst_a.md3");
-	else
-	    setmodel(cst1, "");
-	setattachment(cst1, e, "tag_head");
-	cst1.owner = e;
-	e.cyst = cst1;
-	cst1.scale = 0.25;
-	cst1.cyst_rate_scale = 0.025;
-	cst1.cyst_rate_glowmod = 0.025 + (0.025* random());
-	cst1.glowmod = '0.5 0.5 0.5';
-
-	cst1.think = melon_head_think;
-	cst1.nextthink = time + 0.1;
-	//self.skin = 1;
-
-
-};
-
-void monster_fallen() {
+void precache_monster_fallen() {
 	precache_model("models/enemies/fallen/gibs/gib_torso_b.md3");
 	precache_model("models/enemies/fallen/gibs/gib_torso_a.md3");
 	precache_model("models/enemies/fallen/gibs/gib_leg_b_r.md3");
@@ -1731,6 +1543,80 @@ void monster_fallen() {
 	precache_sound("enemies/fallen/swing1.ogg");
 	precache_sound("enemies/fallen/swing2.ogg");
 	precache_sound("enemies/fallen/swing3.ogg");
+}
+
+
+void() melon_head_think =
+{
+	if (self.cyst_flag)
+	{
+		//self.scale -= self.cyst_rate_glowmod / 15;
+		self.glowmod_x -= self.cyst_rate_glowmod;
+		self.glowmod_y -= self.cyst_rate_glowmod;
+		self.glowmod_z -= self.cyst_rate_glowmod;
+
+		if (self.glowmod_x <= 0.5)
+			self.cyst_flag = 0;
+	}
+	else
+	{
+		self.glowmod_x += self.cyst_rate_glowmod;
+		self.glowmod_y += self.cyst_rate_glowmod;
+		self.glowmod_z += self.cyst_rate_glowmod;
+
+		if (self.glowmod_x >= 1)
+			self.cyst_flag = 1;
+	}
+	if ((self.owner.health > 0) && (self.owner.melonhead == 2)) {
+		float tagindex = gettagindex(self.owner, "tag_head");
+		vector tagorg = gettaginfo(self.owner, tagindex);
+		makevectors(self.owner.angles);
+		pointparticles(particleeffectnum("flame"), tagorg + v_forward * 2, '0 0 0', 1);
+	}
+	self.think = melon_head_think;
+	self.nextthink = time + 0.1;
+};
+
+
+void melon_head(entity e) {
+	entity cst1 = spawn();
+
+	if (e.melonhead == 1)
+	    setmodel(cst1, "models/enemies/afflicted/cyst_a.md3");
+	else
+	    setmodel(cst1, "");
+
+	setattachment(cst1, e, "tag_head");
+	cst1.owner = e;
+	e.cyst = cst1;
+	cst1.scale = 0.25;
+	cst1.cyst_rate_scale = 0.025;
+	cst1.cyst_rate_glowmod = 0.025 + (0.025* random());
+	cst1.glowmod = '0.5 0.5 0.5';
+
+	cst1.think = melon_head_think;
+	cst1.nextthink = time + 0.1;
+}
+
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-12 -12 -32, 12 12 32)
+	model({"path": "models/enemies/fallen/fallen1.md3"})
+= monster_fallen : "Monster: Fallen" [
+	melonhead(choices) : "Variant" : 0 = [
+		0 : "Normal"
+		1 : "Cyst Head"
+		2 : "Fire"
+		3 : "Crystal"
+		4 : "Cyst"
+	]
+]
+*/
+void monster_fallen() {
+	precache_monster_fallen();
 
 	self.flags = self.flags | FL_MONSTER;
 	setmodel(self, "models/enemies/fallen/fallen1.md3");
@@ -1747,8 +1633,7 @@ void monster_fallen() {
 	self.th_walk = fallen_walk1;
 	self.skin = 0;
 
-	float r, rgib;
-	r = (random() * 5);
+	float r = random() * 5;
 	if (r <= 5)
 		self.noise = "enemies/fallen/sight5.ogg";
 	if (r < 4)
@@ -1759,12 +1644,12 @@ void monster_fallen() {
 		self.noise = "enemies/fallen/sight2.ogg";
 	if (r < 1)
 		self.noise = "enemies/fallen/sight1.ogg";
-		
+
 	self.th_run =  fallen_run;
 
 	if (!(self.type_mutilated))
 	{
-		rgib = floor(random() * 3);
+		float rgib = floor(random() * 3);
 		if (rgib < 1)
 			self.type_mutilated = 1;
 		if (rgib < 2)
@@ -1811,34 +1696,28 @@ void monster_fallen() {
 	if(self.melonhead == 2)
 		melon_head(self);
 	if(self.melonhead == 3)
-		self.colormod = '1 0.3 1'; 
-	if(self.melonhead == 4)
-	{
-		self.colormod = '0.7 1 0.5'; 
+		self.colormod = '1 0.3 1';
+	if(self.melonhead == 4) {
+		self.colormod = '0.7 1 0.5';
 		spawn_cysts(self);
 	}
 
-	//writethis = strftime(1,"%Y-%m-%d %H:%M:%S");
 	if (self.rise == 1)
 		self.alpha = -1;
 
-
-	if ((self.rise != 1) || ((self.rise == 1) && (self.warped == 1)))
-	{
+	if ((self.rise != 1) || ((self.rise == 1) && (self.warped == 1))) {
 		self.origin_z += 12;
 		self.frame = 1;
 
 		if ((world.model == "maps/testboss3.bsp") || (world.model == "maps/boss3.bsp")) {
 			self.frame = 116;
 			self.lastframewarp = 123;
-
 		}
 		self.think = self.th_stand;
 		self.nextthink = time + 0.1;
 		walkmonster_start();
 	}
-	else
-	{
+	else {
 		self.frame = $cr_walk1;
 		self.pain_finished = time + 2.05;
 		self.think = walkmonster_start;

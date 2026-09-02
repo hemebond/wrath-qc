@@ -10,8 +10,6 @@ vector thumbstick_mouse;
 // won't interfere with our normal single-input keyboard mapping.
 #define IS_KBM_KEY(k) (k == INPUT_TYPE_KEYBOARD || k == INPUT_TYPE_MOUSE)
 
-string Controller_GetGlyph(string code);
-void Controller_InitGlyphs(float type);
 
 void Controller_Query(void)
 {

@@ -20,7 +20,7 @@ void() check_tether2 = { read_currentprofileslot();
 	savingtether = stof(readtext);
 	fclose(readparms);
 
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 
 };
@@ -34,7 +34,7 @@ void() check_shrine = { read_currentprofileslot();
 	readtext = fgets(readparms);	//read the text
 	savingtether = stof(readtext);
 	fclose(readparms);
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 
 };

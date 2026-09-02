@@ -1,10 +1,3 @@
-void() train_next;
-
-void() func_train_find;
-
-void() mercenary_test_think;
-
-void(entity e, vector r) setsizeitem;
 void() train_blocked =
 {
 	if ((time < self.attack_finished))

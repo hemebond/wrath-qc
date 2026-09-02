@@ -78,7 +78,7 @@ void Cyxplode(float cdmg, float aoe, entity ignore) {
 
 
 void cyst_field_think() {
-	setorigin (self, self.owner.origin);
+	setorigin(self, self.owner.origin);
 
 	if (self.oldorigin != self.origin) {
 		self.owner.lifetime =  0;
@@ -117,12 +117,12 @@ void cyst_field_die() {
 
 
 void cyst_touch() {
-	// Cyst has touched something
+	// Cyst projectile has touched something
 
 	if (GetSkyMaterial()) {
 		// Hit the sky or a no-impact surface
 		remove(self);
-		sound(self, CHAN_WEAPON, "misc/null.wav", 0, ATTN_NORM);	// stop loop sound
+		sound(self, CHAN_WEAPON, "misc/null.wav", 0, ATTN_NORM);  // stop loop sound
 		return;
 	}
 
@@ -177,22 +177,23 @@ void cyst_touch() {
 			cyst_field.health = 5;
 			cyst_field.th_die = cyst_field_die;
 			cyst_field.touch = cyst_field_touch;
+			cyst_field.nextthink = time + 0.1;
+			cyst_field.think = cyst_field_think;
 
 			entity cyst_solid_field = spawn();
 			cyst_solid_field.owner = self;
 			cyst_solid_field.origin = self.origin;
 			setsize(cyst_solid_field, '-12 -12 -12', '12 12 12');
-			cyst_solid_field.solid = SOLID_BBOX;
+			// cyst_solid_field.solid = SOLID_BBOX;
+			cyst_solid_field.solid = SOLID_CORPSE;
 			cyst_solid_field.clipgroup = 1;
 			cyst_solid_field.classname = "cystfield";
 			cyst_solid_field.takedamage = DAMAGE_AIM;
 			cyst_solid_field.health = 1;
 			cyst_solid_field.th_die = cyst_field_die;
 			cyst_solid_field.th_pain = th_paintodeath;
-			cyst_field.nextthink = time + 0.1;
-			cyst_field.think = cyst_field_think;
 
-			self.clipgroup = CLIPGROUP_CYSTS;
+			// self.clipgroup = CLIPGROUP_CYSTS;
 
 			force_retouch = 2;
 
@@ -283,28 +284,24 @@ void aoep_think() {
 		self.think = aoep_think;
 	else
 		self.think = SUB_Remove;
+
 	self.origin = self.owner.origin;
 
 	if (self.aoe_big == 1) {
 		if ((self.owner.cnt) < (self.cnt / 5)) {
 			pointparticles(particleeffectnum("retcheraoebig5"), self.origin, v_forward * -550, 3);
-			dprint("Playing particle retcheraoebig5\n");
 		}
 		else if ((self.owner.cnt) < (self.cnt / 4)) {
 			pointparticles(particleeffectnum("retcheraoebig4"), self.origin, v_forward * -550, 3);
-			dprint("Playing particle retcheraoebig4\n");
 		}
 		else if ((self.owner.cnt) < (self.cnt / 3)) {
 			pointparticles(particleeffectnum("retcheraoebig3"), self.origin, v_forward * -550, 3);
-			dprint("Playing particle retcheraoebig3\n");
 		}
 		else if ((self.owner.cnt) < (self.cnt / 2)) {
 			pointparticles(particleeffectnum("retcheraoebig2"), self.origin, v_forward * -550, 3);
-			dprint("Playing particle retcheraoebig2\n");
 		}
 		else {
 			pointparticles(particleeffectnum("retcheraoebig1"), self.origin, v_forward * -550, 3);
-			dprint("Playing particle retcheraoebig1\n");
 		}
 	}
 	else {
@@ -315,9 +312,6 @@ void aoep_think() {
 }
 
 void aoe_spawn(entity e) {
-	dprint("aoe_spawn()\n");
-	dprint("e.classname = ", e.classname, "\n");
-
 	entity aoe = spawn();
 	aoe.wrathflags += FL_GARBAGE;
 	aoe.owner = e.owner;

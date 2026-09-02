@@ -37,7 +37,7 @@ void() ClientDisconnect = {
 void(string locsound, float rnd, float nchannel) playerwsound =
 {
 	float r;
-	float wvol = cvar ("weapons_fire_volume");
+	float wvol = cvar("weapons_fire_volume");
 	string monstersound, rsound;
 	r = floor(random() *rnd) + 1;
 	if (r == self.chattersnd)
@@ -93,20 +93,20 @@ void(string locsound, float rnd,float pitch) playersound7 = {
 };
 .float psound_cnt;
 
-void(string locsound, float rnd, float nchannel) playersound2 = { local float r;
-	local string monstersound, rsound;
 
-	r = floor(random() *rnd) + 1;
+void playersound2(string locsound, float rnd, float nchannel) {
+	float r = floor(random() * rnd) + 1;
 	if (r == self.psound_cnt)
 		r += 1;
 	if (r > rnd)
 		r = 1;
 
 	self.psound_cnt = r;
-	rsound = ftos(r);
-	monstersound = strcat(locsound, rsound, ".ogg");
+	string rsound = ftos(r);
+	string monstersound = strcat(locsound, rsound, ".ogg");
 	sound(self, nchannel, monstersound, 1, ATTN_NORM);
-};
+}
+
 
 void() delete_shrine =
 {
@@ -280,12 +280,6 @@ void() PlayerJump = {
 		self.velocity_z = 92;
 	else
 		self.velocity_z += 270;
-
-/*	if(!(self.walking))
-	{
-	makevectors2 (self.angles);
-	self.velocity += v_forward * 12;
-	}*/
 
 	self.onground_time = 0;
 };
@@ -593,7 +587,6 @@ void() UpdateViewOfs = {
 
 
 .float nowatershift;
-//float autocvar_invertmouse;// = 0;
 .float slowmouse;
 .float noshake;
 
@@ -710,8 +703,7 @@ void() autosave = {
 .vector shadowangle;
 
 
-void() PlayerPreThink =
-{
+void PlayerPreThink() {
 	self.shadowangle = normalize('1 0 0');
 	// Reki (May 9 2023): Fixed this anti-rj logic because it was bugged and a bit inflexible
 	if (self.flags & FL_ONGROUND && self.velocity_z < 200)
@@ -1393,16 +1385,13 @@ void() PlayerPreThink =
 		self.maceorigin = gettaginfo(self.vweapon, tagindex);
 		self.macesoultimer = time + 0.05;
 	}
-
-
 };
 
 .float jump_flag;	// player jump flag
 
 .float nomelee;
 .float checkweaponflag;
-void() nowater_type =
-{
+void nowater_type() {
 	self.waterlevel = 0;
 	self.fakewatertype = 0;
 	self.zerogtime = 0;
@@ -1719,7 +1708,7 @@ void ArtifactClientModel() {
 .float lungefree;
 
 .float time_sea_particles;
-void() PlayerPostThink = {
+void PlayerPostThink() {
 	// Reki: March 28, 2023
 	// replaced stuffcmds with .r_saturation stat
 	// added r_healthhaze for low hp
@@ -2030,10 +2019,9 @@ void() PlayerPostThink = {
 	//bprint (lmessage);
 };
 
-void() Check_FrikFile;
-
 string nextmap;
-void() monster_relocator = { local entity monster;
+void() monster_relocator = {
+	entity monster;
 
 	monster = nextent(world);
 	while (monster)
@@ -2172,11 +2160,11 @@ void(entity e) coffers_checkperfect // Reki (July 24 2023): check for coffer amo
 	}
 };
 
-void() loadlevel = { stuffcmd(self, "slowmo 1\n");//stuffcmd(self, "r_glsl_saturation 1\n");
+void() loadlevel = {
+	stuffcmd(self, "slowmo 1\n");
 	read_currentprofileslot();
 	stuffcmd(self, "set cvar_restoregame 1\n");
-	string cname;
-	cname = strcat("load data/profiles/", profilename, "/maps/", nextmap, "\n");
+	string cname = strcat("load data/profiles/", profilename, "/maps/", nextmap, "\n");
 	stuffcmd(self, cname);
 };
 
@@ -2187,7 +2175,7 @@ void(entity e) changelevel_wait = { e.changing_level = 1;
 	e.nextthink = time + 1.5;
 	e.think = changemap;
 };
-void() ParmstoFrik;
+
 void(entity e) loadlevel_wait = { e.changing_level = 1;
 	e.nextthink = time + 1.5;
 	e.think = loadlevel;
@@ -2500,13 +2488,6 @@ void() changelevel_touch = { if (self.wait > time)
 			other.playerflags -= FL_BLADEBLOOD;
 	}
 
-/*	if(invrtmsb)
-	stuffcmd(other, "m_pitch -0.001\n");
-	else
-	stuffcmd(other, "m_pitch 0\n");
-
-	stuffcmd(other, "m_yaw 0\n");
-*/
 	if (!self.location)
 		other.location = 0;
 	else
@@ -3113,7 +3094,6 @@ void() Apply_Lut =
 	if(self.displacement_time > time + 0.5)
 	{
 		localcmd("set cvar_otherdimension 1\n");
-		//stuffcmd(self, "v_flipped 1\n");
 		stuffcmd(self,"r_glsl_postprocess_color_lut gfx/lookup_artifact.png \n");
 			sound (self, CHAN_AUTO, "items/sigils/sigil_flight_start.ogg",1 ,1);
 		stuffcmd(self, "r_glsl_postprocess_uservec3_enable 1\n");

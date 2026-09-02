@@ -56,7 +56,7 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 					} break;
 			}
 
-			if (s) // if we still are using the string, bypass the command
+			if ((string)s != "") // if we still are using the string, bypass the command
 			{
 				s = (chara)substring((string)s, o + 1, strlen((string)s));
 			}

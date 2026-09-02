@@ -121,13 +121,13 @@ void EntUpdate_HudSync()
 	float sendflags = ReadByte();
 	if (sendflags & HUDSYNC::RELICS)
 	{
-		if (huds_relics)
+		if (huds_relics != "")
 			strunzone(huds_relics);
 		huds_relics = strzone(ReadString());
 	}
 	if (sendflags & HUDSYNC::KEYS)
 	{
-		if (huds_keys)
+		if (huds_keys != "")
 			strunzone(huds_keys);
 		huds_keys = strzone(ReadString());
 	}

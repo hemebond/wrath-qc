@@ -25,7 +25,8 @@
 .float magnetized;
 
 
-float() somecustomizefunction = { local entity pl;
+float() somecustomizefunction = {
+	entity pl;
 	pl = find(world, classname, "player");	//find the client
 	traceline(pl.origin + pl.view_ofs, self.origin, TRUE, other);
 	if (trace_fraction == 1)
@@ -84,6 +85,10 @@ void() release_retcher = { check_retcher_skin();
 };
 
 
+float PROJECTILE_RETCHER_GRAVITY = 2;
+float PROJECTILE_RETCHER_VEL = 1280;
+float PROJECTILE_RETCHER_VEL_Z = 288;
+
 void W_Fireretcher(float rtag) {
 	newmis = spawn();
 	newmis.owner = self;
@@ -104,11 +109,11 @@ void W_Fireretcher(float rtag) {
 	setorigin(newmis, tagorg);
 	setmodel(newmis, "models/projectiles/proj_cyst.md3");
 	newmis.classname = "spleetcyst";
-	newmis.velocity = normalize(cursor_trace_endpos_fixed(self) - newmis.origin) * retcher_proj_vel;
-	newmis.velocity_z += retcher_proj_velz;
+	newmis.velocity = normalize(cursor_trace_endpos_fixed(self) - newmis.origin) * PROJECTILE_RETCHER_VEL;
+	newmis.velocity_z += PROJECTILE_RETCHER_VEL_Z;
 	newmis.angles = vectoangles(newmis.velocity);
 	newmis.touch = cyst_touch;
-	newmis.gravity = retcher_proj_grav;
+	newmis.gravity = PROJECTILE_RETCHER_GRAVITY;
 	newmis.modelflags = 0;
 	newmis.colormod  = '2 2 2';
 	newmis.effects = EF_NOSHADOW;
@@ -129,7 +134,7 @@ void W_Fireretcher(float rtag) {
 	}
 
 	newmis.wrathflags += FL_PROJECTILE;
-	setsizeitem(newmis, retcher_proj_size);
+	setsize(newmis, '-4 -4 -4', '4 4 4');
 	if(cvar("cl_punch") == 1)
 		self.punchangle_x = -2;
 }
@@ -168,7 +173,8 @@ void wfire_retcher() {
 	self.nextthink = time + 0.05;
 };
 
-void() wsfire_retcher3 = { self.vweaponframe += 1;
+void() wsfire_retcher3 = {
+	self.vweaponframe += 1;
 	if (self.vweaponframe == 30)//28
 		self.vweaponskin = 1;
 	if ((self.vweaponframe == 31) && (self.ammo_retcher >= 1))//29

@@ -347,13 +347,13 @@ void MenuInit_LoadingScreen(void)
 		if (load_mapname != autocvar_scr_loadingscreen_mapname || virtualscreen_size != screen.size)
 		{
 			virtualscreen_size = screen.size;
-			if (load_mapname)
+			if (load_mapname != "")
 				strunzone(load_mapname);
 			load_mapname = strzone(autocvar_scr_loadingscreen_mapname);
 
 			string path = sprintf("gfx/splashes/%s/%s_16-9.tga", cvar_string("prvm_language"), load_mapname);
 			string path_generic = sprintf("gfx/splashes/%s_16-9.tga", load_mapname);
-			if (splash.image)
+			if (splash.image != "")
 				strunzone(splash.image);
 			splash.image = __NULL__;
 			float use_blank = FALSE;
@@ -1118,7 +1118,7 @@ uielement_c UI_Sliderbar(uielement_c own, vector org, vector anc, vector just, v
 		if (!this.bar_change)
 		{
 			uitext_c txt = (uitext_c)slider.partner;
-			if (txt.text)
+			if (txt.text != "")
 				strunzone(txt.text);
 			txt.text = strzone(sprintf("%.2f", this.bar_frac));
 		}
@@ -1402,11 +1402,11 @@ void MenuInit_Options_Controller(void)
 			cmd_name = controllerdiagram_validcontrols[i].name;
 		}
 
-		if (hint.text)
+		if (hint.text != "")
 			strunzone(hint.text);
 
 		hint.text = cmd;
-		if (cmd_name)
+		if (cmd_name != "")
 			hint.text = cmd_name;
 
 		hint.text = strzone(hint.text);
@@ -1475,7 +1475,7 @@ void MenuInit_Options_Controller(void)
 		value = bound(SLIDER_MIN, value, SLIDER_MAX);
 			
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%s", controller_presetnames[value]));
 		//cmd("set ", OPT_CVAR, " ", ftos(-value), "\n");
@@ -1495,7 +1495,7 @@ void MenuInit_Options_Controller(void)
 		value = bound(0, value, controller_presetnames.length - 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%s", controller_presetnames[value]));
 	};
@@ -1550,7 +1550,7 @@ void MenuInit_Options_Controller(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 			
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("seta ", OPT_CVAR, " ", ftos(-value), "\n");
@@ -1561,7 +1561,7 @@ void MenuInit_Options_Controller(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -1587,7 +1587,7 @@ void MenuInit_Options_Controller(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 			
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("seta ", OPT_CVAR, " ", ftos(-value), "\n");
@@ -1598,7 +1598,7 @@ void MenuInit_Options_Controller(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -1624,7 +1624,7 @@ void MenuInit_Options_Controller(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 			
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("seta ", OPT_CVAR, " ", ftos(value), "\n");
@@ -1635,7 +1635,7 @@ void MenuInit_Options_Controller(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -1708,7 +1708,7 @@ void MenuInit_Options_Mouse(void)
 		float msens = frac * SLIDER_MAX;
 		
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.1f", msens));
 		cmd("set ", OPT_CVAR, " ", ftos(msens), "\n");
@@ -1719,7 +1719,7 @@ void MenuInit_Options_Mouse(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.1f", msens));
 	};
@@ -1741,7 +1741,7 @@ void MenuInit_Options_Mouse(void)
 		float msens = frac * SLIDER_MAX;
 		
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", msens));
 		cmd("set ", OPT_CVAR, " ", ftos(msens), "\n");
@@ -1752,7 +1752,7 @@ void MenuInit_Options_Mouse(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", msens));
 	};
@@ -1881,7 +1881,7 @@ void(uielement_c this) bind_fixtext = {
 	uitext_c txt = (uitext_c)this.partner;
 	if (!txt)
 		return;
-	if (txt.text)
+	if (txt.text != "")
 		strunzone(txt.text);
 	txt.text = strzone(key_str);
 
@@ -2221,7 +2221,7 @@ void MenuInit_Options_Video(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -2232,7 +2232,7 @@ void MenuInit_Options_Video(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -2295,7 +2295,7 @@ void MenuInit_Options_Video(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -2306,7 +2306,7 @@ void MenuInit_Options_Video(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -2332,7 +2332,7 @@ void MenuInit_Options_Video(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -2343,7 +2343,7 @@ void MenuInit_Options_Video(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -2573,7 +2573,7 @@ void MenuInit_Options_Video(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.0f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -2584,7 +2584,7 @@ void MenuInit_Options_Video(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.0f", value));
 	};
@@ -2912,7 +2912,7 @@ void MenuInit_Options_Resolution(void)
 		flags_to_apply &= ~1;
 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		if (value == resolutions_amount)
 		{
@@ -2968,7 +2968,7 @@ void MenuInit_Options_Resolution(void)
 		this.bar_scrollamt = (1 / resolutions_amount);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		
 		if (value == resolutions_amount)
@@ -3070,7 +3070,7 @@ void MenuInit_Options_Resolution(void)
 	static uielement_c langbutton;
 	void(uielement_c this) option_reinit = {
 
-		if (language_to_apply)
+		if (language_to_apply != "")
 			strunzone(language_to_apply);
 		language_to_apply = strzone(cvar_string("prvm_language"));
 		language_current = LanguageDef_Find(language_to_apply);
@@ -3082,9 +3082,9 @@ void MenuInit_Options_Resolution(void)
 	}
 
 	static void(uitext_c langtxt_viewer, uitext_c langtxt_native, language_c langdef) lang_initname = {
-		if (langtxt_viewer.text)
+		if (langtxt_viewer.text != "")
 			strunzone(langtxt_viewer.text);
-		if (langtxt_native.text)
+		if (langtxt_native.text != "")
 			strunzone(langtxt_native.text);
 
 		langtxt_viewer.flags &= ~UIFLAG_HIDE;
@@ -3098,7 +3098,7 @@ void MenuInit_Options_Resolution(void)
 			if (!viewertxt) // try to use fallback if our native doesn't have a translation
 				viewertxt = LanguageDef_FindName(langdef, cvar_string("prvm_language_fallback"));
 			
-			if (viewertxt)
+			if (viewertxt != "")
 			{
 				//print(sprintf("\"%s\"\n", viewertxt));
 				langtxt_viewer.text = strzone(viewertxt);
@@ -3424,7 +3424,7 @@ void MenuInit_Options_Audio(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -3435,7 +3435,7 @@ void MenuInit_Options_Audio(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -3461,7 +3461,7 @@ void MenuInit_Options_Audio(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -3472,7 +3472,7 @@ void MenuInit_Options_Audio(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -3498,7 +3498,7 @@ void MenuInit_Options_Audio(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -3509,7 +3509,7 @@ void MenuInit_Options_Audio(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -3693,9 +3693,9 @@ void MenuInit_Options_Gameplay(void)
 	}
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons_left, anchor: '0.5 0', origin: '-64 0', justify: '1 0', size: '10 10', text: _("UI_CENTERWEAPON"), font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
 	uifill_c box = spawn(uifill_c, owner: txt, origin: '24 0', anchor: '1 0.5', justify: '0 0.5', size: '18 18', color: OPTIONS_TEXT_COLOR, flags: UIFLAG_CLICKABLE | UIFLAG_HIGHLIGHT);
-		box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
-		box.m_click = option_click;
-		box.preloop = option_preloop;
+	box.partner = spawn(uifill_c, owner: box, anchor: '0.5 0.5', justify: '0.5 0.5', size: '12 12', color: OPTIONS_HEADER_COLOR, alpha: 0.7);
+	box.m_click = option_click;
+	box.preloop = option_preloop;
 	#undef OPT_CVAR
 	#undef OPT_VAL
 	//
@@ -3932,7 +3932,7 @@ void MenuInit_Options_Gameplay(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.1f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -3943,7 +3943,7 @@ void MenuInit_Options_Gameplay(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.1f", value));
 	};
@@ -4128,7 +4128,7 @@ void MenuInit_LoadProfile(void)
 				prof_name = " ";
 			}
 			
-			if (slot.text)
+			if (slot.text != "")
 				strunzone(slot.text);
 			slot.text = strzone(prof_name);
 			if (prof_name && prof_name != " ")
@@ -4410,17 +4410,17 @@ void MenuInit_LoadProfile(void)
 			uitext_c time = page.partner;
 
 			// cleanup zoned strings
-			if (page.image)
+			if (page.image != "")
 			{
 				strunzone(page.image);
 				page.image = __NULL__;
 			}
-			if (date.text)
+			if (date.text != "")
 			{
 				strunzone(date.text);
 				date.text = __NULL__;
 			}
-			if (time.text)
+			if (time.text != "")
 			{
 				strunzone(time.text);
 				time.text = __NULL__;
@@ -4518,7 +4518,7 @@ void MenuInit_LoadProfile(void)
 		Run_Reinit_List(menu_deleteconfirm.reinit_list);
 
 		uitext_c msg = (uitext_c)menu_deleteconfirm.partner;
-		if (msg.text)
+		if (msg.text != "")
 			strunzone(msg.text);
 			msg.text = strzone(sprintf(_("UI_PROFILE"), profilename));
 	};
@@ -4615,7 +4615,7 @@ void MenuInit_CreateProfile()
 		}
 	};
 
-	float(uielement_c this, float nkey, float ascii, float released) option_input = {
+	float option_input(uielement_c this, float nkey, float ascii, float released) {
 		uifill_c box = (uifill_c)this.partner;
 		uitext_c txt = (uitext_c)box.partner;
 		if (nkey == K_ESCAPE)
@@ -4640,7 +4640,7 @@ void MenuInit_CreateProfile()
 			{
 				if (nkey == K_BACKSPACE)
 				{
-					string str = strcat(txt.text);
+					string str = txt.text;
 					if (strlen(str) <= 0)
 						return;
 					
@@ -4654,9 +4654,7 @@ void MenuInit_CreateProfile()
 				{
 					if (strlen(txt.text) < 16)
 					{
-						string str = strcat(txt.text);
-
-						strunzone(txt.text);
+						string str = txt.text;
 						str = strcat(str, chr2str(ascii));
 						txt.text = strzone(str);
 					}
@@ -4693,34 +4691,6 @@ void MenuInit_CreateProfile()
 				}
 				
 				// Reki (February 2 2024): fgsfds...
-				#if 0
-				float f = fopen("profiles/profilenames.txt", FILE_READ);
-				if (f < 0)
-					return;
-				
-				float lnnum;
-				string ln;
-				do {
-					ln = fgets(f);
-					if (strtolower(ln) == strtolower(txt.text))
-					{
-						warningdup.flags &= ~UIFLAG_HIDE;
-						accept.flags |= UIFLAG_HIDE;
-						fclose(f);
-						return;
-					}
-					if (ln != "")
-						lnnum++;
-				} while(ln);
-
-				if (lnnum >= menu_loadprofile_slots.length)
-				{
-					warningamt.flags &= ~UIFLAG_HIDE;
-					accept.flags |= UIFLAG_HIDE;
-				}
-
-				fclose(f);
-				#else
 				float sb = search_begin("data/profiles/*/menu.version", TRUE, TRUE);
 				if (sb >= 0)
 				{
@@ -4739,8 +4709,6 @@ void MenuInit_CreateProfile()
 
 					search_end(sb);
 				}
-				#endif
-				//
 			}
 		}
 
@@ -4811,7 +4779,7 @@ void MenuInit_CreateProfile()
 		uifill_c box = (uifill_c)menu_createprofile.partner;
 		uitext_c txt = (uitext_c)box.partner;
 		
-		profilename = strzone(strcat(txt.text));
+		profilename = txt.text;
 		float f = fopen(sprintf("profiles/%s.frk", profilename), FILE_WRITE);	//open what file to use in write mode
 		if (f < 0)
 			return;
@@ -4823,8 +4791,6 @@ void MenuInit_CreateProfile()
 		cmd("set infinite_saves 0\n");
 		menu_current = menu_createprofile_difficulty;
 		Run_Reinit_List(menu_createprofile_difficulty);
-		//write_currentprofileslotfirsttime();
-		//write_menuversion();
 	};
 
 	uitext_c txt = spawn(uitext_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '16 16', text: _("UI_ACCEPT"), font: FONT_MENU,
@@ -4904,7 +4870,7 @@ void MenuInit_CreateProfile_Difficulty()
 		float f = fopen("statistics/gamecomplete", FILE_READ);
 		if (f >= 0) {
 			string str;
-			while((str = fgets(f)))
+			while((str = fgets(f)) != "")
 			{
 				float argc = tokenizebyseparator(str, ",");
 				if (argc >= 2)

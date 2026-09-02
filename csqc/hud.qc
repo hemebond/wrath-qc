@@ -33,7 +33,7 @@ void() write_tether = { read_currentprofileslot();
 	fputs(writeparms, writethis);	//line 1
 	fputs(writeparms, "\n");	//and again
 	fclose(writeparms);
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 };
 
@@ -52,7 +52,7 @@ void() check_tether = { read_currentprofileslot();
 	//tetherp = floor(getstatf(STAT_TETHER));
 	//if (tetherp <= 0)
 	//	tether = 0;
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 };
 float shrine_user;
@@ -65,7 +65,7 @@ void() check_shrine_user = { read_currentprofileslot();
 	readtext = fgets(readparms);	//read the text
 	shrine_user = stof(readtext);
 	fclose(readparms);
-	if (profilename)
+	if (profilename != "")
 		strunzone(profilename);
 };
 float mm2;
@@ -537,7 +537,7 @@ void HUD_InitializeUI(void)
 		uipicture_c enemy = (uipicture_c)this.partner3;
 
 		float crosshair_show = floor(getstatf(STAT_CROSSHAIR));
-		float crosshair_scale = cvar("saved8");
+		crosshair_scale = cvar("saved8");
 		this.size = '32 32' * crosshair_scale;
 
 		base.alpha = 1;

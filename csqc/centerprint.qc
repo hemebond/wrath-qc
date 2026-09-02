@@ -22,7 +22,7 @@ void HUD_InitializeCenterprint(void)
 			this.health = 0;
 			while(lst) // clear text
 			{
-				if (lst.text)
+				if (lst.text != "")
 					strunzone(lst.text);
 				lst.text = 0;
 				lst.flags |= UIFLAG_HIDE;
@@ -61,7 +61,7 @@ void centerprint(string s)
 	uitext_c txt = (uitext_c)centerprint_list.partner;
 	for(i = 0; i < min(argc, CENTERPRINT_MAXLINES); i++, txt = (uitext_c)txt.partner)
 	{
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		
 		string sub_s = argv(i);
@@ -85,7 +85,7 @@ void centerprint(string s)
 
 			sub_s = strcat(s1, s2);
 			uipicture_c glyph = (uipicture_c)(txt.glpyhlist[k]);
-			if (glyph.image)
+			if (glyph.image != "")
 				strunzone(glyph.image);
 
 			glyph.flags &= ~UIFLAG_HIDE;
@@ -109,7 +109,7 @@ void centerprint(string s)
 	// clean up any remaining lines
 	for(; i < CENTERPRINT_MAXLINES; i++, txt = (uitext_c)txt.partner)
 	{
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = 0;
 		txt.flags |= UIFLAG_HIDE;

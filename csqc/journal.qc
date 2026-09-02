@@ -788,7 +788,7 @@ journalentry_c Journal_ParseEntry(string path)
 	do {
 		strtemp = fgets(file);
 		strbody = strcat(strbody, strtemp);
-	} while (strtemp);
+	} while (strtemp != "");
 	
 	// define inital state
 	float 	txt_font = 7;
@@ -800,7 +800,7 @@ journalentry_c Journal_ParseEntry(string path)
 	journalentry_c jentry = spawn(journalentry_c);
 	
 	// loop through our text and 
-	while (strbody)
+	while (strbody != "")
 	{
 		// search for tags or line breaks
 		float ofs_lb = strstrofs(strbody, "\\n", 0);
@@ -869,12 +869,14 @@ journalentry_c Journal_ParseEntry(string path)
 		dprint(sprintf("%s: TAG=%s, VALUE=%s\n", __func__, tag, value));
 		if (tag == "TITLE")
 		{
-			if (jentry.title) strunzone(jentry.title);
+			if (jentry.title != "")
+				strunzone(jentry.title);
 			jentry.title = strzone(value);
 		}
 		if (tag == "MSGIMG")
 		{
-			if (jentry.titleimg) strunzone(jentry.msgimg);
+			if (jentry.titleimg != "")
+				strunzone(jentry.msgimg);
 			jentry.msgimg = strzone(value);
 		}
 		else if (tag == "NOTEINDEX") // index (bit flag that corresponds to this note)

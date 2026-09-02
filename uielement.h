@@ -359,9 +359,9 @@ class uipicture_c : uielement_c
 	// constructor
 	nonvirtual void() uipicture_c {
 		type = UITYPE_PICTURE;
-		if (image)
+		if (image != "")
 			precache_pic(image);
-		if (image2)
+		if (image2 != "")
 			precache_pic(image2);
 	};
 
@@ -626,7 +626,7 @@ class uiglyph_c : uipicture_c
 				code = ftos(keynum);
 			}
 
-			if (image)
+			if (image != "")
 				strunzone(image);
 
 			image = strzone(Controller_GetGlyph(code));
@@ -700,9 +700,9 @@ class uispritesheet_c : uielement_c
 	// constructor
 	nonvirtual void() uispritesheet_c {
 		type = UITYPE_PICTURE;
-		if (image)
+		if (image != "")
 			precache_pic(image);
-		if (image2)
+		if (image2 != "")
 			precache_pic(image2);
 	};
 

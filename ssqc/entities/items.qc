@@ -1,8 +1,48 @@
 .float timer_item_cnt;
 .float old_cnt;
 .float old_item_cnt;
-
 .float oldcnt;
+
+
+// artifact_nsize = '-12 -12 -44' 	// artifact_nsize;
+// artifact_size = '12 12 0' 		// artifact_size;
+// dark_helm_nsize = '-16 -16 -8'	// dark_helm_nsize;
+// dark_helm_size = '16 16 8'		// dark_helm_size;
+// dark_armor_nsize = '-16 -16 -8'	// dark_armor_nsize;
+// dark_armor_size = '16 16 20'		// dark_armor_size;
+// dark_shard_nsize = '-16 -16 -8' 	// dark_shard_nsize;
+// dark_shard_size = '16 16 2' 		// dark_shard_size;
+// helm_nsize = '-16 -16 -8' 	// helm_nsize;
+// helm_size = '16 16 8' 		// helm_size;
+// armor_nsize = '-16 -16 -8' 	// armor_nsize;
+// armor_size = '16 16 20' 		// armor_size;
+// shard_nsize = '-16 -16 -8' 	// shard_nsize;
+// shard_size = '16 16 2' 		// shard_size;
+// heart_size = '12 12 2' 		// heart_size;
+// chalice_size = '16 16 24' 		// chalice_size;
+// vial_size = '16 16 16'			// vial_size;
+// beaker_size = '16 16 20' 		// beaker_size;
+// resin_size = '16 16 9' 		// fangs_size;
+// resinl_size = '12 12 12' 		// wtf_size;
+// ore_size = '16 16 11' 		// ore_size;
+// orel_size = '16 16 9' 		// orel_size;
+// explosives_size = '16 16 8' 		// cysts_size;
+// explosivesl_size = '16 16 8' 		// cysts_size;
+// shells_size = '16 16 6' 		// shells_size;
+// shellsl_size = '16 16 6' 		// slugs_size;
+// slag_nsize = '-12 -12 -24' 	// slag_nsize;
+// slag_size = '12 12 8' 		// slag_size;
+// spitter_nsize = '-12 -12 -24' 	// spitter_nsize;
+// spitter_size = '12 12 8'		// spitter_size;
+// retcher_nsize = '-12 -12 -24' 	// retcher_nsize;
+// retcher_size = '12 12 8'  		// retcher_size;
+// coach_nsize = '-12 -12 -24' 	// coach_nsize;
+// coach_size = '12 12 8' 		// coach_size;
+// coffer_key_nsize = '-12 -12 -48' 	// coffer_key_nsize;
+// coffer_key_size = '12 12 0' 		// coffer_key_size;
+// retcher_proj_size = '4 4 4'         // retcher_projectile_size;
+// shells_size_invader = '12 12 8' 		// invader_pickup_size;
+
 
 float (string lightstyle_character, float ammountl) glowmodstylevalue =
 {

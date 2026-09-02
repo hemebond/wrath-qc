@@ -91,6 +91,7 @@ entities/func/bobbing.qc
 entities/func/plat.qc
 entities/func/weather.qc
 entities/func/pendulum.qc
+entities/misc/cyst.qc
 entities/jumpad.qc
 entities/portal.qc
 ../orrey.qc

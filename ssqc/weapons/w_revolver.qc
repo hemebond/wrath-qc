@@ -3,6 +3,19 @@
 .float oldrevolverclip;
 .float sfcg;
 
+// self.revolver_damage1 = 60				//	damage mutiplier fire1 (1 projectile 200 DPS )
+// self.revolver_damage1_mp = 25				//	damage mutiplier fire1 (1 projectile 83 DPS )MULTIPLAYER
+// self.revolver_damage2 = 50				//	damage multiplier fire2 (3 projectiles, 300 DPS)
+// self.revolver_damage2_mp = 20				//	damage multiplier fire2 (3 projectiles, 120 DPS)MULTIPLAYER
+// self.revolver_time1 = 0.3				//	time fire 1
+// self.revolver_time2 = 0.5				//	time fire 2
+// self.revolver_spread1 = 0.1	 			//	revolver spread fire 1
+// self.revolver_spread2 = .1				//	revolver spread fire 2
+// self.cgvweapon_scale = 0				//	scale
+// coachbbox = '2 2 2' 		//	bbox for tracebox (positive values)
+// coach_proj_vel = 3072			//	projectile vel
+
+
 void() idle_revolver =
 {
 	if (self.playerdeadtime > time)
@@ -44,33 +57,33 @@ void wsfire_revolver1() {
 		vector tagorg;
 		if (self.ammo_revolver == 1) {
 			tagorg = tag_origin("tag_proja",self.vweapon);
-			launch_projectile_revolver (tagorg, dir, 1,self);
+			launch_projectile_revolver(tagorg, dir, 1, self);
 			self.ammo_revolver -= 1;
 		}
 
 		if (self.ammo_revolver == 2) {
 			tagorg = tag_origin("tag_proja",self.vweapon);
-			launch_projectile_revolver (tagorg, dir, 1,self);
+			launch_projectile_revolver(tagorg, dir, 1, self);
 			tagorg = tag_origin("tag_projb",self.vweapon);
-			launch_projectile_revolver (tagorg, dir, 2,self);
+			launch_projectile_revolver(tagorg, dir, 2, self);
 			self.ammo_revolver -= 2;
 		}
 
 		if (self.ammo_revolver > 2) {
 			tagorg = tag_origin("tag_proja",self.vweapon);
-			launch_projectile_revolver (tagorg, dir, 1,self);
+			launch_projectile_revolver(tagorg, dir, 1, self);
 			tagorg = tag_origin("tag_projb",self.vweapon);
-			launch_projectile_revolver (tagorg, dir, 2,self);
+			launch_projectile_revolver(tagorg, dir, 2, self);
 			tagorg = tag_origin("tag_projc",self.vweapon);
-			launch_projectile_revolver (tagorg, dir, 3,self);
+			launch_projectile_revolver(tagorg, dir, 3, self);
 			self.ammo_revolver -= 3;
 		}
 
 		self.effects += EF_MUZZLEFLASH;
-		string muzzlemodel = "models/weapons/revolver/flash_big.md3";
+
 		entity muzzle = spawn();
 		muzzle.owner = self;
-		setmodel (muzzle, muzzlemodel);
+		setmodel(muzzle, "models/weapons/revolver/flash_big.md3");
 		muzzle.viewmodelforclient = self;
 		setattachment(muzzle,self.vweapon,"tag_muzzle2");
 		muzzle.angles_z = random() * 360;
@@ -122,7 +135,7 @@ void() wfire_revolver1 = {
 	self.nextthink = time + 0.05;
 }
 
-
+float REVOLVER_SPREAD1 = 0.1;
 void wfire_revolver() {
 	self.vweaponglowmod = '0.5 0.5 0.5';
 	self.vweaponframe = 2;
@@ -135,7 +148,7 @@ void wfire_revolver() {
 	float wvol = cvar ("weapons_fire_volume");
 	sound(self, CHAN_WEAPON, snd, wvol, ATTN_NORM);
 
-	float active_punchangle = cvar ("cl_punch");
+	float active_punchangle = cvar("cl_punch");
 	if(active_punchangle == 1)
 		self.punchangle_x = -2;
 
@@ -144,7 +157,7 @@ void wfire_revolver() {
 	Controller_RumbleTriggers(self, 0.3, 0, 50);
 
 	vector dir = aim(self, 100000);
-	FireBullets(1, dir, '0.01 0.02 0', self.revolver_damage1, self.revolver_spread1);
+	FireBullets(1, dir, '0.01 0.02 0', 60, REVOLVER_SPREAD1);
 	self.effects += EF_MUZZLEFLASH;
 	self.ammo_revolver -= 1;
 
@@ -233,3 +246,45 @@ void() lower_revolver = {
 	self.vweaponstate = 2;
 	self.nextthink = time + 0.025;
 };
+
+
+float REVOLVER_SPREAD2 = 0.1;
+void launch_projectile_revolver(vector org, vector dir, float order, entity ownerproj) {
+	client_shot_collector(ownerproj);
+
+	entity shotgun_proj;
+	shotgun_proj = spawn ();
+	shotgun_proj.owner = ownerproj;
+	shotgun_proj.movetype = MOVETYPE_BOUNCEMISSILE;
+	shotgun_proj.solid = SOLID_BBOX;
+	shotgun_proj.count = 3;
+	shotgun_proj.angles = vectoangles(dir);
+	shotgun_proj.touch = shotgun_proj_touch;
+	shotgun_proj.alreadytoucher = order;// counter of touchs
+	shotgun_proj.classname = "projectile_shot";
+	shotgun_proj.lifetime = time + 5;
+	shotgun_proj.think = shot_projectile_think;
+	shotgun_proj.nextthink = time;
+	shotgun_proj.clipgroup = 2;
+	shotgun_proj.wrathflags += FL_PROJECTILE;
+	setmodel (shotgun_proj, "models/projectiles/proj_shrapnel.md3");
+	setsize (shotgun_proj, '0 0 0', '0 0 0');
+
+	if(ownerproj.classname == "player")
+		makevectors(ownerproj.v_angle);
+	else
+		makevectors(ownerproj.angles);
+
+	setorigin (shotgun_proj, org);
+
+	// Apply spread
+	vector rvec = '0 0 0';
+	rvec_x = REVOLVER_SPREAD2 * 0.25;
+	rvec_y = REVOLVER_SPREAD2 * 0.25;
+	rvec = crandom() * rvec_x * v_right + crandom() * rvec_y * v_up;
+
+	dir += rvec;
+	shotgun_proj.velocity = dir * (coach_proj_vel + (25 * order));
+	shotgun_proj.oldvelocity = shotgun_proj.velocity;
+	shotgun_proj.nspeed = coach_proj_vel + (25 * order);
+}

@@ -158,12 +158,12 @@ void CSQC_Init(void)
 	if (!csprogname)
 		csprogname = "csprogs";
 	
-	if (cvar_string("prvm_language"))
+	if (cvar_string("prvm_language") != "")
 	{
 		Localization_LoadFile(csprogname, cvar_string("prvm_language"));
 		Localization_LoadFile("common", cvar_string("prvm_language"));
 	}
-	if (cvar_string("prvm_language_fallback"))
+	if (cvar_string("prvm_language_fallback") != "")
 	{
 		Localization_LoadFile(csprogname, cvar_string("prvm_language_fallback"));
 		Localization_LoadFile("common", cvar_string("prvm_language_fallback"));
@@ -767,9 +767,9 @@ float CSQC_Parse_TempEntity()
 						continue;
 
 					line.frame++;
-					if (cnt.text)
+					if (cnt.text != "")
 						strunzone(cnt.text);
-					if (cntimg.image)
+					if (cntimg.image != "")
 						strunzone(cntimg.image);
 					
 					cnt.text = strzone(sprintf("x%g", line.frame));

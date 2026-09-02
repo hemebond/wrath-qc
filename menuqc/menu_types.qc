@@ -106,7 +106,7 @@ void() confirm_profile = { check_profileslot();
 		pausesound = 0;
 	}
 
-	if (gah)
+	if (gah != "")
 		strunzone(gah);
 	gah = "";
 	write_currentprofileslotfirsttime();

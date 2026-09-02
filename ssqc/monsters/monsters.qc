@@ -1,3 +1,5 @@
+float SF_MONSTER_AMBUSH = 1;
+
 void() monster_use = { if (self.enemy)
 		return;
 	if (self.health <= 0)
@@ -10,7 +12,8 @@ void() monster_use = { if (self.enemy)
 	self.nextthink = time + 0.1;
 	self.think = FoundTarget;
 };
-void() afflicted_runb1;
+
+
 void() monster_death_use = { if (self.flags &FL_FLY)
 		self.flags = self.flags - FL_FLY;
 	if (self.flags &FL_SWIM)
@@ -35,10 +38,10 @@ void() monster_death_use = { if (self.flags &FL_FLY)
 	}
 
 };
+
+
 .float nodroptofloor;
 .float spawned;
-void()fallen_rise2;
-
 
 
 void() walkmonster_start_go = { self.origin_z = self.origin_z + 1;	// raise off floor a bit
@@ -319,7 +322,8 @@ void() warped_go = { self.flags = self.flags | FL_MONSTER;
 		self.warped = 0;
 	}
 };
-void(entity e) spawn_emitters;
+
+
 void() walkmonster_start = 
 {	
 	// delay drop to floor to make sure all doors have been spawned
@@ -400,7 +404,7 @@ void() warpedfly_go = { self.flags = self.flags | FL_MONSTER;
 	if(!self.warpframe)
 	{
 		entity color_controller = spawn();
-		setmodel	 (color_controller,"");
+		setmodel(color_controller,"");
 		color_controller.warpframe = 1;
 		color_controller.owner = self;
 		color_controller.colormod = self.colormod;
@@ -464,8 +468,8 @@ void() flymonster_start = {	// spread think times so they don't all happen at sa
 	//indicator(self);
 };
 
-void() swimmonster_start_go = { if (deathmatch)
-	{
+void() swimmonster_start_go = {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
@@ -478,10 +482,8 @@ void() swimmonster_start_go = { if (deathmatch)
 	self.use = monster_use;
 	self.flags = self.flags | FL_MONSTER;
 	self.flags = self.flags | FL_FLY ;
-	//self.flags += 16384;
 	force_retouch = 2;
-	if (self.target != string_null)
-	{
+	if (self.target != "") {
 		self.goalentity = self.movetarget = find(world, targetname, self.target);
 		if (!self.movetarget)
 		{
@@ -494,8 +496,7 @@ void() swimmonster_start_go = { if (deathmatch)
 		self.ideal_yaw = vectoyaw(self.goalentity.origin - self.origin);
 		self.th_walk();
 	}
-	else
-	{
+	else {
 		self.pausetime = 99999999;
 		self.th_stand();
 	}
@@ -510,5 +511,3 @@ void() swimmonster_start = {	// spread think times so they don't all happen at s
 	self.max_health = self.health;
 	self.think = swimmonster_start_go;
 };
-
-////////////////end of qc file

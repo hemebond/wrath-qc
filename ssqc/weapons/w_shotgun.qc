@@ -2,8 +2,6 @@
 .float noshells;
 .float oldshotgunclip;
 .float sfcg;
-void() check_shotgun;
-void() idle_shotgun;
 
 .float empty_shells;
 float scattershot_kills;
@@ -18,8 +16,7 @@ void() idle_shotgun = { if (self.playerdeadtime > time)
 		self.realoding = 0;
 	if (self.sfcg)
 		self.sfcg = 0;
-	//if((self.vweaponglowmod_x != -0.1)&& (!self.button3))
-	//self.vweaponglowmod = '-0.1 -0.1 -0.1';
+
 	if (self.timezoom > time)
 		self.timezoom = 0;
 
@@ -38,7 +35,6 @@ void() idle_shotgun = { if (self.playerdeadtime > time)
 	self.nextthink = time + 0.1;
 };
 
-vector() wall_velocity;
 .float oldspeed;
 .float nspeed;
 .float checkspeedtime;
@@ -356,69 +352,10 @@ void dripper_fix_angle() {
 }
 
 
-void launch_projectile_revolver(vector org, vector dir, float order, entity ownerproj) {
-	client_shot_collector(ownerproj);
-
-	entity shotgun_proj;
-	shotgun_proj = spawn ();
-	shotgun_proj.owner = ownerproj;
-	shotgun_proj.movetype = MOVETYPE_BOUNCEMISSILE;
-	shotgun_proj.solid = SOLID_BBOX;
-	shotgun_proj.count = 3;
-	shotgun_proj.angles = vectoangles(dir);
-	shotgun_proj.touch = shotgun_proj_touch;
-	shotgun_proj.alreadytoucher = order;// counter of touchs
-	shotgun_proj.classname = "projectile_shot";
-	shotgun_proj.lifetime = time + 5;
-	shotgun_proj.think = shot_projectile_think;
-	shotgun_proj.nextthink = time;
-	shotgun_proj.clipgroup = 2;
-	shotgun_proj.wrathflags += FL_PROJECTILE;
-	setmodel (shotgun_proj, "models/projectiles/proj_shrapnel.md3");
-	setsize (shotgun_proj, '0 0 0', '0 0 0');
-
-	if(ownerproj.classname == "player")
-		makevectors(ownerproj.v_angle);
-	else
-		makevectors(ownerproj.angles);
-
-	setorigin (shotgun_proj, org);
-
-	vector rvec = '0 0 0';
-	rvec_x = ownerproj.revolver_spread2 * 0.25;
-	rvec_y = ownerproj.revolver_spread2 * 0.25;
-	rvec = crandom() * rvec_x * v_right + crandom() * rvec_y * v_up;
-
-	dir += rvec;
-	shotgun_proj.velocity = dir * (coach_proj_vel + (25 * order));
-	shotgun_proj.oldvelocity = shotgun_proj.velocity;
-	shotgun_proj.nspeed = coach_proj_vel + (25 * order);
-}
-
-
 void(vector org, vector dir, float order, entity ownerproj) launch_projectile =
 {
-	local entity shotgun_proj;
-	//shot_water_dripper(org -'0 0 4', dir, self);
+	entity shotgun_proj;
 
-	/*
-	if(!(ownerproj.waterlevel >= 2))
-	{
-		entity dripper = spawn();
-		dripper.origin = org;
-		dripper.movetype = MOVETYPE_WALK;
-		dripper.solid = SOLID_TRIGGER;
-		setsize(dripper,'-1 -1 -1','1 1 1');
-		dripper.classname = "dripper";
-		dripper.owner = ownerproj;
-		setmodel(dripper,"");
-		dripper.velocity = dir *( 3450);
-		dripper.touch = dripper_touch;
-		dripper.angles = vectoangles(dripper.velocity);
-		dripper.think = dripper_fix_angle;
-		dripper.nextthink = time + 0.05;
-	}
-	*/
 	shotgun_proj = spawn();
 	shotgun_proj.owner = ownerproj;
 	shotgun_proj.movetype = MOVETYPE_BOUNCEMISSILE;
@@ -441,7 +378,7 @@ void(vector org, vector dir, float order, entity ownerproj) launch_projectile =
 		makevectors(ownerproj.v_angle);
 	else
 		makevectors(ownerproj.angles);
-	//org -=v_forward*order ;
+
 	setorigin(shotgun_proj, org);
 	local vector rvec;
 	rvec_x += ownerproj.shotgun_spread1;
@@ -631,36 +568,6 @@ void() wfire_shotgunempty1 = {
 	self.empty_shells = 1;
 	self.vweaponframe += 1;
 	self.shotgun_fire1 = 1;
-	if (self.vweaponframe == 113 + centered_frames)
-	{
-		#if 0
-		local vector dir;
-		self.vweaponglowmod = '0.9 0.9 0.9';
-		makevectors(self.v_angle);
-		float wvol = cvar ("weapons_fire_volume");
-		sound(self, CHAN_AUTO, "weapons/shotgun/firetoempty.ogg", wvol, ATTN_NORM);
-		dir = aim(self, 100000);
-		FireBullets(self.buckshot_count, dir, '0.3 0.3 0', self.shotgun_damage1, self.shotgun_spread1);
-		self.effects += EF_MUZZLEFLASH;
-		float active_punchangle = cvar ("cl_punch");
-		if(active_punchangle == 1)
-			self.punchangle_x = -5;
-		self.ammo_shotgun -= 2;
-		//muzzle_shotgun(self.vweapon, 1);
-		local entity muzzle;
-		local string muzzlemodel;
-		muzzlemodel = "models/weapons/shotgun/flash_small.md3";
-		muzzle = spawn();
-		muzzle.owner = self;
-		muzzle.scale = 2;
-		setmodel(muzzle, muzzlemodel);
-		muzzle.viewmodelforclient = self;
-		setattachment(muzzle, self.vweapon, "tag_muzzle");
-		muzzle.angles_z = random() *360;
-		muzzle.think = SUB_Remove;
-		muzzle.nextthink = time + 0.05;
-		#endif
-	}
 
 	if ((self.vweaponframe > 114 + centered_frames) && (self.vweaponglowmod_x > 0))
 	{
@@ -670,9 +577,6 @@ void() wfire_shotgunempty1 = {
 		self.vweaponglowmod_y -= 0.1;
 		self.vweaponglowmod_z -= 0.1;
 	}
-
-	//		if(self.vweaponframe == 123)
-	//		sound(self,CHAN_WEAPON,"misc/null.wav",1,1);
 
 	if (self.vweaponframe >= 130 + centered_frames)
 	{
@@ -803,9 +707,6 @@ void() wsfire_shotgunempty1 = { self.empty_shells = 1;
 
 	if (self.vweaponframe == 116 + centered_frames)
 		self.timezoom = time + self.shotgun_time1 / 2;
-
-	//	if(self.vweaponframe == 123)
-	//		sound(self,CHAN_WEAPON,"misc/null.wav",1,1);
 
 	if (self.vweaponframe == 130+ centered_frames)
 	{
@@ -1183,9 +1084,7 @@ void() empty_reload_shotgun = { sound(self, CHAN_AUTO, "weapons/shotgun/emptytor
 }
 
 void() raise_shotgun2 = {
-
-	//if (self.vweaponframe == 103)
-		W_SetWeapon();
+	W_SetWeapon();
 	self.vweaponframe += 1;
 	if (self.vweaponframe >= 106)
 	{
@@ -1234,6 +1133,3 @@ void() lower_shotgun = { self.shotgun_fire1 = 0;
 	self.vweaponstate = 2;
 	self.nextthink = time + 0.025;
 };
-
-///////////////////////////////////end of qc file
-///////////////////////////////////end of qc file

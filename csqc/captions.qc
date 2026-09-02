@@ -83,7 +83,7 @@ void HUD_InitializeCaptions(void)
 		{
 			uitext_c line = caption_lines[i];
 			uifill_c backdrop = (uifill_c)line.partner;
-			if (line.text)
+			if (line.text != "")
 				strunzone(line.text);
 			line.text = 0;
 			backdrop.flags |= UIFLAG_HIDE;

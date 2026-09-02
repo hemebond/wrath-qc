@@ -118,7 +118,7 @@ void Localization_LoadFile(string path, string lang)
 		}
 		else if (firstsix == "msgstr")
 		{
-			if (loc_currenttag)
+			if (loc_currenttag != "")
 			{
 				Localization_AddToTable(loc_currenttag, body);
 			}
@@ -132,7 +132,7 @@ void Localization_LoadFile(string path, string lang)
 			for(i = 0; i < 20; i++)
 			{
 				txt = fgets(f);
-				if (txt)
+				if (txt != "")
 					break;
 			}
 			if (i == 20)
@@ -169,7 +169,7 @@ string Localization_FindFile(string path, optional float primaryonly = FALSE)
 string strcontrols(string strbody, float hint_glyphs)
 {
 	string final = "";
-	while (strbody)
+	while (strbody != "")
 	{
 		float ofs_tag = strstrofs(strbody, "@", 0);
 		if (ofs_tag < 0) // we don't have any more tags
@@ -237,7 +237,7 @@ string strcontrols(string strbody, float hint_glyphs)
 string strlocalize_full(string strbody, float hint_glyphs)
 {
 	string final = "";
-	while (strbody)
+	while (strbody != "")
 	{
 		float ofs_tag = strstrofs(strbody, "$", 0);
 		if (ofs_tag < 0) // we don't have any more tags
@@ -285,9 +285,9 @@ void TempEnt_Localization_Files(void)
 {
 	for(string line = ReadString(); line != "eof"; line = ReadString())
 	{
-		if (cvar_string("prvm_language"))
+		if (cvar_string("prvm_language") != "")
 			Localization_LoadFile(line, cvar_string("prvm_language"));
-		if (cvar_string("prvm_language_fallback"))
+		if (cvar_string("prvm_language_fallback") != "")
 			Localization_LoadFile(line, cvar_string("prvm_language_fallback"));
 	}
 }
@@ -441,7 +441,6 @@ void LanguageDef_LoadFile(string lcode)
 		k = 16; // we found a good line, reset!
 
 		float fsz = 20;
-		uielement_c block;
 		if (s[0] == "<") // we have a special statement
 		{
 			float o = strstrofs((string)s, ">", 0);
@@ -490,7 +489,7 @@ void LanguageDef_LoadFile(string lcode)
 
 					if (langcode == langdef.lang) // native name!
 					{
-						if (langdef.nativename)
+						if (langdef.nativename != "")
 							strunzone(langdef.nativename);
 						langdef.nativename = strzone((string)s);
 						dprint(sprintf("^3      ^ native name found (%s)\n", langdef.lang));
@@ -504,7 +503,7 @@ void LanguageDef_LoadFile(string lcode)
 	// register menu font (for language selection)
 	langdef.fontcode = FONT_MENU;
 	string menufontfile = LanguageDef_FindFont(langdef, LANGFONT_MAINMENU);
-	if (menufontfile)
+	if (menufontfile != "")
 	{
 		langdef.fontcode = loadfont(langdef.lang, menufontfile, fontsizes[LANGFONT_MAINMENU], -1, fontscales[LANGFONT_MAINMENU], 0);
 	}
