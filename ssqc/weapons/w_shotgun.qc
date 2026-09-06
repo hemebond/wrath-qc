@@ -1,3 +1,30 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/shotgun/w_shotgun.md3"})
+= weapon_shotgun : "Shotgun" []
+*/
+
+void() weapon_shotgun =
+{
+	self.items = IT_SHOTGUN;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/shotgun/w_shotgun.md3");
+	self.ammo_shotgun = 2;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.rwpn = 1;
+	precache_sound(self.noise);
+	self.touch = wammo_touch;
+	self.msg = 91;
+	self.msg_icon = "shotgun";
+	self.msg_text = "$NOTIFY_WEP_SHOTGUN";
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+};
+
 .float oldammo_shotgun;
 .float noshells;
 .float oldshotgunclip;

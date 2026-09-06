@@ -70,6 +70,16 @@ void() func_bob_find =
 	self.think = SUB_Null;
 };
 
+
+/*FGD
+@SolidClass = func_bob : "Moves back and forth between the two targets" [
+	count(float) : "Count" : "2" : "Easing factor"
+	distancetotarget(float) : "Distance to Target" : "128"
+	speed(float) : "Bob Cycle Time" : "512" : "amount of time in seconds for one complete oscillation cycle."
+	target(target_destination) : "Target 1"
+	target2(target_destination) : "Target 2"
+]
+*/
 void() func_bob =
 {
 	if(!self.speed)

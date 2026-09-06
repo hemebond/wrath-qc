@@ -39,7 +39,8 @@ void() write_tether = { read_currentprofileslot();
 
 
  
-void() check_tether = { read_currentprofileslot();
+void check_tether() {
+	read_currentprofileslot();
 	local string campaignloc;
 	campaignloc = strcat("profiles/", profilename, "/tether.txt");
 	local float readparms;
@@ -48,13 +49,11 @@ void() check_tether = { read_currentprofileslot();
 	readtext = fgets(readparms);	//read the text
 	tether = stof(readtext);
 	fclose(readparms);
-	//float tetherp;
-	//tetherp = floor(getstatf(STAT_TETHER));
-	//if (tetherp <= 0)
-	//	tether = 0;
 	if (profilename != "")
 		strunzone(profilename);
-};
+}
+
+
 float shrine_user;
 void() check_shrine_user = { read_currentprofileslot();
 	local string campaignloc;

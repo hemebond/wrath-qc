@@ -1,9 +1,3 @@
-/*
-==============================================================================
-brute CODE
-==============================================================================
-*/
-
 $frame brt_pose0
 
 $frame brt_idle1 brt_idle2 brt_idle3 brt_idle4 brt_idle5 brt_idle6 brt_idle7 brt_idle8 brt_idle9 brt_idle10
@@ -1253,82 +1247,53 @@ void(entity enemy, float dmg) brute_pain =
 	chattersound("enemies/brute/pain", 3, 1);
 	self.nextthink = time;	
 };
-void() precache_monster_brute = 
-{ 
-
-    precache_sound("enemies/brute/attack_punch1.ogg");
-    precache_sound("enemies/brute/attack_punch2.ogg");
-    precache_sound("enemies/brute/attack_punch3.ogg");
-    precache_sound("enemies/brute/attack_punch4.ogg");
-    precache_sound("enemies/brute/attack_slam1.ogg");
-    precache_sound("enemies/brute/attack_slam2.ogg");
-    precache_sound("enemies/brute/attack_slam3.ogg");
-    precache_sound("enemies/brute/brute_rumble.ogg");
-    precache_sound("enemies/brute/chatter1.ogg");
-    precache_sound("enemies/brute/chatter2.ogg");
-    precache_sound("enemies/brute/chatter3.ogg");
-    precache_sound("enemies/brute/die1.ogg");
-    precache_sound("enemies/brute/die2.ogg");
-    precache_sound("enemies/brute/die3.ogg");
-    precache_sound("enemies/brute/idle1.ogg");
-    precache_sound("enemies/brute/idle2.ogg");
-    precache_sound("enemies/brute/idle3.ogg");
-    precache_sound("enemies/brute/pain1.ogg");
-    precache_sound("enemies/brute/pain2.ogg");
-    precache_sound("enemies/brute/pain3.ogg");
-    precache_sound("enemies/brute/proj_impact1.ogg");
-    precache_sound("enemies/brute/proj_impact2.ogg");
-    precache_sound("enemies/brute/proj_impact3.ogg");
-    precache_sound("enemies/brute/proj_loop.ogg");
-    precache_sound("enemies/brute/shoot1.ogg");
-    precache_sound("enemies/brute/shoot2.ogg");
-    precache_sound("enemies/brute/shoot3.ogg");
-    precache_sound("enemies/brute/sight1.ogg");
-    precache_sound("enemies/brute/sight2.ogg");
-    precache_sound("enemies/brute/sight3.ogg");
-    precache_sound("enemies/brute/wound.ogg");
+void() precache_monster_brute = {
+	precache_sound("enemies/brute/attack_punch1.ogg");
+	precache_sound("enemies/brute/attack_punch2.ogg");
+	precache_sound("enemies/brute/attack_punch3.ogg");
+	precache_sound("enemies/brute/attack_punch4.ogg");
+	precache_sound("enemies/brute/attack_slam1.ogg");
+	precache_sound("enemies/brute/attack_slam2.ogg");
+	precache_sound("enemies/brute/attack_slam3.ogg");
+	precache_sound("enemies/brute/brute_rumble.ogg");
+	precache_sound("enemies/brute/chatter1.ogg");
+	precache_sound("enemies/brute/chatter2.ogg");
+	precache_sound("enemies/brute/chatter3.ogg");
+	precache_sound("enemies/brute/die1.ogg");
+	precache_sound("enemies/brute/die2.ogg");
+	precache_sound("enemies/brute/die3.ogg");
+	precache_sound("enemies/brute/idle1.ogg");
+	precache_sound("enemies/brute/idle2.ogg");
+	precache_sound("enemies/brute/idle3.ogg");
+	precache_sound("enemies/brute/pain1.ogg");
+	precache_sound("enemies/brute/pain2.ogg");
+	precache_sound("enemies/brute/pain3.ogg");
+	precache_sound("enemies/brute/proj_impact1.ogg");
+	precache_sound("enemies/brute/proj_impact2.ogg");
+	precache_sound("enemies/brute/proj_impact3.ogg");
+	precache_sound("enemies/brute/proj_loop.ogg");
+	precache_sound("enemies/brute/shoot1.ogg");
+	precache_sound("enemies/brute/shoot2.ogg");
+	precache_sound("enemies/brute/shoot3.ogg");
+	precache_sound("enemies/brute/sight1.ogg");
+	precache_sound("enemies/brute/sight2.ogg");
+	precache_sound("enemies/brute/sight3.ogg");
+	precache_sound("enemies/brute/wound.ogg");
 	precache_model("models/enemies/brute/brute.md3");
 	precache_model("models/projectiles/proj_brute.md3");
-
 };
 
-void() monster_brute = 
-{ 
 
-    precache_sound("enemies/brute/attack_punch1.ogg");
-    precache_sound("enemies/brute/attack_punch2.ogg");
-    precache_sound("enemies/brute/attack_punch3.ogg");
-    precache_sound("enemies/brute/attack_punch4.ogg");
-    precache_sound("enemies/brute/attack_slam1.ogg");
-    precache_sound("enemies/brute/attack_slam2.ogg");
-    precache_sound("enemies/brute/attack_slam3.ogg");
-    precache_sound("enemies/brute/brute_rumble.ogg");
-    precache_sound("enemies/brute/chatter1.ogg");
-    precache_sound("enemies/brute/chatter2.ogg");
-    precache_sound("enemies/brute/chatter3.ogg");
-    precache_sound("enemies/brute/die1.ogg");
-    precache_sound("enemies/brute/die2.ogg");
-    precache_sound("enemies/brute/die3.ogg");
-    precache_sound("enemies/brute/idle1.ogg");
-    precache_sound("enemies/brute/idle2.ogg");
-    precache_sound("enemies/brute/idle3.ogg");
-    precache_sound("enemies/brute/pain1.ogg");
-    precache_sound("enemies/brute/pain2.ogg");
-    precache_sound("enemies/brute/pain3.ogg");
-    precache_sound("enemies/brute/proj_impact1.ogg");
-    precache_sound("enemies/brute/proj_impact2.ogg");
-    precache_sound("enemies/brute/proj_impact3.ogg");
-    precache_sound("enemies/brute/proj_loop.ogg");
-    precache_sound("enemies/brute/shoot1.ogg");
-    precache_sound("enemies/brute/shoot2.ogg");
-    precache_sound("enemies/brute/shoot3.ogg");
-    precache_sound("enemies/brute/sight1.ogg");
-    precache_sound("enemies/brute/sight2.ogg");
-    precache_sound("enemies/brute/sight3.ogg");
-    precache_sound("enemies/brute/wound.ogg");
-	precache_model("models/enemies/brute/brute.md3");
-	precache_model("models/enemies/brute/howitzer/gib_howitser.md3");
-	precache_model("models/projectiles/proj_brute.md3");
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-32 -32 -32, 32 32 48)
+	model({"path": "models/enemies/brute/brute.md3"})
+= monster_brute : "Brute ( metal gorilla )" []
+*/
+void() monster_brute = {
+	precache_monster_brute();
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
@@ -1349,7 +1314,6 @@ void() monster_brute =
 		self.noise = "enemies/brute/sight1.ogg";	
 
 	setsize(self, '-32 -32 -32', '32 32 48');
-	//	setsize (self, '-12 -12 -0', '12 12 64');
 	self.health = 3000;
 	self.max_health = self.health;
 	self.view_ofs_z = 72;
@@ -1365,7 +1329,4 @@ void() monster_brute =
 	self.think = self.th_stand;
 	self.nextthink = time;
 	walkmonster_start();
-
 };
-
-////////////////end of qc file :D 

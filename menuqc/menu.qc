@@ -70,7 +70,7 @@ string quit_taunts[] = {
 #define ACHIEVEMENT_NOTIFICATIONS_MAX	8
 #define ACHIEVEMENT_NOTIFICATIONS_TIME	6
 #define ACHIEVEMENT_NOTIFICATIONS_MAXSIZE 18
-// uielement_c achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX];
+uielement_c achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX];
 // string achnotify_icons[ST_ACHIEVEMENTS::MAX];
 
 
@@ -93,25 +93,14 @@ static string(void) ach_getnextscroll = {
 }
 
 
-/*
-void Achievement_CleanupBox(uielement_c cleanup)
-{
+
+void Achievement_CleanupBox(uielement_c cleanup) {
 	cleanup.flags |= UIFLAG_HIDE;
-
-	// if (cleanstring)
-	// {
-	//	if (((uipicture_c)cleanup.partner6).image)
-	//	{
-	//		strunzone(((uipicture_c)cleanup.partner6).image);
-	//		((uipicture_c)cleanup.partner6).image = __NULL__;
-	//	}
-	// }
-
-	for(uipicture_c clean = (uipicture_c)cleanup.partner; clean; clean = clean.partner)
-	{
+	for (uipicture_c clean = (uipicture_c)cleanup.partner; clean; clean = (uipicture_c)clean.partner) {
 		clean.flags |= UIFLAG_HIDE;
 	}
 }
+
 
 void Overlay_AchievementShuffleDown(void)
 {
@@ -124,10 +113,9 @@ void Overlay_AchievementShuffleDown(void)
 		uielement_c to = achnotify_list[i - 1];
 		uielement_c from = achnotify_list[i];
 		
-		for(uipicture_c bd_to = (uipicture_c)to.partner,
-			uipicture_c bd_from = (uipicture_c)from.partner;
-			bd_to && bd_from;
-			bd_to = bd_to.partner, bd_from = bd_from.partner)
+		for (uipicture_c bd_to = (uipicture_c)to.partner,  uipicture_c bd_from = (uipicture_c)from.partner;
+		     bd_to && bd_from;
+		     bd_to = (uipicture_c)bd_to.partner, bd_from = (uipicture_c)bd_from.partner)
 		{
 			bd_to.image = bd_from.image;
 			bd_to.flags &= ~UIFLAG_HIDE;
@@ -144,9 +132,9 @@ void Overlay_AchievementShuffleDown(void)
 	}
 
 	// Reki (October 10 2023): Perform cleanup on top cheevo box
-	Achievement_CleanupBox(achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX - 1], FALSE);
+	Achievement_CleanupBox(achnotify_list[ACHIEVEMENT_NOTIFICATIONS_MAX - 1]);
 }
-
+/*
 void Overlay_AchievementShuffleUp(void)
 {
 	// Reki (October 10 2023): Perform cleanup on top cheevo box

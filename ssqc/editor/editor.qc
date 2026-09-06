@@ -308,6 +308,7 @@ void() Toggle_Angles = { if (self.editingangles)
 	}
 };
 
+
 void() Toggle_Mode = 
 {
 	if(world.model == "maps/boss1.bsp")

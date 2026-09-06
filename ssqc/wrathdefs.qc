@@ -542,32 +542,6 @@ enumflags DEFLECTION:float {
 	BYPASSTIMER = 128,
 };
 
-//string cmonster1;
-//string cmonster2;
-//string cmonster3;
-//string cmonster4;
-//string cmonster5;
-//string cmonster6;
-//string cmonster7;
-//string cmonster8;
-
-//float cmonster_health;
-//float cmonster_melee;
-//float cmonster_melee_time;
-
-//float cmonster_missile;
-//float cmonster_missile_time;
-
-//float cmonster_missile_type;
-//float cmonster_missile_speed;
-//float cmonster_missile_ammount;
-//float cmonster_missile_movetype;
-//float cmonster_missile_effects;
-
-//float cmonster_speed;
-//string cmonster_model;
-//string cmonster_missile_model;
-
 ///radialmenu
 .float radial_time;
 .float radialactive;
@@ -647,17 +621,11 @@ float devscreen;	// On/off for the flashlight
 
 .float dmg_h;
 .float dmg_t;
-.float dmg_f;
 .string model2;
 .string particleffect;
 .string tagorg2;
 .float pick_up_time;
 
-.vector lb_org;
-.vector lb_org2;
-.vector lb_dest;
-.vector lb_dest2;
-.float lb_active;
 /////////////////////////////////
 
 .float lspeedtime;
@@ -958,3 +926,12 @@ float CLIPGROUP_MODEL = 4;  // model emitter
 float CLIPGROUP_GUARDIAN = 8;  // boss1 guardian projectile
 float CLIPGROUP_PROWLER = 16;  // prowler monster?
 float CLIPGROUP_CYSTS = 32;  // Prevent cysts from blocking each other
+
+/*FGD
+@BaseClass = TargetName [
+    targetname(target_source) : "Name"
+]
+@BaseClass = Target [
+    target(target_destination) : "Target" : "All entities with a matching targetname will be triggered."
+]
+*/

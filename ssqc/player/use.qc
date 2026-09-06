@@ -104,33 +104,39 @@ void() nonsolidswitch_fire =
 	}
 };
 
-void() visibleswitch_think =
-{
-	self.effects = self.owner.effects;
-	self.frame = self.owner.frame;
-	self.usable = self.owner.usable;
-	self.glowmod = self.owner.glowmod;
-	self.think = visibleswitch_think;
-	self.nextthink = time + 0.025;
-};
 
+/*FGD
+@PointClass
+	color(0 0.4 1)
+	size(-12 -12 -16, 12 12 16)
+	model({{
+		model -> model, "models/objects/switches/e1_switch1.md3"
+	}})
+= object_switch : "When a switch is used by a player, it moves in the direction set by the `angle` key, triggers all its targets." [
+	model(model) : "Model File" : "models/objects/switches/e1_switch1.md3" : "Path/name of model to use"
+	angles(vector) : "Angles" : "0 0 0"
+	target(target_destination) : "Target" : : "All entities with a matching targetname will be triggered."
+	wait(float) : "Return Delay" : "-1" : "Number of seconds button stays pressed (-1 = no return)."
+	delay(float) : "Delay" : "0" : "delay before firing (after being used)"
+]
+*/
+// FIXME: This only works once so wait property is nonsense
 void object_switch() {
 	precache_model("models/objects/switches/collisionswitch.md3");
 
-	if(!self.model)
-		string selfpipesmodel = ("models/objects/switches/e1_switch1.md3");
+	string selfpipesmodel;
+	if (!self.model)
+		selfpipesmodel = ("models/objects/switches/e1_switch1.md3");
 	else
 		selfpipesmodel = self.model;
 
 	precache_model(selfpipesmodel);
+	setmodel(self, "models/objects/switches/collisionswitch.md3");
 
 	precache_sound("objects/switches/e1_switch1.ogg");
 	precache_sound("objects/switches/e1_switch1_reset.ogg");
 	self.noise = "objects/switches/e1_switch1.ogg";
 	self.noise2 = "objects/switches/e1_switch1_reset.ogg";
-
-
-	setmodel(self, "models/objects/switches/collisionswitch.md3");
 
 	self.classname = "nonsolidswitch";
 
@@ -141,12 +147,12 @@ void object_switch() {
 
 	self.solid = SOLID_TRIGGER;
 	setsize(self, '-10 -10 -16', '10 10 32');
+
 	self.glowmod_x = 1;
 	self.glowmod_y = 1;
 	self.glowmod_z = 1;
 
-	if(self.displacement == 1)
-	{
+	if (self.displacement == 1) {
 		self.wrathflags += FL_INVISIBLE;
 		self.effects = EF_NODRAW;
 		self.solid = 0;
@@ -159,21 +165,33 @@ void object_switch() {
 	visibleswitch.classname = "switchmodel";
 	visibleswitch.solid = SOLID_TRIGGER;
 	visibleswitch.usable = 1;
-	self.pipes = visibleswitch;
 	visibleswitch.effects = self.effects;
-	setmodel(visibleswitch,selfpipesmodel);
+	setmodel(visibleswitch, selfpipesmodel);
 	visibleswitch.owner = self;
 	visibleswitch.think = visibleswitch_think;
 	visibleswitch.nextthink = time;
+
+	self.pipes = visibleswitch;
 };
 void switch_e1_switch1() = {
 	object_switch();
 }
 
+
+void visibleswitch_think() {
+	self.effects = self.owner.effects;
+	self.frame = self.owner.frame;
+	self.usable = self.owner.usable;
+	self.glowmod = self.owner.glowmod;
+	self.think = visibleswitch_think;
+	self.nextthink = time + 0.025;
+}
+
+
 .float buttondecal;
 .float keyrequired;
 
-void(float keynumber) quitkey = {
+void quitkey(float keynumber) {
 	string cent, dozen, unit, slotdigits;
 	float cent_s, dozen_s, unit_s, currentslotkeyvalue, multiplier, slotkeynumber;
 	slotdigits = ftos(self.slot_keys);
@@ -185,21 +203,18 @@ void(float keynumber) quitkey = {
 	dozen_s = stof(dozen);
 	unit_s = stof(unit);
 	slotkeynumber = self.slot_keys;
-	if (keynumber == cent_s)
-	{
+	if (keynumber == cent_s) {
 		currentslotkeyvalue = (keynumber *100);
 		slotkeynumber = (slotkeynumber - currentslotkeyvalue);
 		slotkeynumber = slotkeynumber * 10;
 	}
 
-	if (keynumber == dozen_s)
-	{
+	if (keynumber == dozen_s) {
 		currentslotkeyvalue = keynumber * 10;
 		slotkeynumber = (slotkeynumber - (currentslotkeyvalue + unit_s)) + (unit_s *10);
 	}
 
-	if (keynumber == unit_s)
-	{
+	if (keynumber == unit_s) {
 		currentslotkeyvalue = keynumber * 1;
 		if (slotkeynumber >= 10)
 			multiplier = 0.1;
@@ -209,10 +224,9 @@ void(float keynumber) quitkey = {
 	}
 
 	self.slot_keys = slotkeynumber;
-};
+}
 
 
-.float fake_use_finished;
 .float pillar_a_activated;
 .float pillar_b_activated;
 .float pillar_c_activated;
@@ -226,10 +240,9 @@ void(float keynumber) quitkey = {
 .entity rkeyson;
 
 
-void Use_Func() {
-	vector source;
+void use_func() {
 	makevectors(self.v_angle);
-	source = self.origin + self.view_ofs - v_forward * 4;
+	vector source = self.origin + self.view_ofs - v_forward * 4;
 	wtraceline(source, source + v_forward *72, FALSE, self);
 
 	self.use_finished2 = time + 0.05;
@@ -237,8 +250,7 @@ void Use_Func() {
 	if (!(self.crosshairflag &1))
 		return;
 
-	if (self.usingnonsolidswitch)
-	{
+	if (self.usingnonsolidswitch) {
 		self.nonsolidswitch.enemy = self;
 		self.nonsolidswitch.think = nonsolidswitch_fire;
 		self.nonsolidswitch.nextthink = self.nonsolidswitch.ltime + 0.01;
@@ -248,33 +260,34 @@ void Use_Func() {
 
 	if (!trace_ent.usable)
 		return;
+
 	if (trace_fraction == 1.0 || GetSkyMaterial())
 		return;
 
 	self.use_finished = time + 0.05;
 
-	if (trace_ent.classname == "coffer")
-	{
-		if (trace_ent.keyrequired)
-		{
-			if (!(self.items &IT_COFFERKEY1))
-			{
-				//Hud_message(37, self.origin, self);
+	if (trace_ent.classname == "coffer") {
+		if (trace_ent.keyrequired) {
+			if (!(self.items & IT_COFFERKEY1)) {
 				Hud_SendNotification_Full(self, "coffer_key", "locked", "$NOTIFY_LOCKED_COFFER");
 				sound(trace_ent, CHAN_VOICE, trace_ent.noise2, 1, 0.5);
 				return;
 			}
-			else
-			{
-
-				if(self.items & IT_COFFERKEY3)
-					{self.items -= IT_COFFERKEY3;self.keyson3.wrathflags -= FL_RESPAWN;}
+			else {
+				if(self.items & IT_COFFERKEY3) {
+					self.items -= IT_COFFERKEY3;
+					self.keyson3.wrathflags -= FL_RESPAWN;
+				}
 				else
 				{
-					if(self.items & IT_COFFERKEY2)
-						{self.items -= IT_COFFERKEY2;self.keyson2.wrathflags -= FL_RESPAWN;}
-					else
-						{self.items -= IT_COFFERKEY1; self.keyson1.wrathflags -= FL_RESPAWN;}
+					if (self.items & IT_COFFERKEY2) {
+						self.items -= IT_COFFERKEY2;
+						self.keyson2.wrathflags -= FL_RESPAWN;
+					}
+					else {
+						self.items -= IT_COFFERKEY1;
+						self.keyson1.wrathflags -= FL_RESPAWN;
+					}
 				}
 			}
 		}
@@ -286,8 +299,7 @@ void Use_Func() {
 		return;
 	}
 
-	if (trace_ent.usable == 3 && trace_ent.usepressed)
-	{
+	if (trace_ent.usable == 3 && trace_ent.usepressed) {
 		// save globals
 		entity o_self = self;
 		entity o_other = other;
@@ -302,8 +314,7 @@ void Use_Func() {
 		other = o_other;
 	}
 
-	if (trace_ent.classname == "func_button")
-	{
+	if (trace_ent.classname == "func_button") {
 		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
 		trace_ent.enemy = self;
 		trace_ent.think = button_fire;
@@ -311,11 +322,9 @@ void Use_Func() {
 		return;
 	}
 
-	if (trace_ent.buttondecal == 1)
-	{
-		local entity linkedbutton;
+	if (trace_ent.buttondecal == 1) {
 		sound(trace_ent, CHAN_AUTO, "objects/switches/e1_switch1.ogg", 1, 1);
-		linkedbutton = trace_ent.owner;
+		entity linkedbutton = trace_ent.owner;
 		linkedbutton.enemy = self;
 		linkedbutton.think = button_fire;
 		linkedbutton.nextthink = trace_ent.ltime + 0.01;
@@ -342,8 +351,7 @@ void Use_Func() {
 		return;
 	}
 
-	if (trace_ent.classname == "readable")
-	{
+	if (trace_ent.classname == "readable") {
 		if (self.message_flag == 1)
 			return;
 		self.message_flag = 1;
@@ -351,19 +359,12 @@ void Use_Func() {
 		self.journal = 2;
 		self.message_number = trace_ent.message_number;
 		self.message_brelease = 1;
-		//stuffcmd(self, "slowmo 0.1\n");
 		return;
 	}
 
-
-	if (trace_ent.classname == "func_door")
-	{
-		if (trace_ent.keyrequired == 1)
-		{
-			if (!(self.items &IT_KEY1))// red key
-			{
-				//	sound (trace_ent, CHAN_VOICE,"sound/misc/Door_Locked.wav", 1, 0.5);
-				//Hud_message(38, self.origin, self);
+	if (trace_ent.classname == "func_door") {
+		if (trace_ent.keyrequired == 1) {  // red key
+			if (!(self.items & IT_KEY1)) {
 				Hud_SendNotification_Full(self, "key_red", "locked", "$NOTIFY_LOCKED_RED");
 				return;
 			}
@@ -371,65 +372,40 @@ void Use_Func() {
 			self.items -= IT_KEY1;
 			self.rkeyson.wrathflags -= FL_RESPAWN;
 			quitkey(1);
-			//sound (trace_ent, CHAN_AUTO,"sound/misc/Door_Activated_Unlock.wav", 1, 0.5);
 		}
 
-		if (trace_ent.keyrequired == 2)
-		{
-			if (!(self.items &IT_KEY2)) // blue key
-			{
-				//Hud_message(36, self.origin, self);
+		if (trace_ent.keyrequired == 2) {  // blue key
+			if (!(self.items & IT_KEY2)) {
 				Hud_SendNotification_Full(self, "key_blue", "locked", "$NOTIFY_LOCKED_BLUE");
-				//	sound (trace_ent, CHAN_VOICE,"sound/misc/Door_Locked.wav", 1, 0.5);
 				return;
 			}
 
 			self.items -= IT_KEY2;
 			self.bkeyson.wrathflags -= FL_RESPAWN;
 			quitkey(2);
-			//sound (trace_ent, CHAN_AUTO,"sound/misc/Door_Activated_Unlock.wav", 1, 0.5);
 		}
 
-		if (trace_ent.keyrequired == 3)
-		{
-			if (!(self.items &IT_KEY3)) // yellow
-			{
-				//Hud_message(39, self.origin, self);
+		if (trace_ent.keyrequired == 3) {  // yellow
+			if (!(self.items & IT_KEY3)) {
 				Hud_SendNotification_Full(self, "key_yellow", "locked", "$NOTIFY_LOCKED_YELLOW");
-				//	sound (trace_ent, CHAN_VOICE,"sound/misc/Door_Locked.wav", 1, 0.5);
 				return;
 			}
 
 			self.items -= IT_KEY3;
 			self.ykeyson.wrathflags -= FL_RESPAWN;
 			quitkey(3);
-			//sound (trace_ent, CHAN_AUTO,"sound/misc/Door_Activated_Unlock.wav", 1, 0.5);
 		}
 
-		/*if (trace_ent.keyrequired == 4)
-		{
-			if (!(self.items &IT_COFFERKEY1))
-			{
-				sound(trace_ent, CHAN_VOICE, trace_ent.noise2, 1, 0.5);
-				Hud_message(37, self.origin, self);
-				return;
-			}
-			else
-				self.items -= IT_COFFERKEY1;
-			self.keyson.wrathflags -= FL_RESPAWN;
-		}
-		*/
 		trace_ent.duser = self;
 		trace_ent.think = door_puse;
 		trace_ent.nextthink = trace_ent.ltime + 0.01;
 		return;
 	}
 
-	if (trace_ent.use)
-	{
+	if (trace_ent.use) {
 		trace_ent.enemy = self;
 		trace_ent.think = trace_ent.use;
 		trace_ent.nextthink = time + 0.01;
 		return;
 	}
-};
+}

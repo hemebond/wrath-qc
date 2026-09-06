@@ -1,8 +1,17 @@
+/*FGD
+@PointClass
+	size(-16 -16 -8, 16 16 8)
+	model({"path": "models/items/ammo_lance.md3"})
+= ammo_lance : "5 Lance ammo." []
+*/
+
+float AMMO_LANCE_AMOUNT = 5;
+
 void spawnfunc_ammo_lance() {
 	setmodel(self, "models/items/ammo_lance.md3");
 	self.noise = "items/ammo_lance.ogg";
-	setsizeitem2(self, explosives_size);
-	self.ammo_lance = lance_ammount;
+	setsize(self, '-16 -16 -8', '16 16 8');
+	self.ammo_lance = AMMO_LANCE_AMOUNT;
 	precache_sound(self.noise);
 	StartItem(2);
 	item_glowmodcontroller_pulse_spawn(self);

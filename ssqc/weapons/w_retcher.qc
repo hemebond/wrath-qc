@@ -20,6 +20,33 @@
 //retcher_proj_vel       = 1280			//	projectile velocity
 //retcher_proj_grav      = 2				//	projectile gravity
 
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/retcher/w_retcher.md3"})
+= weapon_retcher : "Retcher" []
+*/
+
+void() weapon_retcher =
+{
+	self.items = IT_RETCHER;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/retcher/w_retcher.md3");
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+	self.ammo_retcher = 6;
+	self.scale = 1;
+	self.rwpn = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	precache_sound(self.noise);
+	self.touch = wammo_touch;
+	self.msg = 93;
+	self.msg_icon = "retcher";
+	self.msg_text = "$NOTIFY_WEP_RETCHER";
+};
+
 
 .float oldcnt;
 .float magnetized;

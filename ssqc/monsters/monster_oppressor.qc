@@ -1,9 +1,24 @@
 /*
-==============================================================================
-
-oppressor
-
-==============================================================================
+opp_health = 1800            //    health
+opp_bbox = '20 20 56'         //    bbox
+opp_bboxn = '-20 -20 -32'     //    nbbox
+opp_wvel = 8                 //    velocity
+opp_dmg = 50              //    damage
+opp_projvelfactor = 0.3              // prediction factor
+opp_projvel = 1200            //    proj velocity
+opp_projvel2 = 900         //    proj velocity (double attack)
+opp_dr_run = 50                //    dice roll to run or attack (when runing)
+opp_dr_attack = 75                //    dice roll to attack or run (when attack is finished)
+opp_dtp = 900             //    damage to pain
+opp_dtg = -150             //    damage to gib
+opp_rtp = 100             //    dice roll to pain
+opp_near = 128             //    near
+opp_mid = 512           //    mid
+opp_far = 2048          //    far
+opp_zzc = 50                //    zigzag chance
+opp_zzd = 45                //    zigzag max deviance
+opp_zzmd = 10                //    zigzag min deviance
+opp_proj_size = 6 6 5           //    projectile bbox
 */
 
 /*
@@ -1162,21 +1177,32 @@ void(entity e) spawn_emitters =
 	dripb.nextthink = time + (1 * random());
 		
 };	
-/*WRATHED monster_oppressor (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
+
 .vector bbvv;
-void() monster_oppressor = { precache_model("models/enemies/oppressor/oppressor.md3");
-	if (deathmatch)
-	{
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-20 -20 -32, 20 20 56)
+	model({"path": "models/enemies/oppressor/oppressor.md3"})
+= monster_oppressor : "Monster: Oppressor" []
+*/
+void() monster_oppressor = {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
+
+	precache_monster_oppressor();
 
 	if (self.waypointed != 1)
 		self.waypointed = 0;
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/oppressor/oppressor.md3");
-	setsize(self, opp_bboxn, opp_bbox);
+	setsize(self, '-20 -20 -32', '20 20 56');
+
 	self.noise = "enemies/oppressor/sight.ogg";
 	self.health = opp_health;
 	self.damagetopain = opp_dtp;
@@ -1196,8 +1222,4 @@ void() monster_oppressor = { precache_model("models/enemies/oppressor/oppressor.
 	self.heavymonster = 1;
 	self.nextthink = time + 0.1;
 	self.think = walkmonster_start;
-
-
 };
-
-////////////////end of qc file

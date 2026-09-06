@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_apparatus.md3"})
+= artifact_apparatus : "Drowner's Apparatus ( swimming breather )" []
+*/
+
 void artifact_apparatus() {
 	radial();
 	self.noise = "items/artifacts/artifactB_pickup.ogg";
@@ -15,5 +22,4 @@ void artifact_apparatus() {
 	self.msg_text = "$NOTIFY_ARTIFACT_APPARATUS";
 	self.touch = artifact_touch;
 	self.oldtouch = self.touch;
-
 }

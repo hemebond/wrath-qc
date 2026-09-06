@@ -1,3 +1,21 @@
+/*FGD
+@PointClass
+	size(-16 -16 -6, 16 16 6)
+	model({"path": "models/weapons/mace/soul.md3"})
+= ammo_mace : "10 Mace ammo." [
+	count(integer) : "Count" : 1 : "Number of souls to create"
+]
+*/
+
+void spawnfunc_ammo_mace() {
+	setmodel(self, "");
+	if(!self.count)
+		self.count = 1;
+	self.think = ammo_mace_think;
+	self.nextthink = time + 0.1;
+}
+
+
 void soul_touch() {
 	if(other.classname != "player")
 		return;
@@ -22,8 +40,7 @@ void soul_touch() {
 
 
 void ammo_mace_think() {
-	while (self.count > 0)
-	{
+	while (self.count > 0) {
 		entity dropped = spawn();
 		dropped.noise = "";
 		setmodel(dropped,"models/weapons/mace/soul.md3");
@@ -58,13 +75,4 @@ void ammo_mace_think() {
 		dropped.nextthink = time;
 		self.count --;
 	}
-}
-
-
-void spawnfunc_ammo_mace() {
-	setmodel(self, "");
-	if(!self.count)
-		self.count = 1;
-	self.think = ammo_mace_think;
-	self.nextthink = time + 0.1;
 }

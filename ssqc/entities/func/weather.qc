@@ -3,7 +3,7 @@
 
 .vector lastplace_spoted;
 .float density;
-void() lightning_think;
+
 float(entity targ) visibleworld = 
 {
 	local vector spot1, spot2;
@@ -32,7 +32,22 @@ void() weather_think = { if (self.using == 1)
 	self.nextthink = time + self.delay;
 };
 
-void() func_weather = { if (!self.using)
+
+/*FGD
+@SolidClass
+	base(TargetName)
+	color(.4 .4 .4)
+= func_weather : "Particles Emitter, use an invisible brush to determine the area of spawning" [
+	type(choices) : "Type of weather particle" : 1 = [
+		1 : "Snow"
+		2 : "Rain"
+	]
+	delay(float) : "Delay time" : "0.1" : "Delay time between each particle spawning"
+	density(integer) : "Density ammount" : 1 : "amount of particle density(default is 1)."
+]
+*/
+void func_weather() {
+	if (!self.using)
 		self.using = 1;
 	if (!self.delay)
 		self.delay = 0.1;
@@ -103,7 +118,22 @@ void() func_particles_think =
 	//	remove(self);
 };
 
-void() func_particles = { if (!self.using)
+
+/*FGD
+@SolidClass
+	base(TargetName)
+	color(.4 .4 .4)
+= func_particles : "Particles Emitter, use an invisible brush to determine the area of spawning" [
+	particlename(string) : "Particle effect Name" : "proj_heretic_impact" : "which particle name will use, located in effectinfo.txt"
+	delay(float) : "Delay time" : "0.5" : "Delay time between each particle spawning"
+	density(integer) : "Density ammount" : 1 : "multiply of ammount of particles."
+	count(integer) : "ammount of particles" : 1 : "amount of particles(default is based on size of brush)."
+	using(integer) : "Start Active" : 1 : "The emitter will start emiting particles, if 0, targetname is required."
+	clipdist(integer) : "Clip Distance" : 512 : "Distance at which particles will no longer be shown."
+]
+*/
+void() func_particles = {
+	if (!self.using)
 		self.using = 1;
 	if (!self.delay)
 		self.delay = 0.5;
@@ -360,7 +390,24 @@ void() lightning_think = { local float rn, rls;
 	self.think = lightninwait;
 };
 
-void() misc_lightning = { if (!self.style)
+
+/*FGD
+@PointClass color(1 1 1) size(-2 -2 -2, 2 2 2) = misc_lightning : "Lightning. It requires a big real time light of 12, 13 , 14 lightstyles placed in rtlights file in maps/ folder." [
+	style(choices) : "Light Style" : 0 = [
+		12 : "12 lightstyle"
+		13 : "13 lightstyle"
+		14 : "14 lightstyle"
+	]
+	noise(string) : "clap thunder sound 1" : "env/thunder_clap1.ogg" : "sound to play, default is env/thunder_clap1.ogg"
+	noise1(string) : "clap thunder sound 2" : "env/thunder_clap2.ogg" : "sound to play, default is env/thunder_clap2.ogg"
+	noise2(string) : "clap thunder sound 3" : "env/thunder_clap3.ogg" : "sound to play, default is env/thunder_clap3.ogg"
+	targetname(target_source) : "Target Name" : : "If used, misc_lightning should be targeted by button or trigger"
+	wait(float) : "Wait delay" : "10" : "amount of time between each lightning flash"
+	delay(float) : "Delay" : "10" : "amount of time between each lightning flash + wait, it will work for the first spawn as well"
+]
+*/
+void misc_lightning() {
+	if (!self.style)
 		self.style = 12;
 	if (self.style < 12)
 		self.style = 12;
@@ -379,14 +426,13 @@ void() misc_lightning = { if (!self.style)
 	precache_sound(self.noise1);
 	precache_sound(self.noise2);
 	precache_sound(self.noise3);
-	if (!(self.targetname))
-	{
+	if (!(self.targetname)) {
 		self.think = lightning_think;
 		self.nextthink = time + self.delay;
 	}
 	else
 		self.use = lightning_think;
-};
+}
 
 
 void() lightningt_think =
@@ -416,23 +462,24 @@ void() lightningt_think =
 
 };
 .float lightning_time;
-void() trigger_lightning_touch =
-{	
+void trigger_lightning_touch() {
 	if (other.classname != "player")
-	return;
+		return;
+
 	if(self.using == 0)
-	return;
-	if ((self.lightning_time < time) && (other.lightning_time < time))
-	{	
+		return;
+
+	if ((self.lightning_time < time) && (other.lightning_time < time)) {
 		if(self.wait != -1)
-		self.lightning_time = time + self.wait + (self.delay * random());
+			self.lightning_time = time + self.wait + (self.delay * random());
 		else
-		self.using = 0;
+			self.using = 0;
 
 		other.lightning_time =  self.lightning_time;
 		float rls = rint (random(1,3));
+		string tnoise;
 		if (rls == 1)
-			string tnoise = self.noise;
+			tnoise = self.noise;
 		if (rls == 2)
 			tnoise = self.noise1;
 		if (rls == 3)
@@ -443,10 +490,22 @@ void() trigger_lightning_touch =
 		self.think = lightningt_think;
 		self.nextthink = time;
 	}
+}
 
-};
-void() trigger_lightning =
-{
+
+/*FGD
+@SolidClass
+	base(TargetName)
+	color(0.5 0.0 0.5)
+= trigger_lightning : "If the trigger is touched by player random lightnings will spawn, useful only for exterior areas. Noise is picked randomly each time." [
+	delay(float) : "Additional Random Wait" : "10" : "Additional time that is added to the wait, the values are from 0 to the value of the specific"
+	noise(string) : "Noise" : "env/amb/thunder1.ogg" : ""
+	noise1(string) : "Noise 1" : "env/amb/thunder2.ogg" : ""
+	noise2(string) : "Noise 2" : "env/amb/thunder3.ogg" : ""
+	wait(float) : "Wait" : "10" : "Minimum time lapse between lightnings, -1 = single lightning"
+]
+*/
+void trigger_lightning() {
 	if (!self.noise)
 		self.noise = "env/amb/thunder1.ogg";
 	if (!self.noise1)
@@ -459,9 +518,9 @@ void() trigger_lightning =
 	precache_sound (self.noise3);
 
 	if(!self.delay)
-	self.delay = 10;
+		self.delay = 10;
 	if(!self.wait)
-	self.wait = 10;
+		self.wait = 10;
 
 	self.solid = SOLID_TRIGGER;
 	setmodel(self, self.model);
@@ -469,9 +528,9 @@ void() trigger_lightning =
 	self.model = string_null;
 	self.touch = trigger_lightning_touch;
 	if(!self.using)
-	self.using = 1;
+		self.using = 1;
 	self.use = toggle_use;
-};
+}
 
 .float time_fog;
 .float falpha;
@@ -737,6 +796,63 @@ void() model_emitter_use =
 	self.nextthink = time;	
 };
 
+
+/*FGD
+@PointClass base(TargetName) color(.4 .4 .4) size(-8 -8 -8, 8 8 8) = model_emitter : "Particles Emitter, use an invisible point to determine the origin of spawning" [
+	clipdist(integer) : "Clip Distance" : 512 : "Distance at which particles will no longer be shown. Default 512 units."
+	count(integer) : "Amount of Particles" : 1 : "amount of particles model in each spawn."
+	delay(float) : "Delay time" : "0.5" : "Delay time between each model spawning"
+	gravity(float) : "Gravity" : "-0.1" : "Gravity of model (default normal gravity: 1)."
+	loop(integer) : "Looped" : 1 : "Is the use continous? -1 no, 1 YES"
+
+	min_size(float) : "Min Scale Size" : "1" : "min scale value."
+	max_size(float) : "Max Scale Size" : "1" : "max scale value."
+	min_time(float) : "Min Time Life" : "1" : "min time life before fade."
+	max_time(float) : "Max Time Life" : "1" : "max time life before fade."
+
+	model1(string) : "Spawned Model A" : "particles/" : "Spawned model A"
+	model2(string) : "Spawned Model B" : "particles/" : "Spawned model B"
+	model3(string) : "Spawned Model C" : "particles/" : "Spawned model C"
+	model4(string) : "Spawned Model D" : "particles/" : "Spawned model D"
+	model5(string) : "Spawned Model E" : "particles/" : "Spawned model E"
+	model6(string) : "Spawned Model F" : "particles/" : "Spawned model F"
+	model7(string) : "Spawned Model G" : "particles/" : "Spawned model G"
+	model8(string) : "Spawned Model H" : "particles/" : "Spawned model H"
+
+	noise1(string) : "Noise 1"
+	noise2(string) : "Noise 2"
+	noise3(string) : "Noise 3"
+
+	speed(float) : "Speed" : "16" : "default speed of the models."
+	originoffset(vector) : "Origin Offset" : "0 0 0" : "Offset particle spawning origin by this values. Coordspace are world, x – forward, y – right, z – up."
+	originjitter(vector) : "Origin Jitter" : "0 0 0" : "Like originoffset but each axis is jittered between -value/+value. Hence it is defining spherical shape of particle random spawning."
+	particle_movetype(choices) : "Movetype" : 8 = [
+		0 : "NONE"
+		6 : "TOSS"
+		8 : "NOCLIP"
+		9 : "FLYMISSILE"
+		10 : "BOUNCE"
+		11 : "BOUNCEMISSILE"
+	]
+	particle_modelflags(choices) : "Modelflags" : 0 = [
+		1 : "ROCKET"
+		2 : "GRENADE"
+		4 : "GIB"
+		8 : "ROTATE"
+		16 : "GREEN"
+		32 : "ZOMGIB"
+		64 : "ORANGE"
+		128 : "PURPLE"
+	]
+	particlename(string) : "Trail Effect Name" : "" : "which trail effect model will use if present, located in effectinfo.txt"
+	spawnflags(flags) = [
+		1 : "Start Active" : 0 : "The emitter will start emiting particles"
+	]
+	valpha(vector) : "Alpha  Values" : "0 1 1" : "alpha (min_alpha max_alpha fade_rate)."
+	velocityjitter(vector) : "Velocity Jitter" : "0 0 0" : "Like velocity offset but each axis is jittered between -value/+value. Hence it is defining spherical shape of particle random spawning."
+	velocityoffset(vector) : "Velocity Offset" : "0 0 0" : "Add this amount of constant velocity to particle on spawn."
+]
+*/
 void() model_emitter =
 {
 
@@ -1018,9 +1134,27 @@ void() trigger_fog_use2 =
 };
 
 
-
-void() trigger_fog =
-{	
+/*FGD
+@SolidClass
+	color(0.5 0.0 0.5)
+= trigger_fog : "Trigger fog to change the fog values and interpolates the values over time" [
+	n_fog_d(float) : "Density" : "0" : "Density value of the fog."
+	n_fog_r(float) : "Red" : "0" : "Red value of the fog."
+	n_fog_g(float) : "Green" : "0" : "Green value of the fog."
+	n_fog_b(float) : "Blue" : "0" : "Blue value of the fog."
+	n_fog_a(float) : "Alpha" : "1" : "Alpha value of the fog. Default value is 1."
+	n_fog_s(float) : "Start" : "0" : "Start distance from player fog will be rendered."
+	n_fog_e(float) : "End" : "16384" : "The maximum distance the _fog_ will be rendered from the player. Default value is 16384."
+	n_fog_h(float) : "Height" : "1073741824" : "Height of the fog top. Default value is 1073741824."
+	n_fog_f(float) : "Fade Depth" : "128" : "Fade depth value of the fog. Default value is 128."
+	spawnflags(flags) = [
+		1 : "No touch" : 0 : "Can't be triggered by touching, only by triggering."
+		2 : "Force start"
+	]
+	wait(float) : "Transition Time" : "1" : "Number of seconds transition will take. Default value is 1."
+]
+*/
+void trigger_fog() {
 	setmodel(self, self.model);
 	self.solid = SOLID_TRIGGER;
 	if(!self.wait)
@@ -1034,30 +1168,21 @@ void() trigger_fog =
 	if(!self.nfogf)
 		self.nfogf = 128;
 
-
-
-
-
-
 	self.modelindex = 0;
 	self.model = string_null;
 	self.oldwait = self.wait;
 
-	if ((self.spawnflags &SPAWNFLAG_FORCESTART))
-	{
+	if ((self.spawnflags & SPAWNFLAG_FORCESTART)) {
 		self.fogwait = 2;
-
 	}
-	{
-		if (!(self.spawnflags &SPAWNFLAG_NOTOUCH))
-			self.touch = trigger_fog_touch;
 
-		self.use = trigger_fog_use;
-		self.oldtouch = self.touch;
-	}
-};
+	if (!(self.spawnflags & SPAWNFLAG_NOTOUCH))
+		self.touch = trigger_fog_touch;
 
-void() restart_particle;
+	self.use = trigger_fog_use;
+	self.oldtouch = self.touch;
+}
+
 
 void() relocate_particle =
 {

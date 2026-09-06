@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_siphon.md3"})
+= artifact_siphon : "Artifact: Life Siphon ( heart healer )" []
+*/
+
 void artifact_siphon() {
 	radial();
 	self.modelflags = MF_ROTATE;

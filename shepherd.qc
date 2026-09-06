@@ -297,6 +297,18 @@ void place_shepherd_filter(void)
 	}
 }
 
+
+/*FGD
+@PointClass
+	color(.7 .7 .7)
+	size(-16 -16 -24, 16 16 32)
+	model("models/enemies/shepherd/shepherd.md3")
+= place_shepherd : "The Shepherd of Wayward Souls. For INTRO and HUB map appearances." [
+	spawnflags(flags) = [
+		1 : "Hub Behaviour" : 0 : "The Shepherd will deliver monologues appropriate for each encounter level in a hub map."
+	]
+]
+*/
 void spawnfunc_place_shepherd(void)
 {
 	precache_sound("sound/npc/shepherd_voicing_medium1.ogg");

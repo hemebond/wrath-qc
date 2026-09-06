@@ -1,3 +1,32 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/lance/w_lance.md3"})
+= weapon_lance : "Lance" []
+*/
+
+void() weapon_lance =
+{
+	self.items = IT_LANCE;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/lance/w_lance.md3");
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+	//self.noise  ="misc/null.wav";
+	precache_sound(self.noise);
+	self.ammo_lance = 10;
+	self.rwpn = 1;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.touch = wammo_touch;
+	self.msg = 95;
+	self.msg_icon = "lance";
+	self.msg_text = "$NOTIFY_WEP_LANCE";
+};
+
+
 .float lance_reflecttime;
 .float randomattack;
 .float oldrandomattack;

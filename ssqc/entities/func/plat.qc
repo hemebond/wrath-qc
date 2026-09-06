@@ -131,18 +131,22 @@ void() plat_use =
 };
 
 
-/* func_plat (0 .5 .8) ? PLAT_LOW_TRIGGER
-speed	default 150
-
-Plats are always drawn in the extended position, so they will light correctly.
-
-If the plat is the target of another trigger or button, it will start out disabled in the extended position until it is trigger, when it will lower and become a normal plat.
-
-If the "height" key is set, that will determine the amount the plat moves, instead of being implicitly determined by the model's height.
-
+/*FGD
+@SolidClass
+	color(0 .4 1)
+= func_plat : "Rising platform the player can ride to reach higher places. Plats must always be drawn in the raised position, so they will operate and be lighted correctly but they spawn in the lowered position. The plat will stay in the raised position until the player steps off. There are no proper sounds for this entity, only beep noises. It will spawn in the game and work properly but it sounds silly (see notes)." [
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage to inflict on player when he blocks operation of plat (default 4). Plat will reverse direction when blocked."
+	height(float) : "Vertical Travel" : : "If set, this will determine the total amount of vertical travel of the plat."
+	lip(float) : "Lip" : "16" : "Lip remaining at end of move (default 16). Has no effect if `height` is set."
+	noise(string) : "start sound 1" : "" : "sound to play"
+	noise1(string) : "working sound 2" : "" : "sound to play"
+	noise2(string) : "stop sound 3" : "" : "sound to play"
+	rad_sound(float) : "Sound Radius" : "256" : "Radius of sounds."
+	speed(float) : "Move Speed" : "150" : "Determines how fast the plat moves (default 150)."
+	targetname(target_source) : "Target Name" : "" : "If set, the trigger that points to this will raise the plat each time it fires. The plat raises and comes back down a second later if no player is on it."
+	volume(float) : "Sound Volume" : "1" : "Volume of sounds."
+]
 */
-
-
 void() func_plat =
 {
 	if (!self.t_length)

@@ -766,46 +766,24 @@ void() precache_monster_widow = { precache_sound("enemies/widow/attack1.ogg");
 	precache_model("models/enemies/widow/gibs/gib_leg_l_a.md3");
 	precache_model("models/enemies/widow/gibs/gib_leg_l_b.md3");
 };
-void() monster_widow = { precache_sound("enemies/widow/attack1.ogg");
-	precache_sound("enemies/widow/attack2.ogg");
-	precache_sound("enemies/widow/attack3.ogg");
-	precache_sound("enemies/widow/die1.ogg");
-	precache_sound("enemies/widow/die2.ogg");
-	precache_sound("enemies/widow/die3.ogg");
-	precache_sound("enemies/widow/hit_1.ogg");
-	precache_sound("enemies/widow/hit_2.ogg");
-	precache_sound("enemies/widow/hit_3.ogg");
-	precache_sound("enemies/widow/hit_4.ogg");
-	precache_sound("enemies/widow/idle.ogg");
-	precache_sound("enemies/widow/miss1.ogg");
-	precache_sound("enemies/widow/miss2.ogg");
-	precache_sound("enemies/widow/miss3.ogg");
-	precache_sound("enemies/widow/pain1.ogg");
-	precache_sound("enemies/widow/pain2.ogg");
-	precache_sound("enemies/widow/pain3.ogg");
-	precache_sound("enemies/widow/run.ogg");
-	precache_sound("enemies/widow/sight1.ogg");
-	precache_sound("enemies/widow/sight2.ogg");
-	precache_sound("enemies/widow/sight3.ogg");
-	precache_sound("enemies/widow/step1.ogg");
-	precache_sound("enemies/widow/step2.ogg");
-	precache_sound("enemies/widow/step3.ogg");
-	precache_model("models/enemies/widow/widow.md3");
-	precache_model("models/enemies/widow/gibs/gib_arm_r_a.md3");
-	precache_model("models/enemies/widow/gibs/gib_arm_r_b.md3");
-	precache_model("models/enemies/widow/gibs/gib_arm_l_a.md3");
-	precache_model("models/enemies/widow/gibs/gib_arm_l_b.md3");
-	precache_model("models/enemies/widow/gibs/gib_head.md3");
-	precache_model("models/enemies/widow/gibs/gib_leg_r_a.md3");
-	precache_model("models/enemies/widow/gibs/gib_leg_r_b.md3");
-	precache_model("models/enemies/widow/gibs/gib_leg_l_a.md3");
-	precache_model("models/enemies/widow/gibs/gib_leg_l_b.md3");
 
-	if (deathmatch)
-	{
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-12 -12 -32, 12 12 24)
+	model({"path": "models/enemies/widow/widow.md3"})
+= monster_widow : "Monster: Widow" []
+*/
+void() monster_widow = {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
+
+	precache_monster_widow();
+
 	self.onlymelee =  1;
 
 	self.solid = SOLID_SLIDEBOX;
@@ -835,5 +813,3 @@ void() monster_widow = { precache_sound("enemies/widow/attack1.ogg");
 	self.th_die = widow_die;
 	walkmonster_start();
 };
-
-////////////////end of qc file////////////////end of qc file

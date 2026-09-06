@@ -684,6 +684,15 @@ void(entity attacker, float dmg) bossmartyr_c::pain
 	this.pain_finished = time + 0.05;
 }
 
+
+/*FGD
+@PointClass
+	base(Target, TargetName)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/martyr/martyr.md3"})
+= boss_martyr : "Martyr creature, focal point of boss3 summoning behaviour." []
+*/
 void() spawnfunc_boss_martyr
 {
 	spawnfunc_bossmartyr_c();
@@ -1299,6 +1308,106 @@ void() boss_summoner_use
 	self.nextthink = time + self.wait + random(0, 0.8);
 }
 
+
+/*FGD
+@PointClass
+	base(Target, TargetName)
+	color(.7 .2 0)
+	size(-16 -16 -24, 16 16 24)
+	model("models/warp/warp.md3")
+= boss_summoner : "Point at which boss3 will spawn monsters during summonings." [
+	classmonster1(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster2(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster3(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster4(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+	classmonster5(choices) : "Encounter" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "Melon Head ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying brain claw )"
+	]
+]
+*/
 void() boss_summoner = 
 { 
 	self.wrathflags += FL_SPAWNER;
@@ -3555,6 +3664,15 @@ void() boss3_c::mainloop {
 	this.nextthink = time + 0.1;
 }	
 
+
+/*FGD
+@PointClass
+	base(Target, TargetName)
+	color(.9 .3 0)
+	size(-128 -128 -128, 128 128 256)
+	model("models/enemies/boss3/boss3_start.md3")
+= boss_guardian3 : "3rd boss monster, The Dreadful One. The big bad, the final form." []
+*/
 void() spawnfunc_boss_guardian3
 {
 	precache_sound("enemies/boss3/transform.ogg");
@@ -3585,4 +3703,35 @@ void() spawnfunc_boss_guardian3
 	boss.dphitcontentsmask = DPCONTENTS_SOLID | DPCONTENTS_BOSSCLIP;
 	boss.stage = 0;
 }
+
+
+
+entity spawn_lava_ball(vector org) { // Reki (October 12 2023): Repurposed this unused function for boss3 and general purpose lava ball spawning
+	entity lava_ball = spawn();
+	setmodel(lava_ball, "models/projectiles/proj_slag2.md3");
+
+	lava_ball.origin = org;
+	lava_ball.solid = SOLID_TRIGGER;
+	lava_ball.movetype = MOVETYPE_TOSS;
+	lava_ball.scale = random(0.75,1);
+	lava_ball.gravity = 0.75;
+
+	lava_ball.touch = lava_ball_touch;
+	lava_ball.velocity = '0 0 510';
+	lava_ball.velocity += [random(-70, 70), random(-70, 70), random(-30, 120)];
+
+	setsize(lava_ball, '-2 -2 -2', '2 2 2');
+	lava_ball.angles = vectoangles(lava_ball.velocity);
+	lava_ball.traileffectnum = particleeffectnum("lavatrail");
+	lava_ball.effects = 1024;
+
+	lava_ball.cnt = 1;
+	lava_ball.oldcnt = 1;
+
+	lava_ball.think = lava_ball_think;
+	lava_ball.nextthink = time;
+
+	return lava_ball;
+}
+
 #endif

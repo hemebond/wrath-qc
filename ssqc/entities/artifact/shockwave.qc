@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_shockwave.md3"})
+= artifact_shockwave : "Artifact: Shockwave ( electric ring )" []
+*/
+
 void artifact_shockwave() {
 	radial();
 	self.noise = "items/artifacts/artifactJ_pickup.ogg";

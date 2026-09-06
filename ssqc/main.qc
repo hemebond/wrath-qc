@@ -93,12 +93,26 @@ void(entity client, string s) centerprint = {
 entity lastspawn;
 .float episode;
 
-void() worldspawn = 
-{ 
+
+
+/*FGD
+@SolidClass color(0 0 0) = worldspawn : "Only used for the world." [
+    message(string) : "Logon Message" : : "Text to print at user logon. Used for name of level."
+    music(sound) : "Music File" : : "Path/name of looping .wav file used for level's music (e.g. music/sonic5.wav)."
+    gravity(float) : "Gravity" : "800" : "Gravity of level (default normal gravity: 800)."
+    episode(choices) : "Episode" : 1 = [
+        1 : "Episode 1"
+        2 : "Episode 2"
+        3 : "Episode 3"
+    ]
+]
+*/
+
+void worldspawn() {
 	lastspawn = world;
 	skill = cvar("skill");
 
-	if(!(world.episode)) {
+	if (!(world.episode)) {
 		if (
 			(self.model == "maps/intro.bsp") ||
 			(self.model == "maps/hub1.bsp")  ||
@@ -124,7 +138,6 @@ void() worldspawn =
 			world.episode = 2;
 		}
 		else if (
-
 			(self.model == "maps/hub3.bsp") ||
 			(self.model == "maps/e3m1.bsp") ||
 			(self.model == "maps/e3m2.bsp") ||
@@ -137,7 +150,7 @@ void() worldspawn =
 		}
 	}
 
-	if(!(world.episode))
+	if (!(world.episode))
 		world.episode = 1;
 	
 	// Reki (February 14 2024): keep track of our up-to-date save
@@ -146,7 +159,6 @@ void() worldspawn =
 	prog_save_version = PROG_SAVE_VERSION;
 	world.prog_version = PROG_SAVE_VERSION;
 
-	//Precache();
 	check_enemies_frik();
 	check_itemammount();
 	check_itemflash();
@@ -158,72 +170,56 @@ void() worldspawn =
 	check_itemlight();
 	check_maxammo();
 
-	float noqcprecaches = cvar("cl_noqcprecache");	
-	if(noqcprecaches != 1)
+	if (cvar("cl_noqcprecache") != 1)
 		precaches();
+
 	CSQC_AddStats();
-	//	check_tether();
+
 	globalfake_illumination = 1;
+	initLightStyles();
+}
+
+
+void initLightStyles() {
 	//
 	// Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
 	//
+
 	// 0 normal
 	lightstyle(0, "m");
-
 	// 1 FLICKER (first variety)
 	lightstyle(1, "mmnmmommommnonmmonqnmmo");
-
 	// 2 SLOW STRONG PULSE
 	lightstyle(2, "abcdefghijklmnopqrstuvwxyzyxwvutsrqponmlkjihgfedcba");
-
 	// 3 CANDLE (first variety)
 	lightstyle(3, "mmmmmaaaaammmmmaaaaaabcdefgabcdefg");
-
 	// 4 FAST STROBE
 	lightstyle(4, "mamamamamama");
-
 	// 5 GENTLE PULSE 1
 	lightstyle(5, "jklmnopqrstuvwxyzyxwvutsrqponmlkj");
-
 	// 6 FLICKER (second variety)
 	lightstyle(6, "nmonqnmomnmomomno");
-
 	// 7 CANDLE (second variety)
 	lightstyle(7, "mmmaaaabcdefgmmmmaaaammmaamm");
-
 	// 8 CANDLE (third variety)
 	lightstyle(8, "mmmaaammmaaammmabcdefaaaammmmabcdefmmmaaaa");
-
 	// 9 SLOW STROBE (fourth variety)
 	lightstyle(9, "aaaaaaaazzzzzzzz");
-
 	// 10 FLUORESCENT FLICKER
 	lightstyle(10, "mmamammmmammamamaaamammma");
-
 	// 11 SLOW PULSE NOT FADE TO BLACK
 	lightstyle(11, "abcdefghijklmnopqrrqponmlkjihgfedcba");
-
 	// 12 LIGHTNING
 	lightstyle(12, "a");
-
 	lightstyle(13, "a");
-
 	lightstyle(14, "a");
-
 	lightstyle(16, "a");
-
 	lightstyle(17, "mmnmmommommnonmmonqnmmo");
-
 	lightstyle(18, "mmnmmommommnonmmonqnmmo");
-
 	lightstyle(19, "mmnmmommommnonmmonqnmmo");
-
-
-	// styles 32-62 are assigned by the light program for switchable lights
-
 	// 63 testing
 	lightstyle(63, "a");
-};
+}
 
 void StartFrame()
 {
@@ -231,183 +227,183 @@ void StartFrame()
 }
 
 void precaches() {
-	precache_model ("models/player/outlander/head.md3");
-	precache_model ("models/player/outlander/lower.md3");
-	precache_model ("models/player/outlander/upper.md3");
-	precache_model ("models/artifacts/active/flask_active.md3");
-	precache_model ("models/artifacts/active/life_siphon_active.md3");
-	precache_model ("models/artifacts/active/sigil_flight_active.md3"); //
-	precache_model ("models/artifacts/active/soul_tether_active.md3");
-	precache_model ("models/artifacts/active/sigil_wrath_active.md3");
-	precache_model ("models/artifacts/artifact_animus_proj.md3");
-	precache_model ("models/artifacts/artifact_revelation.md3");
-	precache_model ("models/artifacts/artifact_apparatus.md3");
-	precache_model ("models/artifacts/artifact_rage.md3");
-	precache_model ("models/artifacts/artifact_attar.md3");
-	precache_model ("models/artifacts/artifact_grenade.md3");
-	precache_model ("models/artifacts/artifact_siphon.md3");
-	precache_model ("models/artifacts/artifact_deflection.md3");
-	precache_model ("models/artifacts/artifact_aegis.md3");
-	precache_model ("models/artifacts/artifact_animus.md3");
-	precache_model ("models/artifacts/artifact_shockwave.md3");
-	precache_model ("models/artifacts/artifact_apparatus.md3");
-	precache_model ("models/artifacts/artifact_apparatus.md3");
-	precache_model ("models/artifacts/artifact_apparatus.md3");
-	precache_model ("models/artifacts/artifact_apparatus.md3");
-	precache_model ("models/artifacts/artifact_apparatus.md3");
-	precache_model ("models/artifacts/confounding_attar.md3");
-	precache_model ("models/artifacts/confounding_attar.md3");
+	precache_model("models/player/outlander/head.md3");
+	precache_model("models/player/outlander/lower.md3");
+	precache_model("models/player/outlander/upper.md3");
+	precache_model("models/artifacts/active/flask_active.md3");
+	precache_model("models/artifacts/active/life_siphon_active.md3");
+	precache_model("models/artifacts/active/sigil_flight_active.md3"); //
+	precache_model("models/artifacts/active/soul_tether_active.md3");
+	precache_model("models/artifacts/active/sigil_wrath_active.md3");
+	precache_model("models/artifacts/artifact_animus_proj.md3");
+	precache_model("models/artifacts/artifact_revelation.md3");
+	precache_model("models/artifacts/artifact_apparatus.md3");
+	precache_model("models/artifacts/artifact_rage.md3");
+	precache_model("models/artifacts/artifact_attar.md3");
+	precache_model("models/artifacts/artifact_grenade.md3");
+	precache_model("models/artifacts/artifact_siphon.md3");
+	precache_model("models/artifacts/artifact_deflection.md3");
+	precache_model("models/artifacts/artifact_aegis.md3");
+	precache_model("models/artifacts/artifact_animus.md3");
+	precache_model("models/artifacts/artifact_shockwave.md3");
+	precache_model("models/artifacts/artifact_apparatus.md3");
+	precache_model("models/artifacts/artifact_apparatus.md3");
+	precache_model("models/artifacts/artifact_apparatus.md3");
+	precache_model("models/artifacts/artifact_apparatus.md3");
+	precache_model("models/artifacts/artifact_apparatus.md3");
+	precache_model("models/artifacts/confounding_attar.md3");
+	precache_model("models/artifacts/confounding_attar.md3");
 
-	precache_model ("models/artifacts/cruel_aegis.md3");
-	precache_model ("models/artifacts/drowners_apparatus.md3");
-	precache_model ("models/artifacts/effects/confounding_attar_enemy.md3");
-	precache_model ("models/artifacts/effects/confounding_attar_proj.md3");
-	precache_model ("models/artifacts/effects/life_siphon_heretic.md3");
-	precache_model ("models/artifacts/effects/life_siphon_humanoid.md3");
-	precache_model ("models/artifacts/effects/life_siphon_stricken.md3");
-	precache_model ("models/artifacts/effects/life_siphon_wraith.md3");
-	precache_model ("models/artifacts/effects/orb_blackhole.md3");
-	precache_model ("models/artifacts/effects/orb_deflection.md3");
-	precache_model ("models/artifacts/effects/orb_deflection.md3");
-	precache_model ("models/artifacts/effects/orb_deflection.md3");
-	precache_model ("models/artifacts/effects/orb_deflection.md3");
-	precache_model ("models/artifacts/effects/orb_deflection.md3");
-	precache_model ("models/artifacts/effects/orb_deflection.md3");
-	precache_model ("models/artifacts/effects/orb_shockwave1.md3");
-	precache_model ("models/artifacts/effects/orb_shockwave2.md3");
-	precache_model ("models/artifacts/effects/revelation.md3");
-	precache_model ("models/artifacts/effects/revelation_blur.md3");
-	precache_model ("models/artifacts/effects/trinket_dome.md3");
-	precache_model ("models/artifacts/grenade.md3");
-	precache_model ("models/artifacts/life_siphon.md3");
-	precache_model ("models/artifacts/orb_grenade.md3");
-	precache_model ("models/artifacts/soul_marker.md3");
-	precache_model ("models/artifacts/soul_marker.md3");
-	precache_model ("models/artifacts/soul_tether.md3");
-	precache_model ("models/artifacts/trinket_of_reflection.md3");
-	precache_model ("models/artifacts/vicious_animus.md3");
-	precache_model ("models/dev/gizmo.md3");
-	precache_model ("models/dev/node.md3");
-	precache_model ("models/dev/sphere.md3");
-	precache_model ("models/dev/spherebig.md3");
-	precache_model ("models/artifacts/active/cruel_aegis_active.md3");
-	precache_model ("models/enemies/lurker/lurker.md3");
-	precache_model ("models/gibs/gib_large.md3");
-	precache_model ("models/gibs/gib_med.md3");
-	precache_model ("models/gibs/gib_small.md3");
-	precache_model ("models/items/ammo_cannon.md3");
-	precache_model ("models/items/ammo_crystal.md3");
-	precache_model ("models/items/ammo_invader.md3");
-	precache_model ("models/items/ammo_lance.md3");
-	precache_model ("models/items/ammo_retcher.md3");
-	precache_model ("models/items/ammo_revolver.md3");
-	precache_model ("models/items/ammo_shotgun.md3");
-	precache_model ("models/items/ammo_spitter.md3");
-	precache_model ("models/items/ammo_spitter_drop.md3");
-	precache_model ("models/items/armor.md3");
-	precache_model ("models/items/armor_dark.md3");
-	precache_model ("models/items/armor_shard.md3");
-	precache_model ("models/items/armor_shard_dark.md3");
-	precache_model ("models/items/coffer_key1.md3");
-	precache_model ("models/items/glyph_blue.md3");
-	precache_model ("models/items/glyph_red.md3");
-	precache_model ("models/items/glyph_yellow.md3");
-	precache_model ("models/items/helm.md3");
-	precache_model ("models/items/helm_dark.md3");
-	precache_model ("models/items/lifeblood_beaker.md3");
-	precache_model ("models/items/lifeblood_chalice.md3");
-	precache_model ("models/items/lifeblood_vial.md3");
-	precache_model ("models/items/relic.md3");
-	precache_model ("models/items/shells.md3");
-	precache_model ("models/items/slugs.md3");
-	precache_model ("models/keys/key_1_coffer.md3");
-	precache_model ("models/keys/key_2_coffer.md3");
-	precache_model ("models/keys/key_3_coffer.md3");
-	precache_model ("models/keys/key_1_blue.md3");
-	precache_model ("models/keys/key_2_blue.md3");
-	precache_model ("models/keys/key_3_blue.md3");
-	precache_model ("models/keys/key_1_red.md3");
-	precache_model ("models/keys/key_2_red.md3");
-	precache_model ("models/keys/key_3_red.md3");
-	precache_model ("models/keys/key_1_yellow.md3");
-	precache_model ("models/keys/key_2_yellow.md3");
-	precache_model ("models/keys/key_3_yellow.md3");
-	precache_model ("models/misc/null.md3");
-	precache_model ("models/objects/coffers/coffer1_collision.md3");
-	precache_model ("models/objects/coffers/coffer1_locked.md3");
-	precache_model ("models/objects/decor/crystals/crystal_small.md3");
-	precache_model ("models/objects/teleporters/teleporter.md3");
-	precache_model ("models/projectiles/beam_crystal.md3");
-	precache_model ("models/projectiles/beam_crystala.md3");
-	precache_model ("models/projectiles/beam_crystalb.md3");
-	precache_model ("models/projectiles/beam_crystalc.md3");
-	precache_model ("models/projectiles/beam_crystald.md3");
-	precache_model ("models/projectiles/beam_crystale.md3");
-	precache_model ("models/projectiles/proj_beam.md3");
-	precache_model ("models/projectiles/proj_crystal.md3");
-	precache_model ("models/projectiles/proj_cyst.md3");
-	precache_model ("models/projectiles/proj_cyst.md3");
-	precache_model ("models/projectiles/proj_fang1.md3");
-	precache_model ("models/projectiles/proj_fang2.md3");
-	precache_model ("models/projectiles/proj_oppressor.md3");
-	precache_model ("models/projectiles/proj_oppressor_explo.md3");
-	precache_model ("models/projectiles/proj_raila.md3");
-	precache_model ("models/projectiles/proj_railb.md3");
-	precache_model ("models/projectiles/proj_shotgun1.md3");
-	precache_model ("models/projectiles/proj_shotgun2.md3");
-	precache_model ("models/projectiles/proj_shotgun_explo.md3");
-	precache_model ("models/projectiles/proj_shrapnel.md3");
-	precache_model ("models/projectiles/proj_slag1.md3");
-	precache_model ("models/projectiles/proj_slag1_explo.md3");
-	precache_model ("models/projectiles/proj_slag2.md3");
-	precache_model ("models/projectiles/proj_slag2_explo.md3");
-	precache_model ("models/warp/warp.md3");
-	precache_model ("models/weapons/cannon/v_cannon.md3");
-	precache_model ("models/weapons/cannon/v_pipes.md3");
-	precache_model ("models/weapons/cannon/w_cannon.md3");
-	precache_model ("models/weapons/crystal/v_crystal.md3");
-	precache_model ("models/weapons/crystal/w_crystal.md3");
-	precache_model ("models/weapons/lance/barrier.md3");
-	precache_model ("models/weapons/lance/v_beam.md3");
-	precache_model ("models/weapons/lance/v_flash.md3");
-	precache_model ("models/weapons/lance/v_lance.md3");
-	precache_model ("models/weapons/lance/w_lance.md3");
+	precache_model("models/artifacts/cruel_aegis.md3");
+	precache_model("models/artifacts/drowners_apparatus.md3");
+	precache_model("models/artifacts/effects/confounding_attar_enemy.md3");
+	precache_model("models/artifacts/effects/confounding_attar_proj.md3");
+	precache_model("models/artifacts/effects/life_siphon_heretic.md3");
+	precache_model("models/artifacts/effects/life_siphon_humanoid.md3");
+	precache_model("models/artifacts/effects/life_siphon_stricken.md3");
+	precache_model("models/artifacts/effects/life_siphon_wraith.md3");
+	precache_model("models/artifacts/effects/orb_blackhole.md3");
+	precache_model("models/artifacts/effects/orb_deflection.md3");
+	precache_model("models/artifacts/effects/orb_deflection.md3");
+	precache_model("models/artifacts/effects/orb_deflection.md3");
+	precache_model("models/artifacts/effects/orb_deflection.md3");
+	precache_model("models/artifacts/effects/orb_deflection.md3");
+	precache_model("models/artifacts/effects/orb_deflection.md3");
+	precache_model("models/artifacts/effects/orb_shockwave1.md3");
+	precache_model("models/artifacts/effects/orb_shockwave2.md3");
+	precache_model("models/artifacts/effects/revelation.md3");
+	precache_model("models/artifacts/effects/revelation_blur.md3");
+	precache_model("models/artifacts/effects/trinket_dome.md3");
+	precache_model("models/artifacts/grenade.md3");
+	precache_model("models/artifacts/life_siphon.md3");
+	precache_model("models/artifacts/orb_grenade.md3");
+	precache_model("models/artifacts/soul_marker.md3");
+	precache_model("models/artifacts/soul_marker.md3");
+	precache_model("models/artifacts/soul_tether.md3");
+	precache_model("models/artifacts/trinket_of_reflection.md3");
+	precache_model("models/artifacts/vicious_animus.md3");
+	precache_model("models/dev/gizmo.md3");
+	precache_model("models/dev/node.md3");
+	precache_model("models/dev/sphere.md3");
+	precache_model("models/dev/spherebig.md3");
+	precache_model("models/artifacts/active/cruel_aegis_active.md3");
+	precache_model("models/enemies/lurker/lurker.md3");
+	precache_model("models/gibs/gib_large.md3");
+	precache_model("models/gibs/gib_med.md3");
+	precache_model("models/gibs/gib_small.md3");
+	precache_model("models/items/ammo_cannon.md3");
+	precache_model("models/items/ammo_crystal.md3");
+	precache_model("models/items/ammo_invader.md3");
+	precache_model("models/items/ammo_lance.md3");
+	precache_model("models/items/ammo_retcher.md3");
+	precache_model("models/items/ammo_revolver.md3");
+	precache_model("models/items/ammo_shotgun.md3");
+	precache_model("models/items/ammo_spitter.md3");
+	precache_model("models/items/ammo_spitter_drop.md3");
+	precache_model("models/items/armor.md3");
+	precache_model("models/items/armor_dark.md3");
+	precache_model("models/items/armor_shard.md3");
+	precache_model("models/items/armor_shard_dark.md3");
+	precache_model("models/items/coffer_key1.md3");
+	precache_model("models/items/glyph_blue.md3");
+	precache_model("models/items/glyph_red.md3");
+	precache_model("models/items/glyph_yellow.md3");
+	precache_model("models/items/helm.md3");
+	precache_model("models/items/helm_dark.md3");
+	precache_model("models/items/lifeblood_beaker.md3");
+	precache_model("models/items/lifeblood_chalice.md3");
+	precache_model("models/items/lifeblood_vial.md3");
+	precache_model("models/items/relic.md3");
+	precache_model("models/items/shells.md3");
+	precache_model("models/items/slugs.md3");
+	precache_model("models/keys/key_1_coffer.md3");
+	precache_model("models/keys/key_2_coffer.md3");
+	precache_model("models/keys/key_3_coffer.md3");
+	precache_model("models/keys/key_1_blue.md3");
+	precache_model("models/keys/key_2_blue.md3");
+	precache_model("models/keys/key_3_blue.md3");
+	precache_model("models/keys/key_1_red.md3");
+	precache_model("models/keys/key_2_red.md3");
+	precache_model("models/keys/key_3_red.md3");
+	precache_model("models/keys/key_1_yellow.md3");
+	precache_model("models/keys/key_2_yellow.md3");
+	precache_model("models/keys/key_3_yellow.md3");
+	precache_model("models/misc/null.md3");
+	precache_model("models/objects/coffers/coffer1_collision.md3");
+	precache_model("models/objects/coffers/coffer1_locked.md3");
+	precache_model("models/objects/decor/crystals/crystal_small.md3");
+	precache_model("models/objects/teleporters/teleporter.md3");
+	precache_model("models/projectiles/beam_crystal.md3");
+	precache_model("models/projectiles/beam_crystala.md3");
+	precache_model("models/projectiles/beam_crystalb.md3");
+	precache_model("models/projectiles/beam_crystalc.md3");
+	precache_model("models/projectiles/beam_crystald.md3");
+	precache_model("models/projectiles/beam_crystale.md3");
+	precache_model("models/projectiles/proj_beam.md3");
+	precache_model("models/projectiles/proj_crystal.md3");
+	precache_model("models/projectiles/proj_cyst.md3");
+	precache_model("models/projectiles/proj_cyst.md3");
+	precache_model("models/projectiles/proj_fang1.md3");
+	precache_model("models/projectiles/proj_fang2.md3");
+	precache_model("models/projectiles/proj_oppressor.md3");
+	precache_model("models/projectiles/proj_oppressor_explo.md3");
+	precache_model("models/projectiles/proj_raila.md3");
+	precache_model("models/projectiles/proj_railb.md3");
+	precache_model("models/projectiles/proj_shotgun1.md3");
+	precache_model("models/projectiles/proj_shotgun2.md3");
+	precache_model("models/projectiles/proj_shotgun_explo.md3");
+	precache_model("models/projectiles/proj_shrapnel.md3");
+	precache_model("models/projectiles/proj_slag1.md3");
+	precache_model("models/projectiles/proj_slag1_explo.md3");
+	precache_model("models/projectiles/proj_slag2.md3");
+	precache_model("models/projectiles/proj_slag2_explo.md3");
+	precache_model("models/warp/warp.md3");
+	precache_model("models/weapons/cannon/v_cannon.md3");
+	precache_model("models/weapons/cannon/v_pipes.md3");
+	precache_model("models/weapons/cannon/w_cannon.md3");
+	precache_model("models/weapons/crystal/v_crystal.md3");
+	precache_model("models/weapons/crystal/w_crystal.md3");
+	precache_model("models/weapons/lance/barrier.md3");
+	precache_model("models/weapons/lance/v_beam.md3");
+	precache_model("models/weapons/lance/v_flash.md3");
+	precache_model("models/weapons/lance/v_lance.md3");
+	precache_model("models/weapons/lance/w_lance.md3");
 
-	precache_model ("models/weapons/mace/w_mace_open.md3");
-	precache_model ("models/weapons/mace/w_mace.md3");
-	precache_model ("models/weapons/mace/v_gauntlet.md3");
-	precache_model ("models/weapons/mace/v_mace.md3");
-	precache_model ("models/weapons/mace/v_mace_blood.md3");
-	precache_model ("models/weapons/mace/v_mace_hot.md3");
-	precache_model ("models/weapons/mace/v_mace_runes.md3");
-	precache_model ("models/weapons/melee/v_blade.md3");
-	precache_model ("models/weapons/melee/v_blade_blood.md3");
-	precache_model ("models/weapons/melee/v_blade_energy.md3");
-	precache_model ("models/weapons/melee/v_blade_hot.md3");
-	precache_model ("models/weapons/melee/v_blade_runes.md3");
-	precache_model ("models/weapons/melee/v_gauntlet.md3");
-	precache_model ("models/weapons/melee/w_blade.md3");
-	precache_model ("models/weapons/retcher/v_retcher.md3");
-	precache_model ("models/weapons/retcher/w_retcher.md3");
-	precache_model ("models/weapons/revolver/flash_big.md3");
-	precache_model ("models/weapons/revolver/flash_big.md3");
-	precache_model ("models/weapons/revolver/flash_small.md3");
-	precache_model ("models/weapons/revolver/v_revolver.md3");
-	precache_model ("models/weapons/revolver/w_revolver.md3");
-	precache_model ("models/weapons/shotgun/flash_small.md3");
-	precache_model ("models/weapons/shotgun/v_shotgun.md3");
-	precache_model ("models/weapons/shotgun/w_shotgun.md3");
-	precache_model ("models/weapons/spitter/v_fangs.md3");
-	precache_model ("models/weapons/spitter/v_spitter.md3");
-	precache_model ("models/weapons/spitter/w_spitter.md3");
-	precache_model ("particles/explo/explo_blood1.md3");
-	precache_model ("particles/explo/explo_blood2.md3");
-	precache_model ("particles/explo/explo_blood3.md3");
-	precache_model ("particles/explo/explo_blood4.md3");
-	precache_model ("particles/explo/explo_cyst.md3");
-	precache_model ("particles/explo/explo_retcher.md3");
-	precache_model ("particles/explo/explo_slag1.md3");
-	precache_model ("particles/explo/explo_slag2.md3");
+	precache_model("models/weapons/mace/w_mace_open.md3");
+	precache_model("models/weapons/mace/w_mace.md3");
+	precache_model("models/weapons/mace/v_gauntlet.md3");
+	precache_model("models/weapons/mace/v_mace.md3");
+	precache_model("models/weapons/mace/v_mace_blood.md3");
+	precache_model("models/weapons/mace/v_mace_hot.md3");
+	precache_model("models/weapons/mace/v_mace_runes.md3");
+	precache_model("models/weapons/melee/v_blade.md3");
+	precache_model("models/weapons/melee/v_blade_blood.md3");
+	precache_model("models/weapons/melee/v_blade_energy.md3");
+	precache_model("models/weapons/melee/v_blade_hot.md3");
+	precache_model("models/weapons/melee/v_blade_runes.md3");
+	precache_model("models/weapons/melee/v_gauntlet.md3");
+	precache_model("models/weapons/melee/w_blade.md3");
+	precache_model("models/weapons/retcher/v_retcher.md3");
+	precache_model("models/weapons/retcher/w_retcher.md3");
+	precache_model("models/weapons/revolver/flash_big.md3");
+	precache_model("models/weapons/revolver/flash_big.md3");
+	precache_model("models/weapons/revolver/flash_small.md3");
+	precache_model("models/weapons/revolver/v_revolver.md3");
+	precache_model("models/weapons/revolver/w_revolver.md3");
+	precache_model("models/weapons/shotgun/flash_small.md3");
+	precache_model("models/weapons/shotgun/v_shotgun.md3");
+	precache_model("models/weapons/shotgun/w_shotgun.md3");
+	precache_model("models/weapons/spitter/v_fangs.md3");
+	precache_model("models/weapons/spitter/v_spitter.md3");
+	precache_model("models/weapons/spitter/w_spitter.md3");
+	precache_model("particles/explo/explo_blood1.md3");
+	precache_model("particles/explo/explo_blood2.md3");
+	precache_model("particles/explo/explo_blood3.md3");
+	precache_model("particles/explo/explo_blood4.md3");
+	precache_model("particles/explo/explo_cyst.md3");
+	precache_model("particles/explo/explo_retcher.md3");
+	precache_model("particles/explo/explo_slag1.md3");
+	precache_model("particles/explo/explo_slag2.md3");
 	precache_model("models/objects/decor/crystals/crystal_base.md3");
 	//precache_model("models/weapons/lance/v_lance_wrath.md3");
 	precache_model("models/artifacts/effects/revelation_particle.md3");

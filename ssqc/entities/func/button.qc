@@ -34,9 +34,12 @@ void() button_fire = { if (self.state == STATE_UP || self.state == STATE_TOP)
 	SUB_CalcMove(self.pos2, self.speed, button_wait);
 };
 
-void() button_use = { self.enemy = activator;
+
+void button_use() {
+	self.enemy = activator;
 	button_fire();
-};
+}
+
 
 void() buttonbbox_use = { self.owner.enemy = activator;
 	self.owner.think = button_fire;
@@ -49,36 +52,46 @@ void() bboxbutton_think = { self.usable = self.owner.usable;
 
 };
 
-/*
-func_button
-speed (velocity, default is 50)
-wait (time to return in seconds, default is 1)
-lip (lip in qu default 4)
-buttondecal (brush model is flat)
+
+/*FGD
+@SolidClass
+	base(Target)
+	color(0 .4 1)
+= func_button : "When a button is touched by a player, it moves in the direction set by the `angle` key, triggers all its targets, stays pressed by an amount of time set by the `wait` key, then returns to it's original position where it can be operated again." [
+	angle(float) : "Direction" : "0" : "Determines the direction in which the button will move (up = -1, down = -2)."
+	targetname(target_source) : "Target Name" : "" : "If set, other entities can be used to activate the button along with touch or damage way of doing that."
+	speed(float) : "Move Speed" : "50" : "Speed of button's displacement."
+	wait(float) : "Return Delay" : "1" : "Number of seconds button stays pressed (default 1, -1 = no return)."
+	lip(float) : "Lip" : "4" : "Lip remaining at end of move."
+	buttondecal(integer) : "Decal Button" : 0 : "Set to 1 to add extra volume if the brush is a decal."
+]
 */
 
-void() func_button = 
-{ 
+void func_button() {
 	precache_sound(self.noise);
+
 	if (!self.speed)
 		self.speed = 50;
+
 	self.glowmod = '1 1 1';
+
 	if (!self.wait)
 		self.wait = 1;
+
 	if (!self.lip)
 		self.lip = 4;
+
 	SetMovedir();
 	self.usable = 1;
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel(self, self.model);
 
-	if (self.buttondecal == 1)
-	{
+	if (self.buttondecal == 1) {
 		self.solid = SOLID_NOT;
 		self.usable = 0;
-		local entity newbbox;
-		newbbox = spawn();
+
+		entity newbbox = spawn();
 		newbbox.owner = self;
 		newbbox.buttondecal = 1;
 		newbbox.usable = 1;
@@ -91,4 +104,4 @@ void() func_button =
 	self.state = STATE_BOTTOM;
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir *(fabs(self.movedir *self.size) - self.lip);
-};
+}

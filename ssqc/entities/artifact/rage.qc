@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_rage.md3"})
+= artifact_rage : "Artifact: Flask of Rage ( quin damage )" []
+*/
+
 void artifact_rage() {
 	radial();
 	self.noise = "items/artifacts/artifactC_pickup.ogg";

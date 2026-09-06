@@ -1,8 +1,39 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/mace/w_mace.md3"})
+= weapon_mace : "Mace" []
+*/
+
+void() weapon_mace = {
+	self.items = IT_MACE;
+	self.itemisweapon = 1;
+
+	//setmodel(self, "models/weapons/mace/w_mace_open.md3");
+	setmodel(self, "models/weapons/mace/w_mace.md3");
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+	self.noise  ="weapons/mace/mace_unfold1.ogg";
+	precache_sound(self.noise);
+	//self.ammo_lance = 20;
+	self.rwpn = 1;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.touch = wammo_touch;
+	self.msg = 97;
+	self.msg_icon = "mace";
+	self.msg_text = "$NOTIFY_WEP_MACE";
+};
+
+
 .float oldrandomattack;
 .float pick_bfg;
 .float drunktime;
 .float wretch_gibbing;
-void()wsfullcharge_bfg;
+
+
 void() v_bfg_idle = 
 { 
 	if (self.playerdeadtime > time)

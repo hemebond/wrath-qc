@@ -1,11 +1,36 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/spitter/w_spitter.md3"})
+= weapon_spitter : "Spitter gun" []
+*/
+void weapon_spitter() {
+	self.items = IT_SPITTER;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/spitter/w_spitter.md3");
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+	self.ammo_spitter = 20;
+	self.rwpn = 1;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	precache_sound(self.noise);
+	self.touch = wammo_touch;
+	self.msg = 92;
+	self.msg_icon = "spitter";
+	self.msg_text = "$NOTIFY_WEP_SPITTER";
+}
+
 
 .float spittertag;
 .vector vvv2;
 .vector vvv1;
-//void(float damage, float type) spawn_touchblood2;
 
-void() idle_spitter = { if (self.playerdeadtime > time)
-	{
+
+void idle_spitter() {
+	if (self.playerdeadtime > time) {
 		self.think = PlayerDeathThink;
 		self.nextthink = time;
 	}
@@ -20,8 +45,8 @@ void() idle_spitter = { if (self.playerdeadtime > time)
 		self.vweaponstate = 0;
 	self.think = idle_spitter;
 	self.nextthink = time + 0.1;
+}
 
-};
 
 void() prelease_spitter2 = { self.vweaponframe += 1;
 	if (self.vweaponframe >= 30)
@@ -601,5 +626,3 @@ void() lower_spitter = { sound(self, CHAN_AUTO, "weapons/spitter/lower.ogg", 1, 
 	self.vweaponstate = 2;
 	self.nextthink = time + 0.025;
 };
-
-///////////////////////////////////end of qc file

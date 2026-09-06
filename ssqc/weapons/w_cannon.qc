@@ -1,7 +1,34 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/cannon/w_cannon.md3"})
+= weapon_cannon : "Cannon" []
+*/
+
+void() weapon_cannon =
+{
+	self.items = IT_CANNON;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/cannon/w_cannon.md3");
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+	precache_sound(self.noise);
+	self.ammo_cannon = 20;
+	self.rwpn = 1;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.touch = wammo_touch;
+	self.msg = 94;
+	self.msg_icon = "slagcannon";
+	self.msg_text = "$NOTIFY_WEP_SLAGCANNON";
+};
+
+
 .float explodcount;
 .float gwmd;
 .float fire_time_cannon;
-void() wfire_cannon;
 
 void() idle_cannon = { if (self.playerdeadtime > time)
 	{

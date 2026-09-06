@@ -18,6 +18,15 @@ float pingtimerefresh;
 .float wsfire_crystal_dmgcnt;
 
 
+/*FGD
+@BaseClass = Weapon [
+    spawnflags(flags) = [
+        1 : "Inspect Animation" : 0 : "Play inpect animation when pickup up."
+    ]
+]
+*/
+
+
 // self.revolver_damage1 = 60				//	damage mutiplier fire1 (1 projectile 200 DPS )
 // self.revolver_damage1_mp = 25				//	damage mutiplier fire1 (1 projectile 83 DPS )MULTIPLAYER
 // self.revolver_damage2 = 50				//	damage multiplier fire2 (3 projectiles, 300 DPS)
@@ -71,6 +80,7 @@ void(vector org, vector vel) SpawnGib3 =
 		setmodel(gib, "models/gibs/gib_med.md3");
 	if(r > 0.66)
 		setmodel(gib, "models/gibs/gib_large.md3");
+
 	gib.traileffectnum = particleeffectnum("bloodtrail");
 	setorigin(gib, org);
 	gib.solid = SOLID_CORPSE;
@@ -2662,7 +2672,6 @@ void() WeaponSounds =
 };
 .float fieldcreated;
 .float melee_ammount;
-void() w_melee_prerelease;
 void() vgearframes = { if (self.vgearframetime > time)
 		return;
 	if (self.vgearframe >= 15)
@@ -2672,7 +2681,6 @@ void() vgearframes = { if (self.vgearframetime > time)
 	self.fvgeartime += 0.05;
 	self.vgearframetime = time + self.fvgeartime;
 };
-void()ws_release_fire;
 .float flightimesnd;
 .float flightflag;
 void() flight_sound =
@@ -2694,7 +2702,6 @@ void() flight_sound =
 };
 .float melee_lunge;
 .float impulsetime;
-//void() check_stunned_monsters;
 void() glow_melee = { local float gd;
 	if (!(self.melee_kills))
 	{
@@ -2730,8 +2737,6 @@ void() glow_melee_uber = { local float gd;
 .float timezoomframesec;
 .float reloadimpulse;
 .float oldimpulse;
-void(float mtype, vector org, entity ownr) Hud_message_delay;
-void() zoom_shotgun;
 void() Fix_weapons =
 {
 	float hasbug;
@@ -2773,25 +2778,20 @@ void() get_texture_name =
 	pointparticles(bparticle, org, '0 0 0', 1);
 	centerprint(self,trace_dphittexturename);
 };
-void()trigger_artifact_checker_think;
-void(float ty) trigger_all_artifact_checkers =
-{
-	local entity e;
-	e = nextent(world);
-	while (e)
-	{
-		if ((e.classname == "trigger_artifact_checker")&& (e.type == ty) )
-		{
 
-			{
+
+void trigger_all_artifact_checkers(float ty) {
+	entity e = nextent(world);
+	while (e) {
+		if ((e.classname == "trigger_artifact_checker") && (e.type == ty)) {
 			e.think = trigger_artifact_checker_think;
 			e.nextthink = time;
-			}
 		}
 		e = nextent(e);
 	}
-};
-void()trigger_soultether_checker_think;
+}
+
+
 void(entity who) trigger_all_soultether_checkers =
 {
 	for(entity e = nextent(world); e; e = nextent(e))
@@ -2804,7 +2804,6 @@ void(entity who) trigger_all_soultether_checkers =
 		e.nextthink = time;
 	}
 };
-void()Test_Sound;
 .float testsoundflag;
 
 void WeaponFrames() {
@@ -3297,7 +3296,7 @@ void WeaponFrames() {
 		{
 			if (self.luse)
 				return;
-			Use_Func();
+			use_func();
 			self.luse = 1;
 		}
 		else

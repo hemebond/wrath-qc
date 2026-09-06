@@ -97,8 +97,7 @@ void() recount_monsters =
 	total_monsters = killed_monsters +  monster_counter ();
 	entity pl = find(world, classname, "player");
 
-	local entity spawner;
-	spawner = nextent(world);
+	entity spawner = nextent(world);
 	float plrelics = pl.oldrelics;
 
 	if(skill >= 3)
@@ -359,10 +358,120 @@ void() enemy_spawner_use_wait = { self.think = enemy_spawner_use;
 	self.nextthink = time + self.wait;
 };
 
-void() enemy_spawner = 
-{
 
-
+/*FGD
+@PointClass
+	base(Weapon)
+	color(1 1 0)
+	size(-16 -16 -32, 16 16 32)
+= enemy_spawner : "Spawner enemies entity" [
+	classmonster1(choices) : "Encounter1" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster2(choices) : "Encounter2" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster3(choices) : "Encounter3" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster4(choices) : "Encounter4" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster5(choices) : "Encounter5" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	count(integer) : "Amount of monsters" : 1 : "number of monsters to spawn"
+	death_target(target_destination) : "Death Target" : : "All entities with a matching targetname will be triggered once the monster is killed."
+	delay(float) : "Delay" : "5" : "if the amount of monsters to spawn is bigger than 1, this will be the time between each spawn"
+	likecharge(integer) : "Spawn Charging" : 0 : "Enemy spawns in the charging state."
+	nojump(integer) : "No Jumpp" : 0 : "1 =  monster will ignore jumppads and trigger_monsterjumps"
+	rise(integer) : "Rise Animation" : 0 : "1 =  rise animation (if present)"
+	spawnflags(flags) = [
+		1 : "Ambush" : 0 : "the monster will only wake up on really seeing the player, not another monster getting angry"
+	]
+	target(target_destination) : "Target" : : "All entities with a matching targetname will be triggered."
+	targetname(target_source) : "Target Name" : : "If set, a func_button or trigger is required to activate the door (unless using health key)."
+	turret(integer) : "Turret" : 0 : "Monster will not run, just shoot"
+	type(integer) : "SpawnAngry" : 0 : "1 = monster will wake up being furious and following the player (fallen will spawn attacking)"
+	wait(float) : "Wait delay" : "0" : "Number of seconds before the first spawn."
+]
+*/
+void enemy_spawner() {
 	if (!self.classmonster2)
 		self.classmonster2 = self.classmonster1;
 	if (!self.classmonster3)
@@ -387,9 +496,6 @@ void() enemy_spawner =
 		self.delay = 5;
 	setmodel(self, "");
 
-
-
-
 	if (self.wait)
 		self.use = enemy_spawner_use_wait;
 	else
@@ -401,9 +507,7 @@ void() enemy_spawner =
 		self.think = wrath_objerror;
 		self.nextthink = time + random();
 	}
-	//if(self.respawnable)
-	//copy_old_data (self);
-};
+}
 
 .float fastwarp;
 void() enemy_spawner_warp_use = { 
@@ -450,8 +554,114 @@ void() enemy_spawner_warp_use = {
 void() enemy_spawner_warp_use_wait = { self.think = enemy_spawner_warp_use;
 	self.nextthink = time + self.wait;
 };
-void() enemy_spawner_warp = 
-{ 
+
+
+/*FGD
+@PointClass base(Weapon) color(1 0 0.3) size(-32 -32 -64, 32 32 64) model("models/warp/warp.md3") = enemy_spawner_warp : "Spawner enemies entity, using warp" [
+	classmonster1(choices) : "Encounter1" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster2(choices) : "Encounter2" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster3(choices) : "Encounter3" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster4(choices) : "Encounter4" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	classmonster5(choices) : "Encounter5" : 1 = [
+		1 : "Fallen ( zombie )"
+		2 : "Invader ( shotgunner zombie )"
+		3 : "Wretch ( plasma lightbulb )"
+		4 : "Prowler ( invisible manspider )"
+		5 : "Widow ( fast zombie )"
+		6 : "Wraith ( plasma scrag )"
+		7 : "Heretic ( grey cacodemon )"
+		8 : "Lurker ( nopefish )"
+		9 : "Oppressor ( lava revenant )"
+		10 : "Executioner ( big bad blade boi )"
+		11 : "Stricken ( artillery frog )"
+		12 : "Afflicted ( slime zombie )"
+		13 : "MelonHead ( suck it and see )"
+		14 : "Symbol ( space invader squid )"
+		15 : "Brute ( metal gorilla )"
+		16 : "Keeper ( flying mechanical brain )"
+	]
+	death_target(target_destination) : "Death Target" : : "All entities with a matching targetname will be triggered once the monster is killed."
+	fastwarp(integer) : "No Vortex animation" : 0 : "1 =  Vortex animation will be skipped"
+	likecharge(integer) : "Spawn Charging" : 0 : "Enemy spawns in the charging state."
+	nojump(integer) : "No Jumpp" : 0 : "1 =  monster will ignore jumppads and trigger_monsterjumps"
+	rise(integer) : "Rise Animation" : 0 : "1 =  rise animation (if present)"
+	spawnflags(flags) = [
+		1 : "Ambush" : 0 : "the monster will only wake up on really seeing the player, not another monster getting angry"
+	]
+	target(target_destination) : "Target" : : "All entities with a matching targetname will be triggered."
+	targetname(target_source) : "Target Name" : : "If set, a func_button or trigger is required to activate the door (unless using health key)."
+	type(integer) : "SpawnAngry" : 0 : "1 = monster will wake up being furious and following the player (fallen will spawn attacking)"
+]
+*/
+void enemy_spawner_warp() {
 	if (!self.type)
 		self.type = 1;
 	self.frame = 0;
@@ -471,8 +681,7 @@ void() enemy_spawner_warp =
 		self.classmonster5 = self.classmonster1;
 	self.local_classmonster = self.classmonster1;
 
-	if (self.local_classmonster <= 0)
-	{
+	if (self.local_classmonster <= 0) {
 		self.think = SUB_Remove;
 		self.nextthink = time + 0.1;
 		return;
@@ -486,12 +695,11 @@ void() enemy_spawner_warp =
 		self.use = enemy_spawner_warp_use;
 	self.think = check_spawner_counter;
 	self.nextthink = time + 1;
-	if (!self.targetname)
-	{				
+	if (!self.targetname) {
 		self.think = wrath_objerror;
 		self.nextthink = time + random();
 	}
-};
+}
 
 void() trigger_aggro_touch = 
 { 
@@ -516,6 +724,10 @@ void() trigger_aggro_touch =
 	}
 };
 
+
+/*FGD
+@SolidClass base(Target) color(0.5 0.0 0.5) = trigger_aggro : "Targeted monster will become angry at player." []
+*/
 void() trigger_aggro = { 
 
 	self.touch = trigger_aggro_touch;
@@ -525,7 +737,3 @@ void() trigger_aggro = {
 	self.use = toggle_disarmed;
 	self.model = string_null;
 };
-
-
-///////////////////////////////////
-

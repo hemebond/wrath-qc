@@ -1,9 +1,19 @@
 /*
-==============================================================================
-
-symbol
-
-==============================================================================
+symbol_health = 2000			// health
+symbol_walkspeed = 8					// walk speed
+symbol_runspeed = 16 					// run speed
+symbol_runsidespeed = 480			// run side speed
+symbol_upspeed = 256                 // fly up speed
+symbol_damage = 50					// damage
+symbol_proj_speed = 200                 // projectile speed
+symbol_proj_aceleration = 4	                // projectile max aceleration factor
+symbol_proj_angle = 6                 // projectile angle factor
+symbol_dtp = 500                 //	damage needed to pain
+symbol_far = 4096				// far
+symbol_mid = 512				// mid
+symbol_near = 128				// near
+symbol_bbox = '48 48 48'		// bbox
+symbol_bboxn = '-48 -48 -48'	// bboxn
 */
 
 $frame symbolbase
@@ -1574,9 +1584,7 @@ void(entity attacker, float damage) symbol_pain =
 void() symbol_Missile = { symbolshoot1();
 };
 
-/*
-	WRATHED monster_symbol (1 0 0) (-16 -16 -24) (16 16 40) Ambush
-*/
+
 void() precache_monster_symbol = {
 	precache_model("models/enemies/symbol/symbol.md3");
 	precache_model("models/projectiles/proj_symbol.md3");
@@ -1612,20 +1620,16 @@ void() precache_monster_symbol = {
 };
 
 
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-48 -48 -48, 48 48 48)
+	model({"path": "models/enemies/symbol/symbol.md3"})
+= monster_symbol : "Monster: Symbol" []
+*/
 void() monster_symbol = {
-	precache_model("models/enemies/symbol/symbol.md3");
-	precache_model("models/misc/null.md3");
-
-	precache_sound("enemies/symbol/chatter1.ogg");
-	precache_sound("enemies/symbol/chatter2.ogg");
-	precache_sound("enemies/symbol/chatter3.ogg");
-	precache_sound("enemies/symbol/pain1.ogg");
-	precache_sound("enemies/symbol/pain2.ogg");
-	precache_sound("enemies/symbol/pain3.ogg");
-	precache_sound("enemies/symbol/proj_loop.ogg");
-	precache_sound("enemies/symbol/sight1.ogg");
-	precache_sound("enemies/symbol/sight2.ogg");
-	precache_sound("enemies/symbol/sight3.ogg");
+	precache_monster_symbol();
 
 	self.solid = SOLID_SLIDEBOX;
 	self.flyer = 1;
@@ -1643,8 +1647,8 @@ void() monster_symbol = {
 	self.gravity = -0.01;
 
 	setsize(self, '-48 -48 -48', '48 48 48');
-	self.health = symbol_health;
-	self.max_health = symbol_health;
+	self.health = 2000;
+	self.max_health = self.health;
 	self.glowmod = '0.5 0.5 0.5';
 	self.th_stand = symbol_stand1;
 	self.bloody = 1;
@@ -1657,6 +1661,3 @@ void() monster_symbol = {
 
 	flymonster_start();
 };
-
-
-

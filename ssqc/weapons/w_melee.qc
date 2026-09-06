@@ -1,3 +1,30 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/melee/w_blade.md3"})
+= weapon_blade : "Blade" []
+*/
+
+
+void() weapon_blade = {
+	self.items = IT_MELEE;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/melee/w_blade.md3");
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.rwpn = 1;
+	precache_sound(self.noise);
+	self.touch = wammo_touch;
+	self.msg = 89;
+	self.msg_icon = "blade";
+	self.msg_text = "$NOTIFY_WEP_BLADE";
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+};
+
+
 .float oldrandomattack;
 .float pick_melee;
 .entity vmelee;
@@ -955,20 +982,24 @@ void() pick_up_melee = { self.weapon = IT_MELEE;
 	self.nextthink = time + 4.05;
 }
 
-void() TMelee_touch = { if (other.classname != "player")
+void() TMelee_touch = {
+	if (other.classname != "player")
 		return;
-	if (other.items &IT_MELEE)
+	if (other.items & IT_MELEE)
 		return;
 	other.time_pickupweapon = time + 0.75;
 
 	stuffcmd(other, "impulse 101\n");
 	remove(self);
 };
-void() trigger_melee = { self.solid = SOLID_TRIGGER;
+
+
+/*FGD
+@SolidClass = trigger_melee : "Give the player the melee weapon and switch to it." []
+*/
+void trigger_melee() {
+	self.solid = SOLID_TRIGGER;
 	self.alpha = -1;
 	setmodel(self, self.model);
 	self.touch = TMelee_touch;
-
-};
-
-///////////////////////////////////end of qc file
+}

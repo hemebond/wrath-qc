@@ -736,7 +736,6 @@ float CSQC_Parse_TempEntity()
 			// 	msg_mode |= 0x02;
 			// FIXME: Assume the file exists because fexists_pak is broken when using a mode/gamedir
 			msg_mode |= 0x02;
-			
 
 			// search for duplicates to aggregate
 			if (m_flags & HUDMSGFLAG::AGGREGATE)
@@ -804,7 +803,6 @@ float CSQC_Parse_TempEntity()
 					return TRUE;
 				}
 			}
-			//
 
 			uielement_c line = HUD_AllocateLine();
 			uipicture_c icon = (uipicture_c)line.partner;

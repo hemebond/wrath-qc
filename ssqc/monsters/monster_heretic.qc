@@ -1,9 +1,28 @@
 /*
-==============================================================================
-
-heretic
-
-==============================================================================
+heretic_health = 1200			//    health
+heretic_ws = 8				//    walk speed
+heretic_wth = 50				//    walk think % chance to attack, else keep walking
+heretic_ith = 50				//    chance to attack on wakeup
+heretic_rs = 16				//    run speed
+heretic_rt = 1				//    run cycle duration
+heretic_rth = 50				//    run think % chance to attack, else keep runing
+heretic_rsr = 512				//    CHASE speed
+heretic_projvel = 1200			//    PROJECTILE velocity
+heretic_ad = 30				//    PROJECTILE attack damage
+heretic_ath = 50				//    PROJECTILE attack think % chance to attack again, else keep runing
+heretic_sad = 30				//    MELEE attack damage
+heretic_dtp = 500				//    damage needed to pain
+heretic_rtp = 75				//    pain chance %
+heretic_pth = 100				//    pain think % chance to attack or run
+heretic_bbox = 64 64 64		//    bbox
+heretic_far = 4096			//    mid (distance for projectile attack)
+heretic_mid = 384				//    near (distance to chase)
+heretic_near = 111				//    melee (distance to bite)
+heretic_zzc = 100				//    zigzag chance
+heretic_zzd = 45				//    zigzag max deviance
+heretic_zzmd = 20				//    zigzag min deviance
+her_radius = 120             //    radius damage destruction
+her_chargetime = 2				//    charge duration
 */
 
 /*
@@ -1317,6 +1336,15 @@ void() precache_monster_heretic = {
 	precache_sound("enemies/heretic/end_chase.ogg");
 };
 
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-32 -32 -32, 32 32 32)
+	model({"path": "models/enemies/heretic/heretic.md3"})
+= monster_heretic : "Monster: Heretic" []
+*/
 void() monster_heretic = {
 	precache_monster_heretic();
 
@@ -1340,7 +1368,6 @@ void() monster_heretic = {
 	self.movetype = MOVETYPE_FLY;
 	self.oldmovetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/heretic/heretic.md3");
-	// setsize(self, heretic_bbox *-0.5, heretic_bbox *0.5);
 	setsize(self, '-32 -32 -32', '32 32 32');
 	self.health = heretic_health;
 	self.damagetopain = heretic_dtp;

@@ -1,4 +1,11 @@
-void artifact_tether() {
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/soul_tether.md3"})
+= item_tether : "Soul Tether ( save item )" []
+*/
+
+void item_tether() {
 	radial();
 	self.modelflags = MF_ROTATE;
 	self.noise = "items/artifacts/artifactE_pickup.ogg";
@@ -17,10 +24,4 @@ void artifact_tether() {
 	self.msg_text = "$NOTIFY_SOULTETHER";
 	self.touch = artifact_touch;
 	self.oldtouch = self.touch;
-}
-
-
-void item_tether() {
-	// Tether is an artifact but maps use item_tether
-	artifact_tether();
 }

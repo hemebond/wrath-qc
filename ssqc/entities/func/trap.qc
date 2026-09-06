@@ -7,17 +7,11 @@
 .float forcecrouch;
 
 
+void blade_fire() {
+	vector dir =  (self.pos1 - self.pos2);
+	self.velocity_z = 128;
+}
 
-void() blade_fire = 
-{
-vector dir =  (self.pos1 - self.pos2);
-//self.velocity = normalize(dir) * self.speed;
-self.velocity_z = 128;
-};
-
-
-void() trap_fire;
-void() trap_return;
 .vector partoffset;
 
 void() func_trap_particlespawner =
@@ -25,12 +19,12 @@ void() func_trap_particlespawner =
 
 	//vector dir = normalize (
 	vector pos3;
-	if(self.spawnflags & 1)
+	if (self.spawnflags & 1)
 		pos3 = (((self.absmin + self.absmax) * 0.5)) + (self.pos2 * 0.5)+ (self.pos1 * -0.5);
 	else
 		pos3 = (((self.absmin + self.absmax) * 0.5)) + (self.pos2 * 0.5)+ (self.pos1 * -1);
 
-	//if(self.partoffset)
+	//if (self.partoffset)
 		pos3 += self.partoffset;
 
 	vector partorg = pos3;
@@ -38,13 +32,13 @@ void() func_trap_particlespawner =
 	while (partcounnt > 0)
 	{
 
-		if(self.movedir_x == 0)
+		if (self.movedir_x == 0)
 			partorg_x = pos3_x + (random(-self.size_x* 0.5,self.size_x* 0.5));
-		if(self.movedir_y == 0)
+		if (self.movedir_y == 0)
 			partorg_y = pos3_y +  (random(-self.size_y * 0.5,self.size_y* 0.5));
-		if(self.movedir_z == 0)
+		if (self.movedir_z == 0)
 			partorg_z = pos3_z +  (random(-self.size_z* 0.5,self.size_z* 0.5));
-	
+
 		pointparticles(particleeffectnum(self.particlename), partorg, '0 0 0', 1);
 
 		partcounnt -= 1;
@@ -52,14 +46,14 @@ void() func_trap_particlespawner =
 
 };
 
-void() trap_wait = 
-{ 
+void() trap_wait =
+{
 	self.state = STATE_TOP;
 	self.touch = self.oldtouch;
 	activator = self.enemy;
 	self.usable = 0;
 	self.nextthink = self.ltime + self.wait;
-	if(self.classname != "damage_bbox")
+	if (self.classname != "damage_bbox")
 		sound(self, CHAN_VOICE, self.noise2, self.volume, self.atten);
 
 	if (self.particlename != "")
@@ -67,31 +61,30 @@ void() trap_wait =
 
 	self.think = trap_return;
 };
-void() trap_wait2 = 
-{ 
+void() trap_wait2 =
+{
 	self.state = STATE_BOTTOM;
 	self.touch = self.oldtouch;
 	activator = self.enemy;
 	self.usable = 0;
 	self.nextthink = self.ltime + self.wait2;
-	if(self.classname != "damage_bbox")
+	if (self.classname != "damage_bbox")
 		sound(self, CHAN_VOICE, self.noise2, self.volume, self.atten);
 
 
 	self.think = trap_fire;
 };
-void() trap_fire;
-void() trap_blocked = 
-{ 
-	if(other.classname == "spleetcyst")
+void() trap_blocked =
+{
+	if (other.classname == "spleetcyst")
 	other.lifetime = 0;
 
 	if (other.classname == "monster_fallen")
 		other.solid = SOLID_CORPSE;
-	if((other.classname == "player") && (self.forcecrouch == 1))
+	if ((other.classname == "player") && (self.forcecrouch == 1))
 		other.crushingtime = time + 0.1;
-	
-	if(other.damagerate < time)
+
+	if (other.damagerate < time)
 	{
 		T_Damage(other, self, self, self.dmg);
 		other.damagerate = time + self.damagerate;
@@ -100,29 +93,29 @@ void() trap_blocked =
 
 
 .float kill_player;
-void() trap_damageblocked = 
-{ 
+void() trap_damageblocked =
+{
 
-	if(other.classname == "spleetcyst")
+	if (other.classname == "spleetcyst")
 	other.lifetime = 0;
 
-	if((other.classname == "player") && (self.forcecrouch == 1) && (self.damagerate > 0))
+	if ((other.classname == "player") && (self.forcecrouch == 1) && (self.damagerate > 0))
 		other.crushingtime = time + 0.1;
-	if(other.damagerate < time)
+	if (other.damagerate < time)
 	{
-	
-		if((self.kill_player == 1)&& (other.health >0) )
+
+		if ((self.kill_player == 1)&& (other.health >0) )
 		{
 			other.health = -100;
 			Killed(other, self, 1);
 			return;
 		}
 		T_Damage(other, self, self, self.dmg);
-		
-		if(self.damagerate > 0)
+
+		if (self.damagerate > 0)
 			other.damagerate = time + self.damagerate;
 	}
-	if((other.health > 0 ) && (self.damagerate <= 0))
+	if ((other.health > 0 ) && (self.damagerate <= 0))
 	{
 		if (self.state == STATE_UP || self.state == STATE_TOP)
 		{
@@ -135,19 +128,19 @@ void() trap_damageblocked =
 };
 .float alwaysdamage;
 float MOVETYPE_FOLLOW = 12;
-void() trap_damagetouch = 
-{ 
+void() trap_damagetouch =
+{
 
-	if(other.classname == "spleetcyst")
+	if (other.classname == "spleetcyst")
 		other.lifetime = 0;
 
-	if(self.alwaysdamage != 1)
+	if (self.alwaysdamage != 1)
 		return;
 
-	if(other.damagerate < time)
+	if (other.damagerate < time)
 	{
-	
-		if((self.kill_player == 1)&& (other.health >0) )
+
+		if ((self.kill_player == 1)&& (other.health >0) )
 		{
 			other.health = -100;
 			Killed(other, self, 1);
@@ -156,14 +149,14 @@ void() trap_damagetouch =
 		T_Damage(other, self, self, self.dmg);
 
 
-		if(self.damagerate <= 0)
+		if (self.damagerate <= 0)
 			other.damagerate = time + 0.5;
 
-		if(self.damagerate > 0)
+		if (self.damagerate > 0)
 			other.damagerate = time + self.damagerate;
 	}
-	if((other.health > 0 ) && (self.damagerate <= 0))
-	{		
+	if ((other.health > 0 ) && (self.damagerate <= 0))
+	{
 		self.oldtouch = self.touch;
 		self.touch = null;
 		if (self.state == STATE_UP || self.state == STATE_TOP)
@@ -181,8 +174,8 @@ void() trap_damagetouch =
 
 
 
-void() trap_done = 
-{ 
+void() trap_done =
+{
 	sound(self, CHAN_VOICE, self.noise2, self.volume, self.atten);
 	//if (self.particlename)
 		//func_trap_particlespawner();
@@ -191,14 +184,14 @@ void() trap_done =
 	self.solid = SOLID_BSP;
 };
 
-void() trap_return = 
+void() trap_return =
 {
 	self.state = STATE_DOWN;
 	self.usable = 0;
-	if(self.classname != "damage_bbox")
+	if (self.classname != "damage_bbox")
 		sound(self, CHAN_VOICE, self.noise, self.volume, self.atten);
 
-	if((self.using == 1) || (self.loop == 2))
+	if ((self.using == 1) || (self.loop == 2))
 		SUB_CalcMove(self.pos1, self.speed, trap_wait2);
 	else
 	{
@@ -213,15 +206,15 @@ void() trap_return =
 .vector fake_origin;
 .string attached_model;
 
-void() trap_fire = 
-{ 
+void() trap_fire =
+{
 
-    if(self.target != "")
+    if (self.target != "")
     {
         local entity t;
         t = find(world,targetname,self.target);
-        if(t)
-        self.pos2 = t.origin;    
+        if (t)
+        self.pos2 = t.origin;
     }
 
 	if (self.state == STATE_UP || self.state == STATE_TOP)
@@ -230,15 +223,15 @@ void() trap_fire =
 		return;
 	}
 
-	if(self.classname != "damage_bbox")
+	if (self.classname != "damage_bbox")
 	sound(self, CHAN_VOICE, self.noise, 1, self.atten);
 	self.state = STATE_UP;
 	self.usable = 0;
-	if(self.loop != 0)
+	if (self.loop != 0)
 		SUB_CalcMove(self.pos2, self.speed2, trap_wait);
 	else
-	{	
-		if(self.wait == -1)
+	{
+		if (self.wait == -1)
 		SUB_CalcMove(self.pos2, self.speed2, trap_done);
 		else
 		{
@@ -248,22 +241,22 @@ void() trap_fire =
 	}
 };
 
-void() trap_postuse = 
-{ 
-	if(self.using == 0)
+void() trap_postuse =
+{
+	if (self.using == 0)
 	{
 		self.enemy = activator;
 		trap_fire();
 		self.using = 1;
 	}
-	if(self.using == 1)
+	if (self.using == 1)
 		self.using = 0;
 
 };
 
 
-void() trap_use = 
-{ 
+void() trap_use =
+{
 	self.think = trap_postuse;
 	self.nextthink = self.ltime + self.delay;
 };
@@ -273,7 +266,7 @@ void() trap_puse = { SUB_UseTargets();
 	trap_fire();
 };
 
-void() trigger_bbox_think = 
+void() trigger_bbox_think =
 {
 	self.velocity = self.owner.velocity;
 	self.think = trigger_bbox_think;
@@ -282,8 +275,36 @@ void() trigger_bbox_think =
 }
 
 
-void() func_blade = 
-{ 
+/*FGD
+@SolidClass
+	base(Target, TargetName)
+	color(0 .4 1)
+= func_blade : "Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it." [
+	alwaysdamage(integer) : "Always do damage" : 0 : "Func deals damage whenever touched"
+	angle(float) : "Direction" : "0" : "Determines the opening direction of trap (up = -1, down = -2)."
+	blade_offset(vector) : "Offset XYZ" : "1 1 1" : "Vector to reduce the size of the bbox for damage (default 1.0 1.0 1.0)."
+	damagerate(float) : "Damage Rate" : "0.1" : "damage rate in seconds, if the value is -1, func will deal damage once then return to start position"
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage value."
+	fake_lighted(integer) : "Fake Lightning" : 0 : "Set to 1 and brush will use fake lightning."
+	forcecrouch(integer) : "Force Crouch" : 0 : "Force crouch for player if causes damage (useful for vertical crushes)"
+	kill_player(integer) : "Kill Player" : 0 : "Func will kill Player"
+	lip(float) : "Lip" : "0" : "Lip remaining at end of move. Default value is 0"
+	loop(choices) : "Loop Flag" : 0 = [
+		0 : "Func doesnt loop, start inactive"
+		1 : "Func  loops, starts active"
+		2 : "Func  loops, start inactive"
+	]
+	spawnflags(flags) = [
+		1 : "Start open"
+	]
+	speed(float) : "Open Move Speed" : "60" : "Determines how fast the crusher moves (default is around 60)."
+	speed2(float) : "Close Move Speed" : "120" : "Determines how fast the crusher moves (default is around 120)."
+	wait(float) : "Return Delay" : "1" : "Number of seconds (open delay)"
+	wait2(float) : "Return Delay" : "1" : "Number of seconds (close delay"
+]
+*/
+void() func_blade =
+{
 	local float attn;
 	if (!self.volume)
 		self.volume = 1;
@@ -293,7 +314,6 @@ void() func_blade =
 	if (self.rad_sound <= 0)
 		attn = 0;
 	self.atten = attn;
-	//if(self.alwaysdamage)
 
 	precache_sound(self.noise);
 	precache_sound(self.noise2);
@@ -306,8 +326,8 @@ void() func_blade =
 		self.speed = 60;
 	if (!self.speed2)
 		self.speed2 = 120;
-	if(!self.damagerate)
-	self.damagerate = 0.1;
+	if (!self.damagerate)
+		self.damagerate = 0.1;
 
 	self.use = trap_postuse;
 	if (!self.dmg)
@@ -323,28 +343,23 @@ void() func_blade =
 	self.trapstate = 0;
 	self.pos1 = self.origin;
 
-	self.pos2 = self.pos1 + self.movedir *(fabs(self.movedir *self.size) - self.lip);
+	self.pos2 = self.pos1 + self.movedir * (fabs(self.movedir *self.size) - self.lip);
 
-
-	if ((self.spawnflags &1) && (!self.target))
-	{
+	if ((self.spawnflags & 1) && (!self.target)) {
 		setorigin(self, self.pos2);
 		self.pos2 = self.pos1;
 		self.pos1 = self.origin;
 	}
 
 	vector voffset;
-	voffset_z= (self.absmax_z - self.absmin_z) / 2; 
-	
+	voffset_z= (self.absmax_z - self.absmin_z) / 2;
 
-	if((self.loop == 1) || ((!self.targetname)))
-	{
+	if ((self.loop == 1) || ((!self.targetname))) {
 		self.using = 1;
 		self.nextthink = self.ltime + self.wait2 + self.delay;
 		self.think = trap_fire;
-	}	
+	}
 
-	
 	entity damagebbox = spawn();
 	copyentity (self, damagebbox);
 	damagebbox.solid =  SOLID_TRIGGER;
@@ -355,19 +370,47 @@ void() func_blade =
 	damagebbox.classname = "damage_bbox";
 	damagebbox.blocked = null;
 	damagebbox.owner = self;
-	damagebbox.touch = trap_damagetouch;	
+	damagebbox.touch = trap_damagetouch;
 	damagebbox.oldtouch = damagebbox.touch;
 	damagebbox.blocked = trap_damageblocked;
+}
 
 
-};
 .string atmodel;
 .float density;
 
-void() func_trap = 
-{ 
 
-	self.touch = trap_damagetouch;	
+/*FGD
+@SolidClass
+	base(Target)
+	color(0 .4 1)
+= func_trap : "Normal sliding door entity. By default, the door will activate when player walks close to it or when damage is inflicted to it." [
+	alwaysdamage(integer) : "Always do damage" : 0 : "Func deals damage whenever touched"
+	angle(float) : "Direction" : "0" : "Determines the opening direction of trap (up = -1, down = -2)."
+	damagerate(float) : "Damage Rate" : "0.1" : "damage rate in seconds, if the value is -1, func will deal damage once then return to start position"
+	delay(float) : "Start Delay" : "0" : "Number of seconds (open delay)"
+	dmg(integer) : "Damage Inflicted" : 4 : "Damage value."
+	fake_lighted(integer) : "Fake Lightning" : 0 : "Set to 1 and brush will use fake lightning."
+	forcecrouch(integer) : "Force Crouch" : 0 : "Force crouch for player if causes damage (useful for vertical crushes)"
+	kill_player(integer) : "Kill Player" : 0 : "Func will kill Player"
+	lip(float) : "Lip" : "0" : "Lip remaining at end of move. Default value is 0"
+	loop(choices) : "Loop Flag" : 0 = [
+		0 : "Func doesnt loop, start inactive"
+		1 : "Func loops, starts active"
+		2 : "Func  loops, start inactive."
+	]
+	spawnflags(flags) = [
+		1 : "Start open"
+	]
+	speed(float) : "Open Move Speed" : "60" : "Determines how fast the crusher moves (default is around 60)."
+	speed2(float) : "Close Move Speed" : "120" : "Determines how fast the crusher moves (default is around 120)."
+	targetname(target_source) : "Target Name" : "" : "If set, a func_button or trigger is required to activate the door (unless using health key)."
+	wait(float) : "Return Delay" : "1" : "Number of seconds (open delay)"
+	wait2(float) : "Return Delay" : "1" : "Number of seconds (close delay"
+]
+*/
+void func_trap() {
+	self.touch = trap_damagetouch;
 	self.oldtouch = self.touch;
 	self.blocked = trap_damageblocked;
 
@@ -379,11 +422,8 @@ void() func_trap =
 	attn = 512 / self.rad_sound;	// 200 for snd_soundradius default cvar!
 	if (self.rad_sound <= 0)
 		attn = 0;
-	
-	//partoffset
 
 	self.atten = attn;
-	//if(self.alwaysdamage)
 
 	precache_sound(self.noise);
 	precache_sound(self.noise2);
@@ -392,17 +432,19 @@ void() func_trap =
 	self.movetype = MOVETYPE_PUSH;
 	self.solid = SOLID_BSP;
 	setmodel(self, self.model);
+
 	if (!self.speed)
 		self.speed = 60;
 	if (!self.speed2)
 		self.speed2 = 120;
-	if(!self.damagerate)
+	if (!self.damagerate)
 		self.damagerate = 0.1;
 
-	if(!self.delay)
+	if (!self.delay)
 		self.use = trap_postuse;
 	else
 		self.use = trap_use;
+
 	if (!self.dmg)
 		self.dmg = 1;
 	if (!self.wait2)
@@ -416,15 +458,11 @@ void() func_trap =
 	self.trapstate = 0;
 	self.pos1 = self.origin;
 	self.pos2 = self.pos1 + self.movedir *(fabs(self.movedir *self.size) - self.lip);
-	
-	//self.partoffset = '0 0 -32';
-	//self.particlename = "e3m4trap";
 
-	if(!self.count)
-		self.count = 24; 
+	if (!self.count)
+		self.count = 24;
 
-	if (self.spawnflags &1)
-	{
+	if (self.spawnflags & 1) {
 		setorigin(self, self.pos2);
 		self.pos2 = self.pos1;
 		self.pos1 = self.origin;
@@ -432,85 +470,63 @@ void() func_trap =
 
 	if (self.keyrequired)
 		self.usable = 1;
+
 	vector voffset;
-	voffset_z= (self.absmax_z - self.absmin_z) / 2; 
-	if(self.fake_lighted == 1)
-	{
-	self.fake_origin = 0.5 *(self.absmax + self.absmin);
-	self.fake_origin_z = self.absmax_z;
+	voffset_z= (self.absmax_z - self.absmin_z) / 2;
+	if (self.fake_lighted == 1) {
+		self.fake_origin = 0.5 *(self.absmax + self.absmin);
+		self.fake_origin_z = self.absmax_z;
 
-	spawn_lighter(self);
+		spawn_lighter(self);
 	}
-	
 
-
-	//self.minlight = 75;
-
-	if(!(self.vminlight))
-	{
+	if (!(self.vminlight)) {
 		self.fake_origin = 0.5 *(self.absmax + self.absmin);
 		self.fake_origin_z = self.absmax_z + 8;
 
 
-		vector vlight  = getlight(self.fake_origin);	
+		vector vlight  = getlight(self.fake_origin);
 		self.vminlight = vlight;
 	}
-	if(self.minlight > 0)
-	{
+	if (self.minlight > 0) {
 		self.effects = EF_FULLBRIGHT;
 		self.colormod_x = self.vminlight_x * (self.minlight / 100);
 		self.colormod_y = self.vminlight_y * (self.minlight / 100);
 		self.colormod_z = self.vminlight_z * (self.minlight / 100);
-		//self.fake_lighted = 0;
 	}
 
-
-
-	if((self.loop == 1) || ((!self.targetname)))
-	{
+	if ((self.loop == 1) || ((!self.targetname))) {
 		self.using = 1;
 		self.nextthink = self.ltime + self.wait2 + self.delay;
 		self.think = trap_fire;
-	}	
-    if (self.atmodel != "")
-    {
-        precache_model(self.atmodel);
-        entity attached = spawn();
-        setmodel(attached, self.atmodel);
-        attached.origin = self.origin;
+	}
+	if (self.atmodel != "") {
+		precache_model(self.atmodel);
+		entity attached = spawn();
+		setmodel(attached, self.atmodel);
+		attached.origin = self.origin;
 		attached.movetype = MOVETYPE_FOLLOW; // make the hole follow
 		attached.solid = SOLID_NOT; // MOVETYPE_FOLLOW is always non-solid
 		attached.aiment = self; // make the hole follow bmodel
 		attached.punchangle = self.angles; // the original angles of bmodel
 		attached.view_ofs = attached.origin - self.origin; // relative origin
 		attached.v_angle = attached.angles - self.angles; // relative angles
-        
-    }
-};
-
-/*- open speed
-- close speed
-- open delay
-- close delay
-- damage
-- damage rate
-- loop flag
-- loop when triggered flag*/
+	}
+}
 
 
-void(float damage, vector dir,vector dest) TraceAttackBeam = 
-{	
-	local vector vel, org;
+void TraceAttackBeam(float damage, vector dir,vector dest) {
+	vector vel, org;
 	vel = normalize(dir + v_up* crandom() + v_right* crandom());
 	vel = vel + 2 * trace_plane_normal;
 	vel = vel * 200;
 	org = trace_endpos;
-	local float rlooplimit, dam;
-	local vector dorg, orgen;
-	local entity tempen;
+	float rlooplimit, dam;
+	vector dorg, orgen;
+	entity tempen;
 	rlooplimit = 21;
 	dorg = org - dir * 4;
-	if (trace_ent.takedamage) 
+	if (trace_ent.takedamage)
 	{
 		while (rlooplimit > 0)
 		{
@@ -537,9 +553,9 @@ void(float damage, vector dir,vector dest) TraceAttackBeam =
 	}
 };
 
-void() trigger_beam_active = 
+void() trigger_beam_active =
 {
-	if((self.using == 1)&& (self.lifetime < time))
+	if ((self.using == 1)&& (self.lifetime < time))
 	{
 		entity muzzle = spawn();
 		setmodel(muzzle, "models/projectiles/proj_crystal.md3");
@@ -549,7 +565,7 @@ void() trigger_beam_active =
 		muzzle.scale = random (1,1.5);
 
 
-		if(!(self.wait == -1))
+		if (!(self.wait == -1))
 		{
 			muzzle.think = crystal_muzzle_think;
 			muzzle.nextthink = time + self.duration + 0.1;
@@ -559,7 +575,7 @@ void() trigger_beam_active =
 		self.lifetime =  time + self.wait;
 		self.attack_finished = time + self.duration;
 
-		if(self.wait == -1)
+		if (self.wait == -1)
 		{
 			self.think = SUB_Remove;
 			self.nextthink = time + self.duration;
@@ -568,7 +584,7 @@ void() trigger_beam_active =
 
 	}
 
-	if((self.dmg > 0) && (self.using == 1) && (self.attack_finished > time))
+	if ((self.dmg > 0) && (self.using == 1) && (self.attack_finished > time))
 	{
 		vector direction = normalize (self.origin - self.oldorigin);
 		wtraceline(self.origin, self.oldorigin, FALSE, self);
@@ -588,8 +604,8 @@ void() trigger_beam_ready =
 	self.nextthink = time + 0.05;
 };
 
-void() toggle_beam_use = 
-{ 
+void() toggle_beam_use =
+{
 	if (self.using == 1)
 		self.using = 0;
 	else
@@ -600,7 +616,7 @@ void() toggle_beam_use =
 
 	entity t = find(world, targetname, self.target);
 
-	if(t.classname == "info_beam")
+	if (t.classname == "info_beam")
 	{
 		float tdelay = self.delay;
 		entity oself = self;
@@ -612,19 +628,32 @@ void() toggle_beam_use =
 };
 
 
-void() info_beam =
-{
+/*FGD
+@PointClass
+	color(.8 .1 1)
+	size(-8 -8 -8, 8 8 8)
+= info_beam : "Starting point for emitting purple energy beam for e2m4 map." [
+	dmg(float) : "Damage Inflicted" : "10" : "Damage inflicted"
+	duration(float) : "Duration" : "0.5"
+	scale(float) : "Scale" : "1"
+	target(target_destination) : "Target" : : "Target this to an info_notnull"
+	targetname(target_source) : "Target Name" : : "Target the beam to switch it on."
+	using(integer) : "Start Active" : 1 : "The emitter will start emiting particles, if 0, targetname is required."
+	wait(float) : "Wait delay" : "1" : "Duration of beam. Set to -1 for permanent."
+]
+*/
+void info_beam() {
 	self.classname = "info_beam";
-	if(!self.wait)
+	if (!self.wait)
 		self.wait = 1;
-	if(!self.duration)
+	if (!self.duration)
 		self.duration = 0.5;
-	if(!self.dmg)
+	if (!self.dmg)
 		self.dmg = 10;
-	if(!self.scale)
+	if (!self.scale)
 		self.scale = 1;
 
-	if(self.using == 1)
+	if (self.using == 1)
 	{
 		self.think = trigger_beam_ready;
 		self.nextthink = time + 0.1;
@@ -632,142 +661,59 @@ void() info_beam =
 	self.use = toggle_beam_use;
 };
 
-void() trigger_beam =
-{
+
+void trigger_beam() {
 	info_beam();
-};
-void(entity e, float ltime, float damage) lava_aoe_spawn;
-void()lava_ball_touch_small;
-void() lava_ball_think =
-{
-	if((self.cnt != 1) && (self.velocity_z < 0)&&(self.owner.count > 1))
-	{
-		self.gravity = self.scale;
-		float wnr_rspeed = self.owner.speed * 0.125;
-		if(self.scale <= 1)
-		{
-			float lava_count = 3;
-			while(lava_count > 0)
-			{
-				entity lava_ball = spawn();
-				lava_ball.owner = self;
-				setmodel(lava_ball, "models/projectiles/proj_slag2.md3");
-				lava_ball.origin_x = self.origin_x + random (-7,7);
-				lava_ball.origin_y = self.origin_y + random (-7,7);
-				lava_ball.origin_z = self.origin_z + random (-7,7);
-				lava_ball.solid = SOLID_TRIGGER;
-				lava_ball.movetype = MOVETYPE_TOSS;
-				lava_ball.owner = self.owner;
-				setsize(lava_ball, '-1 -1 -1', '1 1 1');
-				lava_ball.scale = random(0.1,0.25);
-				lava_ball.angles = self.angles;
-				lava_ball.gravity = self.gravity * random(0.85,1);	
-    			lava_ball.velocity_x = self.velocity_x* random(0.85,1.15);	
-				lava_ball.velocity_y = self.velocity_y * random(0.85,1.15);	
-				lava_ball.velocity_z = self.velocity_z;
-				lava_ball.traileffectnum = particleeffectnum("lavatrail2");
-				lava_ball.touch = lava_ball_touch_small;
-				lava_count --;
+}
 
-			}
-		}
 
-		if(self.scale == 1.25)
-			self.scale = 1;
-        self.velocity_x +=  random (-wnr_rspeed,wnr_rspeed);
-        self.velocity_y +=  random (-wnr_rspeed,wnr_rspeed);
-		self.cnt = 1;
-	}
-	
-	//self.angles = vectoangles(self.velocity);
-	vector wishangles = vectoangles(self.velocity);
+/*FGD
+@PointClass = lava_trap []
+*/
+void trap_lava() {
+	if (!self.using)
+		self.using = 1;
+	if (!self.wait)
+		self.wait = 3;
+	if (!self.count)
+		self.count = 3;
+	if (!self.cnt)
+		self.cnt = 3;
+	if (!self.lifetime)
+		self.lifetime = 4;
 
-	//self.angles = (self.angles  + wishangles ) * 0.5;
-	self.angles = vectoangles(self.velocity);
+	self.lifetime = self.lifetime / 2;
 
-	self.think = lava_ball_think;
-	self.nextthink = time + 0.01;
-};
+	if (!self.dmg)
+		self.dmg = 25;
 
-void()lava_ball_touch= 
-{
-	if(other.solid ==SOLID_TRIGGER) 
-		return;
-	if((other.solid ==SOLID_BSP)||(other.solid == SOLID_BBOX) || (other.solid == SOLID_SLIDEBOX))
-	{	
-		setorigin (self,self.origin + '0 0 38');
-		T_SplashDamage(self, self, 96, world, 96);
-		pointparticles(particleeffectnum("oppressor_gib"), self.origin, '0 0 0', 1);		
-		lava_aoe_spawn(self, max(0.1, self.owner.lifetime), self.dmg);
-		self.touch = SUB_Null;
-		self.effects = EF_NODRAW;
-		sound7(self,CHAN_AUTO,"impact/projectiles/slag2_explo2.ogg",0.5,0.25,random(200,270),0);
-		self.think = SUB_Remove;
-		self.nextthink = time + 5;
-	}
-};
-void()lava_ball_touch_small =
-{
-	if(other.solid ==SOLID_TRIGGER) 
-		return;
-	if((other.solid ==SOLID_BSP)||(other.solid == SOLID_BBOX) || (other.solid == SOLID_SLIDEBOX))
-	{	
-		self.touch = SUB_Null;
-		sound7(self,CHAN_AUTO,"impact/projectiles/slag2_explo2.ogg",0.25,0.25,random(370,500),0);
-		pointparticles(particleeffectnum("oppressor_small_gib"), self.origin, '0 0 0', 1);
-		float r = random();
-		self.velocity  = '0 0 0';
-		self.solid = 0;
-		self.movetype = 0;
-		if(r < 0.25)
-		{
-			setmodel(self,"");
-			self.effects = EF_FLAME;
-			float ball_duration = self.owner.lifetime * 0.85;
-			self.nextthink = time + random(ball_duration * 0.5,ball_duration);
-		}
-		else
-			self.nextthink = time;
+	if (!self.delay)
+		self.delay = 2;
+	if (!self.speed)
+		self.speed = 256;
+	if (!self.height)
+		self.height = 512;
 
-		T_SplashDamage(self, self, 32, world, 64);
-		self.think = SUB_Remove;
-	}
+	self.angles_x = 0;
+	self.angles_z = 0;
 
-};
+	self.use = toggle_use;
+	self.think = trap_lava_prethink;
+	self.nextthink = time;
+}
 
-entity(vector org) spawn_lava_ball = // Reki (October 12 2023): Repurposed this unused function for boss3 and general purpose lava ball spawning
-{
-	entity lava_ball = spawn();
-	setmodel(lava_ball, "models/projectiles/proj_slag2.md3");
-	
-	lava_ball.origin = org;
-	lava_ball.solid = SOLID_TRIGGER;
-	lava_ball.movetype = MOVETYPE_TOSS;
-	lava_ball.scale = random(0.75,1);
-	lava_ball.gravity = 0.75;
+void lava_trap() {
+	// For backward compatibility
+	trap_lava();
+}
 
-	lava_ball.touch = lava_ball_touch;
-	lava_ball.velocity = '0 0 510';
-	lava_ball.velocity += [random(-70, 70), random(-70, 70), random(-30, 120)];
+void trap_lava_prethink() {
+	self.think = trap_lava_think;
+	self.nextthink = time;
+}
 
-	setsize(lava_ball, '-2 -2 -2', '2 2 2');
-	lava_ball.angles = vectoangles(lava_ball.velocity);
-	lava_ball.traileffectnum = particleeffectnum("lavatrail");
-	lava_ball.effects = 1024;
-
-	lava_ball.cnt = 1;
-	lava_ball.oldcnt = 1;
-
-	lava_ball.think = lava_ball_think;
-	lava_ball.nextthink = time;
-
-	return lava_ball;
-};
-
-void() lava_trap_think =
-{
-	if(self.using == 1)
-	{
+void trap_lava_think() {
+	if (self.using == 1) {
 		float lava_count = self.count;
 		while(lava_count > 0)
 		{
@@ -780,25 +726,25 @@ void() lava_trap_think =
 			entity lava_ball = spawn();
 			lava_ball.owner = self;
 			setmodel(lava_ball, "models/projectiles/proj_slag2.md3");
-			
-			lava_ball.origin = self.origin + '0 0 32';	
+
+			lava_ball.origin = self.origin + '0 0 32';
 			lava_ball.origin_x += random(self.originjitter_x *-1, self.originjitter_x);
 			lava_ball.origin_y += random(self.originjitter_y *-1, self.originjitter_y);
 			lava_ball.origin_z += random(self.originjitter_z *-1, self.originjitter_z);
 			lava_ball.solid = SOLID_TRIGGER;
 			lava_ball.movetype = MOVETYPE_TOSS;
-			if(lava_count == self.count)
+			if (lava_count == self.count)
 				lava_ball.scale = 1.25;
 			else
 				lava_ball.scale = random(0.75,1);
-			lava_ball.gravity = 0.75;	
+			lava_ball.gravity = 0.75;
 
-			if(lava_count == self.count)
+			if (lava_count == self.count)
 				lava_ball.touch = lava_ball_touch;
 			else
 				lava_ball.touch = lava_ball_touch_small;
-			lava_ball.velocity_x = self.velocity_x;	
-			lava_ball.velocity_y = self.velocity_y;	
+			lava_ball.velocity_x = self.velocity_x;
+			lava_ball.velocity_y = self.velocity_y;
 			lava_ball.velocity_z = self.velocity_z;
 			lava_ball.velocity_x += random(self.velocityjitter_x * -1,self.velocityjitter_x);
 			lava_ball.velocity_y += random(self.velocityjitter_y * -1,self.velocityjitter_y);
@@ -813,57 +759,101 @@ void() lava_trap_think =
 			lava_count --;
 
 		}
-		self.think = lava_trap_think;
+		self.think = trap_lava_think;
 		self.nextthink = time + self.wait + random() * self.delay;
 	}
-	else
-	{
-		self.think = lava_trap_think;
+	else {
+		self.think = trap_lava_think;
 		self.nextthink = time + 0.1;
 	}
-};
-
-void() lava_trap_prethink =
-{
-
-	self.think = lava_trap_think;
-	self.nextthink = time;
 }
-void() lava_trap =
-{
-	if(!self.using)
-		self.using = 1;
-	if(!self.wait)
-		self.wait = 3;
-	if(!self.count)
-		self.count = 3;
-	if(!self.cnt)
-		self.cnt = 3;
-	if(!self.lifetime)
-		self.lifetime = 4;
-
-		self.lifetime = self.lifetime / 2;
-	if(!self.dmg)
-		self.dmg = 25;
-
-	if(!self.delay)
-		self.delay = 2;
-	if(!self.speed)
-		self.speed = 256;
-	if(!self.height)
-		self.height = 512;
-
-	self.angles_x = 0;
-	self.angles_z = 0;
-
-	self.use = toggle_use;
-	self.think = lava_trap_prethink;
-	self.nextthink = time;
-};
 
 
-void() trap_lava =
-{
-	lava_trap();
-};
-///////////////////////////////////end of qc file
+void lava_ball_touch_small() {
+	if (other.solid ==SOLID_TRIGGER)
+		return;
+	if ((other.solid ==SOLID_BSP)||(other.solid == SOLID_BBOX) || (other.solid == SOLID_SLIDEBOX)) {
+		self.touch = SUB_Null;
+		sound7(self,CHAN_AUTO,"impact/projectiles/slag2_explo2.ogg",0.25,0.25,random(370,500),0);
+		pointparticles(particleeffectnum("oppressor_small_gib"), self.origin, '0 0 0', 1);
+		float r = random();
+		self.velocity  = '0 0 0';
+		self.solid = 0;
+		self.movetype = 0;
+		if (r < 0.25)
+		{
+			setmodel(self,"");
+			self.effects = EF_FLAME;
+			float ball_duration = self.owner.lifetime * 0.85;
+			self.nextthink = time + random(ball_duration * 0.5,ball_duration);
+		}
+		else
+			self.nextthink = time;
+
+		T_SplashDamage(self, self, 32, world, 64);
+		self.think = SUB_Remove;
+	}
+}
+
+
+void lava_ball_touch() {
+	if (other.solid ==SOLID_TRIGGER)
+		return;
+
+	if ((other.solid ==SOLID_BSP)||(other.solid == SOLID_BBOX) || (other.solid == SOLID_SLIDEBOX)) {
+		setorigin (self,self.origin + '0 0 38');
+		T_SplashDamage(self, self, 96, world, 96);
+		pointparticles(particleeffectnum("oppressor_gib"), self.origin, '0 0 0', 1);
+		lava_aoe_spawn(self, max(0.1, self.owner.lifetime), self.dmg);
+		self.touch = SUB_Null;
+		self.effects = EF_NODRAW;
+		sound7(self,CHAN_AUTO,"impact/projectiles/slag2_explo2.ogg",0.5,0.25,random(200,270),0);
+		self.think = SUB_Remove;
+		self.nextthink = time + 5;
+	}
+}
+
+
+void lava_ball_think() {
+	if ((self.cnt != 1) && (self.velocity_z < 0)&&(self.owner.count > 1)) {
+		self.gravity = self.scale;
+		float wnr_rspeed = self.owner.speed * 0.125;
+		if (self.scale <= 1) {
+			float lava_count = 3;
+			while (lava_count > 0) {
+				entity lava_ball = spawn();
+				lava_ball.owner = self;
+				setmodel(lava_ball, "models/projectiles/proj_slag2.md3");
+				lava_ball.origin_x = self.origin_x + random (-7,7);
+				lava_ball.origin_y = self.origin_y + random (-7,7);
+				lava_ball.origin_z = self.origin_z + random (-7,7);
+				lava_ball.solid = SOLID_TRIGGER;
+				lava_ball.movetype = MOVETYPE_TOSS;
+				lava_ball.owner = self.owner;
+				setsize(lava_ball, '-1 -1 -1', '1 1 1');
+				lava_ball.scale = random(0.1,0.25);
+				lava_ball.angles = self.angles;
+				lava_ball.gravity = self.gravity * random(0.85,1);
+				lava_ball.velocity_x = self.velocity_x* random(0.85,1.15);
+				lava_ball.velocity_y = self.velocity_y * random(0.85,1.15);
+				lava_ball.velocity_z = self.velocity_z;
+				lava_ball.traileffectnum = particleeffectnum("lavatrail2");
+				lava_ball.touch = lava_ball_touch_small;
+				lava_count --;
+
+			}
+		}
+
+		if (self.scale == 1.25)
+			self.scale = 1;
+
+		self.velocity_x +=  random (-wnr_rspeed,wnr_rspeed);
+		self.velocity_y +=  random (-wnr_rspeed,wnr_rspeed);
+		self.cnt = 1;
+	}
+
+	self.angles = vectoangles(self.velocity);
+
+	self.think = lava_ball_think;
+	self.nextthink = time + 0.01;
+}

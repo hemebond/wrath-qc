@@ -859,7 +859,7 @@ void() lurker_pain7  =[      $lurker_pain1, lurker_pain8 ] {};
 void() lurker_pain8  =[      $lurker_pain1, lurker_pain9 ] {};
 void() lurker_pain9  =[      $lurker_pain1, lurker_pain10 ] {
 if(self.movetype == MOVETYPE_FLY)
-	setsize(self, heretic_bbox *-0.35, heretic_bbox *0.35);
+	setsize(self, LURKER_BBOX_MIN, LURKER_BBOX_MAX);
 };
 void() lurker_pain10  =[      $lurker_pain1, lurker_preattack ] {};
 
@@ -920,7 +920,7 @@ void() lurker_painb7  =[      $lurker_painb7, lurker_painb8 ] {pain_angles();};
 void() lurker_painb8  =[      $lurker_painb8, lurker_painb9 ] {pain_angles();};
 void() lurker_painb9  =[      $lurker_painb9, lurker_painb10 ] {
 if(self.movetype == MOVETYPE_FLY)
-	setsize(self, heretic_bbox *-0.35, heretic_bbox *0.35);
+	setsize(self, LURKER_BBOX_MIN, LURKER_BBOX_MAX);
 pain_angles();
 };
 void() lurker_painb10  =[      $lurker_painb8, lurker_roaming1 ] {
@@ -981,8 +981,7 @@ void(entity lurker_attacker, float damage)	lurker_pain =
 	}
 };
 
-void()precache_monster_lurker =
-{
+void() precache_monster_lurker = {
 	precache_sound ("enemies/lurker/attack1.ogg");
 	precache_sound ("enemies/lurker/attack2.ogg");
 	precache_sound ("enemies/lurker/attack3.ogg");
@@ -1037,7 +1036,7 @@ void() water_checker_think =
 			self.owner.angles_z = 0;
 
 	}
-	float envisible = visible (self.owner.enemy);
+	float envisible = visible(self.owner.enemy);
 
 	if(self.owner.lurker_jump_moment > time)
 	{
@@ -1049,13 +1048,20 @@ void() water_checker_think =
 
 	if(envisible >= 1)
 		self.owner.alert_time =  time + 12;
-	vector  pool_rorigin = (self.owner.pool.absmin + self.owner.pool.absmax) *0.5; 
-	if(!self.owner.lurkeroldorg)
+	vector pool_rorigin = (self.owner.pool.absmin + self.owner.pool.absmax) *0.5;
+
+	if (!self.owner.lurkeroldorg)
 		self.owner.lurkeroldorg = pool_rorigin+ randomvector ('-64 -64 -16','64 64 16');
-	if((self.liquidtouch_timing > time) && (self.owner.movetype == MOVETYPE_FLY) &&(self.owner.waiting_time < time) )
-	{
-		if((self.oldvelocity == self.owner.origin)&& (self.owner.frame == $lurker_swim1))
-		{
+
+	if (
+		(self.liquidtouch_timing > time) &&
+		(self.owner.movetype == MOVETYPE_FLY) &&
+		(self.owner.waiting_time < time)
+	) {
+		if (
+			(self.oldvelocity == self.owner.origin) &&
+			(self.owner.frame == $lurker_swim1)
+		) {
 			self.owner.sigil_time = time + random(0.5,0.75);
 			self.owner.movetype = MOVETYPE_WALK;
 			makevectors2 (self.owner.angles);
@@ -1082,7 +1088,7 @@ void() water_checker_think =
 				dir += v_forward * 12;
 			
 			self.colormod = '1 0 0';	
-			dir = normalize (dir);
+			dir = normalize(dir);
 			self.owner.velocity = dir * 128;
 			if((!visible(single_player)) && (self.owner.alert_time < time))
 			{
@@ -1093,24 +1099,40 @@ void() water_checker_think =
 	self.velocity = '0 0 12';
 	if((self.owner.movetype == MOVETYPE_WALK) && (self.owner.sigil_time < time))
 		self.owner.movetype = MOVETYPE_FLY;
+
 	if((self.owner.movetype == MOVETYPE_BOUNCE) && (self.owner.velocity_z > 0) && (self.owner.think != lurker_falling))
 		self.liquidtouch_timing = time + 0.75;
-	if ((((self.origin_x > self.owner.pool.absmin_x) && (self.origin_x < self.owner.pool.absmax_x))&&
-	((self.origin_y > self.owner.pool.absmin_y) && (self.origin_y < self.owner.pool.absmax_y))&&
-	((self.origin_z > self.owner.pool.absmin_z) && (self.origin_z < self.owner.pool.absmax_z))) && (self.owner.pool.classname == "func_water"))
-	self.liquidtouch_timing = time + 0.5;
 
-	if((self.owner.liquidtouch_timing < time) && (self.liquidtouch_timing > time))
+	if (
+		(
+			(
+				(self.origin_x > self.owner.pool.absmin_x) &&
+				(self.origin_x < self.owner.pool.absmax_x)
+			) &&
+			(
+				(self.origin_y > self.owner.pool.absmin_y) &&
+				(self.origin_y < self.owner.pool.absmax_y)
+			) &&
+			(
+				(self.origin_z > self.owner.pool.absmin_z) &&
+				(self.origin_z < self.owner.pool.absmax_z)
+			)
+		) &&
+		(self.owner.pool.classname == "func_water")
+	) {
+		self.liquidtouch_timing = time + 0.5;
+	}
+
+	if ((self.owner.liquidtouch_timing < time) && (self.liquidtouch_timing > time))
 		self.owner.liquidtouch_timing = self.liquidtouch_timing;
 
-	if((self.liquidtouch_timing < time) && (self.owner.movetype != MOVETYPE_TOSS))
-	{
-
+	if ((self.liquidtouch_timing < time) && (self.owner.movetype != MOVETYPE_TOSS)) {
 		self.owner.movetype = MOVETYPE_TOSS;
 
 		vector  pool_rorigin = (self.owner.pool.absmin + self.owner.pool.absmax) *0.5; 
 		if(self.owner.pos1)
 			pool_rorigin = self.owner.pos1;
+
 		vector dir = normalize (pool_rorigin - self.owner.origin );
 		self.owner.velocity = dir * random(96,128) * 3; 
 		self.owner.velocity_z = random (64,96); 
@@ -1121,7 +1143,7 @@ void() water_checker_think =
 		self.owner.lurkerpainb = 1;	
 		self.owner.think = lurker_painb1;
 		self.owner.nextthink = time;
-		T_Damage (self.owner, world, world, 1);	
+		T_Damage(self.owner, world, world, 1);
 		setsize(self.owner, heretic_bbox *-0.25, heretic_bbox *0.25);
 	}
 	if((self.liquidtouch_timing > time) && (self.owner.movetype == MOVETYPE_TOSS))
@@ -1146,20 +1168,30 @@ void() water_checker_think =
 	self.oldvelocity = self.owner.origin;
 	self.nextthink = time + 0.05;
 };
-/*QUAKED monster_lurker (1 0 0) (-16 -16 -24) (16 16 24) Ambush*/
-void() monster_lurker =
-{
-	if (deathmatch)
-	{
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-22.4 -22.4 -22.4, 22.4 22.4 22.4)
+	model({"path": "models/enemies/lurker/lurker.md3"})
+= monster_lurker : "Lurker ( nopefish )" []
+*/
+
+vector LURKER_BBOX_MIN = '-22.4 -22.4 -22.4';
+vector LURKER_BBOX_MAX = '22.4 22.4 22.4';
+
+void monster_lurker() {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
+
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_FLY;
 	self.wrathflags += FL_SWIMMER;
 	self.classname = "monster_lurker";
 	setmodel(self, "models/enemies/lurker/lurker.md3");
-	setsize(self, heretic_bbox *-0.35, heretic_bbox *0.35);
+	setsize(self, LURKER_BBOX_MIN, LURKER_BBOX_MAX);
 
 	//gnounc
 	self.noise = "lurker/idle.wav";
@@ -1175,7 +1207,7 @@ void() monster_lurker =
 		self.noise = "enemies/lurker/sight1.ogg";
 
 	if(r > 1.5)
-	self.ammo_lance = 2;
+		self.ammo_lance = 2;
 
 	self.th_stand = lurker_stand1;
 	self.th_walk = lurker_walk1;
@@ -1186,7 +1218,7 @@ void() monster_lurker =
 	entity water_checker = spawn();
 	water_checker.owner = self;
 	water_checker.solid = SOLID_TRIGGER;
-	setsize(water_checker,'0 0 0','1 1 1');
+	setsize(water_checker, '0 0 0', '1 1 1');
 	water_checker.classname = "waterchecker";
 	water_checker.touch = water_checker_touch;
 	water_checker.origin = self.origin;

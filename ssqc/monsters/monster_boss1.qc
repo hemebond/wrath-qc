@@ -1214,7 +1214,14 @@ void()boss_path_touch =
 };
 
 
-void()boss_path =
+/*FGD
+@PointClass
+	base(Target, TargetName)
+	color(.8 .6 .6)
+	size(-8 -8 -256, 8 8 256)
+= boss_path : "Point to which boss monsters will travel, depending on their behaviour. Like a path_corner for normal monsters to walk between." []
+*/
+void() boss_path =
 {
 	setmodel(self,"");
 	self.solid = SOLID_TRIGGER;
@@ -1233,7 +1240,6 @@ void()boss_path =
 	}
 
 };
-void()guardian_bbox_think;
 
 
 void()boss1_head_die =

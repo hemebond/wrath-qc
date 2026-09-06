@@ -1,8 +1,18 @@
+/*FGD
+@PointClass
+	size(-16 -16 -8, 16 16 16)
+	model({"path": "models/items/ammo_crystal.md3"})
+= ammo_crystal : "50 Crystal ammo." []
+*/
+
+float AMMO_CRYSTAL_AMOUNT = 50;
+
 void spawnfunc_ammo_crystal() {
 	setmodel(self, "models/items/ammo_crystal.md3");
 	self.noise = "items/ammo_crystallizer.ogg";
-	setsizeitem2(self, explosives_size);
-	self.ammo_crystal = crystal_ammount;
+	// setsizeitem2(self, explosives_size);
+	setsize(self, '-16 -16 -8', '16 16 16');
+	self.ammo_crystal = AMMO_CRYSTAL_AMOUNT;
 	precache_sound(self.noise);
 	StartItem(2);
 	item_glowmodcontroller_pulse_spawn(self);

@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_deflection.md3"})
+= artifact_deflection : "Artifact: Orb of Deflection ( static golden forcefield )" []
+*/
+
 void artifact_deflection() {
 	radial();
 	self.noise = "items/artifacts/artifactG_pickup.ogg";

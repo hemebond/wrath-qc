@@ -83,6 +83,11 @@ void() pillar_usekey = {
 
 	relic_removefromslot(other, self.relics);
 };
+
+
+/*FGD
+@PointClass model("models/objects/hubs/hub1_portal.md3") = portal_hub1 : "point entity" []
+*/
 void() portal_hub1 = { precache_model("models/objects/hubs/hub1_portal.md3");
 	precache_model("models/objects/hubs/hub1_portal_pillar_a.md3");
 	precache_model("models/objects/hubs/hub1_portal_pillar_a_collision.md3");
@@ -281,7 +286,12 @@ void() portal_hub1 = { precache_model("models/objects/hubs/hub1_portal.md3");
 
 };
 
-void() portal_intro = { precache_model("models/objects/hubs/intro_portal.md3");
+
+/*FGD
+@PointClass color(0.4 0.5 0.4) size(-24 -24 -12, 24 24 12) model({"path": "models/objects/hubs/intro_portal.md3"}) = portal_intro : "" []
+*/
+void portal_intro() {
+	precache_model("models/objects/hubs/intro_portal.md3");
 	precache_model("models/objects/hubs/intro_portal_pillar_a.md3");
 	precache_model("models/objects/hubs/hub1_portal_pillar_a_collision.md3");
 	precache_model("models/objects/hubs/hub1_portal_pillar_beam.md3");
@@ -289,13 +299,13 @@ void() portal_intro = { precache_model("models/objects/hubs/intro_portal.md3");
 	setmodel(self, "models/objects/hubs/intro_portal.md3");
 	relics_forhub = 1;
 	
-	local entity pillar_a, pillar_a_mesh, pillar_a_beam;
+	entity pillar_a, pillar_a_mesh, pillar_a_beam;
 
 	pillar_a_mesh = spawn();
 	pillar_a_mesh.solid = SOLID_BSP;
 	pillar_a_mesh.owner = self;
-	local vector tagorg;
-	tagorg = tag_origin("tag_a", self);
+
+	vector tagorg = tag_origin("tag_a", self);
 	pillar_a_mesh.origin = tagorg;
 	pillar_a_mesh.usable = 3;
 	pillar_a_mesh.usepressed = pillar_usekey;
@@ -322,8 +332,12 @@ void() portal_intro = { precache_model("models/objects/hubs/intro_portal.md3");
 	pillar_a_beam.alpha = 0.01;
 	pillar_a_beam.think = beam_pillar;
 	pillar_a_beam.nextthink = time;
-};
+}
 
+
+/*FGD
+@PointClass model("models/objects/hubs/hub2_portal.md3") = portal_hub2 : "point entity" []
+*/
 void() portal_hub2 = { precache_model("models/objects/hubs/hub2_portal.md3");
 	precache_model("models/objects/hubs/hub2_portal_pillar_a.md3");
 	precache_model("models/objects/hubs/hub2_portal_pillar_a_collision.md3");
@@ -507,6 +521,10 @@ void() portal_hub2 = { precache_model("models/objects/hubs/hub2_portal.md3");
 	pillar_e_beam.nextthink = time;
 };
 
+
+/*FGD
+@PointClass model("models/objects/hubs/hub3_portal.md3") = portal_hub3 : "point entity" []
+*/
 void() portal_hub3 = { precache_model("models/objects/hubs/hub3_portal.md3");
 	precache_model("models/objects/hubs/hub3_portal_pillar_a.md3");
 	precache_model("models/objects/hubs/hub3_portal_pillar_a_collision.md3");

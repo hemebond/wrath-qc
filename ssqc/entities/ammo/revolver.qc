@@ -1,6 +1,12 @@
+/*FGD
+@PointClass size(-16 -16 -6, 16 16 6) model({"path": "models/items/ammo_revolver.md3"}) = ammo_revolver : "15 Coach Gun ammo." []
+*/
+
+float AMMO_REVOLVER_AMOUNT = 15;
+
 void spawnfunc_ammo_revolver() {
 	self.noise = "items/ammo_revolver.ogg";
-	self.ammo_revolver = revolver_ammount;
+	self.ammo_revolver = AMMO_REVOLVER_AMOUNT;
 	setmodel(self, "models/items/ammo_revolver.md3");
 	setsizeitem2(self, shellsl_size);
 	self.msg = 120;

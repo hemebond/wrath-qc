@@ -410,8 +410,6 @@ class uipicture_c : uielement_c
 				float a2 = (angle + 90) * DEG2RAD;
 				br += [(cos(a) * slength[0]) + (cos(a2) * slength[1]), (sin(a) * slength[0]) + (sin(a2) * slength[1])];
 
-
-
 				R_BeginPolygon(final_img, drawflags, 1);
 				R_PolygonVertex(tl, '0 0', final_color, final_alpha);
 				R_PolygonVertex(tr, '1 0', final_color, final_alpha);
@@ -833,9 +831,6 @@ class uitext_c : uielement_c
 	};
 };
 
-void UI_RenderElements(uielement_c chain);
-void UI_CheckClick(uielement_c chain);
-float UI_CheckInput(uielement_c chain, float nkey, float ascii, float released);
 
 float lastsoundjournal;
 void Journal_Sound(void)

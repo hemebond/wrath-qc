@@ -1,3 +1,30 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/revolver/w_revolver.md3"})
+= weapon_revolver : "Revolver" []
+*/
+
+void() weapon_revolver = {
+	self.items = IT_REVOLVER;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/revolver/w_revolver.md3");
+	self.ammo_revolver = 3;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.rwpn = 1;
+	precache_sound(self.noise);
+	self.touch = wammo_touch;
+	self.msg = 90;
+	self.msg_icon = "revolver";
+	self.msg_text = "$NOTIFY_WEP_REVOLVER";
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+};
+
+
 .float oldammo_revolver;
 .float noshells;
 .float oldrevolverclip;
@@ -16,10 +43,8 @@
 // coach_proj_vel = 3072			//	projectile vel
 
 
-void() idle_revolver =
-{
-	if (self.playerdeadtime > time)
-	{
+void() idle_revolver = {
+	if (self.playerdeadtime > time) {
 		self.think = PlayerDeathThink;
 		self.nextthink = time;
 	}

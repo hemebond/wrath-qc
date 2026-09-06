@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_grenade.md3"})
+= artifact_grenade : "Artifact: Void Grenade ( black hole bomb )" []
+*/
+
 void artifact_grenade() {
 	radial();
 	self.noise = "items/artifacts/artifactE_pickup.ogg";

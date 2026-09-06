@@ -1,10 +1,12 @@
 /*
-
-==============================================================================
-
-incisor
-
-==============================================================================
+incisorhealth = 400			//health
+incisordamage = 5			//damage
+incisornbbox = -12 -12 -32	//bbox negative
+incisorbbox = 12 12 24	//bbox
+incisorpl = 25			// pain damage low
+incisorpm = 50			// pain damage medium
+incisorph = 75			// pain damage high
+incisorod = -50			// over damage
 */
 
 $frame inc_pose0
@@ -676,13 +678,21 @@ void() precache_monster_prowler =
 };
 
 
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-30 -30 -24, 30 30 24)
+	model({"path": "models/enemies/prowler/prowler.md3"})
+= monster_prowler : "Prowler ( invisible manspider )" []
+*/
 void monster_prowler() {
-	precache_monster_prowler();
-
 	if (deathmatch) {
 		remove(self);
 		return;
 	}
+
+	precache_monster_prowler();
 
 	entity alphamodifier = spawn();
 	alphamodifier.owner = self;
@@ -694,7 +704,7 @@ void monster_prowler() {
 	self.damagetopain = 25;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/prowler/prowler.md3");
-	self.bbvv = incisorbbox;
+	self.bbvv = '12 12 24';
 	setsize(self, '-30 -30 -24', '30 30 24');
 	self.exec_push = FL_CLIENT;
 
@@ -706,13 +716,14 @@ void monster_prowler() {
 	if (r < 1)
 		self.noise = "enemies/prowler/sight1.ogg";
 
-	self.health = incisorhealth;
+	self.health = 400;
+	self.max_health = 400;
+
 	self.touch = incisor_touch;
 	self.scale = 1;
 	self.alpha = 1;
 	self.classname = "monster_incisor";
 	self.oldclassname = "monster_incisor";
-	self.max_health = incisorhealth;
 	self.view_ofs_z = STAT_RD_ST;
 	self.stepheight_delta = FL_CLIENT;
 
@@ -742,7 +753,7 @@ void monster_prowler() {
 
 .float walktime2;
 .float xangle_controller_cnt;
-void()xangle_controller_think =
+void() xangle_controller_think =
 {
 
 	if(self.owner.walktime2 > time)
@@ -793,8 +804,7 @@ void()xangle_controller_think =
 };
 
 
-void()monster_incisor =
-{
+void() monster_incisor = {
 	monster_prowler();
 };
 

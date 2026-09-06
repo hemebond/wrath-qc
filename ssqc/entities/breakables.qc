@@ -2,23 +2,72 @@
 .float urn_health;
 .float urn_ammo;
 .float urn_artifacts;
-void(string locsound, float rndl, float vol) randomsound;
-entity(vector org, string class, float ammount, entity ownr) drop_item;
-void() urn_die = { local vector tagorg;
-	local float tagindex;
-	local string tagname;
-	tagname = ("tag_item");tagindex = gettagindex(self, tagname);tagorg = gettaginfo(self, tagindex);
-	if(self.episode == 2)
+
+
+/*FGD
+@BaseClass = breakable_loot [
+	urn_health(choices) : "Lifeblood" : 0 = [
+		1 : "Vial of Lifeblood"
+		2 : "Beaker of Lifeblood"
+		3 : "Chalice of Lifeblood"
+	]
+	urn_armor(choices) : "Armor" : 0 = [
+		1 : "Armor"
+		2 : "Armor Shard"
+		3 : "Helm"
+		4 : "Dark Armor"
+		5 : "Dark Armor Shard"
+		6 : "Dark Helm"
+	]
+	urn_ammo(choices) : "Ammo" : 0 = [
+		1 : "Slugs"
+		2 : "Shells"
+		3 : "Fangs"
+		4 : "Cysts"
+		5 : "Ore"
+		6 : "Plasma"
+		7 : "Crystals"
+		8 : "Souls"
+	]
+	urn_artifacts(choices) : "Artifacts" : 0 = [
+		1  : "Mark of Revelation"
+		2  : "Drowner's Apparatus"
+		3  : "Flask of Rage"
+		4  : "Confounding Attar"
+		5  : "Soul Tether"
+		6  : "Life Siphon"
+		7  : "Orb of Deflection"
+		8  : "Cruel Aegis"
+		9  : "Vicious Animus"
+		10 : "Shockwave"
+		11 : "Void Grenade"
+	]
+]
+@BaseClass base(breakable_loot) = breakable_urn [
+	episode(integer) : "Episode" : 0 : "Defaults to the world/level episode"
+	health(integer) : "Health" : 10 : ""
+	skin(integer) : "Skin" : 0 : ""
+]
+*/
+
+
+void urn_die() {
+	string tagname = ("tag_item");
+	float tagindex = gettagindex(self, tagname);
+	vector tagorg = gettaginfo(self, tagindex);
+
+	if (self.episode == 2)
 		tagorg_z += 24;
+
 	self.classentity = "deadurn";
 	float spitch;
-	if (self.classname == "breakable_urn_small")
-	{
-		if(self.episode == 1)
+
+	if (self.classname == "breakable_urn_small") {
+		if (self.episode == 1)
 			pointparticles(particleeffectnum("ep1urn1"), tagorg, '0 0 0', 1);
-		if(self.episode == 2)
+		if (self.episode == 2)
 			pointparticles(particleeffectnum("ep2urn1"), tagorg - '0 0 16', '0 0 0', 1);
-		if(self.episode == 3)
+		if (self.episode == 3)
 			pointparticles(particleeffectnum("ep3urn1"), tagorg - '0 0 16', '0 0 0', 1);
 		spawngibs("tag_giba", self.gibmodel1, self, relvel('-15 15  0', self));
 		spawngibs("tag_gibb", self.gibmodel2, self, relvel('20 10  0', self));
@@ -26,13 +75,13 @@ void() urn_die = { local vector tagorg;
 		spawngibs("tag_gibc", self.gibmodel4, self, relvel('20 -20  0', self));
 		spitch = 100;
 	}
-	if (self.classname == "breakable_urn_medium")
-	{
-		if(self.episode == 1)
+
+	if (self.classname == "breakable_urn_medium") {
+		if (self.episode == 1)
 			pointparticles(particleeffectnum("ep1urn2"), tagorg, '0 0 0', 1);
-		if(self.episode == 2)
+		if (self.episode == 2)
 			pointparticles(particleeffectnum("ep2urn2"), tagorg - '0 0 16', '0 0 0', 1);
-		if(self.episode == 3)
+		if (self.episode == 3)
 			pointparticles(particleeffectnum("ep3urn2"), tagorg - '0 0 16', '0 0 0', 1);
 
 		spawngibs("tag_giba", self.gibmodel1, self, relvel('-20 20  0', self));
@@ -41,13 +90,13 @@ void() urn_die = { local vector tagorg;
 		spawngibs("tag_gibd", self.gibmodel4, self, relvel('20 20  0', self));
 		spitch = 85;
 	}
-	if (self.classname == "breakable_urn_large")
-	{
-		if(self.episode == 1)
+
+	if (self.classname == "breakable_urn_large") {
+		if (self.episode == 1)
 			pointparticles(particleeffectnum("ep1urn3"), tagorg, '0 0 0', 1);
-		if(self.episode == 2)
+		if (self.episode == 2)
 			pointparticles(particleeffectnum("ep2urn3"), tagorg - '0 0 16', '0 0 0', 1);
-		if(self.episode == 3)
+		if (self.episode == 3)
 			pointparticles(particleeffectnum("ep3urn3"), tagorg - '0 0 16', '0 0 0', 1);
 
 		spawngibs("tag_giba", self.gibmodel1, self, relvel('-30 30  0', self));
@@ -55,11 +104,10 @@ void() urn_die = { local vector tagorg;
 		spawngibs("tag_gibc", self.gibmodel3, self, relvel('30 30  0', self));
 		spawngibs("tag_gibd", self.gibmodel4, self, relvel('30 -30  0', self));
 		spitch = 70;
-
 	}
 
-	if(spitch <= 85)
-	randomsound7("impact/destruct/urn_break", 5,1, spitch);
+	if (spitch <= 85)
+		randomsound7("impact/destruct/urn_break", 5,1, spitch);
 
 	randomsound("impact/destruct/urn_break", 5,0.7);
 
@@ -128,38 +176,42 @@ void() urn_die = { local vector tagorg;
 	setmodel(self, self.dmodel);
 	self.solid = SOLID_NOT;
 	setsize(self, '0 0 0', '0 0 0');
-};
+}
 
-void() breakable_urn_small = 
-{
-	if(!self.episode)
+
+/*FGD
+@PointClass
+	base(breakable_urn)
+	color(0 1 1)
+	size(-12 -12 0, 12 12 32)
+	model("models/destruct/urns/urn32.md3")
+= breakable_urn_small : "small urn" []
+*/
+void breakable_urn_small() {
+	if (!self.episode)
 		self.episode = world.episode;
 
-	if((self.episode == 2) && (!self.skin))
-	{
+	if ((self.episode == 2) && (!self.skin)) {
 		string cipherx = (ftos(floor((self.origin_x +self.origin_y) * 0.35 )));
 		float nLength = strlen(cipherx) -1;
 		string characterx = substring (cipherx,nLength,1); 
 
 		float characterf = stof(characterx);
-		if(characterf == 1)
-		self.skin = 1;
-		if(characterf == 2)
-		self.skin = 1;
-		if(characterf == 7)
-		self.skin = 1;
-		if(characterf == 8)
-		self.skin = 1;
-		if(characterf == 5)
-		self.skin = 1;
+		if (characterf == 1)
+			self.skin = 1;
+		if (characterf == 2)
+			self.skin = 1;
+		if (characterf == 7)
+			self.skin = 1;
+		if (characterf == 8)
+			self.skin = 1;
+		if (characterf == 5)
+			self.skin = 1;
+
 		self.cnt = characterf;
-
-
 	}
 
-
-	if(self.episode ==  1)
-	{
+	if (self.episode ==  1) {
 		self.gibmodel1 = ("models/destruct/urns/urn32_gibs/urn32_giba.md3");
 		self.gibmodel2 = ("models/destruct/urns/urn32_gibs/urn32_gibb.md3");
 		self.gibmodel3 = ("models/destruct/urns/urn32_gibs/urn32_gibc.md3");
@@ -170,8 +222,7 @@ void() breakable_urn_small =
 		self.dmodel = "models/destruct/urns/urn32_destroyed.md3";
 	}
 
-	if(self.episode ==  2)
-	{
+	if (self.episode ==  2) {
 		self.gibmodel1 = ("models/destruct/e2urns/urn32_gibs/urn32_giba.md3");
 		self.gibmodel2 = ("models/destruct/e2urns/urn32_gibs/urn32_gibb.md3");
 		self.gibmodel3 = ("models/destruct/e2urns/urn32_gibs/urn32_gibc.md3");
@@ -182,8 +233,7 @@ void() breakable_urn_small =
 		self.dmodel = "models/destruct/e2urns/urn32_destroyed.md3";
 	}
 
-	if(self.episode ==  3)
-	{
+	if (self.episode ==  3) {
 		self.gibmodel1 = ("models/destruct/e3urns/urn32_gibs/urn32_giba.md3");
 		self.gibmodel2 = ("models/destruct/e3urns/urn32_gibs/urn32_gibb.md3");
 		self.gibmodel3 = ("models/destruct/e3urns/urn32_gibs/urn32_gibc.md3");
@@ -198,8 +248,10 @@ void() breakable_urn_small =
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
+
 	if (!self.health)
 		self.health = 10;
+
 	self.classentity = "wrathbreakable";
 
 	setsize(self, '-12 -12 0', '12 12 32');
@@ -208,37 +260,43 @@ void() breakable_urn_small =
 	self.th_die = urn_die;
 	self.takedamage = DAMAGE_YES;
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
+
+/*FGD
+@PointClass
+	base(breakable_urn)
+	color(0 1 1)
+	size(-16 -16 0, 16 16 48)
+	model("models/destruct/urns/urn48.md3")
+= breakable_urn_medium : "medium urn" []
+*/
 void() breakable_urn_medium = 
 {
-	if(!self.episode)
+	if (!self.episode)
 		self.episode = world.episode;
 		
-	if((self.episode == 2) && (!self.skin))
-	{
+	if ((self.episode == 2) && (!self.skin)) {
 		string cipherx = (ftos(floor((self.origin_x +self.origin_y) * 0.35 )));
 		float nLength = strlen(cipherx) -1;
 		string characterx = substring (cipherx,nLength,1); 
 
 		float characterf = stof(characterx);
-		if(characterf == 1)
-		self.skin = 1;
-		if(characterf == 3)
-		self.skin = 1;
-		if(characterf == 7)
-		self.skin = 1;
-		if(characterf == 8)
-		self.skin = 1;
-		if(characterf == 6)
-		self.skin = 1;
+		if (characterf == 1)
+			self.skin = 1;
+		if (characterf == 3)
+			self.skin = 1;
+		if (characterf == 7)
+			self.skin = 1;
+		if (characterf == 8)
+			self.skin = 1;
+		if (characterf == 6)
+			self.skin = 1;
+
 		self.cnt = characterf;
-
-
 	}
 
-	if(self.episode ==  1)
-	{
+	if (self.episode ==  1) {
 		self.gibmodel1 = ("models/destruct/urns/urn48_gibs/urn48_giba.md3");
 		self.gibmodel2 = ("models/destruct/urns/urn48_gibs/urn48_gibb.md3");
 		self.gibmodel3 = ("models/destruct/urns/urn48_gibs/urn48_gibc.md3");
@@ -249,8 +307,7 @@ void() breakable_urn_medium =
 		self.dmodel = "models/destruct/urns/urn48_destroyed.md3";
 	}
 
-	if(self.episode ==  2)
-	{
+	if (self.episode ==  2) {
 		self.gibmodel1 = ("models/destruct/e2urns/urn48_gibs/urn48_giba.md3");
 		self.gibmodel2 = ("models/destruct/e2urns/urn48_gibs/urn48_gibb.md3");
 		self.gibmodel3 = ("models/destruct/e2urns/urn48_gibs/urn48_gibc.md3");
@@ -261,8 +318,7 @@ void() breakable_urn_medium =
 		self.dmodel = "models/destruct/e2urns/urn48_destroyed.md3";
 	}
 
-	if(self.episode ==  3)
-	{
+	if (self.episode ==  3) {
 		self.gibmodel1 = ("models/destruct/e3urns/urn48_gibs/urn48_giba.md3");
 		self.gibmodel2 = ("models/destruct/e3urns/urn48_gibs/urn48_gibb.md3");
 		self.gibmodel3 = ("models/destruct/e3urns/urn48_gibs/urn48_gibc.md3");
@@ -277,8 +333,10 @@ void() breakable_urn_medium =
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
+
 	if (!self.health)
 		self.health = 10;
+
 	self.classentity = "wrathbreakable";
 
 	setsize(self, '-16 -16 0', '16 16 48');
@@ -287,35 +345,41 @@ void() breakable_urn_medium =
 	self.th_die = urn_die;
 	self.takedamage = DAMAGE_YES;
 	self.wrathflags += FL_BREAKABLE;
+}
 
-};
 
-void() breakable_urn_large = { 
-
-	if(!self.episode)
+/*FGD
+@PointClass
+	base(breakable_urn)
+	color(0 1 1)
+	size(-16 -16 -0, 16 16 64)
+	model("models/destruct/urns/urn64.md3")
+= breakable_urn_large : "large urn" []
+*/
+void breakable_urn_large() {
+	if (!self.episode)
 		self.episode = world.episode;
 
-	if((self.episode == 2) && (!self.skin))
-	{
+	if ((self.episode == 2) && (!self.skin)) {
 		string cipherx = (ftos(floor((self.origin_x +self.origin_y) * 0.35 )));
 		float nLength = strlen(cipherx) -1;
 		string characterx = substring (cipherx,nLength,1); 
 		float characterf = stof(characterx);
-		if(characterf == 1)
-		self.skin = 1;
-		if(characterf == 3)
-		self.skin = 1;
-		if(characterf == 6)
-		self.skin = 1;
-		if(characterf == 8)
-		self.skin = 1;
-		if(characterf == 5)
-		self.skin = 1;
+		if (characterf == 1)
+			self.skin = 1;
+		if (characterf == 3)
+			self.skin = 1;
+		if (characterf == 6)
+			self.skin = 1;
+		if (characterf == 8)
+			self.skin = 1;
+		if (characterf == 5)
+			self.skin = 1;
+
 		self.cnt = characterf;
 	}
 
-	if(self.episode ==  1)
-	{
+	if (self.episode ==  1) {
 		self.gibmodel1 = ("models/destruct/urns/urn64_gibs/urn64_giba.md3");
 		self.gibmodel2 = ("models/destruct/urns/urn64_gibs/urn64_gibb.md3");
 		self.gibmodel3 = ("models/destruct/urns/urn64_gibs/urn64_gibc.md3");
@@ -326,8 +390,7 @@ void() breakable_urn_large = {
 		self.dmodel = "models/destruct/urns/urn64_destroyed.md3";
 	}
 
-	if(self.episode ==  2)
-	{
+	if (self.episode ==  2) {
 		self.gibmodel1 = ("models/destruct/e2urns/urn64_gibs/urn64_giba.md3");
 		self.gibmodel2 = ("models/destruct/e2urns/urn64_gibs/urn64_gibb.md3");
 		self.gibmodel3 = ("models/destruct/e2urns/urn64_gibs/urn64_gibc.md3");
@@ -338,8 +401,7 @@ void() breakable_urn_large = {
 		self.dmodel = "models/destruct/e2urns/urn64_destroyed.md3";
 	}
 
-	if(self.episode ==  3)
-	{
+	if (self.episode ==  3) {
 		self.gibmodel1 = ("models/destruct/e3urns/urn64_gibs/urn64_giba.md3");
 		self.gibmodel2 = ("models/destruct/e3urns/urn64_gibs/urn64_gibb.md3");
 		self.gibmodel3 = ("models/destruct/e3urns/urn64_gibs/urn64_gibc.md3");
@@ -350,13 +412,14 @@ void() breakable_urn_large = {
 		self.dmodel = "models/destruct/e3urns/urn64_destroyed.md3";
 	}
 
-
 	precache_model(self.gibmodel1);
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
+
 	if (!self.health)
 		self.health = 10;
+
 	self.classentity = "wrathbreakable";
 
 	setsize(self, '-16 -16 0', '16 16 64');
@@ -365,15 +428,14 @@ void() breakable_urn_large = {
 	self.th_die = urn_die;
 	self.takedamage = DAMAGE_YES;
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
 
 
-void() skull_checking_ground =
-{
-	local float speed;
-	local vector hspeedangles;
-	local vector hspeed;
+void skull_checking_ground() {
+	float speed;
+	vector hspeedangles;
+	vector hspeed;
 
 	if (((self.oldorigin == self.origin) && (self.movetype != MOVETYPE_TOSS)))
 	{
@@ -430,7 +492,7 @@ void() skull_checking_ground =
 	self.health = MOVETYPE_BOUNCE;
 	self.takedamage = TRUE;
 	self.oldorigin = self.origin;
-	if((self.flags & FL_ONGROUND))
+	if ((self.flags & FL_ONGROUND))
 	{
 		self.nextthink = (time + 0.05);
 		self.think = self.th_die;
@@ -440,24 +502,23 @@ void() skull_checking_ground =
 	self.nextthink = (time + 0.05);
 };
 
-void() skull_die =
-{
-	local vector tagorg;
-	local float tagindex;
-	local string tagname;
-	local float mveldmg;
-	local float veldmg;
-	local entity fskull;
-	local vector dir;
-	local vector rvector;
+void skull_die() {
+	vector tagorg;
+	float tagindex;
+	string tagname;
+	float mveldmg;
+	float veldmg;
+	entity fskull;
+	vector dir;
+	vector rvector;
 
 	fskull = findradius(self.origin, STAT_NORMAL_MESSAGES);
 	mveldmg = (self.health * 0.25);
 
-	if(self.vgear)
+	if (self.vgear)
 	remove(self.vgear);
 
-	if(mveldmg < -100)
+	if (mveldmg < -100)
 	mveldmg = -100;
 	while (fskull)
 	{
@@ -484,8 +545,8 @@ void() skull_die =
 	tagorg = gettaginfo(self, tagindex);
 	pointparticles(particleeffectnum("skull"), tagorg, VEC_ORIGIN, TRUE);
 
-	if(self.classname == "breakable_skull")
-	pointparticles(particleeffectnum("skullbig"), tagorg, VEC_ORIGIN, TRUE);
+	if (self.classname == "breakable_skull")
+		pointparticles(particleeffectnum("skullbig"), tagorg, VEC_ORIGIN, TRUE);
 
 	random();
 
@@ -511,8 +572,8 @@ void() skull_die =
 	spawngibs("tag_l_side", self.gibmodel4, self, relvel2('0 -12 23', self, veldmg));
 
 
-	if(!self.maxspeed)
-	self.maxspeed = 100;
+	if (!self.maxspeed)
+		self.maxspeed = 100;
 
 	sound7 (self, CHAN_BODY, self.noise,1, 0.25,random(80,120),0);
 
@@ -585,7 +646,7 @@ void() skull_die =
 	vector tagdest = tag_origin("tag_base", self);
 	setorigin (self,tagdest);
 	self.movetype = MOVETYPE_BOUNCE;
-	if(self.flags & FL_ONGROUND)
+	if (self.flags & FL_ONGROUND)
 		self.flags -= FL_ONGROUND;
 	self.bouncefactor = 0.35;
 	self.alpha = TRUE;
@@ -600,21 +661,16 @@ void() skull_die =
 	setsize(self, VEC_ORIGIN, VEC_ORIGIN);
 	self.think = gibalphafade4;
 	self.nextthink = time + 3 + random(0,5);
-};
+}
+
+
 .float clipdist;
 .string oldmodel;
-float(entity targ) visibleworld;
 
-void() skull_clipdist_check =
-{
-	//float dist = vlen(self.origin - single_player.origin);
-	//if ((dist < self.owner.clipdist) && (visibleworld(single_player)))
-
-	if(	self.owner.classentity == "wrathbreakable")
-	{
-		if(checkpvs(self.origin,single_player) )
-		{
-			if(self.owner.cnt != 1)
+void skull_clipdist_check() {
+	if (self.owner.classentity == "wrathbreakable") {
+		if (checkpvs(self.origin,single_player)) {
+			if (self.owner.cnt != 1)
 			{
 				self.owner.cnt = 1;
 				setmodel(self.owner,self.owner.oldmodel);
@@ -622,7 +678,7 @@ void() skull_clipdist_check =
 		}
 		else
 		{
-			if((self.owner.cnt != 0))
+			if ((self.owner.cnt != 0))
 			{
 				self.owner.cnt = 0;
 				setmodel(self.owner,"models/misc/null.md3");
@@ -633,11 +689,13 @@ void() skull_clipdist_check =
 		remove(self);
 	self.think = skull_clipdist_check;
 	self.nextthink = time + 0.05;
-};
-void() skull_calculate_movetype =
-{
+}
+
+
+void skull_calculate_movetype() {
 	self.classentity = "wrathbreakable";
 	self.oldmodel = self.model;
+
 	entity checkerclip = spawn();
 	checkerclip.origin = self.origin;
 	checkerclip.owner = self;
@@ -645,34 +703,58 @@ void() skull_calculate_movetype =
 	checkerclip.think = skull_clipdist_check;
 	checkerclip.nextthink = time;
 
-	if(self.count != 1)
-	{
+	if (self.count != 1) {
 		self.angles_x = self.angles_x * -1;
 		self.count = 1;
 	}
 	self.movetype = 0;
-	
-
-};
-
-void() breakable_skull =
-{
+}
 
 
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/b_skull1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/b_skull2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/b_skull3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/b_skull4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/b_skull5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/b_skull6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/b_skull7.md3"},
+		type == 8 -> {"path": "models/destruct/skulls/b_skull8.md3"},
+		"models/destruct/skulls/b_skull1.md3"
+	}})
+= breakable_skull : "Skull breakable prop, medium and large." [
+	model(string) : "Model File" : "models/destruct/skulls/b_skull1.md3" : "Path/name of model to use"
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Nostrilsaurus"
+		2 : "Predalike"
+		3 : "Cyclops"
+		4 : "Minotaur LARGE"
+		5 : "Sharpie"
+		6 : "Goatman"
+		7 : "Grinner"
+		8 : "Toothhound"
+	]
+]
+*/
+void breakable_skull() {
 	self.noise = "impact/destruct/skullbreak_big.ogg";
 	precache_sound ( self.noise);
 
-	if (!self.type)
-	{
+	if (!self.type) {
 		self.type = 1;
 	}
 
-	if (self.type > 8)
- 	{
+	if (self.type > 8) {
  		self.type = 8;
  	}
-	if ((self.type == 1))
- 	{
+	if ((self.type == 1)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull1_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull1_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull1_gibs/r_side.md3";
@@ -680,8 +762,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull1_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull1.md3";
  	}
-	if ((self.type == 2))
-	{
+	if ((self.type == 2)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull2_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull2_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull2_gibs/r_side.md3";
@@ -689,8 +770,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull2_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull2.md3";
 	}
-	if ((self.type == 3))
-	{
+	if ((self.type == 3)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull3_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull3_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull3_gibs/r_side.md3";
@@ -698,8 +778,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull3_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull3.md3";
 	}
-	if ((self.type == 4))
-	{
+	if ((self.type == 4)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull4_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull4_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull4_gibs/r_side.md3";
@@ -707,8 +786,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull4_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull4.md3";
 	}
-	if ((self.type == 5))
-	{
+	if ((self.type == 5)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull5_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull5_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull5_gibs/r_side.md3";
@@ -716,8 +794,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull5_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull5.md3";
 	}
-	if ((self.type == 6))
-	{
+	if ((self.type == 6)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull6_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull6_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull6_gibs/r_side.md3";
@@ -725,8 +802,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull6_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull6.md3";
 	}
-	if ((self.type == 7))
-	{
+	if ((self.type == 7)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull7_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull7_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull7_gibs/r_side.md3";
@@ -734,8 +810,7 @@ void() breakable_skull =
 		self.dmodel = "models/destruct/skulls/b_skull7_gibs/base.md3";
 		self.model = "models/destruct/skulls/b_skull7.md3";
 	}
-	if ((self.type == 8))
-	{
+	if ((self.type == 8)) {
 		self.gibmodel1 = "models/destruct/skulls/b_skull8_gibs/front.md3";
 		self.gibmodel2 = "models/destruct/skulls/b_skull8_gibs/back.md3";
 		self.gibmodel3 = "models/destruct/skulls/b_skull8_gibs/r_side.md3";
@@ -750,16 +825,17 @@ void() breakable_skull =
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
 	precache_model(self.dmodel);
-	if (!self.health)
-	{
+
+	if (!self.health) {
 		self.health = MOVETYPE_BOUNCE;
 	}
+
 	setmodel(self, self.model);
 	
 	if (self.type == 4)
-	setsize(self, '-20 -20 -20', '20 20 20');
+		setsize(self, '-20 -20 -20', '20 20 20');
 	else
-	setsize(self, '-16 -16 -16', '16 16 16');
+		setsize(self, '-16 -16 -16', '16 16 16');
 	
 	self.takedamage = TRUE;
 	self.solid = FL_SWIM;
@@ -768,8 +844,48 @@ void() breakable_skull =
 	self.th_die = skull_die;
 	self.takedamage = TRUE;
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
+
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		(spawnflags & 4) != 0 -> {"path": "models/destruct/skulls/skull_a1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_a2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_a3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_a4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_a5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_a6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/skull_a7.md3"},
+		type == 8 -> {"path": "models/destruct/skulls/skull_a8.md3"},
+		type == 9 -> {"path": "models/destruct/skulls/skull_a9.md3"},
+		type == 10 -> {"path": "models/destruct/skulls/skull_a10.md3"},
+		"models/destruct/skulls/skull_a1.md3"
+	}})
+= breakable_skull_small_a : "Skull breakable prop, small humanoid." [
+	model(string) : "Model File" : "models/destruct/skulls/skull_a1.md3" : "Path/name of model to use"
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Random"
+		2 : "Skull a2"
+		3 : "Skull a3"
+		4 : "Skull a4"
+		5 : "Skull a5"
+		6 : "Skull a6"
+		7 : "Skull a7"
+		8 : "Skull a8"
+		9 : "Skull a9"
+		10 : "Skull a10"
+	]
+	spawnflags(flags) = [
+		4 : "Skull a1"
+	]
+]
+*/
 void() breakable_skull_small_a =
 {
 	if (!self.type)
@@ -786,10 +902,9 @@ void() breakable_skull_small_a =
 	self.dmodel = "models/destruct/skulls/skull_a_gibs/base.md3";
 	self.noise = "impact/destruct/skullbreak_med.ogg";
 	precache_sound ( self.noise);
+
 	if ((self.type == 1))
-	{
 		self.type = floor(random(2,10));
-	}
 	if ((self.type == 2))
 		self.model = "models/destruct/skulls/skull_a2.md3";
 	if ((self.type == 3))
@@ -808,7 +923,7 @@ void() breakable_skull_small_a =
 		self.model = "models/destruct/skulls/skull_a9.md3";
 	if ((self.type == 10))
 		self.model = "models/destruct/skulls/skull_a10.md3";
-	if(self.spawnflags & 4)
+	if (self.spawnflags & 4)
 		self.model = "models/destruct/skulls/skull_a1.md3";
 
 	precache_model(self.model);
@@ -817,10 +932,11 @@ void() breakable_skull_small_a =
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
 	precache_model(self.dmodel);
-	if (!self.health)
-	{
+
+	if (!self.health) {
 		self.health = MOVETYPE_BOUNCE;
 	}
+
 	setmodel(self, self.model);
 	self.solid = FL_SWIM;
 	setsize(self, '-12 -12 -12', '12 12 12');
@@ -829,15 +945,44 @@ void() breakable_skull_small_a =
 	self.think = skull_calculate_movetype;
 	self.nextthink = (time + 0.1);
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
-void() breakable_skull_small_b =
-{
+
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_b1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_b2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_b3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_b4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_b5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_b6.md3"},
+		"models/destruct/skulls/skull_b1.md3"
+	}})
+= breakable_skull_small_b : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull b1"
+		2 : "Skull b2"
+		3 : "Skull b3"
+		4 : "Skull b4"
+		5 : "Skull b5"
+		6 : "Skull b6"
+	]
+]
+*/
+void breakable_skull_small_b() {
 	if (!self.type)
 		self.type = 1;
 
 	if ((self.type > MOVETYPE_TOSS))
 		self.type = MOVETYPE_TOSS;
+
 	self.noise = "impact/destruct/skullbreak_med.ogg";
 	precache_sound ( self.noise);
 
@@ -846,6 +991,7 @@ void() breakable_skull_small_b =
 	self.gibmodel3 = "models/destruct/skulls/skull_b_gibs/r_side.md3";
 	self.gibmodel4 = "models/destruct/skulls/skull_b_gibs/l_side.md3";
 	self.dmodel = "models/destruct/skulls/skull_b_gibs/base.md3";
+
 	if ((self.type == 1))
 		self.model = "models/destruct/skulls/skull_b1.md3";
 	if ((self.type == 2))
@@ -858,16 +1004,18 @@ void() breakable_skull_small_b =
 		self.model = "models/destruct/skulls/skull_b5.md3";
 	if ((self.type == 6))
 		self.model = "models/destruct/skulls/skull_b6.md3";
+
 	precache_model(self.model);
 	precache_model(self.gibmodel1);
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
 	precache_model(self.dmodel);
-	if (!self.health)
-	{
+
+	if (!self.health) {
 		self.health = MOVETYPE_BOUNCE;
 	}
+
 	setmodel(self, self.model);
 	setsize(self, '-12 -12 -12', '12 12 12');
 	self.solid = FL_SWIM;
@@ -876,8 +1024,31 @@ void() breakable_skull_small_b =
 	self.th_die = skull_die;
 	self.takedamage = TRUE;
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
+
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_c1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_c2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_c3.md3"},
+		"models/destruct/skulls/skull_c1.md3"
+	}})
+= breakable_skull_small_c : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull c1"
+		2 : "Skull c2"
+		3 : "Skull c3"
+	]
+]
+*/
 void() breakable_skull_small_c =
 {
 	if (!self.type)
@@ -899,16 +1070,19 @@ void() breakable_skull_small_c =
 		self.model = "models/destruct/skulls/skull_c2.md3";
 	if ((self.type == 3))
 		self.model = "models/destruct/skulls/skull_c3.md3";
+
 	precache_model(self.model);
 	precache_model(self.gibmodel1);
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
 	precache_model(self.dmodel);
+
 	if (!self.health)
 	{
 		self.health = MOVETYPE_BOUNCE;
 	}
+
 	setmodel(self, self.model);
 	setsize(self, '-12 -12 -12', '12 12 12');
 	self.solid = FL_SWIM;
@@ -917,14 +1091,42 @@ void() breakable_skull_small_c =
 	self.th_die = skull_die;
 	self.takedamage = TRUE;
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
-void() breakable_skull_small_d =
-{
+
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_d1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_d2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_d3.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_d4.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_d5.md3"},
+		"models/destruct/skulls/skull_d1.md3"
+	}})
+= breakable_skull_small_d : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull d1"
+		2 : "Skull d2"
+		3 : "Skull d3"
+		4 : "Skull d4"
+		5 : "Skull d5"
+	]
+]
+*/
+void breakable_skull_small_d() {
 	if (!self.type)
-		self.type = TRUE;
+		self.type = 1;
+
 	if ((self.type > 5))
 		self.type = 5;
+
 	self.noise = "impact/destruct/skullbreak_med.ogg";
 	precache_sound ( self.noise);
 
@@ -933,6 +1135,7 @@ void() breakable_skull_small_d =
 	self.gibmodel3 = "models/destruct/skulls/skull_d_gibs/r_side.md3";
 	self.gibmodel4 = "models/destruct/skulls/skull_d_gibs/l_side.md3";
 	self.dmodel = "models/destruct/skulls/skull_d_gibs/base.md3";
+
 	if ((self.type == 1))
 		self.model = "models/destruct/skulls/skull_d1.md3";
 	if ((self.type == 2))
@@ -943,14 +1146,17 @@ void() breakable_skull_small_d =
 		self.model = "models/destruct/skulls/skull_d4.md3";
 	if ((self.type == 5))
 		self.model = "models/destruct/skulls/skull_d5.md3";
+
 	precache_model(self.model);
 	precache_model(self.gibmodel1);
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
 	precache_model(self.dmodel);
+
 	if (!self.health)
 		self.health = MOVETYPE_BOUNCE;
+
 	setmodel(self, self.model);
 	setsize(self, '-12 -12 -12', '12 12 12');
 	self.solid = FL_SWIM;
@@ -959,14 +1165,48 @@ void() breakable_skull_small_d =
 	self.th_die = skull_die;
 	self.takedamage = TRUE;
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
-void() breakable_skull_small_e =
-{
+
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_e1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_e2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_e3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_e4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_e5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_e6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/skull_e7.md3"},
+		type == 8 -> {"path": "models/destruct/skulls/skull_e8.md3"},
+		"models/destruct/skulls/skull_e1.md3"
+	}})
+= breakable_skull_small_e : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull e1"
+		2 : "Skull e2"
+		3 : "Skull e3"
+		4 : "Skull e4"
+		5 : "Skull e5"
+		6 : "Skull e6"
+		7 : "Skull e7"
+		8 : "Skull e8"
+	]
+]
+*/
+void breakable_skull_small_e() {
 	if (!self.type)
 		self.type = 1;
+
 	if (self.type > 8)
 		self.type = 8;
+
 	self.noise = "impact/destruct/skullbreak_med.ogg";
 	precache_sound ( self.noise);
 
@@ -975,6 +1215,7 @@ void() breakable_skull_small_e =
 	self.gibmodel3 = "models/destruct/skulls/skull_e_gibs/r_side.md3";
 	self.gibmodel4 = "models/destruct/skulls/skull_e_gibs/l_side.md3";
 	self.dmodel = "models/destruct/skulls/skull_e_gibs/base.md3";
+
 	if (self.type == 1)
 		self.model = "models/destruct/skulls/skull_e1.md3";
 	if (self.type == 2)
@@ -991,14 +1232,17 @@ void() breakable_skull_small_e =
 		self.model = "models/destruct/skulls/skull_e7.md3";
 	if (self.type == 8)
 		self.model = "models/destruct/skulls/skull_e8.md3";
+
 	precache_model(self.model);
 	precache_model(self.gibmodel1);
 	precache_model(self.gibmodel2);
 	precache_model(self.gibmodel3);
 	precache_model(self.gibmodel4);
 	precache_model(self.dmodel);
+
 	if (!self.health)
 		self.health = MOVETYPE_BOUNCE;
+
 	setmodel(self, self.model);
 	self.solid = FL_SWIM;
 	setsize(self, '-12 -12 -12', '12 12 12');
@@ -1007,10 +1251,40 @@ void() breakable_skull_small_e =
 	self.think = skull_calculate_movetype;
 	self.nextthink = (time + 0.1);
 	self.wrathflags += FL_BREAKABLE;
-};
+}
 
-void() breakable_skull_small_f =
-{
+
+/*FGD
+@PointClass
+	base(breakable_loot)
+	color(.9 .8 .7)
+	size(-12 -12 -12, 12 12 12)
+	model({{
+		type == 1 -> {"path": "models/destruct/skulls/skull_f1.md3"},
+		type == 2 -> {"path": "models/destruct/skulls/skull_f2.md3"},
+		type == 3 -> {"path": "models/destruct/skulls/skull_f3.md3"},
+		type == 4 -> {"path": "models/destruct/skulls/skull_f4.md3"},
+		type == 5 -> {"path": "models/destruct/skulls/skull_f5.md3"},
+		type == 6 -> {"path": "models/destruct/skulls/skull_f6.md3"},
+		type == 7 -> {"path": "models/destruct/skulls/skull_f7.md3"},
+		"models/destruct/skulls/skull_f1.md3"
+	}})
+= breakable_skull_small_f : "Skull breakable prop, small humanoid." [
+	health(integer) : "Health" : 10
+	angle(float) : "Yaw Angle" : "0" : "Direction in which model will be oriented."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	type(choices) : "Variant" : 1 = [
+		1 : "Skull f1"
+		2 : "Skull f2"
+		3 : "Skull f3"
+		4 : "Skull f4"
+		5 : "Skull f5"
+		6 : "Skull f6"
+		7 : "Skull f7"
+	]
+]
+*/
+void breakable_skull_small_f() {
 	if (!self.type)
 		self.type = 1;
 	if (self.type > 7)
@@ -1053,5 +1327,4 @@ void() breakable_skull_small_f =
 	self.think = skull_calculate_movetype;
 	self.nextthink = (time + 0.1);
 	self.wrathflags += FL_BREAKABLE;
-};
-
+}

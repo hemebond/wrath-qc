@@ -25,6 +25,7 @@ timescale.qc										// controls slowmo
 dmg_system.qc
 
 editor/editor.qc
+editor/node_editor.qc
 
 
 ../localization.h
@@ -40,7 +41,6 @@ player/use.qc
 entities/projectiles/heretic.qc
 entities/projectiles/cyst.qc
 
-weapons/node_editor.qc
 weapons/weapon_system.qc
 weapons/w_melee.qc
 weapons/w_revolver.qc
@@ -58,6 +58,9 @@ entities/sounds.qc  // Ambient Sounds
 entities/func/water.qc
 entities/func/button.qc
 entities/func/door.qc
+entities/func/wall.qc
+entities/func/ray.qc
+entities/func/illusionary.qc
 entities/trigger.qc
 entities/entity_model.qc
 entities/breakables.qc
@@ -84,6 +87,8 @@ entities/artifact/siphon.qc
 entities/artifact/tether.qc
 
 entities/items.qc
+entities/health.qc
+entities/armor.qc
 entities/func/destruct.qc
 entities/func/trap.qc
 entities/func/bob.qc
@@ -92,8 +97,11 @@ entities/func/plat.qc
 entities/func/weather.qc
 entities/func/pendulum.qc
 entities/misc/cyst.qc
+entities/misc/model.qc
+entities/misc/portal_camera.qc
 entities/jumpad.qc
 entities/portal.qc
+entities/object_coffer.qc
 ../orrey.qc
 ../shepherd.qc
 
@@ -111,7 +119,7 @@ monsters/monster_executioner.qc
 monsters/monster_template.qc
 monsters/monster_invader.qc
 monsters/monster_wretch.qc
-monsters/monster_incisor.qc
+monsters/monster_prowler.qc
 monsters/monster_stricken.qc
 monsters/monster_heretic.qc
 monsters/monster_fallen.qc

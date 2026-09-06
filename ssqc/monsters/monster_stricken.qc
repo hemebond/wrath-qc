@@ -964,6 +964,16 @@ void precache_monster_stricken() {
 	precache_sound("enemies/stricken/die.ogg");
 	precache_sound("enemies/stricken/explode.ogg");
 }
+
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-48 -48 -32, 48 48 44)
+	model({"path": "models/enemies/stricken/stricken.md3"})
+= monster_stricken : "Monster: Stricken" []
+*/
 void monster_stricken() {
 	if (deathmatch) {
 		remove(self);

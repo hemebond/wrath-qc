@@ -21,12 +21,21 @@ void() misc_cyst_wait_die =
 };
 
 
+/*FGD
+@PointClass
+	color(0 1 0)
+	size(-8 -8 -8, 8 8 8)
+	model("models/items/cysts.md3")
+= misc_cyst : "A solid cyst entity that explodes when triggered" [
+	targetname(target_source) : "Target Name" : : "Cyst can explode it with func_button or trigger"
+	dmg(float) : "Damage Inflicted" : "16" : "Damage caused by explosion"
+	sradius(float) : "Radius" : "16" : "Radius of explosion"
+	health(float) : "Health" : "16" : "Health of the cyst. if health is 0 it should be triggered to explode"
+	scale(float) : "Model Scale" : "2" : "Scale of the model, it will affect collisions box size"
+	type(float) : "Model Type" : "1" : "Values from 1 to 4, it will change the default cyst model"
+]
+*/
 void misc_cyst() {
-	//
-	// Static cysts that can't be interacted with directly
-	// but explode when used
-	//
-
 	if(!self.type)
 		self.type = 1;
 	if(!self.scale)

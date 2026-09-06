@@ -1,3 +1,30 @@
+/*FGD
+@PointClass
+	base(Weapon)
+	color(0 0 0.5)
+	size(-12 -12 -24, 12 12 8)
+	model({"path": "models/weapons/crystal/w_crystal.md3"})
+= weapon_crystal : "Lance" []
+*/
+
+void() weapon_crystal =
+{
+	self.items = IT_CRYSTAL;
+	self.itemisweapon = 1;
+	setmodel(self, "models/weapons/crystal/w_crystal.md3");
+	setsize(self, '-12 -12 -24' ,'12 12 8');
+	precache_sound(self.noise);
+	self.ammo_crystal = 20;
+	self.rwpn = 1;
+	self.scale = 1;
+	StartItem(1);
+	self.origin_z += 24;
+	self.touch = wammo_touch;
+	self.msg = 96;
+	self.msg_icon = "crystallizer";
+	self.msg_text = "$NOTIFY_WEP_BOILER";
+};
+
 
 .float randomattack;
 .float oldrandomattack;
@@ -9,40 +36,20 @@
 .float spawnedcrystal;
 .float gibcount;
 .float base_scale;
-
-void() idle_crystal =
-{
-	self.pipes.vweaponstate = 1;
-	self.crystal_frame = 0;
-	self.spawnedcrystal = 0;
-	self.crystal_frame_time = 0;
-	if (self.pick_up_time < time)
-		self.vweaponstate = 0;
-	self.vweaponstate = 0;
-	self.vweaponframe = 0;
-};
-
 .float beam_lenght;
 .entity lastbeam;
 .float beam_counter;
 .entity lastbeam_view;
 .float beam_counter_view;
-
-void(entity e)sub_beam2;
-
-void(entity e)sub_beam2 =
-{
-
-};
 .float crystallized_time;
 .float crystallized;
 .float oldtakedamage;
-.void()oldth_stand;
-.void()oldth_walk;
-.void()oldth_run;
-.void()oldth_missile;
-.void()oldth_melee;
-.void(entity a, float b)oldth_pain;
+.void() oldth_stand;
+.void() oldth_walk;
+.void() oldth_run;
+.void() oldth_missile;
+.void() oldth_melee;
+.void(entity a, float b) oldth_pain;
 .float oldflags;
 .float old2movetype;
 .string oldclassname;
@@ -51,43 +58,53 @@ void(entity e)sub_beam2 =
 .float beamangles_random;
 .float beamangles_random_time;
 
-void() crystalbeam_update_view =
-{
 
-	if(self == self.owner.lastbeam_view)
-	{
-		if(self.owner.beam_counter_view > ((self.owner.beam_lenght / 2) + 1))
-		{
+void idle_crystal() {
+	self.pipes.vweaponstate = 1;
+	self.crystal_frame = 0;
+	self.spawnedcrystal = 0;
+	self.crystal_frame_time = 0;
+	if (self.pick_up_time < time)
+		self.vweaponstate = 0;
+	self.vweaponstate = 0;
+	self.vweaponframe = 0;
+}
+
+
+void crystalbeam_update_view() {
+	if (self == self.owner.lastbeam_view) {
+		if (self.owner.beam_counter_view > ((self.owner.beam_lenght / 2) + 1)) {
 			self.owner.beam_counter_view --;
 			self.owner.lastbeam_view = self.lastbeam_view;
 			remove(self);
 			return;
 		}
-		if(self.owner.beam_counter_view < (self.owner.beam_lenght / 2))
-		{
+		if (self.owner.beam_counter_view < (self.owner.beam_lenght / 2)) {
 			self.owner.beam_counter_view ++;
-			local entity beam;
-			beam = spawn();
+			entity beam = spawn();
 			beam.beam_counter  = self.owner.beam_counter_view;
 			beam.classname = "crystalbeam_view";
 			beam.owner = self.owner;
-			if(self.cnt >= 5)
+
+			if (self.cnt >= 5)
 				beam.cnt = 1;
 			else
-			beam.cnt = self.cnt + 1;
-			if(beam.cnt == 1)
-				setmodel (beam,"models/projectiles/beam_crystala.md3");
-			if(beam.cnt == 2)
-				setmodel (beam,"models/projectiles/beam_crystalb.md3");
-			if(beam.cnt == 3)
-				setmodel (beam,"models/projectiles/beam_crystalc.md3");
-			if(beam.cnt == 4)
-				setmodel (beam,"models/projectiles/beam_crystald.md3");
-			if(beam.cnt == 5)
-				setmodel (beam,"models/projectiles/beam_crystale.md3");
+				beam.cnt = self.cnt + 1;
+
+			if (beam.cnt == 1)
+				setmodel(beam,"models/projectiles/beam_crystala.md3");
+			if (beam.cnt == 2)
+				setmodel(beam,"models/projectiles/beam_crystalb.md3");
+			if (beam.cnt == 3)
+				setmodel(beam,"models/projectiles/beam_crystalc.md3");
+			if (beam.cnt == 4)
+				setmodel(beam,"models/projectiles/beam_crystald.md3");
+			if (beam.cnt == 5)
+				setmodel(beam,"models/projectiles/beam_crystale.md3");
+
 			beam.lastbeam_view = self.owner.lastbeam_view;
 			self.owner.lastbeam_view = beam;
-			setattachment (beam,self,"tag_nextbeam");
+			setattachment(beam,self,"tag_nextbeam");
 			beam.movetype = MOVETYPE_NOCLIP;
 			beam.nextthink = time;
 			beam.alpha = 1;
@@ -96,12 +113,12 @@ void() crystalbeam_update_view =
 
 	}
 
-	if(!self.owner.spawnedcrystal)
+	if (!self.owner.spawnedcrystal)
 		self.think = alphafade3;
 	else
 		self.think = crystalbeam_update_view;
 	self.nextthink = time + 0.0125;
-};
+}
 
 
 void() boss2crystalbeam_update_view =
@@ -1824,8 +1841,3 @@ void() pick_up_crystal =
 	self.think = pick_up_crystal2;
 	self.nextthink = time + 3.8;
 };
-
-///////////////////////////////////end of qc file
-
-
-///////////////////////////////////end of qc file

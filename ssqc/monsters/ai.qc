@@ -309,6 +309,17 @@ void() movetarget_f =
 	setsize(self, '-8 -8 -8', '8 8 8');
 };
 
+
+/*FGD
+@PointClass color(.5 .3 0) size(-8 -8 -8, 8 8 8) = path_corner : "Path corner entity that func_trains can be made to follow." [
+	target(target_destination) : "Target" : "" : "Point to next path_corner in the path."
+	targetname(target_source) : "Target Name" : "" : "The train following the path or the previous path_corner in the path points to this."
+	speed(float) : "Move Speed" : "" : "Speed of func_train while moving to the next path corner. This will override the speed value of the train."
+	wait(float) : "Corner Delay" : "0" : "Number of seconds func_train will pause on path corner before moving to next path corner (default 0 - see notes)."
+	// -------- NOTES --------
+	// Setting the wait key to -1 will not make the train stop on the path corner, it will simply default to 0.
+]
+*/
 void() path_corner = 
 {
 	movetarget_f();
@@ -2713,12 +2724,16 @@ void() trigger_nowaypointed =
 	self.model = string_null;
 };
 
-float(entity targ, entity eself) backtouch; 
 
-void() info_angle=
-{
-};
+/*FGD
+@PointClass base(TargetName) color(0 .5 0) size(-8 -8 -8, 8 8 8) = info_angle : "Used as a angle target for trigger_angle" []
+*/
+void info_angle() {}
+
+
 .vector vangles;
+
+
 void()determine_subangle =
 {
 	local entity t;
@@ -2861,6 +2876,14 @@ void() trigger_angle_touch =
 
 };
 
+
+/*FGD
+@SolidClass color(0.5 0.0 0.5) = trigger_angle : "Changes the angles of monsters." [
+	minorangle(float) : "Min Angle factor" : "0" : "sets min angle factor to touch, from 1 to -1"
+	target(target_destination) : "Target" : : "target info_angle to set y angles"
+	angle(float) : "Direction" : : "Determines the orientation angle of the trigger."
+]
+*/
 void() trigger_angle =
 {
 	self.vangles = self.angles;
@@ -2892,13 +2915,22 @@ void() trigger_no_check_angles_touch =
 other.timeangles3 = (time + self.no_fixed_angles_time);
 };
 
-void() trigger_no_check_angles =
-{
+
+/*FGD
+@SolidClass color(0.5 0.0 0.5) = trigger_no_check_angles : "Turn some monsters in turrets." [
+    no_fixed_angles_time(float) : "Time" : "0" : "time in seconds when the checking angles AI will be off, use -1 to activate it again"
+]
+*/
+void trigger_no_check_angles() {
 	InitTrigger();
 	self.touch = trigger_no_check_angles_touch;
-}; .float burnable;
+}
 
+
+.float burnable;
 .float floortime;
+
+
 void(entity e) checkburnable =
 {
 

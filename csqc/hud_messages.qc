@@ -7,10 +7,16 @@ float oldhud_messages;
 .vector icolor;
 float msgtime;
 float removingmessages;
-void() SUB_Remove = {remove(self);};
 float savingtether;
-void() check_tether2 = { read_currentprofileslot();
 
+
+void SUB_Remove() {
+	remove(self);
+}
+
+
+void check_tether2() {
+	read_currentprofileslot();
 	local string campaignloc;
 	campaignloc = strcat("profiles/", profilename, "/tetherclient.txt");
 	local float readparms;
@@ -22,8 +28,8 @@ void() check_tether2 = { read_currentprofileslot();
 
 	if (profilename != "")
 		strunzone(profilename);
+}
 
-};
 
 void() check_shrine = { read_currentprofileslot();
 	local string campaignloc;
@@ -177,7 +183,6 @@ void HUD_ShuffleNotificationsUp(void)
 	string stroffs_textimg = msgimg.image;
 	string stroffs_cnttext = cnt.text;
 	string stroffs_cntimg = cntimg.image;
-	//
 
 	for(float i = 0; i < HUD_NOTIFY_LINES - 1; i++)
 	{
@@ -240,11 +245,9 @@ void HUD_ShuffleNotificationsUp(void)
 uielement_c HUD_AllocateLine(void)
 {
 	float time_prev = 0;
-	for(float i = 0; i < HUD_NOTIFY_LINES; i++)
-	{
+	for (float i = 0; i < HUD_NOTIFY_LINES; i++) {
 		uielement_c line = ui_notify_lines[i];
-		if (line.skin)
-		{
+		if (line.skin) {
 			time_prev = line.skin;
 			continue;
 		}
@@ -255,7 +258,6 @@ uielement_c HUD_AllocateLine(void)
 		return line;
 	}
 
-	//HUD_ShuffleNotificationsUp();
 	// go into overflow line
 	HUD_ShuffleNotificationsUp();
 
@@ -380,14 +382,14 @@ void() MessageThink = {
 	}
 };
 
-void() Hud_Messages_Draw = 
-{ 
-	string image, imageicon;
+void Hud_Messages_Draw() {
 	oldhud_messages = hud_messages;
 
-	string language_selected = 	cvar_string("prvm_language");	
+	string language_selected = cvar_string("prvm_language");
+
 	float weapn_icon = 0;
-	imageicon = "null";
+	string image;
+	string imageicon = "null";
 	if (self.msg == 1)
 	{	
 		image = strcat("gfx/hud/messages/",language_selected,"/msg_aegis.tga");

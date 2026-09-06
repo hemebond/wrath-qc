@@ -174,9 +174,7 @@ void torso_think() {
 
 
 void spawn_player_model(entity e) {
-	entity playermodel, torso;
-
-	playermodel = spawn();
+	entity playermodel = spawn();
 	e.player_model = playermodel;
 	playermodel.owner = e;
 	playermodel.wrathflags = FL_GARBAGE;
@@ -188,25 +186,16 @@ void spawn_player_model(entity e) {
 	playermodel.think = lower_think;
 	playermodel.nextthink = time + 0.05;
 
-	torso = spawn();
+	entity torso = spawn();
 	torso.owner = e;
 	e.torso_model = torso;
 	precache_model("models/player/outlander/outlander_new_upper.md3");
 	setmodel(torso, "models/player/outlander/outlander_new_upper.md3");
-	//void(entity e, entity tagentity, string tagname) setattachment
 	setattachment(torso, playermodel, "tag_mid");
 	torso.frame = OUTLANDER_UPPER_RIFLE;
 	torso.wrathflags = FL_GARBAGE;
 	torso.think = torso_think;
 	torso.nextthink = time + 0.05;
-
-	entity head = spawn();
-	head.owner = e;
-	setmodel(head, "models/player/outlander/head.md3");
-	setattachment(head, torso, "tag_head");
-	head.wrathflags = FL_GARBAGE;
-	head.think = torso_think;
-	head.nextthink = time + 0.05;
 
 	entity weapon = spawn();
 	weapon.wrathflags = FL_GARBAGE;

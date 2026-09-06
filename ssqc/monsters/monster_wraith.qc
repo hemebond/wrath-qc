@@ -1043,42 +1043,16 @@ void() precache_monster_wraith = { precache_model("models/enemies/wraith/wraith_
 	precache_sound("enemies/wraith/sight3.ogg");
 };
 
-void() monster_wraith = { precache_model("models/enemies/wraith/wraith_tail2.md3");
-	precache_model("models/enemies/wraith/wraith_tail1.md3");
-	precache_model("models/enemies/wraith/wraith_head.md3");
-	precache_model("models/enemies/wraith/wraith_back3.md3");
-	precache_model("models/enemies/wraith/wraith_back2.md3");
-	precache_model("models/enemies/wraith/wraith_back1.md3");
-	precache_model("models/enemies/wraith/wraith_arm4.md3");
-	precache_model("models/enemies/wraith/wraith_arm3.md3");
-	precache_model("models/enemies/wraith/wraith_arm2.md3");
-	precache_model("models/enemies/wraith/wraith_arm1.md3");
-	precache_model("models/enemies/wraith/wraith.md3");
-	precache_model("models/misc/null.md3");
-
-	precache_sound("enemies/wraith/attack1.ogg");
-	precache_sound("enemies/wraith/attack2.ogg");
-	precache_sound("enemies/wraith/attack3.ogg");
-	precache_sound("enemies/wraith/chatter1.ogg");
-	precache_sound("enemies/wraith/chatter2.ogg");
-	precache_sound("enemies/wraith/chatter3.ogg");
-	precache_sound("enemies/wraith/chatter4.ogg");
-	precache_sound("enemies/wraith/chatter5.ogg");
-	precache_sound("enemies/wraith/die1.ogg");
-	precache_sound("enemies/wraith/die2.ogg");
-	precache_sound("enemies/wraith/die3.ogg");
-	precache_sound("enemies/wraith/pain1.ogg");
-	precache_sound("enemies/wraith/pain2.ogg");
-	precache_sound("enemies/wraith/pain3.ogg");
-	precache_sound("enemies/wraith/proj_impact1.ogg");
-	precache_sound("enemies/wraith/proj_impact2.ogg");
-	precache_sound("enemies/wraith/proj_impact3.ogg");
-	precache_sound("enemies/wraith/proj_loop1.ogg");
-	precache_sound("enemies/wraith/proj_loop2.ogg");
-	precache_sound("enemies/wraith/proj_loop3.ogg");
-	precache_sound("enemies/wraith/sight1.ogg");
-	precache_sound("enemies/wraith/sight2.ogg");
-	precache_sound("enemies/wraith/sight3.ogg");
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/wraith/wraith.md3"})
+= monster_wraith : "Monster: Wraith" []
+*/
+void() monster_wraith = {
+	precache_monster_wraith();
 
 	self.solid = SOLID_SLIDEBOX;
 	self.flyer = 1;
@@ -1112,47 +1086,18 @@ void() monster_wraith = { precache_model("models/enemies/wraith/wraith_tail2.md3
 	self.th_die = wraith_die;
 
 	flymonster_start();
-
 };
 
 
-void() monster_bigwraith = { precache_model("models/enemies/wraith/wraith_tail2.md3");
-	precache_model("models/enemies/wraith/wraith_tail1.md3");
-	precache_model("models/enemies/wraith/wraith_head.md3");
-	precache_model("models/enemies/wraith/wraith_back3.md3");
-	precache_model("models/enemies/wraith/wraith_back2.md3");
-	precache_model("models/enemies/wraith/wraith_back1.md3");
-	precache_model("models/enemies/wraith/wraith_arm4.md3");
-	precache_model("models/enemies/wraith/wraith_arm3.md3");
-	precache_model("models/enemies/wraith/wraith_arm2.md3");
-	precache_model("models/enemies/wraith/wraith_arm1.md3");
-	precache_model("models/enemies/wraith/wraith.md3");
-	precache_model("models/misc/null.md3");
-
-	precache_sound("enemies/wraith/attack1.ogg");
-	precache_sound("enemies/wraith/attack2.ogg");
-	precache_sound("enemies/wraith/attack3.ogg");
-	precache_sound("enemies/wraith/chatter1.ogg");
-	precache_sound("enemies/wraith/chatter2.ogg");
-	precache_sound("enemies/wraith/chatter3.ogg");
-	precache_sound("enemies/wraith/chatter4.ogg");
-	precache_sound("enemies/wraith/chatter5.ogg");
-	precache_sound("enemies/wraith/die1.ogg");
-	precache_sound("enemies/wraith/die2.ogg");
-	precache_sound("enemies/wraith/die3.ogg");
-	precache_sound("enemies/wraith/pain1.ogg");
-	precache_sound("enemies/wraith/pain2.ogg");
-	precache_sound("enemies/wraith/pain3.ogg");
-	precache_sound("enemies/wraith/proj_impact1.ogg");
-	precache_sound("enemies/wraith/proj_impact2.ogg");
-	precache_sound("enemies/wraith/proj_impact3.ogg");
-	precache_sound("enemies/wraith/proj_loop1.ogg");
-	precache_sound("enemies/wraith/proj_loop2.ogg");
-	precache_sound("enemies/wraith/proj_loop3.ogg");
-	precache_sound("enemies/wraith/sight1.ogg");
-	precache_sound("enemies/wraith/sight2.ogg");
-	precache_sound("enemies/wraith/sight3.ogg");
-
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-32 -32 -32, 32 32 32)
+	model({"path": "models/enemies/symbol/symbol.md3"})
+= monster_bigwraith : "Monster: Big Wraith" []
+*/
+void() monster_bigwraith = {
 	self.solid = SOLID_SLIDEBOX;
 	self.flyer = 1;
 	self.movetype = MOVETYPE_STEP;

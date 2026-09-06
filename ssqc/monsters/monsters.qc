@@ -1,3 +1,11 @@
+/*FGD
+@BaseClass = Monster [
+    spawnflags(flags) = [
+        1 : "Ambush" : 0 : "the monster will only wake up on really seeing the player, not another monster getting angry"
+    ]
+]
+*/
+
 float SF_MONSTER_AMBUSH = 1;
 
 void() monster_use = { if (self.enemy)

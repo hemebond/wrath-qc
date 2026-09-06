@@ -1,9 +1,3 @@
-/*
-==============================================================================
-executioner CODE
-==============================================================================
-*/
-
 $frame ex_pose0
 $frame ex_idle1 ex_idle2 ex_idle3 ex_idle4 ex_idle5 ex_idle6 ex_idle7 ex_idle8 ex_idle9 ex_idle10
 
@@ -1495,7 +1489,8 @@ void() executioner_death = { if (self.skin == 1)
 
 };
 
-void() precache_monster_executioner = { precache_sound("enemies/executioner/blade_swing1.ogg");
+void() precache_monster_executioner = {
+	precache_sound("enemies/executioner/blade_swing1.ogg");
 	precache_sound("enemies/executioner/blade_swing2.ogg");
 	precache_sound("enemies/executioner/blade_swing3.ogg");
 	precache_sound("enemies/executioner/charge_collide.ogg");
@@ -1524,33 +1519,17 @@ void() precache_monster_executioner = { precache_sound("enemies/executioner/blad
 	precache_model("models/enemies/executioner/arm_left.md3");
 };
 
-void() monster_executioner = { precache_sound("enemies/executioner/blade_swing1.ogg");
-	precache_sound("enemies/executioner/blade_swing2.ogg");
-	precache_sound("enemies/executioner/blade_swing3.ogg");
-	precache_sound("enemies/executioner/chatter_combat1.ogg");
-	precache_sound("enemies/executioner/chatter_combat2.ogg");
-	precache_sound("enemies/executioner/chatter_combat3.ogg");
-	precache_sound("enemies/executioner/charge_collide.ogg");
-	precache_sound("enemies/executioner/die1.ogg");
-	precache_sound("enemies/executioner/die2.ogg");
-	precache_sound("enemies/executioner/die3.ogg");
-	precache_sound("enemies/executioner/idle1.ogg");
-	precache_sound("enemies/executioner/idle2.ogg");
-	precache_sound("enemies/executioner/idle3.ogg");
-	precache_sound("enemies/executioner/mutilate.ogg");
-	precache_sound("enemies/executioner/pain1.ogg");
-	precache_sound("enemies/executioner/pain2.ogg");
-	precache_sound("enemies/executioner/pain3.ogg");
-	precache_sound("enemies/executioner/rawr.ogg");
-	precache_sound("enemies/executioner/sight1.ogg");
-	precache_sound("enemies/executioner/sight2.ogg");
-	precache_sound("enemies/executioner/sight3.ogg");
-	precache_sound("enemies/executioner/step1.ogg");
-	precache_sound("enemies/executioner/step2.ogg");
-	precache_sound("enemies/executioner/step3.ogg");
-	precache_model("models/enemies/executioner/executioner.md3");
-	precache_model("models/enemies/executioner/arm_right.md3");
-	precache_model("models/enemies/executioner/arm_left.md3");
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 48)
+	model({"path": "models/enemies/executioner/executioner.md3"})
+= monster_executioner : "Monster: Executioner" []
+*/
+void() monster_executioner = {
+	precache_monster_executioner();
 
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
@@ -1558,7 +1537,6 @@ void() monster_executioner = { precache_sound("enemies/executioner/blade_swing1.
 	setmodel(self, "models/enemies/executioner/executioner.md3");
 	self.classname = "executioner";
 	self.heavymonster = 1;
-	//self.damagetopain = opp_dtp;
 	self.stepheight_delta = 8;
 	local float r;
 	r = (random() *3);
@@ -1570,7 +1548,6 @@ void() monster_executioner = { precache_sound("enemies/executioner/blade_swing1.
 		self.noise = "enemies/executioner/sight1.ogg";	
 
 	setsize(self, '-16 -16 -32', '16 16 48');
-	//	setsize (self, '-12 -12 -0', '12 12 64');
 	self.health = exec_health;
 	self.view_ofs_z = 72;
 	self.th_stand = executioner_stand1;
@@ -1600,5 +1577,3 @@ void() monster_executioner = { precache_sound("enemies/executioner/blade_swing1.
 	self.nextthink = time;
 	walkmonster_start();
 };
-
-////////////////end of qc file

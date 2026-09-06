@@ -987,14 +987,24 @@ void() precache_monster_keeper =
 	precache_model("models/enemies/keeper/keeper.md3");
 	precache_model("models/enemies/keeper/orb_keeper.md3");
 };
-void() monster_keeper = 
-{ 
-	precache_monster_keeper();
-	if (deathmatch)
-	{
+
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 0, 16 16 64)
+	model({"path": "models/enemies/keeper/keeper.md3"})
+= monster_keeper : "Keeper ( flying mechanical brain forcefield generator )" []
+*/
+void() monster_keeper = {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
+
+	precache_monster_keeper();
+
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_FLY;
 	setmodel(self, "models/enemies/keeper/keeper.md3");
@@ -1012,19 +1022,19 @@ void() monster_keeper =
 	height_controller.think = height_controller_think;
 	height_controller.nextthink = time;
 
-    if(self.warped == 1)
-    {
+	if(self.warped == 1)
+	{
 		entity color_controller = spawn();
-		setmodel	 (color_controller,"");
+		setmodel(color_controller,"");
 		color_controller.warpframe = 1;
 		color_controller.owner = self;
 		color_controller.colormod = self.colormod;
 		color_controller.think = color_controller_think;
 		color_controller.nextthink = time;
-    }
+	}
 
 	entity glow_controller = spawn();
-	setmodel	 (glow_controller,"");
+	setmodel(glow_controller,"");
 	glow_controller.owner = self;
 	glow_controller.think = glow_controller_think;
 	glow_controller.nextthink = time;
@@ -1041,6 +1051,5 @@ void() monster_keeper =
 	self.th_run = keeper_stand1;
 	self.th_melee = keeper_stand1;
 
-	self.nextthink = time + random(0.1,0.3);
-
+	self.nextthink = time + random(0.1, 0.3);
 };

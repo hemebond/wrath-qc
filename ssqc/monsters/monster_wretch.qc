@@ -1,9 +1,45 @@
 /*
-==============================================================================
-
-wretch
-
-==============================================================================
+wretch_health = 250             //	health USING
+wretch_ws = 16              //	walk speed USING
+wretch_wth = 50              //	walk think % chance to attack, else keep walking
+wretch_rs = 16              //	run speed USING
+wretch_rt = .4              //	run time cycle duration
+wretch_rth = 50              //	run think roll USING
+wretch_attp = 1               //	attack type (melee[1] or projectile[2])
+wretch_ad = 20              //	attack damage USING
+wretch_at = .5              //	attack time
+wretch_ath = 50              //	attack think % chance to attack, else keep runing USING
+wretch_pat = 0.3             //	pre-attack time
+wretch_sad = 30              //	secondary attack damage USING
+wretch_sat = 1               //	secondary attack time
+wretch_spat = 0.5             //	secondary pre-attack time
+wretch_dtp = 25              //	damage needed to pain USING
+wretch_pt = .5              //	pain time USING
+wretch_pth = 10              //	pain think % chance to attack or walk USING
+wretch_bbox = 32 32 64        //	bbox USING
+wretch_far = 4096            //	far USING
+wretch_mid = 2048            //	mid USING
+wretch_near = 64				//	near USING
+wretch_projvel = 1024            //	projectile velocity USING
+wretch_rtp = 50              //	roll dice (pain) USING
+wretch_dtg = -200            //  damage needed to gib USING
+wretch_rtsh = 50				//  roll dice to spining head USING
+wretch_zzc = 75				//	zigzag chance USING
+wretch_zzd = 45            	//	zigzag max deviance USING
+wretch_zzmd = 10				//	zigzag min deviance USING
+wretch_itadr = 50				//	chance to attack on wakeup
+wretch_sht = 1.5             //  spining head life time USING
+wretch_shv = -1200           //  spining head velocity (angles per second) USING
+wretch_shvb = -1200           //  spining head velocity at start USING
+wretch_shsps = 10              //  spining head shoots per second
+wretch_shg = 1            	//  spining head gravity
+wretch_shkv = '128 128 32'   	//  spining head kick vector
+wretch_shbbox = '16 16 20'      //	spining head bbox
+wretch_shbboxn = '-16 -16 0'     //	spining head negative bbox
+wretch_explo_damage = 250             //  damage explo damage to enemy
+wretch_explo_damage_player = 50             	//  damage explo damage to player
+wretch_explo_radius = 192             //  damage explo radius
+wretch_pushfactor = 3				//  explo pushfactor
 */
 
 /*
@@ -1256,9 +1292,7 @@ void() wretch_diea1 = {
 	self.nextthink = time + 0.1;
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////
 
-/*WRATHED monster_wretch (1 0 0) (-16 -16 -24) (16 16 40) Ambush*/
 .vector bbvv;
 void() precache_monster_wretch = { 
 	precache_model ("particles/explo/explo_wretch.md3");
@@ -1309,22 +1343,30 @@ void() precache_monster_wretch = {
 	precache_model("models/enemies/wretch/gibs/gib_leg2_r.md3");
 	precache_model("models/enemies/wretch/gibs/gib_head_spin.md3");
 	precache_model("models/enemies/wretch/gibs/gib_head.md3");
-	
-
 };
 
-void() monster_wretch = { precache_model("models/enemies/wretch/wretch.md3");
-	if (deathmatch)
-	{
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/wretch/wretch.md3"})
+= monster_wretch : "Monster: Wretch" []
+*/
+void() monster_wretch = {
+	if (deathmatch) {
 		remove(self);
 		return;
 	}
 
+	precache_monster_wretch();
+
 	if (self.waypointed != 1)
 		self.waypointed = 0;
 	self.solid = SOLID_SLIDEBOX;
-	local float r;
-	r = (random() *3);
+
+	float r = (random() *3);
 	if (r <= 3)
 		self.noise = "enemies/wretch/sight3.ogg";
 	if (r < 2)
@@ -1333,7 +1375,8 @@ void() monster_wretch = { precache_model("models/enemies/wretch/wretch.md3");
 		self.noise = "enemies/wretch/sight1.ogg";
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/wretch/wretch.md3");
-	setsize(self, wretch_bbox *-0.5, wretch_bbox *0.5);
+	setsize(self, '-16 -16 -32', '16 16 32');
+
 	self.health = wretch_health;
 	self.damagetopain = wretch_dtp;
 	self.classname = "monster_wretch";
@@ -1352,11 +1395,8 @@ void() monster_wretch = { precache_model("models/enemies/wretch/wretch.md3");
 	self.th_pain = wretch_paina1;
 	self.th_die = wretch_diea1;
 	walkmonster_start();
-	entity checkmovetyper;
-	checkmovetyper = spawn();
+
+	entity checkmovetyper = spawn();
 	checkmovetyper.think = checkmovetypeowner;
 	checkmovetyper.nextthink = time;
 };
-
-////////////////end of qc file
-

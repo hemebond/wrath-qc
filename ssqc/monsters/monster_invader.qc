@@ -1,9 +1,35 @@
 /*
-==============================================================================
-
-invader
-
-==============================================================================
+invader_health = 200			    //	health
+invader_ws = 8				//	walk speed
+invader_wth = 100		    	//	walk think % chance to attack, else keep walking
+invader_rs = 8		    	//	run speed
+invader_rt = 1			    //	run time cycle duration
+invader_rth = 100			    //	run think roll
+invader_attp = 1				//	attack type (melee[1] or projectile[2])
+invader_ad = 3		    	//	RANGED attack damage
+invader_at = 1				//	attack time
+invader_ath = 50		    	//	attack think % chance to attack, else keep runing
+invader_pat = 1		    	//	pre-attack time
+invader_sad = 50		    	//	MELEE attack damage
+invader_sat = 1				//	secondary attack time
+invader_spat = 0		    	//	secondary pre-attack time
+invader_dtp = 25		    	//	damage needed to pain
+invader_pt = .5				//	pain time
+invader_pth = 100		    	//	pain think % chance to attack or walk
+invader_bbox = 32 32 64	    //	bbox
+invader_nproj = 10				//	NUM projectiles
+invader_shotgun_spread1 = .1				//	projectile spread fire 1
+invader_projvel = 4096            //  projectile velocity ammount
+invader_lungevel = 800            	//	lunge velocity
+invader_far = 4096            //	far
+invader_mid = 1024            //	mid
+invader_near = 92    	        //	near
+invader_rtp = 75 	            //  roll dice (pain)
+invader_zzc = 100				//	zigzag chance
+invader_zzd = 45				//	zigzag max deviance
+invader_zzmd = 10				//	zigzag min deviance
+invader_itadr = 75				//	chance to attack on wakeup
+invader_gdv = -250			//	overkill needed to gib
 */
 
 /*
@@ -67,7 +93,7 @@ $frame inv_deathb1 inv_deathb2 inv_deathb3 inv_deathb4 inv_deathb5 inv_deathb6 i
 $frame inv_deathc1 inv_deathc2 inv_deathc3 inv_deathc4 inv_deathc5 inv_deathc6 inv_deathc7 inv_deathc8 inv_deathc9 inv_deathc10
 $frame inv_deathd1 inv_deathd2 inv_deathd3 inv_deathd4 inv_deathd5 inv_deathd6 inv_deathd7 inv_deathd8 inv_deathd9 inv_deathd10 inv_deathd11 inv_deathd12 inv_deathd13 inv_deathd14 inv_deathd15 inv_deathd16 inv_deathd17 inv_deathd18 inv_deathd19 inv_deathd20
 
-	.float runing_time;
+.float runing_time;
 .float headless;
 /////////////////////////////////////////////////////////////////////////////////////////////
 void() invader_stand =[$inv_idle1, invader_stand2]
@@ -1679,20 +1705,18 @@ void() invader_touch =
 	}
 };
 
-void() monster_invader = { precache_model("models/enemies/invader/invader.md3");
-	precache_model("models/enemies/invader/gibs/gib_head.md3");
-	precache_model("models/enemies/invader/gibs/gib_arm_l.md3");
-	precache_model("models/enemies/invader/gibs/gib_arm_r.md3");
-	precache_model("models/enemies/invader/gibs/gib_body_l.md3");
-	precache_model("models/enemies/invader/gibs/gib_body_r.md3");
-	precache_model("models/enemies/invader/gibs/gib_leg_l.md3");
-	precache_model("models/enemies/invader/gibs/gib_leg_r.md3");
-	precache_model("models/enemies/invader/gibs/gib_hair_a.md3");
-	precache_model("models/enemies/invader/gibs/gib_hair_b.md3");
-	precache_model("models/enemies/invader/gibs/gib_hair_c.md3");
-	precache_model("models/enemies/invader/muzzle_flash.md3");
-	precache_model("particles/explo/explo_invader.md3");
-	precache_model("models/items/shells_drop.md3");
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 32)
+	model({"path": "models/enemies/invader/invader.md3"})
+= monster_invader : "Monster: Invader" []
+*/
+void() monster_invader = {
+	precache_monster_keeper();
+
 	if (deathmatch)
 	{
 		remove(self);
@@ -1713,7 +1737,7 @@ void() monster_invader = { precache_model("models/enemies/invader/invader.md3");
 	self.solid = SOLID_SLIDEBOX;
 	self.movetype = MOVETYPE_STEP;
 	setmodel(self, "models/enemies/invader/invader.md3");
-	setsize(self, invader_bbox *-0.5, invader_bbox *0.5);
+	setsize(self, '-16 -16 -32', '16 16 32');
 	self.health = invader_health;
 	self.classname = "monster_invader";
 	self.th_stand = invader_stand;
@@ -1724,11 +1748,8 @@ void() monster_invader = { precache_model("models/enemies/invader/invader.md3");
 		self.th_run = invader_preattack;
 	self.turretable = 1;
 	self.th_missile = invader_preattack;
-	//self.touch =invader_touch;
 	self.th_melee = invader_sattack;
 	self.th_pain = invader_pain;
 	self.th_die = invader_death;
 	walkmonster_start();
 };
-
-////////////////end of qc file

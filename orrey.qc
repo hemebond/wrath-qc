@@ -134,8 +134,15 @@ void Orrey_Use()
 	self.SendFlags |= 0x04 | 0x08 | 0x10;
 }
 
-void spawnfunc_object_orrery()
-{
+
+/*FGD
+@PointClass
+	color(0 0.6 1)
+	size(-12 -12 -12, 12 12 12)
+	model({"path": "models/objects/orrery/orrery.md3"})
+= object_orrery : "Grand orrery model for e2m5: The Watchtowers. Can be triggered to animate." []
+*/
+void spawnfunc_object_orrery() {
 	precache_sound("objects/orrery.ogg");
 	precache_model(self.model);
 

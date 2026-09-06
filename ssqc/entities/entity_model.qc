@@ -80,7 +80,7 @@ void() train_next =
 	}
 	self.state = 0;
 	//void(entity e, float chan, string samp, float vol, float atten, float speed, float flags, float trapezoid) soundwrath = #8;
-	
+
 	soundwrath(self, FL_SWIM, self.noise, TRUE, 0.15,100,0.5);
 	if ((self.spawnflags & TRUE))
 	{
@@ -112,6 +112,29 @@ void() func_train_find =
 	}
 };
 
+
+/*FGD
+@SolidClass
+	color(0 .4 1)
+= func_train : "Trains are moving solids that follow a string of path_corner entities. Trains in Q3A are very basic, they also require an origin brush (see notes)." [
+	color(color1) : "Model Light Color" : "1 1 1" : "ConstantLight color of .md3 model included with entity. Has no effect on the entity's brushes (default 1 1 1)."
+	light(float) : "Model Light Intensity" : "0" : "ConstantLight radius of .md3 model included with entity. Has no effect on the entity's brushes (default 0)."
+	model2(string) : "Model File" : "" : "Path/name of model to include (.md3 files only, e.g. models/mapobjects/pipe/pipe02.md3)."
+	speed(float) : "Move Speed" : "100" : "Speed of displacement of train (default 100 or overridden by speed value of path)."
+	target(target_destination) : "Target" : "" : "This points to the first path_corner of the path which is also the spawn location of the train's origin."
+	targetname(target_source) : "Target Name" : "" : "Used to attach a misc_model entity to this entity."
+	// -------- NOTES --------
+	// 1. Trains always start on in the game.
+	// 2. Trains do not damage the player when blocked.
+	// 3. Trains cannot emit sound.
+	// 4. Trains are not triggerable or toggle-able.
+	// 5. Trains cannot be block-stopped just by getting in their way, the player must be wedged between the train and another obstacle to block it.
+	//
+	// You need to have an origin brush as part of this entity. When using the model2 key, the origin point of the model will correspond to the origin point defined by the origin brush.
+	//
+	// Target this entity with a misc_model to have the model attached to the entity (set the model's "target" key to the same value as this entity's "targetname").
+]
+*/
 void() func_train =
 {
 	if (!self.speed)
@@ -129,7 +152,7 @@ void() func_train =
 
 	if(!(self.noise))
 		self.noise = "misc/null.wav";
-	if(!(self.noise2)) 
+	if(!(self.noise2))
 		self.noise2 = "misc/null.wav";
 
 	precache_sound(self.noise);
@@ -176,7 +199,7 @@ void() func_train =
 		attachedmodel.think = attached_think;
 		attachedmodel.nextthink = time + 0.025;
 	}
-	
+
 
 
 };
@@ -337,7 +360,7 @@ void() boat_check =
 	{
 		self.think = boat_check;
 		self.nextthink = time + 0.05;
-	}		
+	}
 };
 void() place_model_checkowner =
 {
@@ -349,7 +372,7 @@ void() place_model_checkowner =
 	{
 		if ((e.classname == "func_train")&& (e.targetname == self.target) )
 		{
-			
+
 			{
 				realt = e;
 			}
@@ -365,7 +388,7 @@ void() place_model_checkowner =
 		self.punchangle = self.angles; // the original angles of bmodel
 		self.view_ofs = self.origin - realt.origin; // relative origin
 		self.v_angle = self.angles - realt.angles; // relative angles
-		
+
 		if (self.spawnflags & 2)
 		{
 			self.frame = 0;
@@ -377,20 +400,32 @@ void() place_model_checkowner =
 			self.nextthink = time + 0.05;
 			return;
 		}
-		
+
 		else
 			self.think = null;
 
 		self.nextthink = time + 0.5;
 	}
-	
+
 };
 
+
+/*FGD
+@PointClass
+	color(1 .5 .25)
+	size(-16 -16 -16, 16 16 16)
+	model({"Path": model})
+= place_model : "Generic placeholder for inserting MD3 models in game. Doesnt Requires compilation of map geometry to be added to level." [
+	model(string) : "Model File" : : "Path/name of model to use (e.g. models/mapobjects/teleporter/teleporter.md3)."
+	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
+	scale(float) : "Uniform Scale" : "1" : "Floating-point value used to scale a model up or down (default 1.0)."
+]
+*/
 void() place_model =
 {
 	precache_model(self.model);
 	setmodel(self, self.model);
-	
+
 	if (self.target != "")
 	{
 		if (self.spawnflags & 1)
@@ -536,101 +571,113 @@ void() TorchAmbient =
 	ambientsound(self.origin, self.noise, TRUE, 0.5);
 };
 
-void() object_torch1 =
-{
+
+/*FGD
+@PointClass
+	color(0 1 1)
+	size(-4 -4 -8, 4 4 8)
+	model({{
+		episode == 1 -> {"path": "models/objects/fixtures/torch1.md3"},
+		episode == 2 -> {"path": "models/objects/fixtures/e2_torch.md3"},
+		episode == 3 -> {"path": "models/objects/fixtures/e3_torch.md3"},
+		episode == 4 -> {"path": "models/objects/fixtures/e2_torch_2.md3"},
+		"models/objects/fixtures/torch1.md3"
+	}})
+= object_torch1 : "flamey wall torch" [
+	episode(choices) : "Episode" : 1 = [
+		1 : "Episode 1"
+		2 : "Episode 2"
+		3 : "Episode 3"
+		4 : "Episode 4"
+	]
+	skin(integer) : "Alternate" : 1 : "(ALTERNATE) uses an alternate flame pattern and sound effect.  Use this every other torch placement to reduce syncing of sound/animation of multiple visible torches"
+]
+*/
+void object_torch1() {
 	if(!self.episode)
 		self.episode = world.episode;
 	self.classname = "object_torch1";
-	if(self.episode == 1)
-	{
-		
+	if(self.episode == 1) {
 		precache_model("models/objects/fixtures/torch1.md3");
 		setmodel(self, "models/objects/fixtures/torch1.md3");
 	}
-	if(self.episode == 2)
-	{
+	if(self.episode == 2) {
 		precache_model("models/objects/fixtures/e2_torch.md3");
 		setmodel(self, "models/objects/fixtures/e2_torch.md3");
 		makevectors2 (self.angles);
-		
 	}
-	if(self.episode == 3)
-	{
+	if(self.episode == 3) {
+		// FIXME: This model does not exist
 		precache_model("models/objects/fixtures/e3_torch.md3");
 		setmodel(self, "models/objects/fixtures/e3_torch.md3");
 	}
-	if(self.episode == 4)
-	{
+	if(self.episode == 4) {
 		precache_model("models/objects/fixtures/e2_torch_2.md3");
 		setmodel(self, "models/objects/fixtures/e2_torch_2.md3");
 		makevectors2 (self.angles);
-		
 	}
-
 
 	precache_sound("fx/fire1.ogg");
 	precache_sound("fx/fire2.ogg");
 	setsize(self, '-4 -4 -8', '4 4 8');
 
-	if(self.episode == 2)
-	{
+	if(self.episode == 2) {
 		self.solid = SOLID_BBOX;
 		self.wrathflags += FL_NOONTOP;
 		setsize(self, '-4 -4 -30', '4 4 12');
 	}
 
-	if (!self.skin)
-	{
+	if (!self.skin) {
 		float r = random();
 		if ( r > 0.5)
 			self.skin = 1;
-	}	
-
+	}
 
 	if(self.episode == 1)
-	self.skin = floor(random(0,3.99));
+		self.skin = floor(random(0,3.99));
 
-
-	if (self.skin != 1)
-	{
-		
+	if (self.skin != 1) {
 		self.noise = "fx/fire1.ogg";
 	}
-	else
-	{
+	else {
 		self.noise = "fx/fire2.ogg";
 	}
 	TorchAmbient();
-};
+}
 
-void() object_torch2 =
-{
+
+/*FGD
+@PointClass model("models/objects/fixtures/e2_torch.md3") = object_torch2 []
+*/
+void object_torch2() {
 	self.episode = 2;
 	precache_model("models/objects/fixtures/e2_torch.md3");
 	object_torch1();
+}
 
-};
 
-
-void() object_torch2b =
-{
+/*FGD
+@PointClass model("models/objects/fixtures/e2_torch_2.md3") = object_torch2b []
+*/
+void object_torch2b() {
 	self.episode = 4;
 	precache_model("models/objects/fixtures/e2_torch_2.md3");
 	object_torch1();
+}
 
-};
 
-void() object_torch3 =
-{
+/*FGD
+@PointClass model("models/objects/fixtures/e3_torch.md3") = object_torch3 []
+*/
+void object_torch3() {
 	self.episode = 3;
 	precache_model("models/objects/fixtures/e3_torch.md3");
 	object_torch1();
-
-};
-
+}
 
 
-void() converttriggerhurt = 
+
+void() converttriggerhurt =
 {
 	self.movetype = 0;
 	self.velocity = ' 0 0 0';
@@ -646,12 +693,11 @@ void() converttriggerhurt =
 	self.takedamage = 0;
 };
 
-void() objecfire_getmodel =
-{
-
+void objecfire_getmodel() {
 	if (!self.skin)
 		self.skin = floor(random(0,3.99));
 	setmodel(self, "models/objects/fixtures/fire1.md3");
+
 	entity checktriggerhurt = spawn();
 	checktriggerhurt.solid = SOLID_TRIGGER;
 	checktriggerhurt.origin = (self.origin + '0 0 2');
@@ -665,20 +711,27 @@ void() objecfire_getmodel =
 	checktriggerhurt.owner = self;
 	checktriggerhurt.think = converttriggerhurt;
 	checktriggerhurt.nextthink = time + 2;
-};
-void() object_fire1 =
-{
+}
+
+
+/*FGD
+@PointClass size(-4 -4 -8, 4 4 8) model({"path": "models/objects/fixtures/fire1.md3"}) = object_fire1 : "fire" [
+	skin(integer) : "Skin" : 0
+	spawnflags(flags) = [
+		1 : "No hurt"
+	]
+]
+*/
+void object_fire1() {
 	precache_model("models/objects/fixtures/fire1.md3");
 	precache_sound("fx/fire1.ogg");
 	precache_sound("fx/fire2.ogg");
 	setmodel(self, "");
 	setsize(self, '-4 -4 -8', '4 4 8');
-	if (!self.skin)
-	{
+	if (!self.skin) {
 		self.noise = "fx/fire1.ogg";
 	}
-	else
-	{
+	else {
 		self.noise = "fx/fire2.ogg";
 	}
 	TorchAmbient();
@@ -702,7 +755,7 @@ void() CyExplosionBody = { local entity newcyst;
 	else
 		tagorg = self.origin;
 	remove(self);
-	
+
 	newcyst = spawn();
 	setorigin(newcyst, tagorg);
 	newcyst.scale = 0.25;
@@ -933,14 +986,14 @@ void(string tagname, entity e) setoriginbytag =
 	tagorg = gettaginfo(e, tagindex);
 	e.tagorigin = tagorg;
 };
-void() smallbonetocuh = 
+void() smallbonetocuh =
 {
 	if((other.solid == SOLID_BSP) && (self.cnt < 7))
 	{
 	//self.effects = 1024;
 	self.cnt ++;
-	self.velocity_x += random(-90,90); 
-	self.velocity_y += random(-90,90); 
+	self.velocity_x += random(-90,90);
+	self.velocity_y += random(-90,90);
 
 	sound7 (self, CHAN_AUTO, self.noise, 1, 0.5,random(70,200),0);
 	}
@@ -1037,7 +1090,7 @@ void() info_chain_think2 =
 	angulos = acos(((((localcnt * localcnt) - (radio * radio)) - (radio * radio)) / ((CONTENT_SOLID * radio) * radio))) * RAD2DEG;
 	arco = ((6.28319 * radio) * angulos) / 360;
 
-	
+
 	self.cnt = ((arco / 2.5) - TRUE);
 	self.cnt -= self.lip;
 	self.degrees_chain_constant = (angulos / self.cnt);
@@ -1081,8 +1134,8 @@ void generate_map_chain() {
 		    if (chain_model.classname == "chained_model")
 		    {
 		        writeparms = fopen ("misc_model.map", FILE_APPEND);    //open what file to use in write mode
-				
-				//chain_model.angles_x = chain_model.angles_x * -1;	
+
+				//chain_model.angles_x = chain_model.angles_x * -1;
 
 		        fputs(writeparms, "{\n");
 		        fputs(writeparms, "\"classname\" \"misc_model\"\n");
@@ -1095,7 +1148,7 @@ void generate_map_chain() {
 		        fclose(writeparms);
 		    }
 		    chain_model = holder;
-		}       
+		}
 	}
 
 };
@@ -1106,11 +1159,11 @@ void() info_chain_think =
 	float r_dist = (vlen((self.origin - t.origin)));
 	self.lastchain = self;
 	self.angles = vectoangles(normalize((self.origin - t.origin)));
-	float firstchain = 1;	
+	float firstchain = 1;
 	self.c_dist = r_dist;
 
 	self.height = self.height * self.scale;// //max(t.origin_z , self.origin_z) - min(t.origin_z , self.origin_z);
-	
+
 
 
 	if(self.height > r_dist)
@@ -1122,13 +1175,13 @@ void() info_chain_think =
 		//float c_radius; // diametro
 		self.c_radius = (((r_dist/2) * (r_dist/2)) / self.height) + self.height;
 		self.c_radius =  self.c_radius * 0.5;
-		
-		float cathetus_op = r_dist / 2;     
+
+		float cathetus_op = r_dist / 2;
 		self.c_angle =   asin(cathetus_op / self.c_radius)* RAD2DEG;
 
 		self.arch = (PI * self.c_angle * (self.c_radius))/ 180;
 		self.count = floor (r_dist) / 4.8;
-		firstchain = 0;	
+		firstchain = 0;
 		self.chain_angle =  self.c_angle / self.count;
 	}
 	else
@@ -1139,7 +1192,7 @@ void() info_chain_think =
 	self.count = self.count / self.scale + self.lip;
 
 
-	
+
 
 	while (self.count > 0)
 	{
@@ -1156,7 +1209,7 @@ void() info_chain_think =
 
 		if(firstchain == 0)
 		{
-			firstchain = 1;	
+			firstchain = 1;
 			chain.angles_x += self.chain_angle * (self.count * 0.5) + self.origin_offset_angle;
 		}
 		else
@@ -1166,15 +1219,33 @@ void() info_chain_think =
 		self.count --;
 		chain.think = chain_makestatic;
 		chain.nextthink = time + 0.5;
-		
+
 	}
 
 	self.think = chain_makestatic;
 	self.nextthink = time + 0.5;
 };
 
+
+/*FGD
+@PointClass
+	color(.8 .6 .4)
+	size(-8 -8 -8, 8 8 8)
+	model({{
+		model -> model, "models/misc/chain.md3"
+	}})
+= info_chain : "Procedural hanging chain." [
+	target(target_destination) : "Target" : : "Target this to an info_notnull"
+	height(float) : "Height" : : "Relative height of chain curve ( slack )"
+	offset_angle(float) : "Offset Angle"
+	scale(float) : "Scale" : : "Scale of chain models"
+	lip(float) : "Lip" : "0" : "Adds or subtracts links from end of the chain"
+	auto_angle(integer) : "Auto Angle" : 0
+	tag_name(string) : "Tag Name" : "tag_chain"
+]
+*/
 void() info_chain =
-{	
+{
 	if(self.model != "")
 	{
 		precache_model(self.model);
@@ -1188,7 +1259,7 @@ void() info_chain =
     self.classname = "chained_model";
 
 
-	if(self.auto_angle == 0)	
+	if(self.auto_angle == 0)
 	self.auto_angle = 0;
 	else if(!self.auto_angle)
 	self.auto_angle = 90;
@@ -1218,12 +1289,12 @@ void() place_modelb =
 // .health: amount intensity of flicker, default is 0.6
 // .wait: time between changes, default is 0.2
 // .style: 0 (smooth) or 1 (choppy), default is 0
-void() flicker_think = 
+void() flicker_think =
 {
 	float base = 1 - self.health;
 	float deviation = self.health;
 
-	self.glowmod[0] = 
+	self.glowmod[0] =
 	self.glowmod[1] =
 	self.glowmod[2] = base + (random() * deviation);
 
@@ -1231,8 +1302,8 @@ void() flicker_think =
 	self.think = flicker_think;
 }
 
-void() flicker_think_smooth = 
-{	
+void() flicker_think_smooth =
+{
 	if (time > self.attack_finished)
 	{
 		float base = 1 - self.health;
@@ -1242,8 +1313,8 @@ void() flicker_think_smooth =
 		self.ammo_revolver = self.ammo_shotgun;
 		self.ammo_shotgun = base + (random() * deviation);
 	}
-	
-	self.glowmod[0] = 
+
+	self.glowmod[0] =
 	self.glowmod[1] =
 	self.glowmod[2] = lerp(self.ammo_shotgun, self.ammo_revolver, (self.attack_finished - time) / self.wait);
 
@@ -1259,10 +1330,10 @@ void() func_flicker =
 
 	if (!self.wait)
 		self.wait = 0.2;
-	
+
 	if (!self.health)
 		self.health = 0.6;
-	
+
 	if (self.style < 0)
 	{
 		self.use = (self.style == -1) ? flicker_think_smooth : flicker_think;
@@ -1310,14 +1381,14 @@ void(entity attacker, float dmg) eyeball_pain
 
 	if !(attacker.flags & FL_CLIENT)
 		return;
-	
+
 	// play sound
 	string snd = random_sound_from_noise_fields(self);
 	if (snd != "")
 	{
 		sound(self, CHAN_AUTO, snd, self.volume, self.atten);
 	}
-	
+
 	if (time < self.pain_finished)
 		return;
 
@@ -1359,13 +1430,13 @@ void() object_eyeball =
 
 	if (!self.volume)
 		self.volume = 1;
-		
+
 	if (!self.atten)
 		self.atten = ATTN_NORM;
 
 	if (!self.wait)
 		self.wait = 5;
-	
+
 	precache_noise_fields(self);
 	entity lid = spawn();
 

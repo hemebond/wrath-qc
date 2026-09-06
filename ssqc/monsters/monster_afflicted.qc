@@ -1,7 +1,3 @@
-/*FGD
-@PointClass base(Monster) color(1 0 0) size(-10 -10 -32, 10 10 32) model({"path": "models/enemies/afflicted/afflicted.md3"}) = monster_afflicted : "Monster: Afflicted" []
-*/
-
 $frame pose0
 $frame idle1 idle2 idle3 idle4 idle5 idle6 idle7 idle8 idle9 idle10
 $frame walk1 walk2 walk3 walk4 walk5 walk6 walk7 walk8 walk9 walk10 walk11 walk12 walk13 walk14
@@ -1196,6 +1192,16 @@ void() precache_monster_afflicted = {
 	precache_model("models/enemies/afflicted/gibs/gib_head.md3");
 	precache_model("particles/explo/explo_afflicted.md3");
 };
+
+
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-10 -10 -32, 10 10 32)
+	model({"path": "models/enemies/afflicted/afflicted.md3"})
+= monster_afflicted : "Monster: Afflicted" []
+*/
 void monster_afflicted() {
 	precache_monster_afflicted();
 

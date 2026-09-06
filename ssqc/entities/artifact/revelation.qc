@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_revelation.md3"})
+= artifact_revelation : "Artifact: Mark Of Revelation ( shows all secrets in the map )" []
+*/
+
 void artifact_revelation() {
 	radial();
 	self.noise = "items/artifacts/artifactA_pickup.ogg";

@@ -19,7 +19,7 @@
 
 //Fade-in 0.3
 //Fade out 0.2
-void() UpdateChannelsVolume = 
+void() UpdateChannelsVolume =
 {
 
 	if (time > self.smoothsound_finished)
@@ -27,7 +27,7 @@ void() UpdateChannelsVolume =
 		if(self.soundfade ==  1)
 		{
 			if(self.pl_chan32_vol  <= 1)
-				self.pl_chan32_vol += 0.0833;	
+				self.pl_chan32_vol += 0.0833;
 			if(self.pl_chan32_vol  >= 1)
 				self.soundfade = 0;
 
@@ -37,13 +37,13 @@ void() UpdateChannelsVolume =
 		if(self.soundfade ==  2)
 		{
 			if(self.pl_chan32_vol  > 0.05)
-				self.pl_chan32_vol -= 0.125;	
+				self.pl_chan32_vol -= 0.125;
 			if(self.pl_chan32_vol <= 0.125)
 			{
-				self.pl_chan32_vol = 0;	
+				self.pl_chan32_vol = 0;
 				self.soundfade = 0;
 				sound7(self,CHAN_WEAPONFADE,"misc/null.wav",1,0.25,100,0);
-			}	
+			}
 			stuffcmd(self,strcat( "set snd_channel32volume ", ftos(self.pl_chan32_vol), "\n"));
 			self.smoothsound_finished =  time + 0.025;
 		}
@@ -52,13 +52,13 @@ void() UpdateChannelsVolume =
 		if(self.soundfade ==  3)
 		{
 			if(self.pl_chan32_vol  > 0.05)
-				self.pl_chan32_vol -= 0.125;	
+				self.pl_chan32_vol -= 0.125;
 			if(self.pl_chan32_vol <= 0.125)
 			{
-				self.pl_chan32_vol = 0;	
+				self.pl_chan32_vol = 0;
 				self.soundfade = 2;
 				sound7(self,CHAN_WEAPONFADE,"misc/null.wav",1,0.25,100,0);
-			}	
+			}
 			stuffcmd(self,strcat( "set snd_channel32volume ", ftos(self.pl_chan32_vol), "\n"));
 			self.smoothsound_finished =  time + 0.025;
 		}
@@ -68,37 +68,37 @@ void() UpdateChannelsVolume =
 
 
 	if (time > self.interior_time + 1.5)
-		return;	
+		return;
 
 	if (time < self.interior_time)
 	{
 		self.chan8_vol = 1;
 		self.chan9_vol = 0.1;
-	}	
+	}
 
 	if (time > self.interior_time)
 	{
 		self.chan8_vol = 0.1;
 		self.chan9_vol = 1;
-	}	
+	}
 
 	if (time > self.smoothsound_finished)
 	{
 		if(self.chan8_vol  != self.chan8_smooth_vol)
 		{
 			if(self.chan8_vol  > self.chan8_smooth_vol)
-				self.chan8_smooth_vol += 0.05;	
+				self.chan8_smooth_vol += 0.05;
 			if(self.chan8_vol  < self.chan8_smooth_vol)
-				self.chan8_smooth_vol -= 0.05;	
+				self.chan8_smooth_vol -= 0.05;
 			stuffcmd(self,strcat( "set snd_channel8volume ", ftos(self.chan8_smooth_vol), "\n"));
 			self.smoothsound_finished =  time + 0.05;
 		}
 		if(self.chan9_vol  != self.chan9_smooth_vol)
 		{
 			if(self.chan9_vol  > self.chan9_smooth_vol)
-				self.chan9_smooth_vol += 0.05;	
+				self.chan9_smooth_vol += 0.05;
 			if(self.chan9_vol  < self.chan9_smooth_vol)
-				self.chan9_smooth_vol -= 0.05;	
+				self.chan9_smooth_vol -= 0.05;
 			stuffcmd(self,strcat( "set snd_channel9volume ", ftos(self.chan9_smooth_vol), "\n"));
 			self.smoothsound_finished =  time + 0.05;
 		}
@@ -121,7 +121,7 @@ void() play_ambient_sound =
 void() trigger_interior_touch =
 {
 	if(other.classname == "player")
-		other.interior_time = time + 0.1;	
+		other.interior_time = time + 0.1;
 };
 
 void() trigger_interior =
@@ -129,14 +129,14 @@ void() trigger_interior =
 
 	InitTrigger ();
 	self.touch = trigger_interior_touch;
-	
+
 };
 .float mindelay;
 .float maxdelay;
 .float rad_sound_inner;
 .float trapezoid_sound;
 void() soundbox_think;
-void() soundbox_stop = 
+void() soundbox_stop =
 {
 	self.using = -1;
 	 if (self.count)
@@ -150,7 +150,7 @@ void() soundbox_stop =
 	self.use = soundbox_think;
 };
 
-void() soundbox_think = { 
+void() soundbox_think = {
 
 	self.using = 1;
 	local float spitch;
@@ -167,7 +167,7 @@ void() soundbox_think = {
 		self.count = 1;
 		soundwrath(self, CHAN_VOICE, self.noise, self.volume, self.atten, spitch, self.sound7flags,self.trapezoid_sound);
 	}
-	else	
+	else
 		soundwrath(self, CHAN_VOICE, self.noise, self.volume, self.atten,100,self.sound7flags,self.trapezoid_sound);
 	if (self.delay > 0)
 	{
@@ -180,7 +180,7 @@ void() soundbox_think = {
 		self.think = soundbox_think;
 		self.nextthink = time + self.cnt;
 		self.use = soundbox_stop;
-	}	
+	}
 	if ((self.delay == -1) && (!(self.spawnflags & 4)))
 		remove(self);
 };
@@ -192,7 +192,7 @@ void() soundbox_think_wait =
 {
 	self.think = soundbox_think;
 	self.nextthink = time + self.wait;
-	
+
 };
 
 float testsoundrad;
@@ -234,7 +234,7 @@ void() Test_Sound =
 
 
 .float showsphere;
-void() soundbox_visible_toggle = 
+void() soundbox_visible_toggle =
 {
 		if(self.ammo_shotgun == 1)
 		{
@@ -243,7 +243,7 @@ void() soundbox_visible_toggle =
 			self.vgear.effects = EF_NODRAW;
 			self.msprite.effects = EF_NODRAW;
 			self.pipes.pipes.colormod = '0 0.1 0';
-			centerprint(single_player,"\n");			
+			centerprint(single_player,"\n");
 			return;
 		}
 		else
@@ -259,8 +259,8 @@ void() soundbox_visible_toggle =
 		}
 
 };
-void() randomsoundbox_think = 
-{ 
+void() randomsoundbox_think =
+{
 
 	float r = ceil(random(0,self.count));
 	string snoise;
@@ -304,7 +304,7 @@ void() randomsoundbox_think =
 	self.cnt = soundlength(snoise);
 	self.noise = snoise;
 	soundwrath(self, CHAN_AUTO, snoise, self.volume, self.atten,100, self.sound7flags,self.trapezoid_sound);
-	self.wait = self.cnt + random(self.mindelay,self.maxdelay); 
+	self.wait = self.cnt + random(self.mindelay,self.maxdelay);
 	self.think = randomsoundbox_think;
 	vector vec = normalize((rorigin(single_player) - rorigin(self)));
 	self.angles = vectoangles(vec);
@@ -316,7 +316,38 @@ void() randomsoundbox_think =
 	self.nextthink = time +  self.wait;
 }
 
-string random_sound_from_noise_fields(entity e);
+
+/*FGD
+@PointClass
+	color(0 1 0)
+	size(-16 -16 -16, 16 16 16)
+= randomsoundbox : "Random Sound Box" [
+	mindelay(float) : "Minimum Delay"
+	maxdelay(float) : "Maximum Delay"
+	noise1(string)
+	noise2(string)
+	noise3(string)
+	noise4(string)
+	noise5(string)
+	noise6(string)
+	noise7(string)
+	noise8(string)
+	noise9(string)
+	noise10(string)
+	noise11(string)
+	noise12(string)
+	noise13(string)
+	noise14(string)
+	noise15(string)
+	rad_sound(float) : "Sound Radius" : "512"
+	rad_sound_inner(float) : : "0" : "inner sound box with no attenuation, default 0"
+	spawnflags(flags) =
+	[
+		32 : "No Spatialize" : 0 : "2D sound only"
+	]
+	volume(float) : "Volume" : "1"
+]
+*/
 void() randomsoundbox =
 {
 	if (self.noise1 != "")
@@ -382,20 +413,20 @@ void() randomsoundbox =
 		visible_sound.origin = self.origin;
 		visible_sound.alpha = 0.25;
 		visible_sound.effects = EF_NODRAW;
-	
+
 		if(self.rad_sound >= 1024)
 		{
 			setmodel(visible_sound,"models/dev/spherebig.md3");
 			visible_sound.scale = self.rad_sound  / 192;
 		}
 		else
-		{		
+		{
 			setmodel(visible_sound,"models/dev/sphere.md3");
 			visible_sound.scale = self.rad_sound  / 128;
 		}
 
 		//self.alpha = -1;
-		entity speaker_icon = spawn();	
+		entity speaker_icon = spawn();
 		visible_sound.colormod = '0.5 0.5 1';
 		speaker_icon.colormod = '0 0.1 0';
 		if ((self.targetname) && (self.using))
@@ -426,7 +457,7 @@ void() randomsoundbox =
 				visible_innersound.scale = self.rad_sound_inner  / 192;
 			}
 			else
-			{		
+			{
 				setmodel(visible_innersound,"models/dev/sphere.md3");
 				visible_innersound.scale = self.rad_sound_inner  / 128;
 			}
@@ -449,163 +480,103 @@ void() randomsoundbox =
 				setmodel(visible_sound2,"models/dev/sphere.md3");
 			visible_sound2.scale = visible_sound.scale;
 			visible_sound2.colormod = '0.5 0.5 1';
-	}	
+	}
 
-	self.think = randomsoundbox_think; 
+	self.think = randomsoundbox_think;
 	self.nextthink = time + 0.25;
 };
 
 
-void() soundbox = 
-{
-
-	if(world.model == "maps/testsound.bsp")
-		testsound_frik();
+/*FGD
+@PointClass
+	color(0 1 0.2)
+	size(-16 -16 -16, 16 16 16)
+= soundbox : "Sound Box" [
+	rad_sound(integer) : "Sounds Radius" : 512
+	volume(integer) : "Volume" : 1
+	noise(string) : "Noise" : "sound/doors/e1m2_pillar.ogg" : "Sound file to play"
+	delay(float) : "Delay" : "-1"
+	minpitch(float) : "Minimum Pitch" : "0.1"
+	spawnflags(flags) = [
+		1 : "Attenuation 0"
+		2 : "Force Loop"
+		32 : "No Spatialize" : 0 : "2D sound only"
+	]
+]
+*/
+void soundbox() {
 	if (self.noise != "")
 		precache_sound(self.noise);
 
-	/*random_sound_from_noise_fields(self);
-	if (self.noise1)
-		precache_sound(self.noise1);
-	if (self.noise2)
-		precache_sound(self.noise2);
-	if (self.noise3)
-		precache_sound(self.noise3);
-	if (self.noise4)
-		precache_sound(self.noise4);
-	if (self.noise5)
-		precache_sound(self.noise5);
-	if (self.noise6)
-		precache_sound(self.noise6);
-	if (self.noise7)
-		precache_sound(self.noise7); 
-	if (self.noise8)
-		precache_sound(self.noise8); 
-	if (self.noise9)
-		precache_sound(self.noise9); 
-	if (self.noise10)
-		precache_sound(self.noise10);
-	if (self.noise11)
-		precache_sound(self.noise11);
-	if (self.noise12)
-		precache_sound(self.noise12);
-	if (self.noise13)
-		precache_sound(self.noise13);
-	if (self.noise14)
-		precache_sound(self.noise14);
-	if (self.noise15)
-		precache_sound(self.noise15);
-	if (self.noise15)
-		precache_sound(self.noise15);
-	if (self.noise16)
-		precache_sound(self.noise16);
-	if (self.noise17)
-		precache_sound(self.noise17);
-	if (self.noise18)
-		precache_sound(self.noise18);
-	if (self.noise19)
-		precache_sound(self.noise19);
-	if (self.noise20)
-		precache_sound(self.noise20);
-    */
-
-	if (!self.delay)
-	{
+	if (!self.delay) {
 		self.delay = -1;
 	}
 
-
-	local float attn;
 	if (!self.volume)
 		self.volume = 1;
+
 	if (!self.rad_sound)
 		self.rad_sound = 512;
-	if(world.model == "maps/testsound.bsp")
-	{
-		self.rad_sound = testsoundrad;
-		self.volume = testsoundvolume;
-		self.using = 1;
-		self.noise = testsoundnoise;
-		self.targetname = "hasdas";
-		self.delay = -0.1;
-	}
-	
- 	if(!(self.rad_sound_inner))
-    {
-        self.rad_sound_inner = 0;
-        self.trapezoid_sound = 0;
-    }
-    else
-    {
-        self.rad_sound += self.rad_sound_inner;
-        self.trapezoid_sound = self.rad_sound_inner / self.rad_sound;
-    }
 
-	attn = 512 / self.rad_sound;	// 512 for snd_soundradius default cvar!
+ 	if (!(self.rad_sound_inner)) {
+		self.rad_sound_inner = 0;
+		self.trapezoid_sound = 0;
+	}
+	else {
+		self.rad_sound += self.rad_sound_inner;
+		self.trapezoid_sound = self.rad_sound_inner / self.rad_sound;
+	}
+
+	float attn = 512 / self.rad_sound;  // 512 for snd_soundradius default cvar!
 	if (self.rad_sound <= 0)
 		attn = 0;
-	if (self.spawnflags &1)
+	if (self.spawnflags & 1)
 		attn = 0;
-	if (self.spawnflags &2)
+	if (self.spawnflags & 2)
 		self.sound7flags += 2;
-	if (self.spawnflags &32)
+	if (self.spawnflags & 32)
 		self.sound7flags += 32;
-
 	if (self.minpitch <= 0)
 		self.minpitch = 0.1;
+
 	self.atten = attn;
 
-
-
-	float dev = cvar("showsoundspheres");
-	if ((dev == 1) || (world.model == "maps/testsound.bsp"))
-	{
+	if (cvar("showsoundspheres")) {
 		entity visible_sound = spawn();
 		visible_sound.origin = self.origin;
 		visible_sound.alpha = 0.25;
-		if (world.model != "maps/testsound.bsp")
-			visible_sound.effects = EF_NODRAW;
-		else
-			visible_sound.effects = 512 + EF_ADDITIVE +  EF_DOUBLESIDED;
-	
-		if(self.rad_sound >= 1024)
-		{
+		visible_sound.effects = EF_NODRAW;
+
+		if (self.rad_sound >= 1024) {
 			setmodel(visible_sound,"models/dev/spherebig.md3");
 			visible_sound.scale = self.rad_sound  / 192;
 		}
-		else
-		{		
+		else {
 			setmodel(visible_sound,"models/dev/sphere.md3");
 			visible_sound.scale = self.rad_sound  / 128;
 		}
 
-		//self.alpha = -1;
-		entity speaker_icon = spawn();	
+		entity speaker_icon = spawn();
 		visible_sound.colormod = '0.5 0.5 1';
 		speaker_icon.colormod = '0 0.1 0';
 		if ((self.targetname) && (self.using))
 			speaker_icon.colormod = '0.2 0.2 1';
 		if ((self.targetname) && (!self.using))
 			speaker_icon.colormod = '1 0 0';
-		if (world.model == "maps/testsound.bsp")
-			speaker_icon.colormod = '1 1 0';
 		speaker_icon.origin = self.origin;
 		setmodel(speaker_icon, "particles/impact/impact_oppressor6.md3");
 		speaker_icon.scale = 0.7;
 
-		if(self.rad_sound_inner > 0)
-		{
+		if (self.rad_sound_inner > 0) {
 			entity visible_innersound = spawn();
 			visible_innersound.origin = self.origin;
 			visible_innersound.alpha = 0.25;
 			visible_innersound.effects = EF_NODRAW;
-			if(self.rad_sound_inner >= 1024)
-			{
+			if (self.rad_sound_inner >= 1024) {
 				setmodel(visible_innersound,"models/dev/spherebig.md3");
 				visible_innersound.scale = self.rad_sound_inner  / 192;
 			}
-			else
-			{		
+			else {
 				setmodel(visible_innersound,"models/dev/sphere.md3");
 				visible_innersound.scale = self.rad_sound_inner  / 128;
 			}
@@ -621,100 +592,78 @@ void() soundbox =
 		setmodel(sself, "models/dev/collisionbox.md3");
 		setsize (sself,'-8 -8 -8','8 8 8');
 		sself.solid = SOLID_TRIGGER;
-		if (world.model != "maps/testsound.bsp")
-			sself.usable = 1;
+		sself.usable = 1;
 		sself.pipes = visible_sound;
 		sself.pipes.pipes = speaker_icon;
 
-		if (world.model != "maps/testsound.bsp")
-		{
-			entity visible_sound2 = spawn();
-			sself.vgear = visible_sound2;
-			visible_sound2.origin = self.origin;
-			visible_sound2.alpha = 0.075;
-			visible_sound2.effects = EF_NODRAW; //
-			if(self.rad_sound >= 1024)
-				setmodel(visible_sound2,"models/dev/spherebig.md3");
-			else
-				setmodel(visible_sound2,"models/dev/sphere.md3");
-			visible_sound2.scale = visible_sound.scale;
-			visible_sound2.colormod = '0.5 0.5 1';
-		}
+		entity visible_sound2 = spawn();
+		sself.vgear = visible_sound2;
+		visible_sound2.origin = self.origin;
+		visible_sound2.alpha = 0.075;
+		visible_sound2.effects = EF_NODRAW; //
+		if (self.rad_sound >= 1024)
+			setmodel(visible_sound2,"models/dev/spherebig.md3");
+		else
+			setmodel(visible_sound2,"models/dev/sphere.md3");
+		visible_sound2.scale = visible_sound.scale;
+		visible_sound2.colormod = '0.5 0.5 1';
+	}
 
-	}	
-
-	if ((self.targetname) && (!self.using))
-	{
-		if(self.wait)
+	if ((self.targetname) && (!self.using)) {
+		if (self.wait)
 			self.use = soundbox_think_wait;
 		else
 			self.use = soundbox_think;
 
 	}
-	else
-	{
-		if (self.delay >= 0)
-		{
+	else {
+		if (self.delay >= 0) {
 			if (!self.wait)
 				self.wait = 1;
-			//self.think = soundbox_think;
-			//self.nextthink = time + random(1,2);
 			return;
 		}
-		else
-			{
-	
-				if(world.model == "maps/testsound.bsp")
-					return;
-				if(((self.interior == 1) || (self.interior == -1)) || (self.sound7flags > 0))
-				{
-					self.using = 2;
+		else {
+			if (((self.interior == 1) || (self.interior == -1)) || (self.sound7flags > 0)) {
+				self.using = 2;
 
-					if((self.interior == 1) || (self.interior == -1))		
-					{
-						if(self.interior == 1)
-						self.channel = 8;
-						if(self.interior == -1)
-						self.channel = 9;
-						//self.nextthink = time + 1;
-					}
-					else 
-					{
-						self.channel = CHAN_AUTO;
-						if((self.spawnflags & 34) == 34)
-						{
-							//self.think = play_ambient_sound;
-							//self.nextthink = time + 3 + random();
-							return;
-						}
-						//self.nextthink = time + 0.5;
-					}
-					
-					//self.think = play_ambient_sound;
-					return;
+				if ((self.interior == 1) || (self.interior == -1)) {
+					if (self.interior == 1)
+					self.channel = 8;
+					if (self.interior == -1)
+					self.channel = 9;
 				}
-				else	
-					ambientsound(self.origin, self.noise, self.volume, attn);
+				else {
+					self.channel = CHAN_AUTO;
+					if ((self.spawnflags & 34) == 34) {
+						return;
+					}
+				}
+				return;
 			}
+			else {
+				ambientsound(self.origin, self.noise, self.volume, attn);
+			}
+		}
 	}
-};
+}
+
 
 void soundbox_initializeambients(void)
 {
-	for(entity loopedsound = findchain(::classname, "soundbox"); loopedsound; loopedsound = loopedsound.chain)
+	for (entity loopedsound = findchain(::classname, "soundbox"); loopedsound; loopedsound = loopedsound.chain)
 	{
 		if ((loopedsound.interior == 1) || (loopedsound.interior == -1))
-		{			
+		{
 			loopedsound.think = play_ambient_sound;
 			loopedsound.nextthink = time + 0.5;
 		}
 		if ((loopedsound.using == 2) && (loopedsound.sound7flags &  2))
-		{			
+		{
 			loopedsound.think = play_ambient_sound;
 			loopedsound.nextthink = time + 0.5;
 		}
 		if ((loopedsound.using == 1) && (loopedsound.sound7flags &  2))
-		{			
+		{
 			loopedsound.think = soundbox_think;
 			loopedsound.nextthink = time + 0.5;
 		}
@@ -774,7 +723,7 @@ void(string locsound) painsound =
 	if(self.classname == "monster_symbol")
 	{
 		if (r > 5)
-			r = 1;		
+			r = 1;
 	}
 	else
 	{
@@ -1268,7 +1217,7 @@ void(string locsound, float rnd) weapon_sound =
 	}
 	else
 		msound(self, CHAN_WEAPON, weapon_sound, TRUE, 0.25);
-	
+
 };
 
 // Reki (September 4 2023): Precache all entity noise fields

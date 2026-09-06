@@ -190,12 +190,23 @@ void() nodegraph_queue_initialize =
 // ============================================================================
 void() node_model_think =
 {
-if(test_ia == 1)
-self.effects = 0;
-else
-self.effects = EF_NODRAW;
-self.nextthink = time + 1;
+	if(test_ia == 1)
+		self.effects = 0;
+	else
+		self.effects = EF_NODRAW;
+	self.nextthink = time + 1;
 }
+
+
+/*FGD
+@PointClass
+	color(1 .5 0)
+	size(-64 -64 -16, 64 64 16)
+	model({"path": "models/dev/node_ed.md3"})
+= info_node : "Navigation node, for Wrath monster pathing." [
+	// Place nodes at least 128 units apart, indicated by circumference ring on model.
+]
+*/
 void() info_node =
 {
 	float dev = cvar("developer");

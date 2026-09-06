@@ -1,19 +1,17 @@
-float(float v) mathlib_anglemod = {
-	return v - floor(v / 360) *360;
-};
+float mathlib_anglemod(float v) {
+	return v - floor(v / 360) * 360;
+}
 
-void makevectors2(vector ang);
+void SUB_Null() {}
 
-void() SUB_Null = {};
-
-void() SUB_Remove = {
+void SUB_Remove() {
 	remove(self);
-};
+}
 
-void(entity e, float d) nullpain = {};
+void nullpain(entity e, float d) {};
 
-void() SetMovedir = 
-{ 
+void() SetMovedir =
+{
 	if (self.angles == '0 -1 0')
 		self.movedir = '0 0 1';
 	else if (self.angles == '0 -2 0')
@@ -27,60 +25,66 @@ void() SetMovedir =
 };
 
 .float disarmed;
-void() toggle_disarmed = 
+void() toggle_disarmed =
 {
 	if(self.disarmed == 1)
 		self.disarmed = 0;
 	else
 		self.disarmed = 1;
 };
-void() InitTrigger = 
-{
+void InitTrigger() {
 	if (self.angles != '0 0 0')
 		SetMovedir();
+
 	self.solid = SOLID_TRIGGER;
-	if (!self.model)
-	{
+
+	if (!self.model) {
 		if (!self.absmin)
 			self.absmin = '-8 -8 -8';
 		if (!self.absmax)
 			self.absmax = '8 8 8';
 		setsize(self, self.absmin, self.absmax);
 	}
-	else
+	else {
 		setmodel(self, self.model);	// set size and link into world
+	}
+
 	self.movetype = MOVETYPE_NONE;
 	self.modelindex = 0;
 	self.model = string_null;
-	if (self.disarmed == -1)
-		return;
-	if (self.disarmed)
-		self.using = -1;
-};
 
-void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt = { local entity stemp;
-	stemp = self;
+	if (self.disarmed != -1)
+		self.using = -1;
+}
+
+
+void SUB_CalcMoveEnt(entity ent, vector tdest, float tspeed, void() func) {
+	entity stemp = self;
 	self = ent;
 	SUB_CalcMove(tdest, tspeed, func);
 	self = stemp;
-};
-void(entity e, vector org) fake_light =
-{
-e.effects = EF_FULLBRIGHT;
-vector vlight  = getlight(org);
-
-e.colormod_x = (vlight_x * 1.2) - 0.05;
-e.colormod_y = (vlight_y * 1.2) - 0.05;
-e.colormod_z = (vlight_z * 1.2) - 0.05;
-
-};
-vector (entity bmodel) b_org =
-{
-vector origin = 0.5 *(bmodel.absmax + bmodel.absmin);
-return origin;
 }
-void(vector tdest, float tspeed, void() func) SUB_CalcMove = { local vector vdestdelta;
-	local float len, traveltime;
+
+
+void fake_light(entity e, vector org) {
+	e.effects = EF_FULLBRIGHT;
+	vector vlight  = getlight(org);
+
+	e.colormod_x = (vlight_x * 1.2) - 0.05;
+	e.colormod_y = (vlight_y * 1.2) - 0.05;
+	e.colormod_z = (vlight_z * 1.2) - 0.05;
+}
+
+
+vector b_org(entity bmodel) {
+	vector origin = 0.5 *(bmodel.absmax + bmodel.absmin);
+	return origin;
+}
+
+
+void SUB_CalcMove(vector tdest, float tspeed, void() func) {
+	vector vdestdelta;
+	float len, traveltime;
 	if (!tspeed)
 		objerror("No speed is defined!");
 	self.think1 = func;
@@ -108,10 +112,12 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove = { local vector vdes
 	self.nextthink = self.ltime + traveltime;
 	// scale the destdelta vector by the time spent traveling to get velocity
 
-	self.velocity = vdestdelta *(1 / traveltime);	// qcc won't take vec/float	
-};
+	self.velocity = vdestdelta *(1 / traveltime);	// qcc won't take vec/float
+}
 
-void() SUB_CalcMoveDone = { setorigin(self, self.finaldest);
+
+void SUB_CalcMoveDone() {
+	setorigin(self, self.finaldest);
 	self.velocity = '0 0 0';
 	self.nextthink = -1;
 	if (self.think1)
@@ -156,75 +162,9 @@ void() DelayThink = { activator = self.enemy;
 	remove(self);
 };
 
-void() SUB_UseTargets3 = { local entity t, stemp, otemp, act;
 
-	//
-	// check for a delay
-	//
-	if (self.delay)
-	{
-		// create a temp object to fire at a later time
-		t = spawn();
-		t.classname = "DelayedUse";
-		t.nextthink = time + self.delay;
-		t.think = DelayThink;
-		t.enemy = activator;
-		t.message = self.message;
-		t.killtarget = self.killtarget;
-		t.target = self.target;
-		return;
-	}
-	//
-	// print the message
-	//
-	if (activator.classname == "player" && self.message != "")
-	{
-		centerprint(activator, self.message);
-		//if (!self.noise)
-		//	sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
-	}
-
-	//
-	// kill the killtagets
-	//
-	if (self.killtarget != "")
-	{
-		t = world;
-		do { 	t = find(t, targetname, self.killtarget);
-			if (!t)
-				return;
-			remove(t);
-		} while (1);
-	}
-
-	//
-	// fire targets
-	//
-	if (self.target != "")
-	{
-		act = activator;
-		t = world;
-		do { 	t = find(t, targetname, self.target);
-			if (!t)
-			{
-				return;
-			}
-			stemp = self;
-			otemp = other;
-			self = t;
-			other = stemp;
-			if (self.use != SUB_Null)
-			{
-				if (self.use)
-					self.use();
-			}
-			self = stemp;
-			other = otemp;
-			activator = act;
-		} while (1);
-	}
-};
-void() remove_light = { if (self.count == 12)
+void remove_light() {
+	if (self.count == 12)
 		lightstyle(self.style, "l");
 	if (self.count == 11)
 		lightstyle(self.style, "k");
@@ -255,22 +195,19 @@ void() remove_light = { if (self.count == 12)
 	self.count -= 1;
 	self.think = remove_light;
 	self.nextthink = time + (self.time_fade / 12);
-};
+}
 
-void(float mtype, vector org, entity ownr) Hud_message;
-.float firstmessage;
 
-void(float ldelay,string ltarget,string lkilltarget, entity lactivator)spawn_delay_entity =
-{
-    
-		entity t = spawn();
-		t.classname = "DelayedUse";
-		t.nextthink = time + ldelay;
-		t.think = DelayThink;
-		t.enemy = lactivator;
-		t.killtarget = lkilltarget;
-		t.target = ltarget;
-};
+void spawn_delay_entity(float ldelay,string ltarget,string lkilltarget, entity lactivator) {
+	entity t = spawn();
+	t.classname = "DelayedUse";
+	t.nextthink = time + ldelay;
+	t.think = DelayThink;
+	t.enemy = lactivator;
+	t.killtarget = lkilltarget;
+	t.target = ltarget;
+}
+
 
 void() SUB_UseTargets = {
 	entity t, act, stemp, otemp;
@@ -293,8 +230,8 @@ void() SUB_UseTargets = {
         	spawn_delay_entity(self.delay7, self.target7, self.killtarget7, activator);
 	if(self.target8 != "")
         	spawn_delay_entity(self.delay8, self.target8, self.killtarget8, activator);
-	if (self.delay)
-	{
+
+	if (self.delay) {
 		// create a temp object to fire at a later time
 		t = spawn();
 		t.classname = "DelayedUse";
@@ -305,73 +242,46 @@ void() SUB_UseTargets = {
 		t.killtarget = self.killtarget;
 		t.target = self.target;
         	return;
-	}	
+	}
 
 	//
 	// print the message
 	//
-	if (activator.classname == "player" && self.message != string_null)
-	{
-		#if 0
-		// Reki (May 31 2023): Deprecated in favor of strlocalize()
-		if (self.message == "journal")
-		{
-			//Hud_message(255, activator.origin, activator);
-			Hud_SendNotification_Control(activator, ("$HELP_JOURNAL_OPEN"), "impulse 35");
-		}
-		else if (self.message == "inventory")
-		{
-			activator.firstmessage = 1;
-			//Hud_message(256, activator.origin, activator);
-			Hud_SendNotification_Control(activator, ("$HELP_RADIAL_OPEN"), "+button6");
-		}
-		else if (self.message == "pit")
-		{
-			//Hud_message(259, activator.origin, activator);
-			Hud_SendNotification_Control(activator, ("$HELP_BLADE_JUMP"), "+button3");
-		}
-		else
-		#endif
-			centerprint(activator, self.message);
-
-		//if (!self.noise)
-		//	sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+	if (activator.classname == "player" && self.message != string_null) {
+		centerprint(activator, self.message);
 	}
 
 	//
 	// kill the killtagets
 	//
-	if (self.killtarget != string_null)
-	{
+	if (self.killtarget != string_null) {
 		t = world;
 
-		do { 	t = find(t, targetname, self.killtarget);
-
+		do {
+			t = find(t, targetname, self.killtarget);
 			if (!t)
 				return;
-			if (t.classname == "light")
-			{
+
+			if (t.classname == "light") {
 				lightstyle(t.style, "m");
 				t.count = 12;
 				t.think = remove_light;
 				t.nextthink = time;
 			}
-
-			else if (t.classname == "boss_martyr")
-			{
+			else if (t.classname == "boss_martyr") {
 				t.think = t.use;
 				t.nextthink = time;
-			}		
-			else
+			}
+			else {
 				remove(t);
-		} while (1);
+			}
+		} while (TRUE);
 	}
 
 	//
 	// fire targets
 	//
-	if (self.target != string_null)
-	{
+	if (self.target != string_null) {
 		act = activator;
 		t = world;
 
@@ -396,7 +306,8 @@ void() SUB_UseTargets = {
 			activator = act;
 		} while (1);
 	}
-};
+}
+
 
 /*in nightmare mode, all attack_finished times become 0
 some monsters refire twice automatically*/
@@ -423,7 +334,7 @@ void(vector start, vector end, float noents, entity attacker, vector boxsize) wt
 		attacker.solid = SOLID_BBOX;
 	}
 	tracebox(start, boxsize *-1, boxsize, end, noents, attacker);
-	
+
 	if (attacker.solid == SOLID_BBOX)
 	attacker.solid = s;
 };
@@ -444,7 +355,7 @@ void(vector start, vector end, float noents, entity attacker) wtraceline = { loc
 		attacker.solid = SOLID_BBOX;
 	}
 	traceline(start, end, noents, attacker);
-	
+
 	if (attacker.solid == SOLID_BBOX)
 	attacker.solid = s;
 };
@@ -493,8 +404,8 @@ vector randomvector(vector v1,vector v2) {
 .float alphatime;
 
 
-void() alphafade3 = 
-{ 
+void() alphafade3 =
+{
 	self.alpha = self.alpha - 0.2;
 	if (self.alpha <= 0)
 	{
@@ -506,40 +417,45 @@ void() alphafade3 =
 	self.nextthink = time + 0.01;
 };
 
-void() alphafade2 = { if (self.wrathflags &FL_TOSS)
+void alphafade2() {
+	if (self.wrathflags & FL_TOSS)
 		move_gibs();
+
 	self.alpha = self.alpha - ((1 / self.alphatime) / 20);
-	if (self.alpha <= 0)
-	{
+	if (self.alpha <= 0) {
 		self.alpha = -1;
 		self.think = SUB_Remove;
-		if(self.burnable == 2)
-		{
-			vector org = self.origin + randomvector (self.mins,self.maxs);
-			float gibaccount = floor(self.maxs_x - self.mins_x) / 4; 
-			while(gibaccount > 0)
-			{	
-				SpawnGib3(org + randomvector(self.mins,self.maxs),randomvector(self.mins,self.maxs) * gibaccount * 8);
+		if (self.burnable == 2) {
+			vector org = self.origin + randomvector(self.mins,self.maxs);
+			float gibaccount = floor(self.maxs_x - self.mins_x) / 4;
+			while(gibaccount > 0) {
+				SpawnGib3(org + randomvector(self.mins,self.maxs), randomvector(self.mins,self.maxs) * gibaccount * 8);
 				gibaccount --;
-			}			
+			}
 		}
 	}
-	else
+	else {
 		self.think = alphafade2;
+	}
 
 	self.nextthink = time + 0.05;
-};
+}
 
-void() alphafade = {
-	if (self.wrathflags &FL_TOSS)
+
+void alphafade() {
+	if (self.wrathflags & FL_TOSS)
 		move_gibs();
-	if(!self.alphatime)
+
+	if (!self.alphatime)
 		self.alphatime = 1;
+
 	if (!self.alpha)
 		self.alpha = 1;
+
 	self.nextthink = time + 0.01;
 	self.think = alphafade2;
-};
+}
+
 
 void(entity l, vector col, float rad, float sty) lighted = { l.pflags = PFLAGS_FULLDYNAMIC | PFLAGS_NOSHADOW | (rad < 128 ? PFLAGS_LODFADE : 0);
 	l.color = col;
@@ -727,38 +643,36 @@ void paste_old_data() {
 	}
 };
 
-void() turn_solid =
-{
-self.solid = self.oldsolid;
-};
 
-void()SUB_RemoveScalethink =
-{
+void turn_solid() {
+	self.solid = self.oldsolid;
+}
+
+
+void SUB_RemoveScalethink() {
 	self.scale -= 0.05;
-	if(self.scale < 0.1)    
+	if(self.scale < 0.1)
 		self.think = SUB_Remove;
 	else
 		self.think = SUB_RemoveScalethink;
-	if(self.light_lev > 0)
-	{
+	if(self.light_lev > 0) {
 		self.light_lev = self.light_lev * 0.92;
 	}
 
-	self.nextthink = time + 0.0125;   
-};
+	self.nextthink = time + 0.0125;
+}
 
-void() SUB_RemoveScale =
-{
+
+void SUB_RemoveScale() {
 	self.solid = SOLID_NOT;
-	if(!self.scale)    
+	if(!self.scale)
 		self.scale = 1;
 	self.think = SUB_RemoveScalethink;
 	self.nextthink = time;
-};
+}
 
 
-void(float type, float delay) save_screenshot =
-{
+void save_screenshot(float type, float delay) {
 	read_currentprofileslot();
 
 	// Reki (October 10 2023): Refactored this to not use a hardcoded list
@@ -774,14 +688,13 @@ void(float type, float delay) save_screenshot =
 
 
 	if (type == 1)
-	line1= timestamp_image;	
+		line1= timestamp_image;
 	if (type == 2)
-	line2 = timestamp_image;	
+		line2 = timestamp_image;
 	if (type == 3)
-	line3 = timestamp_image;	
+		line3 = timestamp_image;
 
- 	local float writeparms;
-	writeparms = fopen_wrath(strcat("profiles/", profilename,"/timestamp.txt"),  FILE_WRITE);
+ 	float writeparms = fopen_wrath(strcat("profiles/", profilename,"/timestamp.txt"),  FILE_WRITE);
 
 	fputs(writeparms, line1);
  	fputs(writeparms, "\n");
@@ -792,8 +705,7 @@ void(float type, float delay) save_screenshot =
  	fclose_wrath(writeparms);
 	if (profilename != "")
 		strunzone(profilename);
-
-};
+}
 
 
 float GetSkyMaterial() {
@@ -801,13 +713,7 @@ float GetSkyMaterial() {
 }
 
 
-void() touchtriggers_think =
-{
+void touchtriggers_think() {
 	self.think = touchtriggers_think;
-	//force_retouch = 2;
-	//touchtriggers(self.owner);
-
 	self.nextthink = time + random(2,5);
-};
-
-///////////////////////////////////end of qc filet///////////////////////////////////end of qc filet
+}

@@ -1,3 +1,10 @@
+/*FGD
+@PointClass
+	size(-12 -12 -44, 12 12 0)
+	model({"path": "models/artifacts/artifact_attar.md3"})
+= artifact_attar : "Artifact: Confounding Attar ( monster infighting potion )" []
+*/
+
 void artifact_attar() {
 	precache_model("models/artifacts/artifact_attar.md3");
 	precache_model("models/artifacts/effects/confounding_attar_cloud.md3");
