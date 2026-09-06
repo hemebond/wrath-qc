@@ -135,24 +135,20 @@ void() func_train_find =
 	// Target this entity with a misc_model to have the model attached to the entity (set the model's "target" key to the same value as this entity's "targetname").
 ]
 */
-void() func_train =
-{
-	if (!self.speed)
-	{
+void func_train() {
+	if (!self.speed) {
 		self.speed = CAM_ORG_X;
 	}
-	if (!self.target)
-	{
+	if (!self.target) {
 		objerror("func_train without a target");
 	}
-	if (!self.dmg)
-	{
+	if (!self.dmg) {
 		self.dmg = FL_SWIM;
 	}
 
-	if(!(self.noise))
+	if (!(self.noise))
 		self.noise = "misc/null.wav";
-	if(!(self.noise2))
+	if (!(self.noise2))
 		self.noise2 = "misc/null.wav";
 
 	precache_sound(self.noise);
@@ -168,25 +164,23 @@ void() func_train =
 	setsize(self, self.mins, self.maxs);
 	setorigin(self, self.origin);
 	self.oldtarget = self.target;
-	if (!(self.spawnflags & TRUE))
-	{
+	if (!(self.spawnflags & TRUE)) {
 		self.nextthink = (self.ltime + 0.2);
 		self.think = func_train_find;
 	}
-    if(self.fake_lighted == -1)
-    	self.effects = 0;
-	if(self.fake_lighted == 1)
-	{
+
+	if(self.fake_lighted == -1)
+		self.effects = 0;
+
+	if(self.fake_lighted == 1) {
 		if(!(self.effects & EF_DYNAMICMODELLIGHT))
 		self.effects += EF_DYNAMICMODELLIGHT;
 	}
-	if(self.fake_lighted == 2)
-	{
+	if(self.fake_lighted == 2) {
 		self.fake_origin = 0.5 *(self.absmax + self.absmin);
 		self.fake_origin_z = self.absmax_z + 8;
 
-
-		local entity attachedmodel;
+		entity attachedmodel;
 		attachedmodel = spawn();
 		setmodel (attachedmodel, "models/misc/null.md3");
 		attachedmodel.solid = SOLID_NOT;
@@ -199,10 +193,8 @@ void() func_train =
 		attachedmodel.think = attached_think;
 		attachedmodel.nextthink = time + 0.025;
 	}
+}
 
-
-
-};
 
 void() misc_teleporttrain =
 {
@@ -231,42 +223,18 @@ void() misc_teleporttrain =
 	self.think = func_train_find;
 };
 
-void() null =
-{
-};
 
-void() mercenaryanim =
-{
-	local float ntag;
-	local float nparticles;
-	local vector shootorg;
+void null() {}
 
-	self.frame = (self.frame + 1);
-	if ((self.frame >= 98))
-	{
-		self.frame = 1;
-	}
-	if ((self.frame == 32))
-	{
-		ntag = gettagindex(self, "tag_muzzle");
-		shootorg = gettaginfo(self, ntag);
-		sound(self, 1, "weapons/revolver/fire1_1.ogg", TRUE, TRUE);
-		nparticles = particleeffectnum("mercenary_fire");
-		pointparticles(nparticles, shootorg, VEC_ORIGIN, MOVETYPE_BOUNCE);
-	}
-	self.think = mercenaryanim;
-	self.nextthink = (time + 0.1);
-};
 
-void() attach_it =
-{
-	local entity twin;
-
-	twin = spawn();
+void attach_it() {
+	entity twin = spawn();
 	setmodel(twin, self.model);
 	setattachment(twin, self.owner, "tag_hand");
 	remove(self);
-};
+}
+
+
 .string attached_model;
 .string attached_model2;
 .string attached_model3;
@@ -279,10 +247,12 @@ void() attach_it =
 .string tag_name4;
 .string tag_name5;
 string testmodel;
+
+
 void() attach_place_model =
 {
-	local entity t;
-	local vector org;
+	entity t;
+	vector org;
 
 	t = find(world, targetname, self.target);
 	org = tag_origin(self.tag_name, t);
@@ -294,11 +264,11 @@ void() attach_place_model =
 
 void() spawn_attached_models =
 {
-	local entity s_model;
-	local entity s_model2;
-	local entity s_model3;
-	local entity s_model4;
-	local entity s_model5;
+	entity s_model;
+	entity s_model2;
+	entity s_model3;
+	entity s_model4;
+	entity s_model5;
 
 	s_model = spawn();
 	setmodel(s_model, self.attached_model);
@@ -331,57 +301,46 @@ void() spawn_attached_models =
 	self.nextthink = (time + 0.1);
 };
 
-void() boat_frames =
-{
-	if(self.frame == 1)
-	{
+
+void boat_frames() {
+	if(self.frame == 1) {
 		self.frame = 2;
 		self.nextthink = time;
 		self.think = null;
 	}
-	else
-	{
+	else {
 		self.think = boat_frames;
 		self.nextthink = time + 1;
 		self.frame = 1;
 	}
-};
+}
 
-void() boat_check =
-{
-	if(self.owner.state == 1)
-	{
+
+void boat_check() {
+	if (self.owner.state == 1) {
 		self.movetype = 0;
 		self.velocity = '0 0 0';
 		self.think = boat_frames;
 		self.nextthink = time + 1.5;
 	}
-	else
-	{
+	else {
 		self.think = boat_check;
 		self.nextthink = time + 0.05;
 	}
-};
-void() place_model_checkowner =
-{
+}
 
+
+void place_model_checkowner() {
 	entity realt;
-	local entity e;
-	e = nextent(world);
-	while (e)
-	{
-		if ((e.classname == "func_train")&& (e.targetname == self.target) )
-		{
-
-			{
-				realt = e;
-			}
+	entity e = nextent(world);
+	while (e) {
+		if ((e.classname == "func_train") && (e.targetname == self.target)) {
+			realt = e;
 		}
 		e = nextent(e);
 	}
 
-	if(realt)
-	{
+	if (realt) {
 		self.movetype = MOVETYPE_FOLLOW; // make the hole follow
 		self.solid = SOLID_NOT; // MOVETYPE_FOLLOW is always non-solid
 		self.aiment = realt; // make the hole follow bmodel
@@ -389,8 +348,7 @@ void() place_model_checkowner =
 		self.view_ofs = self.origin - realt.origin; // relative origin
 		self.v_angle = self.angles - realt.angles; // relative angles
 
-		if (self.spawnflags & 2)
-		{
+		if (self.spawnflags & 2) {
 			self.frame = 0;
 			self.owner = realt;
 			self.think = boat_check;
@@ -400,14 +358,13 @@ void() place_model_checkowner =
 			self.nextthink = time + 0.05;
 			return;
 		}
-
-		else
+		else {
 			self.think = null;
+		}
 
 		self.nextthink = time + 0.5;
 	}
-
-};
+}
 
 
 /*FGD
@@ -415,28 +372,28 @@ void() place_model_checkowner =
 	color(1 .5 .25)
 	size(-16 -16 -16, 16 16 16)
 	model({"Path": model})
-= place_model : "Generic placeholder for inserting MD3 models in game. Doesnt Requires compilation of map geometry to be added to level." [
+= place_model : "Generic placeholder for inserting MD3 models in game. Doesnt require compilation of map geometry to be added to level." [
 	model(string) : "Model File" : : "Path/name of model to use (e.g. models/mapobjects/teleporter/teleporter.md3)."
 	angles(vector) : "Pitch Yaw Roll" : "0 0 0" : "Individual control of PITCH, YAW, and ROLL (default 0 0 0)."
 	scale(float) : "Uniform Scale" : "1" : "Floating-point value used to scale a model up or down (default 1.0)."
+	spawnflags(flags) = [
+		1 : "Check Owner"
+		2 : "Boat"
+	]
+	target(target_destination) : "Target" : : "Attach to this entity"
 ]
 */
-void() place_model =
-{
+void place_model() {
 	precache_model(self.model);
 	setmodel(self, self.model);
 
-	if (self.target != "")
-	{
-		if (self.spawnflags & 1)
-		{
+	if (self.target != "") {
+		if (self.spawnflags & 1) {
 			self.nextthink = time + 0.1;
 			self.think = place_model_checkowner;
 		}
-		else
-		{
-			if (!self.speed)
-			{
+		else {
+			if (!self.speed) {
 				self.speed = CAM_ORG_X;
 			}
 			self.cnt = TRUE;
@@ -458,114 +415,13 @@ void() place_model =
 		}
 		return;
 	}
-	if (self.attached_model != "")
-	{
+	if (self.attached_model != "") {
 		self.think = spawn_attached_models;
 		self.nextthink = (time + 0.1);
 	}
-};
+}
 
-void() mercenary_test_think2 =
-{
-	local float acframe;
 
-	self.colormod = '0 0 3';
-	acframe = self.frame + TRUE;
-	if ((acframe >= 155))
-	{
-		self.think = mercenary_test_think;
-		self.frame = MOVETYPE_BOUNCEMISSILE;
-	}
-	else
-	{
-		self.think = mercenary_test_think2;
-		self.frame = acframe;
-	}
-	self.nextthink = (time + 0.1);
-};
-
-void() mercenary_test_think =
-{
-	local float acframe;
-
-	self.colormod = '0 3 0';
-	acframe = self.frame + TRUE;
-	if ((acframe >= 25))
-	{
-		self.think = mercenary_test_think2;
-		self.frame = 140;
-	}
-	else
-	{
-		self.think = mercenary_test_think;
-		self.frame = acframe;
-	}
-	self.nextthink = (time + 0.1);
-};
-
-void() mercenary_test =
-{
-	self.frame = MOVETYPE_BOUNCEMISSILE;
-	precache_model("models/enemies/mercenary/mercenary.md3");
-	setmodel(self, "models/enemies/mercenary/mercenary.md3");
-	self.think = mercenary_test_think;
-	self.nextthink = (time + 0.1);
-};
-
-void() test_model_frik =
-{
-	local float readparms;
-
-	readparms = fopen("map/test_model.txt", FALSE);
-	testmodel = strzone(fgets(readparms));
-	fclose(readparms);
-};
-
-void() test_model_fix_origin =
-{
-	self.oldorigin_x = self.origin_x;
-	self.oldorigin_y = self.origin_y;
-	self.oldorigin_z = cvar("test_model_height");
-	setorigin(self, self.oldorigin);
-	self.nextthink = (time + 0.1);
-	self.think = test_model_fix_origin;
-};
-
-void() test_model =
-{
-	test_model_frik();
-	self.model = testmodel;
-	precache_model(testmodel);
-	setmodel(self, testmodel);
-	self.solid = MOVETYPE_WALK;
-	self.oldorigin = self.origin;
-	self.takedamage = TRUE;
-	if (!self.health)
-	{
-		self.health = CAM_ORG_X;
-	}
-	self.th_die = SUB_Remove;
-	if ((world.model == "maps/modelbox.bsp"))
-	{
-		self.nextthink = (time + 0.1);
-		self.think = test_model_fix_origin;
-	}
-	if (self.target != "")
-	{
-		if (!self.speed)
-		{
-			self.speed = CAM_ORG_X;
-		}
-		self.cnt = TRUE;
-		self.movetype = MOVETYPE_PUSH;
-		self.blocked = train_blocked;
-		self.use = train_use;
-		self.solid = MOVETYPE_WALK;
-		setorigin(self, self.origin);
-		self.nextthink = (self.ltime + 0.1);
-		self.think = func_train_find;
-	}
-};
 void() TorchAmbient =
 {
 	ambientsound(self.origin, self.noise, TRUE, 0.5);

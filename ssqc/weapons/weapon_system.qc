@@ -1131,10 +1131,6 @@ void W_SetWeapon() {
 		fwmodel = "models/weapons/mace/v_gauntlet.md3";
 
 	self.weaponmodel = "models/weapons/revolver/v_revolver.md3";
-
-	if (fwmodel == "")
-		error("Expected weapon model, got nothing");
-
 	self.vweapon.model = fwmodel;
 
 	if (self.weapon == IT_VIEWMODEL)
@@ -2859,10 +2855,9 @@ void WeaponFrames() {
 	}
 
 	// Reload settings from file?
-	if(self.check_centered == 1)
-	{
+	if(self.check_centered == 1) {
 		Check_FrikFile();
-		W_SetWeapon ();
+		W_SetWeapon();
 		self.impulse = 0;
 		self.check_centered = 0;
 	}

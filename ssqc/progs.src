@@ -103,7 +103,7 @@ entities/jumpad.qc
 entities/portal.qc
 entities/object_coffer.qc
 ../orrey.qc
-../shepherd.qc
+shepherd.qc
 
 
 monsters/ai.qc

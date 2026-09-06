@@ -89,8 +89,6 @@ officialmap_t officialmaps[] = {
 
 #define stricmp(s1, s2) strcmp(strtolower(s1), strtolower(s2))
 
-void() null;
-void DecodeLevelParms(void);
 void Check_SaveCompatibility(void)
 {
 	dprint(sprintf("^3%s: (%.0f vs %.0f) (%.0f vs %.0f)\n", __func__, world.prog_version, prog_save_version, world.map_version, map_save_version));

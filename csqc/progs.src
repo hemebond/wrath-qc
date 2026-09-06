@@ -22,7 +22,7 @@ multiplayer.qc
 // ../steam.qc
 hud_messages.qc
 ../orrey.qc
-../shepherd.qc
+shepherd.qc
 bezier.qc
 beam.qc
 models.qc
