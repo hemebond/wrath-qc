@@ -61,6 +61,7 @@ entities/func/door.qc
 entities/func/wall.qc
 entities/func/ray.qc
 entities/func/illusionary.qc
+entities/func/train.qc
 entities/trigger.qc
 entities/entity_model.qc
 entities/breakables.qc

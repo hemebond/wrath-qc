@@ -53,7 +53,10 @@ void InitTrigger() {
 	self.modelindex = 0;
 	self.model = string_null;
 
-	if (self.disarmed != -1)
+	if (self.disarmed == -1)
+		return;
+
+	if (self.disarmed)
 		self.using = -1;
 }
 
