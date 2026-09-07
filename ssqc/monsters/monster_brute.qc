@@ -1198,8 +1198,7 @@ void() brute_deathb22 =[$brt_deathb22, brute_deathb23]{};
 void() brute_deathb23 =[$brt_deathb23, brute_deathb24]{};
 void() brute_deathb24 =[$brt_deathb24, brute_deathb25]{};
 void() brute_deathb25 =[$brt_deathb25, brute_deathb25]{
-
-checkburnable(self);
+	checkburnable(self);
 };
 
 void()brute_death =
@@ -1292,7 +1291,7 @@ void() precache_monster_brute = {
 	model({"path": "models/enemies/brute/brute.md3"})
 = monster_brute : "Brute ( metal gorilla )" []
 */
-void() monster_brute = {
+void monster_brute() {
 	precache_monster_brute();
 
 	self.solid = SOLID_SLIDEBOX;
@@ -1304,8 +1303,8 @@ void() monster_brute = {
 	self.yaw_speed = 32;
 	self.damagetopain = 850;
 	self.stepheight_delta = 12;
-	local float r;
-	r = (random() *3);
+
+	float r = (random() *3);
 	if (r < 3)
 		self.noise = "enemies/brute/sight3.ogg";	
 	if (r < 2)
@@ -1329,4 +1328,4 @@ void() monster_brute = {
 	self.think = self.th_stand;
 	self.nextthink = time;
 	walkmonster_start();
-};
+}

@@ -1,46 +1,84 @@
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-16 -16 -32, 16 16 48)
+	model({"path": "models/enemies/executioner/executioner.md3"})
+= monster_executioner : "Monster: Executioner" []
+*/
+void monster_executioner() {
+	precache_monster_executioner();
+
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_STEP;
+	self.flags = self.flags | FL_MONSTER;
+	setmodel(self, "models/enemies/executioner/executioner.md3");
+	self.classname = "executioner";
+	self.heavymonster = 1;
+	self.stepheight_delta = 8;
+
+	float r = (random() *3);
+	if (r < 3)
+		self.noise = "enemies/executioner/sight3.ogg";
+	if (r < 2)
+		self.noise = "enemies/executioner/sight2.ogg";
+	if (r < 1)
+		self.noise = "enemies/executioner/sight1.ogg";
+
+	setsize(self, '-16 -16 -32', '16 16 48');
+	self.health = exec_health;
+	self.view_ofs_z = 72;
+	self.th_stand = executioner_stand1;
+	self.th_walk = executioner_walk1;
+
+	float war = random();
+	if (war > 0.5)
+		self.arm_weak = 1;
+	else
+		self.arm_weak = 2;
+
+	if (self.mutilate)
+		self.arm_weak = self.mutilate;
+
+	if (!self.mutilate)
+		self.mutilate = 3;
+
+	self.onlymelee =  1;
+	self.skin = 0;
+	self.th_run = executioner_run1;
+	self.classname = "executioner";
+	self.th_pain = executioner_pain;
+	self.th_die = executioner_death;
+	self.th_melee = executioner_atkr;
+	self.th_charge = executioner_rawr;
+	self.think = self.th_stand;
+	self.nextthink = time;
+	walkmonster_start();
+}
+
+
 $frame ex_pose0
 $frame ex_idle1 ex_idle2 ex_idle3 ex_idle4 ex_idle5 ex_idle6 ex_idle7 ex_idle8 ex_idle9 ex_idle10
-
 $frame ex_walk1 ex_walk2 ex_walk3 ex_walk4 ex_walk5 ex_walk6 ex_walk7 ex_walk8 ex_walk9 ex_walk10
-
 $frame ex_attack1 ex_attack2 ex_attack3 ex_attack4 ex_attack5 ex_attack6 ex_attack7 ex_attack8 ex_attack9 ex_attack10
-
 $frame ex_attacka1 ex_attacka2 ex_attacka3 ex_attacka4 ex_attacka5 ex_attacka6 ex_attacka7 ex_attacka8 ex_attacka9 ex_attacka10
-
 $frame ex_attackb1 ex_attackb2 ex_attackb3 ex_attackb4 ex_attackb5 ex_attackb6 ex_attackb7 ex_attackb8 ex_attackb9 ex_attackb10
-
 $frame ex_attackc1 ex_attackc2 ex_attackc3 ex_attackc4 ex_attackc5 ex_attackc6 ex_attackc7 ex_attackc8 ex_attackc9 ex_attackc10
-
 $frame ex_charge1 ex_charge2 ex_charge3 ex_charge4 ex_charge5 ex_charge6
-
 $frame ex_charge_slash1 ex_charge_slash2 ex_charge_slash3 ex_charge_slash4 ex_charge_slash5 ex_charge_slash6
-
 $frame ex_rtcha
-
 $frame ex_rtchb
-
 $frame ex_chargeb1 ex_chargeb2 ex_chargeb3 ex_chargeb4 ex_chargeb5 ex_chargeb6
-
 $frame ex_chargeb_slash1 ex_chargeb_slash2 ex_chargeb_slash3 ex_chargeb_slash4 ex_chargeb_slash5 ex_chargeb_slash6
-
 $frame exec_paina1 exec_paina2 exec_paina3 exec_paina4 exec_paina5 exec_paina6 exec_paina7 exec_paina8 exec_paina9 exec_paina10
-
 $frame exec_painb1 exec_painb2 exec_painb3 exec_painb4 exec_painb5 exec_painb6 exec_painb7 exec_painb8 exec_painb9 exec_painb10
-
 $frame exec_paind1 exec_paind2 exec_paind3 exec_paind4 exec_paind5 exec_paind6 exec_paind7 exec_paind8 exec_paind9 exec_paind10
-
 $frame exec_deatha1 exec_deatha2 exec_deatha3 exec_deatha4 exec_deatha5 exec_deatha6 exec_deatha7 exec_deatha8 exec_deatha9 exec_deatha10 exec_deatha11 exec_deatha12 exec_deatha13 exec_deatha14
-
 $frame exec_deathb1 exec_deathb2 exec_deathb3 exec_deathb4 exec_deathb5 exec_deathb6 exec_deathb7 exec_deathb8 exec_deathb9 exec_deathb10 exec_deathb11 exec_deathb12 exec_deathb13 exec_deathb14 exec_deathb15
-
 $frame exec_painf1 exec_painf2 exec_painf3 exec_painf4 exec_painf5 exec_painf6 exec_painf7 exec_painf8 exec_painf9 exec_painf10
-
 $frame exec_paine1 exec_paine2 exec_paine3 exec_paine4 exec_paine5 exec_paine6 exec_paine7 exec_paine8 exec_paine9 exec_paine10
-
 $frame exec_warp1 exec_warp2 exec_warp3 exec_warp4 exec_warp5 exec_warp6 exec_warp7 exec_warp8 exec_warp9 exec_warp10
-
-$frame exec_rawr1 exec_rawr2 exec_rawr3 exec_rawr4 exec_rawr5 exec_rawr6 
-
+$frame exec_rawr1 exec_rawr2 exec_rawr3 exec_rawr4 exec_rawr5 exec_rawr6
 $frame exec_charge1 exec_charge2 exec_charge3 exec_charge4 exec_charge5 exec_charge6 
 
 
@@ -52,16 +90,6 @@ $frame exec_charge1 exec_charge2 exec_charge3 exec_charge4 exec_charge5 exec_cha
 .float zigzag_angle3;
 .float charge_time;
 
-
-void() executioner_rawr;
-void() executioner_chrbg1;
-void() executioner_painb1;
-
-////////////////////////////////////////////////////////////////////////////////////
-void() executioner_run1;
-void() executioner_chrg1;
-//void() executioner_runb1;
-//void() executioner_atk1;
 
 .float exec_idle_time;
 .float exec_sight_time;
@@ -190,15 +218,12 @@ void() executioner_walk10 =[$ex_walk10, executioner_walk1]
 {
 	ai_walk(10);
 };
-//===========================================================================
-void() executioner_atkr;
+
+
 .float exec_type;
 .float exec_jtime;
 
-//===========================================================================
 
-void() executioner_subattack;
-void()executioner_death;
 void() executioner_run1 =[$ex_walk1, executioner_run2]
 {
 	if(self.health < 0)
@@ -297,17 +322,10 @@ void() executioner_run10 =[$ex_walk10, executioner_run1]
 };
 
 
-//===========================================================================
-
-void() executioner_atkb1;
-void() executioner_atkc1;
-void() executioner_atkd1;
 .float loopflag;
 .float exec_damagecharge;
 .float oldspeed2;
 
-
-void(float r) executioner_attack;
 
 void() executioner_subattack = { local entity head;
 
@@ -1517,63 +1535,4 @@ void() precache_monster_executioner = {
 	precache_model("models/enemies/executioner/executioner.md3");
 	precache_model("models/enemies/executioner/arm_right.md3");
 	precache_model("models/enemies/executioner/arm_left.md3");
-};
-
-
-/*FGD
-@PointClass
-	base(Monster)
-	color(1 0 0)
-	size(-16 -16 -32, 16 16 48)
-	model({"path": "models/enemies/executioner/executioner.md3"})
-= monster_executioner : "Monster: Executioner" []
-*/
-void() monster_executioner = {
-	precache_monster_executioner();
-
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	self.flags = self.flags | FL_MONSTER;
-	setmodel(self, "models/enemies/executioner/executioner.md3");
-	self.classname = "executioner";
-	self.heavymonster = 1;
-	self.stepheight_delta = 8;
-	local float r;
-	r = (random() *3);
-	if (r < 3)
-		self.noise = "enemies/executioner/sight3.ogg";	
-	if (r < 2)
-		self.noise = "enemies/executioner/sight2.ogg";	
-	if (r < 1)
-		self.noise = "enemies/executioner/sight1.ogg";	
-
-	setsize(self, '-16 -16 -32', '16 16 48');
-	self.health = exec_health;
-	self.view_ofs_z = 72;
-	self.th_stand = executioner_stand1;
-	self.th_walk = executioner_walk1;
-	local float war;
-	war = random();
-
-	if (war > 0.5)
-		self.arm_weak = 1;
-	else
-		self.arm_weak = 2;
-
-	if (self.mutilate)
-		self.arm_weak = self.mutilate;
-
-	if (!self.mutilate)
-		self.mutilate = 3;
-	self.onlymelee =  1;
-	self.skin = 0;
-	self.th_run = executioner_run1;
-	self.classname = "executioner";
-	self.th_pain = executioner_pain;
-	self.th_die = executioner_death;
-	self.th_melee = executioner_atkr;
-	self.th_charge = executioner_rawr;
-	self.think = self.th_stand;
-	self.nextthink = time;
-	walkmonster_start();
 };

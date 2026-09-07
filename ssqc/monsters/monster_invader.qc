@@ -796,13 +796,13 @@ void() invader_attacktorun10 =[$inv_attacktorun10, invader_run]
 void() invader_attack =[$inv_attack1, invader_attack2]
 {
 	ai_face();
-	local vector dir, tagorg;
-	local float pcount, tagindex;
+	vector dir, tagorg;
+	float pcount, tagindex;
 
 	monstersound2("enemies/invader/fire", 3, CHAN_WEAPON);
 	pcount = invader_nproj;
-	local entity muzzle;
-	local string muzzlemodel;
+	entity muzzle;
+	string muzzlemodel;
 	muzzlemodel = "models/enemies/invader/muzzle_flash.md3";
 	muzzle = spawn();
 	muzzle.owner = self;
@@ -810,14 +810,13 @@ void() invader_attack =[$inv_attack1, invader_attack2]
 	setattachment(muzzle, self, "tag_muzzle");
 	muzzle.think = SUB_Remove;
 	muzzle.nextthink = time + 0.05;
-	while (pcount > 0)
-	{
+	self.effects += EF_MUZZLEFLASH;
+	while (pcount > 0) {
 		tagindex = gettagindex(self, "tag_muzzle");
 		tagorg = gettaginfo(self, tagindex);
 
 		dir = aim(self, 1000);
-		local vector sre;
-		sre = self.angles;
+		vector sre = self.angles;
 		makevectors2(sre);
 		dir = normalize(self.enemy.origin - tagorg);
 		launch_projectile_inv(tagorg, dir, pcount, self);

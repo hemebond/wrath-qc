@@ -642,12 +642,13 @@ void()proj_wretch_explo_think =
 };	
 
 
-void(vector org, vector dir, entity ownerproj) launch_projectile_wre = { local entity shotgun_proj;
+void(vector org, vector dir, entity ownerproj) launch_projectile_wre = {
+	entity shotgun_proj;
 	monstersound3("enemies/wretch/fire", 5, CHAN_AUTO);	
 	shotgun_proj = spawn();
 	
 	if((ownerproj.classname == "boss_guardian1") && (ownerproj.magnetized == 1))
-	shotgun_proj.magnetized = 1;
+		shotgun_proj.magnetized = 1;
 
 	shotgun_proj.owner = ownerproj;
 	shotgun_proj.movetype = MOVETYPE_FLYMISSILE;
@@ -664,19 +665,22 @@ void(vector org, vector dir, entity ownerproj) launch_projectile_wre = { local e
 	shotgun_proj.lifetime  = time + 7.5;
 	shotgun_proj.enemy = ownerproj.enemy;
 	shotgun_proj.traileffectnum = particleeffectnum("proj_wretch_trail");
+	// Add light to the projectile
+	shotgun_proj.pflags |= PFLAGS_FULLDYNAMIC;
+	shotgun_proj.light_lev = 320;
+	shotgun_proj.color = '0.25 0.25 1';
 
 	sound(shotgun_proj, CHAN_WEAPON, "enemies/wretch/proj_loop.ogg", 1, 0.25);
 
 	setmodel(shotgun_proj, "models/projectiles/proj_wretch.md3");
 	setsize(shotgun_proj, '0 0 0', '0 0 0');
 	makevectors(self.angles);
-	//org -=v_forward*order ;
 	setorigin(shotgun_proj, org);
-	if((ownerproj.classname == "boss_guardian1") && (ownerproj.magnetized != 1))
-	shotgun_proj.velocity = dir *(wretch_projvel) * random (1,1.25);
 
+	if ((ownerproj.classname == "boss_guardian1") && (ownerproj.magnetized != 1))
+		shotgun_proj.velocity = dir *(wretch_projvel) * random (1,1.25);
 	else
-	shotgun_proj.velocity = dir *(wretch_projvel);
+		shotgun_proj.velocity = dir *(wretch_projvel);
 
 	shotgun_proj.oldvelocity = shotgun_proj.velocity;
 	shotgun_proj.think = proj_wretch_explo_think;
@@ -935,40 +939,6 @@ void() wretch_meleeb8=[$wre_meleeb8, wretch_run1]{ai_face();
 	}
 };
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////melee attack
-/*
-void(float wdmg) wretch_melee_attack = { local vector delta;
-	local float dist;
-	if (!self.enemy)
-		return;	// removed before stroke
-	delta = self.enemy.origin - self.origin;
-	dist = vlen(delta);
-	if (dist > wretch_near)
-	{
-		return;
-	}
-	else
-	{
-		T_Damage(self.enemy, self, self, wdmg);
-	}
-};
-
-void() wretch_sattack = { ai_face();
-	self.gravity = 1;
-	self.movetype = MOVETYPE_STEP;
-	self.frame = $wre_satk1;
-	self.runing_time = time + wretch_rt;
-	enemy_range = range(self.enemy);
-	wretch_melee_attack(wretch_sad);
-	//self.glowmod = ' 1 0 0';
-	if (enemy_range == RANGE_MELEE)
-		self.think = wretch_spreattack;
-	else
-		self.think = wretch_run1;
-	self.nextthink = time + wretch_sat;
-};
-*/
 
 .float painframe;
 void() wretch_postpain =

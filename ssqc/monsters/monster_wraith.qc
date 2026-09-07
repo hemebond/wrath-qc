@@ -353,25 +353,30 @@ void() wraith_StartFast =
 	missile.movetype = MOVETYPE_FLYMISSILE;
 	missile.solid = SOLID_CORPSE;
 	missile.traileffectnum = particleeffectnum("wraithtrail2");
-	local vector sre;
-	sre = self.angles;
+
+	vector sre = self.angles;
 	makevectors2(sre);
 	missile.velocity = normalize(self.enemy.origin - tagorg);
 	missile.velocity = missile.velocity * 1200;
 	missile.angles = vectoangles(missile.velocity);
-	local entity oself;oself = self;self = missile;
+	entity oself;
+	oself = self;
+	self = missile;
 	randomsound2("enemies/wraith/proj_loop", 3, 1, CHAN_WEAPON, 0, 0.25);
 	self = oself;
 	missile.lifetime = time + 15;
 	missile.touch = WraithProjectileTouch;
-	if(world.model != "maps/testitems.bsp")
-	{
-		missile.nextthink = time;
-		missile.think = wraithslagdrunk;
-	}
+
+	missile.nextthink = time;
+	missile.think = wraithslagdrunk;
 	missile.modelflags = EF_NOMODELFLAGS;	// smoke rocket dp-extension
-	//if(self.scale == 1)
 	missile.scale = 1;
+
+	// Add light to the projectile
+	missile.pflags |= PFLAGS_FULLDYNAMIC;
+	missile.light_lev = 320;
+	missile.color = '0.25 0.25 1';
+
 	setmodel(missile, "models/projectiles/proj_wraith.md3");
 	setsizeitem(missile, '0 0 0');
 

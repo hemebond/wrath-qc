@@ -645,112 +645,40 @@ string(float keynum) keynumtostring_wrath =
 
 float last_selected_option;
 float mouseactive;
+
+// m_keydown and m_keyup are not used but necessary for menus to work
 void(float key, float ascii) m_keydown = {};
+void(float key, float ascii) m_keyup = {};
+
 void(float key, float ascii) menu_keydown = {
-	float deadmenu;
-	deadmenu = cvar("scratch3");
-	if (deadmenu)
-	 {
-	 if (key == K_ESCAPE)
- 		string bindcmd = ("impulse 90\n");
+	dprint("menu_keydown->key: ", ftos(key), "\n");
+	dprint("menu_keydown->ascii: ", ftos(ascii), "\n");
+
+	float deadmenu = cvar("scratch3");
+	if (deadmenu) {
+		if (key == K_ESCAPE)
+ 			string bindcmd = ("impulse 90\n");
 		cmd(bindcmd);
 		return;
 	}
-	if (key >= K_MOUSE1)
-	{
-	mouse1_held = 1;
-	}
-	
-	#if !NEW_MENU
-	if (key == K_ESCAPE)
-	{
-		localsound("sounds/menu.wav");
 
-		if (menutype == M_TYPE_PROFILE)
-		{
-			menutype = M_TYPE_NONE;
-			if (gah != "")
-				strunzone(gah);
-			gah = "";
-		}
-
-		if ((isserver() || (clientstate() == CS_CONNECTED)) && (zmenuingame == 1))	// don't back out to console only
-			m_hide();
-		if ((menutype == M_TYPE_OPTIONS) || (menutype == M_TYPE_RESUME))
-		{
-			menutype = M_TYPE_NONE;
-			zmenuingame = 1;
-		}
-
-		if ((menutype == M_TYPE_AUDIO) || (menutype == M_TYPE_VIDEO) || (menutype == M_TYPE_CONTROLS) || (menutype == M_TYPE_CONTROLBINDS) || (menutype == M_TYPE_GAMEPLAY))
-			menutype = M_TYPE_OPTIONS;
-		if (menutype == M_TYPE_RESOLUTION)
-		{
-			menutype = M_TYPE_OPTIONS;
-			restart_consize();
-		}
-
-		if (menutype == M_TYPE_CONFIRMBIND)
-			menutype = M_TYPE_CONTROLS;
-		//if((menutype == M_TYPE_HELP) || (menutype == M_TYPE_CREDITS) || (menutype == M_TYPE_PROFILE) ||)
-		enterindex = 0;
+	if (key >= K_MOUSE1) {
+		mouse1_held = 1;
 	}
 
-	if (menutype == M_YNQ)
-	{
-		if (ascii == 'y' || ascii == 'Y')
-			cmd("\nquit\n");
-		if ((ascii == 'n' || ascii == 'N') || (key == K_ESCAPE))
-			menutype = M_TYPE_NONE;
-	}
-
-	/*
-		if(menutype == M_TYPE_NONE)
-		{
-			if(ascii == 'y' || ascii == 'Y')
-			{
-				menutype = M_TYPE_NONE;
-				cmd("\n disconnect \n");
-				m_init2();
-			}
-
-			if((ascii == 'n' || ascii == 'N') || (key == K_ESCAPE))
-				menutype = M_TYPE_NONE;
-		}
-	*/
-	if (menutype == M_YND)
-	{
-		if (ascii == 'y' || ascii == 'Y')
-		{
-			menutype = M_TYPE_NONE;
-			cmd("\n disconnect \n");
-			m_init2();
-		}
-
-		if ((ascii == 'n' || ascii == 'N') || (key == K_ESCAPE))
-			menutype = M_TYPE_NONE;
-	}
-	#endif
-
-	#if NEW_MENU
-	if (key == K_ESCAPE)
-	{
-		if (in_game && menu_current == menu_main_game)	// don't back out to console only
-		{
+	if (key == K_ESCAPE) {
+		if (in_game && menu_current == menu_main_game) {  // don't back out to console only
 			localsound("sounds/menu.wav");
 			m_hide();
 			return;
 		}
 	}
 
-	for(uielement_c ui_chain = ui_screen_queue; ui_chain; ui_chain = ui_chain._next)
-	{
+	for (uielement_c ui_chain = ui_screen_queue; ui_chain; ui_chain = ui_chain._next) {
 		UI_CheckInput(ui_chain, key, ascii, 0);
 	}
-	#endif
 
-	if (key == K_MOUSE1)
-	{
+	if (key == K_MOUSE1) {
 		// Reki: Input for UI elements
 		#if NEW_MENU
 		if (ui_usemouse)
@@ -793,8 +721,7 @@ void(float key, float ascii) menu_keydown = {
 		#endif
 		//
 
-		if(menutype == M_TYPE_CONFIRMBIND)
-		{
+		if(menutype == M_TYPE_CONFIRMBIND) {
 			last_selected_option = 0;
 			mouseactive = 0;
 			selected_option = 0;
@@ -813,8 +740,7 @@ void(float key, float ascii) menu_keydown = {
 		}
 	}
 
-	if ((key == K_KP_ENTER) || (key == K_ENTER))
-	{
+	if ((key == K_KP_ENTER) || (key == K_ENTER)) {
 		if ((clientstate() == CS_CONNECTED) && (menuingame == 1))
 			return;
 		time = gettime();
@@ -823,8 +749,7 @@ void(float key, float ascii) menu_keydown = {
 
 	}
 
-	if (menutype == M_TYPE_PROFILE)
-	{
+	if (menutype == M_TYPE_PROFILE) {
 		string theline;
 		theline = gah;
 		if ((ascii >= 48) && (ascii <= 57) || (ascii >= 65) && (ascii <= 90) || (ascii >= 97) && (ascii <= 122))
@@ -848,8 +773,7 @@ void(float key, float ascii) menu_keydown = {
 		gah = theline;
 	}
 
-	if (menutype == M_TYPE_CONFIRMBIND)
-	{
+	if (menutype == M_TYPE_CONFIRMBIND) {
 		string localkey;
 		if (gkcommand == 1) localkey = "+forward";
 		if (gkcommand == 2) localkey = "+back";
@@ -890,32 +814,30 @@ void(float key, float ascii) menu_keydown = {
 			return;
 
 		//		keybind = ascii;
-
 		//		if(key == K_MOUSE1)
 		keybind = key;
 		tokenize(findkeysforcommand(localkey, 0));
-	if (stof(argv(0)) == keybind)
-		{
+		if (stof(argv(0)) == keybind) {
 			menutype = M_TYPE_CONTROLBINDS;
 			return;
 		}
 		
-			if(stof(argv(0)) != -1)
+		if(stof(argv(0)) != -1)
 			cmd(strcat("unbind ", keynumtostring_wrath(stof(argv(0))), "\n"));
-			if(stof(argv(1)) != -1)
+		if(stof(argv(1)) != -1)
 			cmd(strcat("unbind ", keynumtostring_wrath(stof(argv(1))), "\n"));
-			if(stof(argv(2)) != -1)
+		if(stof(argv(2)) != -1)
 			cmd(strcat("unbind ", keynumtostring_wrath(stof(argv(2))), "\n"));
-			if(stof(argv(3)) != -1)
+		if(stof(argv(3)) != -1)
 			cmd(strcat("unbind ", keynumtostring_wrath(stof(argv(3))), "\n"));
-			if(stof(argv(4)) != -1)
+		if(stof(argv(4)) != -1)
 			cmd(strcat("unbind ", keynumtostring_wrath(stof(argv(4))), "\n"));
- 
-			cmd(strcat("unbind ",keynumtostring_wrath(keybind), "\n"));
-			cmd(strcat("in_unbind 1 ",keynumtostring_wrath(keybind), "\n"));
-			cmd(strcat("in_unbind 2 ",keynumtostring_wrath(keybind), "\n"));
-			cmd(strcat("in_unbind 3 ",keynumtostring_wrath(keybind), "\n"));
-			cmd(strcat("in_unbind 4 ",keynumtostring_wrath(keybind), "\n"));
+
+		cmd(strcat("unbind ",keynumtostring_wrath(keybind), "\n"));
+		cmd(strcat("in_unbind 1 ",keynumtostring_wrath(keybind), "\n"));
+		cmd(strcat("in_unbind 2 ",keynumtostring_wrath(keybind), "\n"));
+		cmd(strcat("in_unbind 3 ",keynumtostring_wrath(keybind), "\n"));
+		cmd(strcat("in_unbind 4 ",keynumtostring_wrath(keybind), "\n"));
 		
 		if (gkcommand == 10) localkey = "\"impulse 1\"";
 		if (gkcommand == 11) localkey = "\"impulse 2\"";
@@ -943,13 +865,9 @@ void(float key, float ascii) menu_keydown = {
 			menutype = M_TYPE_CONTROLBINDS;
 		return;
 	}
-
-	//if (gah)
-	//	strunzone(gah);
  };
 
- float Menu_InputEvent(float EventType, float charx, float scany)
- {
+float Menu_InputEvent(float EventType, float charx, float scany) {
 	input_modeswitching(EventType, charx, scany);
 	input_thumbsticks(EventType, charx, scany);
 	

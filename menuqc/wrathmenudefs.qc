@@ -81,7 +81,6 @@ float M_TYPE_CONTROLBINDS = 25;
 float M_TYPE_CONTROLRESTART = 26;
 
 float profileslotpage;
-float checksaves;
 
 float autocvar_vid_conwidth;
 float autocvar_vid_conheight;

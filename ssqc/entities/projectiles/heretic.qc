@@ -92,6 +92,11 @@ void launch_projectile_heretic(vector org, vector dir, entity ownerproj) {
 	projectile.classentity = "projectiles";
 	projectile.wrathflags += FL_PROJECTILE;
 
+	// FIXME: Testing
+	projectile.pflags |= PFLAGS_FULLDYNAMIC;
+	projectile.light_lev = 320;
+	projectile.color = '1 0.5 0.5';
+
 	entity oself = self;
 	self = projectile;
 	randomsound2("enemies/heretic/proj_loop", 3, 1, CHAN_WEAPON, 0, 0.25);

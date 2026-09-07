@@ -36,40 +36,32 @@ void Controller_Type(float index, float type)
 	}
 }
 
-void input_modeswitching(float EventType, float charx, float scany) 
-{
+void input_modeswitching(float EventType, float charx, float scany) {
 	static float input_mode_pollingcooldown;
-	if (cltime > input_mode_pollingcooldown)
-		{
+	if (cltime > input_mode_pollingcooldown) {
 		float new_mode = input_mode;
 
-		if (EventType == IE_KEYDOWN)
-		{
+		if (EventType == IE_KEYDOWN) {
 			float type = bind_gettype(charx);
-			if (IS_KBM_KEY(type))
-			{
+			if (IS_KBM_KEY(type)) {
 				new_mode = IN_MODE_KEYBOARD;
 			}
-			else
-			{
+			else {
 				if (type == INPUT_TYPE_XBOX)
 					new_mode = IN_MODE_GAMEPAD;
 				else
 					new_mode = IN_MODE_JOYSTICK;
 			}
 		}
-		else if (EventType == IE_JOYAXIS)
-		{
+		else if (EventType == IE_JOYAXIS) {
 			if (input_mode != IN_MODE_JOYSTICK)
 				new_mode = IN_MODE_GAMEPAD;
 		}
-		else if (EventType == IE_MOUSEDELTA)
-		{
+		else if (EventType == IE_MOUSEDELTA) {
 			//new_mode = IN_MODE_KEYBOARD;
 		}
 
-		if (input_mode != new_mode)
-		{
+		if (input_mode != new_mode) {
 			input_mode_pollingcooldown = cltime + 1;
 			input_mode = new_mode;
 		}

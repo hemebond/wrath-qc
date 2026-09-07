@@ -734,18 +734,17 @@ class uispritesheet_c : uielement_c
 			tc_v[1] += tc_v[1] * final_sprite[1];
 
 			R_BeginPolygon(final_img, drawflags, 1);
-			R_PolygonVertex(final_origin, 						[tc_u[0], tc_u[1]], final_color, final_alpha);
-			R_PolygonVertex(final_origin + [final_size[0], 0], 	[tc_v[0], tc_u[1]], final_color, final_alpha);
-			R_PolygonVertex(final_origin + final_size, 			[tc_v[0], tc_v[1]], final_color, final_alpha);
-			R_PolygonVertex(final_origin + [0, final_size[1]], 	[tc_u[0], tc_v[1]], final_color, final_alpha);
+			R_PolygonVertex(final_origin,                        [tc_u[0], tc_u[1]], final_color, final_alpha);
+			R_PolygonVertex(final_origin + [final_size[0], 0],   [tc_v[0], tc_u[1]], final_color, final_alpha);
+			R_PolygonVertex(final_origin + final_size,           [tc_v[0], tc_v[1]], final_color, final_alpha);
+			R_PolygonVertex(final_origin + [0, final_size[1]],   [tc_u[0], tc_v[1]], final_color, final_alpha);
 			R_EndPolygon();
 			#endif
 		}
 	};
 };
 
-class uifill_c : uielement_c
-{
+class uifill_c : uielement_c {
 	var virtual void(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) prerender;
 
 	nonvirtual void() uifill_c {

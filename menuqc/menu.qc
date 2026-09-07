@@ -1880,9 +1880,8 @@ void(uielement_c this) bind_fixtext = {
 	ui_scale = o_uiscale;
 }
 
-void MenuInit_Options_Binds(void)
-{
-	void(uielement_c this, float nkey, float ascii, float released) option_input = {
+void MenuInit_Options_Binds(void) {
+	float option_input(uielement_c this, float nkey, float ascii, float released) {
 		if (released)
 			return FALSE;
 		
@@ -1895,7 +1894,7 @@ void MenuInit_Options_Binds(void)
 		return FALSE;
 	};
 
-	void(uielement_c this, __inout vector pos) option_preloop = {
+	void option_preloop(uielement_c this, __inout vector pos) {
 		if (!ui_renderframe)
 			return;
 		
@@ -1911,9 +1910,9 @@ void MenuInit_Options_Binds(void)
 	
 	ui_scale = '1 1';
 	menu_options_keybinds = spawn(uielement_c, flags: UIFLAG_STRETCH);
-		menu_options_keybinds.active_condition = menu_conditional;
-		menu_options_keybinds.input = option_input;
-		menu_options_keybinds.preloop = option_preloop;
+	menu_options_keybinds.active_condition = menu_conditional;
+	menu_options_keybinds.input = option_input;
+	menu_options_keybinds.preloop = option_preloop;
 
 	uielement_c menu_buttons = spawn(uielement_c, owner: menu_options_keybinds, anchor: '0.5 0.5', justify: '0.5 0.5', size: '192 380');
 	
@@ -1929,7 +1928,6 @@ void MenuInit_Options_Binds(void)
 		flags: UIFLAG_CLICKABLE, color: OPTIONS_TEXT_COLOR, padding: '48 32');
 		txt.prerender  = text_highlight;
 		txt.m_click = button_click;
-	//
 
 	keybind_t binds_lane1[] = {
 		{_("UI_CONTROL_MOVEFORWARD"), "+forward", 0},
@@ -2001,7 +1999,7 @@ void MenuInit_Options_Binds(void)
 		key_waitingforinput = TRUE;
 		currentbind_button = this;
 	};
-	void(uitext_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) bind_text_prerender = {
+	void bind_text_prerender(uitext_c this, __inout string txt_to_render, __inout vector color_to_render, __inout float alpha_to_render) {
 		if (key_waitingforinput)
 		{
 			if (this.partner.key_bind.cmd == currentbind_button.key_bind.cmd)
@@ -2075,7 +2073,7 @@ void MenuInit_Options_Binds(void)
 		uitext_c bind_prompt = (uitext_c)this.partner;
 		bind_prompt.text = sprintf(_("UI_BINDPROMPT"), currentbind_button.key_bind.name);
 	};
-	float(uielement_c this, float nkey, float ascii, float released) waitforinput_input = {
+	float waitforinput_input(uielement_c this, float nkey, float ascii, float released) {
 		if (released)
 			return FALSE;
 		
@@ -2088,8 +2086,7 @@ void MenuInit_Options_Binds(void)
 		if (!currentbind_button)
 			return FALSE;
 		
-		if (nkey == K_ESCAPE)
-		{
+		if (nkey == K_ESCAPE) {
 			key_waitingforinput = FALSE;
 			return FALSE;
 		}
@@ -2098,8 +2095,7 @@ void MenuInit_Options_Binds(void)
 			return FALSE;
 		
 		float argc = tokenize(findkeysforcommand(currentbind_button.key_bind.cmd, 0));
-		for(float i = 0; i < argc; i++)
-		{
+		for (float i = 0; i < argc; i++) {
 			if !(argv(i))
 				continue;
 
@@ -2115,12 +2111,10 @@ void MenuInit_Options_Binds(void)
 			cmd("in_unbind 0 ", keynumtostring(keynum), "\n");
 		}
 		
-		if (nkey == K_DEL || nkey == K_BACKSPACE)
-		{
+		if (nkey == K_DEL || nkey == K_BACKSPACE) {
 			currentbind_button.key_bind.key = 0;
 		}
-		else
-		{
+		else {
 			cmd("in_unbind 0 ", keynumtostring(nkey), "\n");
 			cmd("in_bind 0 ", keynumtostring(nkey), " \"", currentbind_button.key_bind.cmd, "\"\n");
 			setkeybind_bindmap(nkey, currentbind_button.key_bind.cmd, 0);
@@ -2132,9 +2126,7 @@ void MenuInit_Options_Binds(void)
 
 		// ugh, I was trying to avoid this but it seems like some race condition makes
 		// the input map not respond instantly, damn cmd()
-		///*
-		string key_str;
-		key_str = keynumtostring(nkey);
+		string key_str = keynumtostring(nkey);
 		uitext_c txt = (uitext_c)currentbind_button.partner;
 		if (txt.text)
 			strunzone(txt.text);
@@ -2145,15 +2137,14 @@ void MenuInit_Options_Binds(void)
 		currentbind_button.size[0] = txt.totalsize()[0] + 4;
 		currentbind_button.size[0] = max(currentbind_button.size[1], currentbind_button.size[0]);
 		ui_scale = o_uiscale;
-		//*/
 		//
 
 		return FALSE;
 	};
 	fill_waitforinput = spawn(uifill_c, owner: menu_options_keybinds, flags: UIFLAG_STRETCH, color: '-1 -1 -1', alpha: 0.9);
-		fill_waitforinput.active_condition = waitforinput_conditional;
-		fill_waitforinput.preloop = waitforinput_preloop;
-		fill_waitforinput.input = waitforinput_input;
+	fill_waitforinput.active_condition = waitforinput_conditional;
+	fill_waitforinput.preloop = waitforinput_preloop;
+	fill_waitforinput.input = waitforinput_input;
 	
 	uitext_c txt = spawn(uitext_c, owner: fill_waitforinput, anchor: '0.5 0.5', origin: '0 0', justify: '0.5 0.5', size: '14 14', font: FONT_MENU, color: OPTIONS_TEXT_COLOR);
 	fill_waitforinput.partner = txt;

@@ -400,12 +400,10 @@ float CSQC_InputEvent(float EventType, float charx, float scany)
 	// determine input type
 	// Reki (December 3 2023): Added this to change behavior based on input type
 	input_modeswitching(EventType, charx, scany);
-	//
 
 	// Reki (December 3 2023): Made this happen always, since we want to track this state
 	// even if the player isn't in the radial (since joyaxis only happens when the value CHANGES)
 	input_thumbsticks(EventType, charx, scany);
-	//
 
 	if ((EventType == 0) && (charx == K_ESCAPE))
 	{

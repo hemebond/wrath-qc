@@ -995,7 +995,8 @@ void() menu_type_options_gameplay = { local vector size, buttions_locs;
 	buttions_locs_y += 34 * vy_rel;
 
 	};
-void() menu_type_options_audio = { local vector size, buttions_locs;
+void() menu_type_options_audio = {
+	vector size, buttions_locs;
 	size_x = vid_x;
 	size_y = vid_y;
 	if (clientstate() != CS_CONNECTED)
@@ -1026,7 +1027,7 @@ void() menu_type_options_audio = { local vector size, buttions_locs;
 
 	drawfilldraggeable(barpos, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0, 4,201, 202, 256 / 20);
 
-//	drawfill(barpos, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0);
+	//drawfill(barpos, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0);
 	////////// EFFECTS VOLUME
 	buttions_locs_x -= 401 * vx_rel;	// back to the x pos
 	buttions_locs_y += 28 * vy_rel;
@@ -1064,7 +1065,7 @@ void() menu_type_options_audio = { local vector size, buttions_locs;
 	barpos3_y -= 8 * vy_rel;
 	barpos3_x += bgmvol *256 * vx_rel;
 	drawfilldraggeable(barpos3, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0, 6,205, 206, 256 / 20);
-//	drawfill(barpos3, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0);
+	//drawfill(barpos3, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0);
 	buttions_locs_x -= 401 * vx_rel;	// back to the x pos
 	buttions_locs_y += 28 * vy_rel;
 };
@@ -1398,7 +1399,7 @@ void() menu_type_options_video =
 	barpos4 = buttions_locs - fixed_vector('0 0 0');
 	barpos4_y -= 8 * vy_rel;
 	barpos4_x += fovlev_v *133 * vx_rel;
-//	drawfill
+	//drawfill
 	
 	drawfilldraggeable(barpos4, fixed_vector('4 16 0'), '0.75 0.75 0.5', 1, 0, 1,297, 298, 256 / 40);
 	string bdesc;bdesc = ftos(fovlev);draw_fbuttion2(barpos4 + fixed_vector('-128.5 -24 0'), bdesc);
@@ -2284,4 +2285,3 @@ void() menu_type_resume =
 	oldprofileslot = profileslot;
 	
 };
-
