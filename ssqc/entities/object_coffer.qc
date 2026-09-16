@@ -429,6 +429,19 @@ void object_fakecoffer() {
 
 
 void use_fakecoffer() {
+/*
+FIXME:
+VM_remove: tried to remove an already freed entity!
+s91480: ssqc/entities/object_coffer.qc:503: STOREP_FNC alphafade (=alphafade()), GLOBAL20281
+s91481: ssqc/entities/object_coffer.qc:504: FIELD_ENT  self (=entity 128), attached_cloud (=.attached_cloud), GLOBAL20280
+s91482: ssqc/entities/object_coffer.qc:504: ADDRESS    GLOBAL20280, nextthink (=.nextthink), GLOBAL20281
+s91483: ssqc/entities/object_coffer.qc:504: STOREP_F   time (=31.1015129), GLOBAL20281
+s91484: ssqc/entities/object_coffer.qc:505: FIELD_F    self (=entity 128), ent_light (=.ent_light), GLOBAL4
+s91485: ssqc/entities/object_coffer.qc:505: CALL1      remove (=remove())
+s91486: ssqc/entities/object_coffer.qc:506: STORE_F    self (=entity 128), GLOBAL4
+s91487: ssqc/entities/object_coffer.qc:506: CALL1      remove (=remove())
+ssqc/entities/object_coffer.qc:506 : use_fakecoffer : statement 284
+*/
 	float ft;
 	self.frame += 1;
 

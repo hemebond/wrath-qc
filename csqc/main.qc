@@ -1,22 +1,6 @@
 // --------------------------------------------------------------------------
 // BEGIN REQUIRED CSQC FUNCTIONS
 
-void() Hud_Init;
-void() rewritefriktether = {};
-void() rewritefrikshrine = {};
-void() pulse_health;
-void() pulse_armor;
-void() pulse_darmor;
-void() pulse_ammo;
-void HUD_InitializeUnderUI(void);
-void HUD_InitializeUI(void);
-void HUD_InitializeArtifactRadial(void);
-void HUD_InitializeNotifications(void);
-void HUD_InitializeBackfill(void);
-void HUD_InitializeDeathMenu(void);
-void HUD_InitializeCaptions(void);
-void HUD_InitializeEndscreen(void);
-void HUD_InitializeCenterprint(void);
 float rmenu;
 
 // CSQC_Init : Called every time the CSQC code is initialized (essentially at map load)
@@ -71,8 +55,8 @@ void CSQC_Init(void)
 	registercvar ("_fog_f",ftos(getproperty(VF_FOG_FADEDEPTH)));
 
 	float scale_crosshair = cvar ("saved8");
-	if(scale_crosshair < 1)
-	strCmd = ("saved8 1\n");
+	if (scale_crosshair < 1)
+		strCmd = ("saved8 1\n");
 	localcmd(strCmd);
 
 	// Reki: Zoom
@@ -92,8 +76,7 @@ void CSQC_Init(void)
 	}
 	string searchpath = sprintf("data/notes/%s/*.txt", cvar_string("prvm_language"));
 	float searchhandle = search_begin(searchpath, TRUE, TRUE);
-	if (searchhandle >= 0)
-	{
+	if (searchhandle >= 0) {
 		float searchsize = search_getsize(searchhandle);
 		for(float i = 0; i < searchsize; i++)
 			Journal_ParseEntry(search_getfilename(searchhandle, i));
@@ -461,7 +444,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 			if (DMselected == 1)
 			{
 				write_tether2(1);
-				rewritefriktether();
 				localcmd("stopsound\n");
 				localcmd("slowmo 1\n");
 				//localcmd("r_glsl_saturation 1\n");

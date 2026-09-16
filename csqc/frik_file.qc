@@ -11,33 +11,39 @@ vector ammo_pos;
 float ammo_scale;
 vector ammo_pos2;
 
-void() check_health =
-{
-	local float readparms;
-	local string readtext;
+void check_health() {
+	health_pos_x = -156;  // x health
+	health_pos_y = -27;   // y health
+	healthsep_x  = -30;   // x separation
+	health_scale = 1;     // scale
+	/*
+	float readparms;
+	string readtext;
 	readparms = fopen ("hud/health.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	health_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	health_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	health_pos_y = stof(readtext);         
+	health_pos_y = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	healthsep_x = stof(readtext);         
+	healthsep_x = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	health_scale = stof(readtext);         
-	readtext = fgets(readparms);                
-	health_pos2_x = stof(readtext);       
-	readtext = fgets(readparms);              
-	health_pos2_y = stof(readtext);         
-	readtext = fgets(readparms);               
-	healthsep2_x = stof(readtext);         
-	readtext = fgets(readparms);                
-	health_pos3_x = stof(readtext);       
-	readtext = fgets(readparms);              
-	health_pos3_y = stof(readtext);         
-	readtext = fgets(readparms);               
-	healthsep3_x = stof(readtext);         
-	fclose (readparms);    
-};
+	health_scale = stof(readtext);
+	readtext = fgets(readparms);
+	health_pos2_x = stof(readtext);
+	readtext = fgets(readparms);
+	health_pos2_y = stof(readtext);
+	readtext = fgets(readparms);
+	healthsep2_x = stof(readtext);
+	readtext = fgets(readparms);
+	health_pos3_x = stof(readtext);
+	readtext = fgets(readparms);
+	health_pos3_y = stof(readtext);
+	readtext = fgets(readparms);
+	healthsep3_x = stof(readtext);
+	fclose (readparms);
+	*/
+}
+
 
 vector hmsgpos;
 float hms;
@@ -46,67 +52,73 @@ float yp;
 float api;
 vector dmsgpos;
 
-void() check_hudmessages =
-{
-	local float readparms;
-	local string readtext;
-	readparms = fopen ("hud/hudmessages.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
+void check_hudmessages() {
+	hmsgpos_x = -232;     // x origin
+	hmsgpos_y = -505;     // y origin
+	hms       = 40;       // y distance to nex mssg
+	ap        = 0.00625;  // alphafading
+	yp        = 0.125;    // y pos fading
+	api       = 0.0125;   // alpha fade in
+	dmsgpos_x = 113;      // x origin
+	dmsgpos_y = -299;     // y origin
+	/*
+	float readparms = fopen ("hud/hudmessages.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
+	string readtext = fgets(readparms);                //read the text
+	hmsgpos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	hmsgpos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	hmsgpos_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	hmsgpos_y  = stof(readtext);         
+	hms = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	hms = stof(readtext);         
+	ap = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	ap = stof(readtext);         
-	readtext = fgets(readparms);                //read the text
-	yp= stof(readtext);         
+	yp= stof(readtext);
 	readtext = fgets(readparms);                //read the text
 	api = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	dmsgpos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	dmsgpos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	dmsgpos_y  = stof(readtext);         
-	fclose (readparms);    
-};
+	dmsgpos_y  = stof(readtext);
+	fclose (readparms);
+	*/
+}
 
-void() check_artifactring =
-{
-/*
-1				//	scale of soul tether icon
--84				//	x position soul tether icon (206 center, -84 side,)
--47				//	y position soul tether icon (-35 lower, )
--4				//	x position for number soul tether ammount relative to soul tether icon
--2				//	y position for number soul tether ammount relative to soul tether icon
-1				//	scale of number soul tether ammount
-5				//	x position for icon relative to ring 
-1				//	y position for icon relative to ring
-1				//	artifact icon scale
--84				//	x position artifact icon (206 center, -84 side,)
--47				//	y position artifact icon (-35 lower, )
--4				//	x position for number soul tether ammount relative to soul tether icon
--2				//	y position for number soul tether ammount relative to soul tether icon
-1				//	scale of number soul tether ammount
-*/
+
+void check_artifactring() {
+	artns      = 1;        // scale of soul tether icon
+	artr1_x    = -84;      // x position soul tether icon (206 center, -84 side,)
+	artr1_y    = -47;      // y position soul tether icon (-35 lower, )
+	artn_x     = 48;       // x position for number soul tether ammount relative to soul tether icon
+	artn_y     = 48;       // y position for number soul tether ammount relative to soul tether icon
+	artrns     = 1;        // scale of number soul tether ammount
+	artic_x    = 5;        // x position for icon relative to ring
+	artic_y    = 1;        // y position for icon relative to ring
+	artics     = 1;        // artifact icon scale
+	arti_pos_x = -20;      // x position artifact icon (206 center, -84 side,)
+	arti_pos_y = -47;      // y position artifact icon (-35 lower, )
+	artin_x    = 48;       // x position for number
+	artin_y    = 48;       // y position for number
+	artirns    = 1;        // scale of number ammount
+	/*
 	local float readparms;
 	local string readtext;
 	readparms = fopen ("hud/tether_artifact.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
 	artns = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	artr1_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	artr1_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	artr1_y  = stof(readtext);         
+	artr1_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	artn_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	artn_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	artn_y  = stof(readtext);         
+	artn_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	artrns = stof(readtext);         
+	artrns = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	artic_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	artic_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	artic_y  = stof(readtext);         
+	artic_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
 	artics = stof(readtext);
 	readtext = fgets(readparms);                //read the text
@@ -114,54 +126,69 @@ void() check_artifactring =
 	readtext = fgets(readparms);                //read the text
 	arti_pos_y = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	artin_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	artin_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	artin_y  = stof(readtext);         
+	artin_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	artirns = stof(readtext);         
-	fclose (readparms);    
-};
+	artirns = stof(readtext);
+	fclose (readparms);
+	*/
+}
+
 
 vector armr_pos;
 vector armr_pos2;
 vector drmr_pos;
 float armr_scale;
 
-void() check_armor =
-{
+void check_armor() {
+	armr_pos_x  = -92;  // x armor
+	armr_pos_y  = -9;   // y armor
+	armr_pos2_x = -14;  // x separation
+	drmr_pos_x  = -92;  // x darmor
+	drmr_pos_y  = -27;  // y darmor
+	armr_scale  = 0.5;  // scale
+	/*
 	local float readparms;
 	local string readtext;
-	readparms = fopen ("hud/armor.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
+	readparms = fopen("hud/armor.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	armr_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	armr_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	armr_pos_y  = stof(readtext);         
+	armr_pos_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	armr_pos2_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	armr_pos2_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	drmr_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	drmr_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	drmr_pos_y  = stof(readtext);         
+	drmr_pos_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	armr_scale = stof(readtext);         
-	fclose (readparms);    
-};
+	armr_scale = stof(readtext);
+	fclose (readparms);
+	*/
+}
 
-void() check_ammo =
-{
-	local float readparms;
-	local string readtext;
+
+void check_ammo() {
+	ammo_pos_x  = 668;  // x
+	ammo_pos_y  = -27;  // y
+	ammo_scale  = 1;    // scale
+	ammo_pos2_x = -30;  // x division
+	/*
+	float readparms;
+	string readtext;
 	readparms = fopen ("hud/ammo.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	ammo_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	ammo_pos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	ammo_pos_y  = stof(readtext);         
+	ammo_pos_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	ammo_scale = stof(readtext);         
+	ammo_scale = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	ammo_pos2_x = stof(readtext);         
-	fclose (readparms);    
-};
+	ammo_pos2_x = stof(readtext);
+	fclose (readparms);
+	*/
+}
 
 vector radialpos;
 float radialscale;
@@ -169,31 +196,42 @@ float radialflag;
 float radialflag2;
 vector artifactdescpos;
 vector bigiconpos;
-void() check_radial =
-{
+void check_radial() {
+	radialpos_x       = -104;  // x
+	radialpos_y       = -315;  // y
+	radialscale       = 2;     // scale
+	radialflag        = 0;     // flag shader for radial stuff
+	artifactdescpos_x = 120;   // artifactinfo pos x
+	artifactdescpos_y = -171;  // artifactinfo pos y
+	bigiconpos_x      = 198;   // bigicon pos x
+	bigiconpos_y      = -285;  // bigicon pos y
+	radialflag2       = 1;     // flag shader for marker radial
+	/*
 	local float readparms;
 	local string readtext;
 	readparms = fopen ("hud/radial.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	radialpos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	radialpos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	radialpos_y  = stof(readtext);         
+	radialpos_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	radialscale  = stof(readtext);         
+	radialscale  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
 	radialflag  = stof(readtext);
 	readtext = fgets(readparms);
-	artifactdescpos_x = stof(readtext); 
+	artifactdescpos_x = stof(readtext);
 	readtext = fgets(readparms);
-	artifactdescpos_y = stof(readtext); 
+	artifactdescpos_y = stof(readtext);
 	readtext = fgets(readparms);
-	bigiconpos_x = stof(readtext); 
+	bigiconpos_x = stof(readtext);
 	readtext = fgets(readparms);
-	bigiconpos_y = stof(readtext); 
+	bigiconpos_y = stof(readtext);
 	readtext = fgets(readparms);                //read the text
 	radialflag2  = stof(readtext);
-	fclose (readparms);    
-};
+	fclose (readparms);
+	*/
+}
+
 
 float r_si;
 vector r_si1;
@@ -218,20 +256,42 @@ vector r_ic8;
 vector r_ic9;
 vector r_ic10;
 
-void() check_radialicon =
-{
+void check_radialicon() {
+	r_ic     = 1;     // icon scale
+	r_ic1_x  = -64;   // icon slot 1 radial x pos A
+	r_ic1_y  = -294;  // icon slot 1 radial y pos
+	r_ic2_x  = -16;   // icon slot 2 radial x pos B
+	r_ic2_y  = -232;  // icon slot 2 radial y pos
+	r_ic3_x  = 32;    // icon slot 3 radial x pos C
+	r_ic3_y  = -294;  // icon slot 3 radial y pos
+	r_ic4_x  = 80;    // icon slot 4 radial x pos D
+	r_ic4_y  = -232;  // icon slot 4 radial y pos
+	r_ic5_x  = 128;   // icon slot 5 radial x pos E
+	r_ic5_y  = -294;  // icon slot 5 radial y pos
+	r_ic6_x  = 312;   // icon slot 6 radial x pos F
+	r_ic6_y  = -294;  // icon slot 6 radial y pos
+	r_ic7_x  = 360;   // icon slot 7 radial x pos G
+	r_ic7_y  = -232;  // icon slot 7 radial y pos
+	r_ic8_x  = 408;   // icon slot 8 radial x pos H
+	r_ic8_y  = -294;  // icon slot 8 radial y pos
+	r_ic9_x  = 456;   // icon slot 9 radial x pos I
+	r_ic9_y  = -232;  // icon slot 9 radial y pos
+	r_ic10_x = 504;   // icon slot 10 radial x pos J
+	r_ic10_y = -294;  // icon slot 10 radial y pos
+
+	/*
 	local float readparms;
 	local string readtext;
 	readparms = fopen ("hud/artifact_icon.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	r_ic = stof(readtext);        
-	readtext = fgets(readparms);               
-	r_ic1_x = stof(readtext);        
-	readtext = fgets(readparms);               
-	r_ic1_y = stof(readtext);        
-	readtext = fgets(readparms);               
-	r_ic2_x = stof(readtext);        
-	readtext = fgets(readparms);               
+	r_ic = stof(readtext);
+	readtext = fgets(readparms);
+	r_ic1_x = stof(readtext);
+	readtext = fgets(readparms);
+	r_ic1_y = stof(readtext);
+	readtext = fgets(readparms);
+	r_ic2_x = stof(readtext);
+	readtext = fgets(readparms);
 	r_ic2_y = stof(readtext);
 	readtext = fgets(readparms);
 	r_ic3_x = stof(readtext);
@@ -265,23 +325,46 @@ void() check_radialicon =
 	r_ic10_x = stof(readtext);
 	readtext = fgets(readparms);
 	r_ic10_y = stof(readtext);
-	fclose (readparms);    
-};
+	fclose (readparms);
+	*/
+}
 
-void() check_radialnum =
-{
+
+void check_radialnum() {
+	r_si     = 1;     //  icon scale
+	r_si1_x  = -70;   //  num slot 1 radial x pos A
+	r_si1_y  = -255;  //  num slot 1 radial y pos
+	r_si2_x  = -22;   //  num slot 2 radial x pos B
+	r_si2_y  = -193;  //  num slot 2 radial y pos
+	r_si3_x  = 26;    //  num slot 3 radial x pos C
+	r_si3_y  = -255;  //  num slot 3 radial y pos
+	r_si4_x  = 74;    //  num slot 4 radial x pos D
+	r_si4_y  = -193;  //  num slot 4 radial y pos
+	r_si5_x  = 122;   //  num slot 5 radial x pos E
+	r_si5_y  = -255;  //  num slot 5 radial y pos
+	r_si6_x  = 351;   //  num slot 6 radial x pos F
+	r_si6_y  = -255;  //  num slot 6 radial y pos
+	r_si7_x  = 399;   //  num slot 7 radial x pos G
+	r_si7_y  = -193;  //  num slot 7 radial y pos
+	r_si8_x  = 447;   //  num slot 8 radial x pos H
+	r_si8_y  = -255;  //  num slot 8 radial y pos
+	r_si9_x  = 495;   //  num slot 9 radial x pos I
+	r_si9_y  = -193;  //  num slot 9 radial y pos
+	r_si10_x = 543;   //  num slot 10 radial x pos J
+	r_si10_y = -255;  //  num slot 10 radial y pos
+	/*
 	local float readparms;
 	local string readtext;
 	readparms = fopen ("hud/artifact_num.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	r_si = stof(readtext);        
-	readtext = fgets(readparms);               
-	r_si1_x = stof(readtext);        
-	readtext = fgets(readparms);               
-	r_si1_y = stof(readtext);        
-	readtext = fgets(readparms);               
-	r_si2_x = stof(readtext);        
-	readtext = fgets(readparms);               
+	r_si = stof(readtext);
+	readtext = fgets(readparms);
+	r_si1_x = stof(readtext);
+	readtext = fgets(readparms);
+	r_si1_y = stof(readtext);
+	readtext = fgets(readparms);
+	r_si2_x = stof(readtext);
+	readtext = fgets(readparms);
 	r_si2_y = stof(readtext);
 	readtext = fgets(readparms);
 	r_si3_x = stof(readtext);
@@ -315,34 +398,42 @@ void() check_radialnum =
 	r_si10_x = stof(readtext);
 	readtext = fgets(readparms);
 	r_si10_y = stof(readtext);
-	fclose (readparms);      
-};
+	fclose (readparms);
+	*/
+}
+
 
 vector keypos;
 float keysep;
 float keyscale;
 float keyflag;
 
-void() check_keys =
-{
+void check_keys() {
+	keypos_x = 680;   // x
+	keypos_y = -505;  // y
+	keysep   = -50;   // key separation x
+	keyscale = 2;     // scale keys
+	keyflag  = 0;     // flag shader for key hud
+	/*
 	local float readparms;
 	local string readtext;
 	readparms = fopen ("hud/keys.txt", FILE_READ);    //open what file to use (THIS TIME IN READ MODE)
 	readtext = fgets(readparms);                //read the text
-	keypos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float) 
+	keypos_x = stof(readtext);        //turn the text into the float u want (by using stof: string to float)
 	readtext = fgets(readparms);                //read the text
-	keypos_y  = stof(readtext);         
+	keypos_y  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	keysep  = stof(readtext);         
+	keysep  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	keyscale  = stof(readtext);         
+	keyscale  = stof(readtext);
 	readtext = fgets(readparms);                //read the text
-	keyflag  = stof(readtext);         
-	fclose (readparms);    
-};
+	keyflag  = stof(readtext);
+	fclose (readparms);
+	*/
+}
 
-void () check_frikfile =
-{
+
+void check_frikfile() {
 	check_artifactring();
 	check_health();
 	check_armor();
@@ -352,6 +443,4 @@ void () check_frikfile =
 	check_radialnum();
 	check_hudmessages ();
 	check_keys();
-};
-
-////////////////end of qc file
+}

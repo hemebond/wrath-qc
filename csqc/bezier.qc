@@ -30,13 +30,13 @@ class bezier_c {
 	};
 
 	virtual void RemoveEntity(void) {
-		
+
 		bezier_c hld;
 		for(bezier_c lst = bezier_list; lst; hld = lst, lst = lst._next)
 		{
 			if (lst != this)
 				continue;
-			
+
 			if (!hld)
 			{
 				bezier_list = lst._next;
@@ -45,7 +45,7 @@ class bezier_c {
 
 			hld._next = lst._next;
 		}
-		
+
 		remove(this);
 	};
 };
@@ -97,7 +97,7 @@ void Crystallizer_Bezier_Predraw(void)
 		}
 		makevectors(view_angles);
 	}
-	
+
 	if (time < (bez.time_updated + 0.12))
 	{
 		bez.alpha = 1;
@@ -135,7 +135,7 @@ void Crystallizer_Bezier_Predraw(void)
 	float scale = (vlen(curve_start - curve_end) / 768);
 	vector controlPoint = curve_start + v_forward * (256 * scale);
 	float time_clamp = floor(time * 15) / 15;
-	#if 1
+
 	if (bez.old_controlTime != time_clamp)
 	{
 		bez.old_controlTime = time_clamp;
@@ -152,23 +152,7 @@ void Crystallizer_Bezier_Predraw(void)
 		//controlPoint += bez.old_controlRand * frac;
 		//controlPoint += bez.controlRand;
 	}
-	#else
-	bez.controlRand[0] = cprandom(time_clamp * 8) * 5 * scale;
-	bez.controlRand[1] = cprandom(time_clamp * 2) * 8 * scale;
-	bez.controlRand[2] = cprandom(time_clamp * 6) * 11 * scale;
 
-	if (!autocvar_cl_straightbeam)
-	{
-		controlPoint += bez.controlRand;
-	}
-	#endif
-
-	#if 0
-	float frac = bound(0, (time - bez.time_updated) / 0.05, 1);
-	curve_end = lerpVector(bez.endOld, bez.end, frac);
-	#endif
-
-	
 	vector last_org = curve_start;
 	for(float i = 0; i <= 1.2; i += 0.05)
 	{
@@ -187,7 +171,7 @@ void Crystallizer_Bezier_Predraw(void)
 			}
 			continue;
 		}
-		
+
 		while(len >= bez.segment_length)
 		{
 			len -= bez.segment_length;
@@ -220,10 +204,10 @@ void TempEnt_Crystallizer_Bezier(void)
 		{
 			if (lst.owner_num != r_own)
 				continue;
-			
+
 			if (lst.type != BEZIER::CRYSTALLIZER)
 				continue;
-			
+
 			// if we found a duplicate, update it
 			lst.time_updated = time;
 			lst.start = r_start;
@@ -235,7 +219,7 @@ void TempEnt_Crystallizer_Bezier(void)
 			return;
 		}
 	}
-	
+
 	bezier_c bez = spawn(bezier_c);
 	bez.start = r_start;
 	bez.end = r_end;
@@ -249,16 +233,4 @@ void TempEnt_Crystallizer_Bezier(void)
 		bez.time_hit = time + (0.1 * (r_hit - 1));
 	bez.predraw = Crystallizer_Bezier_Predraw;
 	bez.drawmask = MASK_NORMAL;
-
 }
-
-
-
-
-
-
-
-
-
-
-

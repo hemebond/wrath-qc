@@ -216,4 +216,3 @@ const float DRAWFLAG_MIPMAP = 0x100; // only for R_BeginPolygon
 #define CLIENTCOMMAND_REMOVEBYCLASSNAME		"removebyclassname"
 #define CLIENTCOMMAND_SET_ORIGIN		"set_origin"
 #define CLIENTCOMMAND_SET_ANGLES		"set_angles"
-////////////////end of qc file

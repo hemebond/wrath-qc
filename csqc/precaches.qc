@@ -187,8 +187,6 @@ void() csqc_precaches =
 	precache_pic("gfx/journal/tabc_active.tga");
 	precache_pic("gfx/journal/tabd_active.tga");
 
-
-
 	string language_selected = cvar_string("prvm_language");
 
 	precache_pic(strcat("gfx/hud/messages/",language_selected,"/msg_armor.tga"));

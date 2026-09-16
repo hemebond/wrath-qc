@@ -35,9 +35,6 @@ void() toggle_disarmed =
 
 
 void InitTrigger() {
-	dprint("InitTrigger()\n");
-	eprint(self);
-
 	if (self.angles != '0 0 0')
 		SetMovedir();
 
