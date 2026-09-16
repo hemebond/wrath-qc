@@ -321,6 +321,7 @@ void() randomsoundbox_think =
 @PointClass
 	color(0 1 0)
 	size(-16 -16 -16, 16 16 16)
+	model({"path": "tb/sound.png", "scale": "0.125"})
 = randomsoundbox : "Random Sound Box" [
 	mindelay(float) : "Minimum Delay"
 	maxdelay(float) : "Maximum Delay"
@@ -491,6 +492,7 @@ void() randomsoundbox =
 @PointClass
 	color(0 1 0.2)
 	size(-16 -16 -16, 16 16 16)
+	model({"path": "tb/sound.png", "scale": "0.125"})
 = soundbox : "Sound Box" [
 	rad_sound(integer) : "Sounds Radius" : 512
 	volume(integer) : "Volume" : 1

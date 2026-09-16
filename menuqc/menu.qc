@@ -523,8 +523,7 @@ void MenuInit_Backdrop(void)
 		backfill.active_condition = backdrop_conditional;
 }
 
-void MenuInit_Main_Game(void)
-{
+void MenuInit_Main_Game(void) {
 	void button_highlight(uipicture_c this, __inout string img_to_render) {
 		if (ui_selected == this || ui_hover == this) img_to_render = this.image2;
 	};
@@ -541,9 +540,9 @@ void MenuInit_Main_Game(void)
 	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0', justify: '0.5 0', size: '352 58',
 		image: menu_assets[MENU_IMG::RESUME], image2: menu_assets[MENU_IMG::RESUME_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::RESUME]);
-		lbutton.prerender = button_owner_highlight;
-		lbutton.prerender_text = text_owner_highlight;
-		container.m_click = button_click;
+	lbutton.prerender = button_owner_highlight;
+	lbutton.prerender_text = text_owner_highlight;
+	container.m_click = button_click;
 	
 	// options button
 	void button_click(uielement_c this) {
@@ -574,8 +573,7 @@ void MenuInit_Main_Game(void)
 
 float controls_init_check;
 float steam_init_check;
-void MenuInit_Main(void)
-{
+void MenuInit_Main(void) {
 	steam_init_check = cvar("steam_firsttime") ? FALSE : TRUE;
 	controls_init_check = cvar("controls_firsttime") ? FALSE : TRUE;
 
@@ -655,28 +653,26 @@ void MenuInit_Main(void)
 	};
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: menu_main, anchor: '0.5 1', justify: '0.5 1', origin: '0 0', size: '352 58', flags: UIFLAG_CLICKABLE,
 		image: menu_assets[MENU_IMG::ACHIEVEMENTS], image2: menu_assets[MENU_IMG::ACHIEVEMENTS_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::ACHIEVEMENTS], fallback_sz: '20 20');
-		// lbutton.active_condition = achievement_conditional;
-		lbutton.prerender = button_highlight;
-		lbutton.prerender_text = text_highlight;
-		lbutton.m_click = button_click;
+	// lbutton.active_condition = achievement_conditional;
+	lbutton.prerender = button_highlight;
+	lbutton.prerender_text = text_highlight;
+	lbutton.m_click = button_click;
 
 	// exit button
 	// QUIT CONFIRM MENU
 	menu_quitconfirm = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		menu_quitconfirm.active_condition = menu_conditional;
 	
-	float (uielement_c this, float nkey, float ascii, float released) quit_input = {
+	float quit_input(uielement_c this, float nkey, float ascii, float released) {
 		if (released)
 			return TRUE;
 
-		if (ascii == 'n' || nkey == K_ESCAPE)
-		{
+		if (ascii == 'n' || nkey == K_ESCAPE) {
 			localsound("sounds/menu.wav");
 			menu_current = menu_main;
 			Run_Reinit_List(menu_current);
 		}
-		else if (ascii == 'y')
-		{
+		else if (ascii == 'y') {
 			localsound("sounds/menu.wav");
 			cmd("quit\n");
 		}
@@ -689,7 +685,7 @@ void MenuInit_Main(void)
 
 	spawn(uifill_c, owner: quitconfirm_buttons, anchor: '0.5 0', justify: '0.5 0', origin: '0 -64', size: '394 104', color: '0.05 0.05 0.05', alpha: 0.65);
 	uitext_c txt = spawn(uitext_c, owner: quitconfirm_buttons, anchor: '0.5 0', origin: '0 -56', justify: '0.5 0', size: '24 24', text: quit_taunts[0], font: FONT_USER7);
-		menu_quitconfirm.partner = txt; // partner is for taunt text
+	menu_quitconfirm.partner = txt; // partner is for taunt text
 	uitext_c txt = spawn(uitext_c, owner: quitconfirm_buttons, anchor: '0.5 0', origin: '0 -32', justify: '0.5 0', size: '14 14', text: _("UI_QUITCONFIRM"), font: FONT_USER7);
 	
 	void(uielement_c this) button_click = {
@@ -699,19 +695,18 @@ void MenuInit_Main(void)
 	}
 	uitext_c txtbutton = spawn(uitext_c, owner: quitconfirm_buttons, anchor: '0.5 0.5', justify: '0 0.5', origin: '-184 0', padding: '24 8',
 		size: '32 32', text: _("UI_NO"), font: FONT_USER7, flags: UIFLAG_CLICKABLE);
-		txtbutton.prerender = text_highlight;
-		txtbutton.m_click = button_click;
+	txtbutton.prerender = text_highlight;
+	txtbutton.m_click = button_click;
 	
 	void(uielement_c this) button_click = {
 		cmd("quit\n");
 	}
 	uitext_c txtbutton = spawn(uitext_c, owner: quitconfirm_buttons, anchor: '0.5 0.5', justify: '1 0.5', origin: '184 0', padding: '24 8',
 		size: '32 32', text: _("UI_YES"), font: FONT_USER7, flags: UIFLAG_CLICKABLE);
-		txtbutton.prerender = text_highlight;
-		txtbutton.m_click = button_click;
-	//
-	
-	void(uielement_c this) button_click = {
+	txtbutton.prerender = text_highlight;
+	txtbutton.m_click = button_click;
+
+	void button_click(uielement_c this) {
 		localsound("sounds/menu.wav");
 		menu_current = menu_quitconfirm;
 		uitext_c taunt = (uitext_c)menu_quitconfirm.partner;
@@ -720,12 +715,12 @@ void MenuInit_Main(void)
 	uielement_c container = spawn(uielement_c, owner: menu_buttons, anchor: '0.5 0', justify: '0.5 0', size: '192 48', flags: UIFLAG_CLICKABLE);
 	uilocpicture_c lbutton = spawn(uilocpicture_c, owner: container, anchor: '0.5 0.5', justify: '0.5 0.5', size: '352 58',
 		image: menu_assets[MENU_IMG::DEPART], image2: menu_assets[MENU_IMG::DEPART_ACTIVE], fallback_txt: menu_assets_string[MENU_IMG::DEPART]);
-		lbutton.prerender = button_owner_highlight;
-		lbutton.prerender_text = text_owner_highlight;
-		container.m_click = button_click;
+	lbutton.prerender = button_owner_highlight;
+	lbutton.prerender_text = text_owner_highlight;
+	container.m_click = button_click;
 
 	// Reki (February 18 2024): stupid hack to fix in DP lagging behind when disconnecting
-	float(uielement_c this) hackfill_conditional = {
+	float hackfill_conditional(uielement_c this) {
 		return (clientstate() != CS_DISCONNECTED);
 	}
 	uifill_c hackfill = spawn(uifill_c, owner: menu_main, color: '0.01 0.01 0.01', flags: UIFLAG_STRETCH);
@@ -2128,7 +2123,7 @@ void MenuInit_Options_Binds(void) {
 		// the input map not respond instantly, damn cmd()
 		string key_str = keynumtostring(nkey);
 		uitext_c txt = (uitext_c)currentbind_button.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(key_str);
 
@@ -2137,7 +2132,6 @@ void MenuInit_Options_Binds(void) {
 		currentbind_button.size[0] = txt.totalsize()[0] + 4;
 		currentbind_button.size[0] = max(currentbind_button.size[1], currentbind_button.size[0]);
 		ui_scale = o_uiscale;
-		//
 
 		return FALSE;
 	};
@@ -2237,7 +2231,7 @@ void MenuInit_Options_Video(void)
 		float value = SLIDER_MIN + (frac * (SLIDER_MAX - SLIDER_MIN));
 		 
 		uitext_c txt = (uitext_c)slider.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 		cmd("set ", OPT_CVAR, " ", ftos(value), "\n");
@@ -2248,7 +2242,7 @@ void MenuInit_Options_Video(void)
 		this.bar_frac = bound(0, this.bar_frac, 1);
 
 		uitext_c txt = (uitext_c)this.partner.partner;
-		if (txt.text)
+		if (txt.text != "")
 			strunzone(txt.text);
 		txt.text = strzone(sprintf("%.2f", value));
 	};
@@ -4979,6 +4973,7 @@ void menu_anydraw(void) {
 }
 
 void m_drawloading(vector screensize, float opaque) {
+	// Called while a level is loading, with the spinning activity indicator in the bottom-right
 	// Reki (December 13 2023): From FTE, implementation from DOOMBRINGER
 
 	in_loadingscreen = TRUE;
@@ -5010,15 +5005,13 @@ void m_draw(float a, float b) {
 	menu_anydraw();
 	
 	check_vectorcolors();
-	if (slayerstate != 1)
-	{
+	if (slayerstate != 1) {
 		if (slayeralpha > 1)
 			slayerstate = 1;
 
 		slayeralpha += clframetime *1.5;
 	}
-	else
-	{
+	else {
 		slayeralpha -= clframetime *1.5;
 		if (slayeralpha < 0.1)
 			slayerstate = 0;
@@ -5082,20 +5075,17 @@ void m_draw(float a, float b) {
 	updateMouse();
 	#endif
 
-	if (Menu_Active)
-	{
+	if (Menu_Active) {
 		if (getmousetarget() != MT_MENU || getkeydest() != KEY_MENU)
 			m_hide();
 	}
 
-	if (!Menu_Active)
-	{
+	if (!Menu_Active) {
 		#if NEW_MENU // render game overlay
 		ui_usemouse = FALSE;
 		ui_renderframe = TRUE;
 		ui_alpha = 1;
-		for(uielement_c ui_chain = menu_gameoverlay; ui_chain; ui_chain = ui_chain._next)
-		{
+		for (uielement_c ui_chain = menu_gameoverlay; ui_chain; ui_chain = ui_chain._next) {
 			UI_RenderElements(ui_chain);
 		}
 		drawresetcliparea();
@@ -5123,14 +5113,12 @@ void m_draw(float a, float b) {
 	
 	#define HW_CURSOR 1
 	#if HW_CURSOR == 0
-	if (getmousetarget() == MT_MENU)
-	{
+	if (getmousetarget() == MT_MENU) {
 		ui_mouseposition[0] = bound(0, ui_mouseposition[0] + mouse_move[0], vid_width);
 		ui_mouseposition[1] = bound(0, ui_mouseposition[1] + mouse_move[1], vid_height);
 	}
 	#else
-	if (getmousetarget() == MT_MENU)
-	{
+	if (getmousetarget() == MT_MENU) {
 		ui_mouseposition = mouse_move;
 	}
 	#endif
@@ -5138,14 +5126,14 @@ void m_draw(float a, float b) {
 	ui_usemouse = FALSE;
 	ui_renderframe = TRUE;
 	ui_alpha = 1.0;
-	for(uielement_c ui_chain = ui_screen_queue; ui_chain; ui_chain = ui_chain._next)
-	{
+	for (uielement_c ui_chain = ui_screen_queue; ui_chain; ui_chain = ui_chain._next) {
 		UI_RenderElements(ui_chain);
 	}
+
 	if (!ui_usemouse)
 		ui_hover = __NULL__;
-	if (ui_hover != ui_oldhover)
-	{
+
+	if (ui_hover != ui_oldhover) {
 		if (ui_oldhover.m_leave)
 			ui_oldhover.m_leave(ui_oldhover);
 	}

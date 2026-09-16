@@ -1,4 +1,3 @@
-#include "localized_assets.h"
 uipicture_c journal_ui;
 
 void Journal_ScrollToCurrentMap(void)

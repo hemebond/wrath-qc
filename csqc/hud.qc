@@ -1,5 +1,3 @@
-#include "localized_assets.h"
-
 /////// PULSES
 float phicon;
 float arphicon;

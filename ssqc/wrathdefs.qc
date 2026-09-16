@@ -783,20 +783,17 @@ void() wrath_objerror =
 	}
 };
 
-vector (entity player) cursor_trace_endpos_fixed =
-{
-	vector t_endpos, org;
-	t_endpos = player.cursor_trace_endpos;
-	org = player.origin;
-	float distance = vlen (org - t_endpos);
-	if(distance > 128)
+vector cursor_trace_endpos_fixed(entity player) {
+	vector t_endpos = player.cursor_trace_endpos;
+	vector org = player.origin;
+	float distance = vlen(org - t_endpos);
+	if (distance > 128) {
 		return t_endpos;
-	else
-	{
+	}
+	else {
 		makevectors(player.v_angle);
 		vector t_dest = player.origin + player.view_ofs + v_forward *2048;
 		traceline((player.origin + player.view_ofs), t_dest, MOVE_WORLDONLY, player);
-
 		return trace_endpos;
 	}
 };

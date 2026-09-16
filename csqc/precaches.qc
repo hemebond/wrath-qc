@@ -1,6 +1,3 @@
-#include "localized_assets.h"
-
-
 void(float ind, string asset) init_deathmenuasset
 {
 	string path = sprintf("gfx/deathmenu/%%s/deathmenu_%s.tga", strtolower(asset));

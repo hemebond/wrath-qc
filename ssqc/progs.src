@@ -40,6 +40,7 @@ player/use.qc
 
 entities/projectiles/heretic.qc
 entities/projectiles/cyst.qc
+entities/projectiles/bfg.qc
 
 weapons/weapon_system.qc
 weapons/w_melee.qc
@@ -62,8 +63,12 @@ entities/func/wall.qc
 entities/func/ray.qc
 entities/func/illusionary.qc
 entities/func/train.qc
+entities/func/flicker.qc
 entities/trigger.qc
+entities/info_chain.qc
 entities/entity_model.qc
+entities/object_eyeball.qc
+entities/object_fire1.qc
 entities/breakables.qc
 
 entities/ammo/cannon.qc
@@ -133,8 +138,9 @@ monsters/monster_keeper.qc
 
 monsters/spawner.qc
 monsters/monster_boss1.qc
-monsters/monster_boss2.qc
 monsters/monster_boss3.qc
+../brushtrigger.h
+monsters/monster_boss2.qc
 
 nodegraph/nodegraph.qc
 

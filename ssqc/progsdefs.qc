@@ -223,7 +223,7 @@ void		end_sys_fields;			// flag for structure dumping
 //
 void(string s, ...) dprint				= #25;
 #define print dprint
-void(vector ang)	makevectors		= #1;		// sets v_forward, etc globals
+void(vector ang) makevectors		= #1;		// sets v_forward, etc globals
 void(entity e, vector o) setorigin	= #2;
 void(entity e, string m) setmodel	= #3;		// set movetype and solid first
 void(entity e, vector min, vector max) setsize = #4;
@@ -237,16 +237,7 @@ void(string e, ...) objerror				= #11;
 float(vector v) vlen				= #12;
 float(vector v) vectoyaw			= #13;
 entity() spawn						= #14;
-#if DEBUG == 2
-void(entity e) remove_engine		= #15;
-void(entity e, string str) remove_wrapper {
-	print(str);
-	remove_engine(e);
-}
-#define remove(e)	remove_wrapper(e, sprintf("remove() called from %s\n   removed = %g(%s)\n   removed.owner = %g(%s)\n   self = %g(%s)\n", __func__, num_for_edict(e), e.classname, num_for_edict(e.owner), e.owner.classname, num_for_edict(self), self.classname))
-#else
 void(entity e) remove				= #15;
-#endif
 
 // sets trace_* globals
 // nomonsters can be:

@@ -1,3 +1,6 @@
+.float distancetotarget;
+
+
 void() bob_blocked = 
 {
 	if(self.cnt == 1)

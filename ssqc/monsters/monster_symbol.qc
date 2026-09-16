@@ -1,3 +1,46 @@
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-48 -48 -48, 48 48 48)
+	model({"path": "models/enemies/symbol/symbol.md3"})
+= monster_symbol : "Monster: Symbol" []
+*/
+void monster_symbol() {
+	precache_monster_symbol();
+
+	self.solid = SOLID_SLIDEBOX;
+	self.flyer = 1;
+	self.movetype = MOVETYPE_STEP;
+	self.classname = "monster_symbol";
+	setmodel(self, "models/enemies/symbol/symbol.md3");
+	setsize(self, '-48 -48 -48', '48 48 48');
+
+	float r = (random() *3);
+	if (r < 3)
+		self.noise = "enemies/symbol/sight3.ogg";
+	if (r < 2)
+		self.noise = "enemies/symbol/sight2.ogg";
+	if (r < 1)
+		self.noise = "enemies/symbol/sight1.ogg";
+
+	self.gravity = -0.01;
+	self.health = 2000;
+	self.max_health = self.health;
+	self.glowmod = '0.5 0.5 0.5';
+	self.th_stand = symbol_stand1;
+	self.bloody = 1;
+	self.scale = 1.5;
+	self.th_walk = symbol_walk1;
+	self.th_run = symbol_run1;
+	self.th_missile = symbol_Missile;
+	self.th_pain = symbol_pain;
+	self.th_die = symbol_die;
+
+	flymonster_start();
+}
+
+
 /*
 symbol_health = 2000			// health
 symbol_walkspeed = 8					// walk speed
@@ -17,19 +60,12 @@ symbol_bboxn = '-48 -48 -48'	// bboxn
 */
 
 $frame symbolbase
-
 $frame symbolidle1 symbolidle2 symbolidle3 symbolidle4 symbolidle5 symbolidle6 symbolidle7 symbolidle8 symbolidle9 symbolidle10 symbolidle11 symbolidle12 symbolidle13 symbolidle14 symbolidle15 symbolidle16 symbolidle17 symbolidle18 symbolidle19 symbolidle20
-
 $frame symbolwalk1 symbolwalk2 symbolwalk3 symbolwalk4 symbolwalk5 symbolwalk6 symbolwalk7 symbolwalk8 symbolwalk9 symbolwalk10 symbolwalk11 symbolwalk12 symbolwalk13 symbolwalk14 symbolwalk15 symbolwalk16 symbolwalk17 symbolwalk18 symbolwalk19 symbolwalk20
-
 //$frame symbolrun1 symbolrun2 symbolrun3 symbolrun4 symbolrun5 symbolrun6 symbolrun7 symbolrun8 symbolrun9 symbolrun10 symbolrun11 symbolrun12 symbolrun13 symbolrun14 symbolrun15 symbolrun16 symbolrun17 symbolrun18 symbolrun19
-
 $frame symbolshoot1 symbolshoot2 symbolshoot3 symbolshoot4 symbolshoot5 symbolshoot6 symbolshoot7 symbolshoot8 symbolshoot9 symbolshoot10 symbolshoot11 symbolshoot12 symbolshoot13 symbolshoot14 symbolshoot15 symbolshoot16 symbolshoot17 symbolshoot18 symbolshoot19 symbolshoot20 symbolshoot21 symbolshoot22 symbolshoot23 symbolshoot24 symbolshoot25 symbolshoot26 symbolshoot27 symbolshoot28 symbolshoot29 symbolshoot30
-
 $frame symbolflyup1 symbolflyup2 symbolflyup3 symbolflyup4 symbolflyup5 symbolflyup6 symbolflyup7 symbolflyup8 symbolflyup9 symbolflyup10 symbolflyup11 symbolflyup12 symbolflyup13 symbolflyup14 symbolflyup15 symbolflyup16 symbolflyup17 symbolflyup18 symbolflyup19 symbolflyup20 symbolflyup21 symbolflyup22 symbolflyup23 symbolflyup24 symbolflyup25 symbolflyup26 symbolflyup27 symbolflyup28 symbolflyup29 symbolflyup30
-
 $frame symbolpain1 symbolpain2 symbolpain3 symbolpain4 symbolpain5 symbolpain6 symbolpain7 symbolpain8 symbolpain9 symbolpain10 symbolpain11 symbolpain12 symbolpain13 symbolpain14 symbolpain15 symbolpain16 symbolpain17 symbolpain18 symbolpain19 symbolpain20 symbolpain21 symbolpain22 symbolpain23 symbolpain24 symbolpain25 symbolpain26 symbolpain27 symbolpain28 symbolpain29 symbolpain30 symbolpain31 symbolpain32 symbolpain33 symbolpain34 symbolpain35 symbolpain36 symbolpain37 symbolpain38 symbolpain39
-
 $frame symbolpainb1 symbolpainb2 symbolpainb3 symbolpainb4 symbolpainb5 symbolpainb6 symbolpainb7 symbolpainb8 symbolpainb9 
 
 /*
@@ -43,10 +79,6 @@ will duck back out and catch it.
 ==============================================================================
 */
 
-void() symbol_run1;
-void() symbol_side1;
-void() symbolAttackFinished;
-void() symbol_run1b;
 void() symbol_run1 = 
 { 
 	if (self.enemy != world)
@@ -57,7 +89,6 @@ void() symbol_run1 =
 
 	if(time > self.touchtime)
 	{
-	//	sound(self, CHAN_VOICE2, "enemies/symbol/idle_loop.ogg", 0.5, 0.15);
 		self.touchtime = time + soundlength("enemies/symbol/idle_loop.ogg");
 	}
 
@@ -1309,8 +1340,7 @@ self.wrath_time = 1;
 
 
 
-void()symbolshoot =
-{
+void symbolshoot() {
 	ai_face();
 	float dist = vlen (self.origin - self.enemy.origin);
 	if (dist < 1)
@@ -1322,7 +1352,8 @@ void()symbolshoot =
 	else
 		self.think = symbolshoot1;
 	self.nextthink = time;
-};
+}
+
 
 void() symbol_forward {
 
@@ -1332,12 +1363,13 @@ void() symbol_forward {
 	self.velocity =v_forward * 382;
 };
 
-void() symbol_shortfly =[$symbolwalk10, symbol_shortfly1]{self.movetype = MOVETYPE_WALK;
-
-symbol_forward();self.velocity_z = 192;
-
-//self.colormod = '1 1 0';
+void() symbol_shortfly =[$symbolwalk10, symbol_shortfly1]{
+	self.movetype = MOVETYPE_WALK;
+	symbol_forward();
+	self.velocity_z = 192;
 };
+
+
 void() symbol_shortfly1 =[$symbolwalk11, symbol_shortfly2]{symbol_forward();self.velocity_z = 192;};
 void() symbol_shortfly2 =[$symbolwalk12, symbol_shortfly3]{symbol_forward();self.velocity_z = 192;};
 void() symbol_shortfly3 =[$symbolwalk13, symbol_shortfly4]{symbol_forward();self.velocity_z = 192;};
@@ -1442,7 +1474,7 @@ void() symbol_death2 =[2, SUB_Null]
 	local entity bloodgib;
 	bloodgib = spawn();
 	bloodgib.alpha = 0.7;
-	//		bloodgib.skin =  (ceil (random() *4)) *5;
+
 	bloodgib.origin = tagorg;
 	setmodel(bloodgib, "particles/explo/explo_blood4.md3");
 	bloodgib.think = bloodgib_think;
@@ -1450,7 +1482,7 @@ void() symbol_death2 =[2, SUB_Null]
 	local float nparticles;
 	nparticles = particleeffectnum("symbol_gib");
 	pointparticles(nparticles, self.origin, '0 0 0', 1);
-	//sound (self, CHAN_VOICE, "player/udeath.wav", 1, ATTN_NORM);
+
 	tagname = ("tag_c_bl");
 	tagindex = gettagindex(self, tagname);
 	tagorg = gettaginfo(self, tagindex);
@@ -1513,7 +1545,6 @@ void() symbol_death2 =[2, SUB_Null]
 	sound(self, CHAN_ITEM, "enemies/heretic/end_chase.ogg", 0.1, 0.25);
 	explo_blood(3, tagorg);
 	explo_blood(7, tagorg);
-
 
 	pointparticles(particleeffectnum("heretic_bloodshower"), self.origin + '0 0 96', '0 0 0', 1);
 	pointparticles(particleeffectnum("heretic_bloodshower"), self.origin + '0 0 12', '0 0 0', 1);
@@ -1581,11 +1612,13 @@ void(entity attacker, float damage) symbol_pain =
 	self.nextthink = time;
 };
 
-void() symbol_Missile = { symbolshoot1();
-};
+
+void symbol_Missile() {
+	symbolshoot1();
+}
 
 
-void() precache_monster_symbol = {
+void precache_monster_symbol() {
 	precache_model("models/enemies/symbol/symbol.md3");
 	precache_model("models/projectiles/proj_symbol.md3");
 
@@ -1617,47 +1650,5 @@ void() precache_monster_symbol = {
 	precache_sound("enemies/symbol/sight1.ogg");
 	precache_sound("enemies/symbol/sight2.ogg");
 	precache_sound("enemies/symbol/sight3.ogg");
-};
-
-
-/*FGD
-@PointClass
-	base(Monster)
-	color(1 0 0)
-	size(-48 -48 -48, 48 48 48)
-	model({"path": "models/enemies/symbol/symbol.md3"})
-= monster_symbol : "Monster: Symbol" []
-*/
-void() monster_symbol = {
-	precache_monster_symbol();
-
-	self.solid = SOLID_SLIDEBOX;
-	self.flyer = 1;
-	self.movetype = MOVETYPE_STEP;
-	self.classname = "monster_symbol";
-	setmodel(self, "models/enemies/symbol/symbol.md3");
-	local float r;
-	r = (random() *3);
-	if (r < 3)
-		self.noise = "enemies/symbol/sight3.ogg";
-	if (r < 2)
-		self.noise = "enemies/symbol/sight2.ogg";
-	if (r < 1)
-		self.noise = "enemies/symbol/sight1.ogg";
-	self.gravity = -0.01;
-
-	setsize(self, '-48 -48 -48', '48 48 48');
-	self.health = 2000;
-	self.max_health = self.health;
-	self.glowmod = '0.5 0.5 0.5';
-	self.th_stand = symbol_stand1;
-	self.bloody = 1;
-	self.scale = 1.5;
-	self.th_walk = symbol_walk1;
-	self.th_run = symbol_run1;
-	self.th_missile = symbol_Missile;
-	self.th_pain = symbol_pain;
-	self.th_die = symbol_die;
-
-	flymonster_start();
-};
+	precache_sound("enemies/symbol/proj_loop.ogg");
+}

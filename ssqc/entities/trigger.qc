@@ -1697,7 +1697,7 @@ void() hurt_touch =
 void trigger_hurt() {
 	if(!self.wait)
 		self.wait = 1;
-	InitTrigger ();
+	InitTrigger();
 	self.touch = hurt_touch;
 	if (!self.dmg)
 		self.dmg = 5;

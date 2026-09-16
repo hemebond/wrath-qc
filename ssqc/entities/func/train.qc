@@ -113,84 +113,65 @@ void() train_use =
 	}
 };
 
-void() train_stop =
-{
-	local entity targ;
-
+void train_stop() {
 	soundwrath(self, FL_SWIM, self.noise2, TRUE, 0.15,100,0.5, FALSE);
-	targ = find(world, targetname, self.target);
+	entity targ = find(world, targetname, self.target);
 	self.target = targ.target;
 	self.velocity = VEC_ORIGIN;
-};
+}
 
-void() train_wait =
-{
 
-	if (self.wait)
-	{
+void train_wait() {
+	if (self.wait) {
 		self.nextthink = (self.ltime + self.wait);
 		soundwrath(self, FL_SWIM, self.noise2, 1, 0.15, 100, 0.5, FALSE);
 	}
-	else
-	{
+	else {
 		self.nextthink = (self.ltime + 0.1);
 	}
 	self.state = 1;
 	self.think = train_next;
-};
+}
 
-void() train_next =
-{
-	local vector fang;
-	local entity targ;
 
-	targ = find(world, targetname, self.target);
-	if (!(self.spawnflags & TRUE))
-	{
+void train_next() {
+	entity targ = find(world, targetname, self.target);
+
+	if (!(self.spawnflags & 1)) {
 		self.target = targ.target;
 	}
-	if (!self.target)
-	{
+	if (!self.target) {
 		objerror("train_next: no next target");
 	}
-	if (targ.wait)
-	{
+	if (targ.wait) {
 		self.wait = targ.wait;
 	}
-	else
-	{
+	else {
 		self.wait = FALSE;
 	}
 	self.state = 0;
-	//void(entity e, float chan, string samp, float vol, float atten, float speed, float flags, float trapezoid) soundwrath = #8;
 
 	soundwrath(self, FL_SWIM, self.noise, TRUE, 0.15,100,0.5);
-	if ((self.spawnflags & TRUE))
-	{
+	if ((self.spawnflags & 1)) {
 		SUB_CalcMove(targ.origin, self.speed, train_stop);
 	}
-	else
-	{
+	else {
 		SUB_CalcMove((targ.origin - self.mins), self.speed, train_wait);
 	}
-	if (((self.classname == "place_model") || (self.classname == "test_afflicted")))
-	{
-		fang = normalize((targ.origin - self.origin));
-		makevectors(self.angles);
+	if (self.classname == "place_model") {
+		vector fang = normalize((targ.origin - self.origin));
+		// FIXME: Did this do anything?
+		// makevectors(self.angles);
 		self.angles = vectoangles(fang);
 	}
-};
+}
 
-void() func_train_find =
-{
-	local entity targ;
-
-	targ = find(world, targetname, self.target);
+void func_train_find() {
+	entity targ = find(world, targetname, self.target);
 	self.target = targ.target;
 	setorigin(self, (targ.origin - self.mins));
-	if (!self.targetname)
-	{
+	if (!self.targetname) {
 		self.nextthink = (self.ltime + 0.1);
 		self.think = train_next;
 	}
-};
+}

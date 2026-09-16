@@ -127,8 +127,6 @@ $frame boss2_death21 boss2_death22 boss2_death23 boss2_death24 boss2_death25 bos
 $frame boss2_death31 boss2_death32 boss2_death33 boss2_death34 boss2_death35 boss2_death36 boss2_death37 boss2_death38 boss2_death39 boss2_death40
 $frame boss2_death41 boss2_death42 boss2_death43 boss2_death44 boss2_death45 boss2_death46 boss2_death47 boss2_death48 boss2_death49 boss2_death50
 
-#include "monster_boss3.qc"
-#include "brushtrigger.h"
 entity boss_center;
 entity boss2_ghost_spawn(entity puppet);
 #pragma warning disable F317

@@ -73,273 +73,22 @@ void() v_bfg_idle =
 	self.nextthink = time + 0.1;
 };
 
-void()bfg_explosion_think =
-{
-    self.alpha -= 0.0065;
-    self.scale += 0.1;
-    if(self.scale >= 10)
-        self.think = SUB_Remove;
-    else
-        self.think = bfg_explosion_think;
-    self.nextthink = time + 0.01; 
 
-};
-.float max_homing_projectile;
-void() bfg_projectile_touch =
-{
-	local vector org;
-	org = self.origin;
-	if (other == self.owner)
-		return;
-	if (other.wrathflags & FL_PROJECTILE)
-		return;
-	if (other.solid == SOLID_TRIGGER)
-		return;	// trigger field, do nothing
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
-		//remove(self.pipes);
-		remove(self);
-		return;
-	}
-	spawn_shaker(self,15,1,512);	
-	makevectors (self.angles);
-	setorigin (self, self.origin - (v_forward * 32));
-	if (other.takedamage)
-	{
-		T_Damage(other, self, self.owner,mace_proj_damage);
-		T_SplashDamage(self, self.owner,mace_proj_splashdamage, other, mace_proj_splashradius);
-	}
-	else
-		T_SplashDamage(self, self.owner,mace_proj_splashdamage, world, slagsplashradius);
-
-	entity model = spawn();
-	model.origin = self.origin;
-	setmodel (model,"models/artifacts/effects/orb_shockwave1.md3");
-	model.scale = 0.1;
-    model.alpha = 0.25;
-	model.colormod = '7 0 0';
-	model.think = bfg_explosion_think;
-	model.nextthink = time;
-
-	entity slag_explo = spawn();
-	float skinn = ceil(random() *4);
-	if (skinn == 4)
-		skinn = 0;
-	slag_explo.origin = self.origin - v_forward * 16;
-	slag_explo.skin = skinn * 10;
-    slag_explo.alpha = 0.5;
-	slag_explo.scale = random(1.5,2); 
-    slag_explo.colormod = '5 1 1';
-	setmodel(slag_explo, "particles/explo/explo_slag2.md3");
-	slag_explo.think = slag2_explode1;
-	slag_explo.nextthink = time + 0.1;
-
-
-	entity gibpusher = spawn();
-	setmodel(gibpusher,"");
-	gibpusher.origin = slag_explo.origin - '0 0 32';
-	gibpusher.cnt = 16;
-	gibpusher.count = 256;// radius
-	gibpusher.think = gibpusher_think;
-	gibpusher.nextthink = time + 0.25;
-
-	vector old_impact = trace_endpos;
-	traceline(self.origin, self.origin + v_forward *1024, MOVE_HITMODEL, self);
-	if (trace_ent != other)
-		trace_endpos = old_impact;
-    if(other.bloody == 2)
-    {
-		makevectors2 (self.angles);
-		if ((bossvulnerable == 1))
-		{
-			if(other == trace_ent)
-			{
-
-				float r = random(); 
-			    {
-					if(other.classname == "boss_guardian2")
-						explo_blood_sprite(2, trace_endpos);
-					else
-						explo_blood_sprite(5, trace_endpos);
-			    }
-			}
-			
-		}
-	    SpawnBlood(org, '0 0 0', 21, BLOOD_WHITE, 1);
-    }
-	if (other.bloodimpact)
-		explo_blood_sprite(other.bloodimpact, trace_endpos);
-
-	pointparticles(particleeffectnum("mace_projectile_explosion"), org, '0 0 0', 1 + (3.5* (10- self.ammo_bfg) ));
-    remove(self);
-};
-//float(entity targ, float dist, float deviance) visibleinfront2 ;
-
-
-void() bfg_search_enemy =
-{
-	entity near;
-	float low = 999999;	
-	float score, maxproj;
-	
-	if(!self.enemy)
-	{
-		local entity head;
-		head = findradius(self.origin, 2048);
-
-
-		while (head)
-		{
-
-		if(head.health >= 0)
-			maxproj = 1;
-		if(head.health >= 1500)
-			maxproj = 2;
-		if(head.health > 3000)
-			maxproj = 3;
-
-		if ((head.classname == "boss_guardian1") || (head.classname == "boss_guardian2") || (head.classname == "boss_guardian3"))
-			maxproj = 10;
-
-			if ((visibleinfront(head, 2048)) && ((head.flags & FL_MONSTER) || ((head.classname == "boss_guardian1") || (head.classname == "boss_guardian2") || ((head.classname == "boss_guardian3") && !(head.flags & FL_NOTARGET))))&& (head.health > 0)&&(head.max_homing_projectile < maxproj))
-			{
-				score = vlen(head.origin - self.origin);
-				if (score < 192) // if it's TOO close, choose a slightly further target
-					score += 384;
-				score -= head.health * 2;
-				
-				if (score < low)
-				{
-					low = score;
-					near = head;
-				}
-			}
-
-			head = head.chain;
-		} 
-	}
-
-	if (near)
-	{
-		self.enemy = near;
-		if(self.enemy.classname == "boss_guardian3")
-		{
-			self.originoffset_x = random(-64,64); 
-			self.originoffset_y = random(-64,64); 
-			self.originoffset_z = random(-128,128); 
-		}
-		else
-		self.originoffset = '0 0 0';
-		self.enemy.max_homing_projectile ++;
-	}
-
-};
-void() mace_bfg_drunk = 
-{ 
-	vector oldvel = self.velocity;
-	vector nextvel;
-	if(!self.enemy)
-	{
-		self.velocity_x = self.velocity_x * 1.05;
-		self.velocity_y = self.velocity_y * 1.05;
-		self.velocity_z = self.velocity_z * 1.05;
-		if(time > self.drunktime)
-		{
-			//makevectors (self.angles);
-			//self.velocity += v_right * random(-16,16)  + v_up * random (-16, 16);
-			self.drunktime = time + random(0.3,1);	// screw up fast
-			//pointparticles(particleeffectnum("mace_projectile_trail2"), self.origin + v_forward * -32, self.velocity,1);
-			bfg_search_enemy();
-		}
-	}
-	else
-	{
-		float speed = vlen(self.velocity);
-
-		vector venemyorg = self.enemy.origin + self.originoffset;
-
-
-		vector vtemp = venemyorg + '0 0 0';
-		float dist = vlen(self.origin -venemyorg);	
-		if ((self.enemy.health > 0) ) 
-		{
-			if(dist > 128)
-			{
-				vector dir = normalize(vtemp - self.origin);
-				vector wishvel = dir * speed;
-				nextvel = wishvel;
-			}
-			else
-			{
-				dir = normalize (venemyorg - self.origin);
-				nextvel = dir * speed * 3;
-			}
-		}
-		self.velocity_x = ((oldvel_x) *(1- mace_proj_homingfactor)) + (nextvel_x * mace_proj_homingfactor);
-		self.velocity_y = ((oldvel_y) *(1- mace_proj_homingfactor)) + (nextvel_y * mace_proj_homingfactor);
-		self.velocity_z = ((oldvel_z) *(1- mace_proj_homingfactor)) + (nextvel_z * mace_proj_homingfactor);
-		self.velocity_x = self.velocity_x * 1.15;
-		self.velocity_y = self.velocity_y * 1.15;
-		self.velocity_z = self.velocity_z * 1.15;
-
-	}
-	self.angles = vectoangles(self.velocity);
-	if((self.origin ==  self.oldorigin))
-	{
-		self.think = bfg_projectile_touch;
-	}
-	else
-	{
-		if (self.lifetime > time)
-			self.think = mace_bfg_drunk;
-		else
-			self.think = SUB_Remove;
-	}
-	if(self.scale < 1.5)
-		self.scale += 0.15;
-	self.oldorigin = self.origin;
-
-	if(self.cnt != 1)
-		self.nextthink = time + 0.1;
-	else
-		self.nextthink = time + 0.025;
-};
-void() pre_mace_projectiles =
-{
-	self.oldorigin = self.origin;
-	self.angles = vectoangles(self.velocity);
-	if(self.scale < 1.5)
-		self.scale += 0.15;
-	self.solid = SOLID_CORPSE;
-	self.effects = 0;
-	self.velocity_x = self.velocity_x * 1.05;
-	self.velocity_y = self.velocity_y * 1.05;
-	self.velocity_z = self.velocity_z * 1.05;
-	self.touch = bfg_projectile_touch;
-	makevectors2 (self.angles);
-	self.velocity = v_forward * mace_proj_speed;
-	self.lifetime = time + 12;
-	self.think  = mace_bfg_drunk;
-	self.nextthink =  time + 0.025 + (self.ammo_bfg * 0.025);
-};
 
 
 void launch_projectile_bfg(float spread, float total_to_spawn) {
 	float tagindex = gettagindex(self.vweapon, "tag_mace");
 	vector tagorg = gettaginfo(self.vweapon, tagindex);
 
-	entity sotgun_projectile = spawn();
-	sotgun_projectile.owner =  self;
-	sotgun_projectile.modelflags  = MF_TRACER3;	
-	vector dir = aim(self, 1000);
-	makevectors (self.v_angle);
-	setorigin(sotgun_projectile, tagorg - v_forward * 12);
-	setmodel(sotgun_projectile, "models/projectiles/proj_mace.md3");
-	sotgun_projectile.solid = SOLID_TRIGGER;
-	setsize(sotgun_projectile,  '-5 -5 -5','5 5 5');
-	sotgun_projectile.velocity = normalize(cursor_trace_endpos_fixed(self) - tagorg) *192;
-	makevectors (self.angles);
+	entity mis = spawn();
+	mis.owner =  self;
 
+	vector dir = aim(self, 1000);
+	makevectors(self.v_angle);
+	setorigin(mis, tagorg - v_forward * 12);
+
+	mis.velocity = normalize(cursor_trace_endpos_fixed(self) - tagorg) * 192;
+	makevectors(self.angles);
 	if (spread > 1) {
 		float odd = 0;
 		if (spread % 2)
@@ -348,24 +97,10 @@ void launch_projectile_bfg(float spread, float total_to_spawn) {
 			odd = -1;
 
 		vector hspread = v_right * (odd * random(5,7) * spread);
-		sotgun_projectile.velocity += (v_up * random (-3,3) * spread) + hspread; 
+		mis.velocity += (v_up * random (-3,3) * spread) + hspread;
 	}
-	sotgun_projectile.movetype = MOVETYPE_FLY;
-	sotgun_projectile.solid = 0;
-	sotgun_projectile.dphitcontentsmask = DPCONTENTSMASK_WEAPON;
-	sotgun_projectile.touch = bfg_projectile_touch;
-	sotgun_projectile.pflags = 128;
-	sotgun_projectile.wrathflags += FL_PROJECTILE;	
-	sotgun_projectile.effects = EF_NODRAW;
-	sotgun_projectile.classname = "maceprojectile";
-	sotgun_projectile.scale = 0.25;
-	sotgun_projectile.light_lev = 64;
-	sotgun_projectile.ammo_bfg = total_to_spawn - spread;
-	sotgun_projectile.color = '3 1 1';
-	sotgun_projectile.traileffectnum = particleeffectnum("mace_projectile_trail");
-	sotgun_projectile.think  = pre_mace_projectiles;
-	sotgun_projectile.nextthink =  time + 0.05;
-	sotgun_projectile.nextthink += 0.1;
+	mis.ammo_bfg = total_to_spawn - spread;
+	SUB_CallAsSelf(projectile_bfg, mis);
 };
 
 void() wsfire_bfg4 = 
@@ -1034,7 +769,6 @@ void() lower_bfg =
 	self.macemeleeskin_time = time + 30;
 	self.nextthink = time + 0.025;
 };
-void() v_bfg_blood_think;
 void() v_bfg_blood_think_fading = 
 { 
 	self.glowmod = self.owner.vweaponglowmod;

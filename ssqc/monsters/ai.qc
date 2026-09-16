@@ -272,19 +272,16 @@ void() ai_melee_side =
 	T_Damage(self.enemy, self, self, ldmg);
 };
 
-void() movetarget_f;
-void() t_movetarget;
-
-void(entity etemp, entity stemp, entity stemp, float dmg) T_Damage;
 
 entity sight_entity;
 float sight_entity_time;
 
-void makevectors2(vector ang) = 
-{
+
+void makevectors2(vector ang) {
 	ang_x *= -1;
 	makevectors(ang);
-};
+}
+
 
 float(float v) anglemod = 
 {
@@ -325,6 +322,16 @@ void() path_corner =
 	movetarget_f();
 };
 
+/*FGD
+@PointClass color(.5 .3 0) size(-8 -8 -8, 8 8 8) = path_corner_start : "Path corner entity that func_trains can be made to follow. Does not require a targetname" [
+	target(target_destination) : "Target" : "" : "Point to next path_corner in the path."
+	targetname(target_source) : "Target Name" : "" : "The train following the path or the previous path_corner in the path points to this."
+	speed(float) : "Move Speed" : "" : "Speed of func_train while moving to the next path corner. This will override the speed value of the train."
+	wait(float) : "Corner Delay" : "0" : "Number of seconds func_train will pause on path corner before moving to next path corner (default 0 - see notes)."
+	// -------- NOTES --------
+	// Setting the wait key to -1 will not make the train stop on the path corner, it will simply default to 0.
+]
+*/
 void() path_corner_start = 
 {
 	movetarget_f();
@@ -334,11 +341,7 @@ void() path_corner_start =
 .entity lastpathed2;
 .entity lastpathed3;
 
-void() t_movetarget = 
-{
-	local entity temp;
-
-
+void t_movetarget() {
 	if (other.movetarget != self)
 		return;
 
@@ -350,24 +353,18 @@ void() t_movetarget =
 	other.lastpathed = self;
 
 
-	if((self.pausetime >= 0) && (other.flags & FL_MONSTER))
+	if ((self.pausetime >= 0) && (other.flags & FL_MONSTER))
 		other.pausetime =  self.pausetime + time;
 
-	temp = self;
+	entity temp = self;
 	self = other;
 	other = temp;
 
-	//	if (self.classname == "monster_ogre")
-	//		sound (self, CHAN_VOICE, "ogre/ogdrag.wav", 1, ATTN_IDLE);// play chainsaw drag sound
-
-	//dprint ("t_movetarget\n");
 	self.goalentity = self.movetarget = find(world, targetname, other.target);
-	if (other.classname == "place_model")
-	{
+	if (other.classname == "place_model") {
 		if (self.speed)
 			other.speed = self.speed;
-		if (self.speed == -1 )
-		{
+		if (self.speed == -1 ) {
 			other.speed = 0;
 			other.velocity = '0 0 0';	
 		}
@@ -378,13 +375,11 @@ void() t_movetarget =
 	if ((self.pathed == 1) && (self.pathtime < time) && (r > 0.8))
 		self.pathtime = time + 0.5;
 
-	if((self.health <= 0) && (self.flags & FL_MONSTER))
+	if ((self.health <= 0) && (self.flags & FL_MONSTER))
 		return;
 
-	if (visible(self.oldenemy))
-	{
-		if (self.th_missile)
-		{
+	if (visible(self.oldenemy)) {
+		if (self.th_missile) {
 			self.ideal_yaw = vectoyaw(self.oldenemy.origin - self.origin);
 			self.enemy = self.oldenemy;
 			self.goalentity = self.enemy;
@@ -392,13 +387,12 @@ void() t_movetarget =
 		}
 	}
 
-	if((self.flags & FL_MONSTER) && (self.pausetime > time))
-	{
+	if ((self.flags & FL_MONSTER) && (self.pausetime > time)) {
 		self.th_stand();
 		return;
 	}
-	if (!self.movetarget)
-	{
+
+	if (!self.movetarget) {
 		self.pausetime = time + 999999;
 		self.th_stand();
 		return;

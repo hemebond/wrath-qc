@@ -1,4 +1,3 @@
-
 .entity follow_path;
 .float followingapath;
 .vector nextnode;
@@ -20,8 +19,7 @@ void() spawn_follow_path_touch =
 	other.followingapath = 0;
 	remove(self);
 };
-void(vector path_org, entity ownr) spawn_follow_path =
-{
+void spawn_follow_path(vector path_org, entity ownr) {
 	entity local_follow_path = spawn();
 	ownr.follow_path = local_follow_path;
 	local_follow_path.owner = ownr;
@@ -36,6 +34,7 @@ void(vector path_org, entity ownr) spawn_follow_path =
 	ownr.followingapath = 1;
 };
 
+
 .float extra_speed;
 .float charging;
 .float walktime;
@@ -43,12 +42,10 @@ void(vector path_org, entity ownr) spawn_follow_path =
 .float evading;
 .vector oldorigin2;
 .entity oldenemy2;
-void() widow_atk ;
 .float widowspeed;
-vector()widow_check_dest;
-void(float dist)ai_test_monster_run = 
-{
 
+
+void ai_test_monster_run(float dist) {
 	if( (self.enemy) &&((!self.enemy.health) || (self.enemy.health < 0)))
 		next_enemy();	
 
@@ -102,8 +99,6 @@ void(float dist)ai_test_monster_run =
 				self.velocity = v_forward *dist * 6;
 				self.velocity_z = -370;
 			}
-			//self.effects = E;
-			
 		}
 		return;
 	}

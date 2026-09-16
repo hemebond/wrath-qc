@@ -3815,7 +3815,6 @@ void PutClientInServer() {
 	self.fixangle = TRUE;	// Turn this way immediately
 
 	setmodel(self, "models/misc/null.md3");	// Set my player to the player model
-	// setmodel(self, "models/enemies/fallen/fallen1.md3");
 
 	self.view_ofs_z = player_zviewofs;	// Center my view
 	self.velocity = '0 0 0';	// Stop any old movement

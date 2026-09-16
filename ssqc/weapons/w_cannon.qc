@@ -259,24 +259,20 @@ void(entity attacker, entity perpetrator, float value, vector exp_origin, float 
 };
 
 
-void() cannon_proj_touch = 
-{ 
-	if (GetSkyMaterial())
-	{
+void cannon_proj_touch() {
+	if (GetSkyMaterial()) {
 		remove(self);
-		sound (self, CHAN_WEAPON, "misc/null.wav", 0, ATTN_NORM);	// stop loop sound
+		sound(self, CHAN_WEAPON, "misc/null.wav", 0, ATTN_NORM);	// stop loop sound
 		return;
 	}
 
-	local vector org;
-	org = self.origin;
-	local string snd;
-	if(other == self.owner)
-	return;
+	vector org = self.origin;
+	string snd;
+	if (other == self.owner)
+		return;
 
 
-	if((other.wrathflags &FL_PROJECTILE) &&  (self.cnt == 2))
-	{
+	if ((other.wrathflags &FL_PROJECTILE) &&  (self.cnt == 2)) {
 		self.originoffset = self.origin;
 		self.velocity = '0 0 0';
 		remove(other);
@@ -287,58 +283,49 @@ void() cannon_proj_touch =
 		return;
 	if (other.solid == SOLID_TRIGGER)
 		return;
-	if (other.solid == SOLID_CORPSE)
-	{
+	if (other.solid == SOLID_CORPSE) {
 		self.originoffset = self.origin;
 		self.velocity = '0 0 0';
 		return;
 	}
 
-    vector partvel =normalize(trace_plane_normal) * 92;
-    float material = GetTraceMaterial();
+	vector partvel = normalize(trace_plane_normal) * 92;
+	float material = GetTraceMaterial();
 	material_impacts(material,self.origin,partvel,1,0);
-
 
 	vector old_impact = trace_endpos;
 	traceline(self.origin, self.origin + v_forward *1024, MOVE_HITMODEL, self);
 	if (trace_ent != other)
 		trace_endpos = old_impact;
-    if(other.bloody == 2)
-    {
-		makevectors2 (self.angles);
-		if ((bossvulnerable == 1))
-		{
-			if(other == trace_ent)
-			{
 
+	if (other.bloody == 2) {
+		makevectors2 (self.angles);
+		if ((bossvulnerable == 1)) {
+			if(other == trace_ent) {
 				float r = random(); 
 					if(other.classname == "boss_guardian2")
 						explo_blood_sprite(2, trace_endpos);
 					else
 						explo_blood_sprite(5, trace_endpos);
 			}
-			
 		}
-	    SpawnBlood(org, '0 0 0', 12, BLOOD_WHITE, 0);
-    }
+		SpawnBlood(org, '0 0 0', 12, BLOOD_WHITE, 0);
+	}
+
 	if (other.bloodimpact)
 		explo_blood_sprite(other.bloodimpact, trace_endpos);
 
-
 	if (self.cnt != 1)
-        spawn_shaker (self,12,0.5,256);
+        	spawn_shaker(self, 12, 0.5, 256);
     
-	if (self.cnt == 1)
-	{
-	self.classname = "explosion_ore";
+	if (self.cnt == 1) {
+		self.classname = "explosion_ore";
 	
-		if((deathmatch == 1) || (other.classname == "player"))
-		{
+		if((deathmatch == 1) || (other.classname == "player")) {
 			T_Damage(other, self, self.owner,slagcannon_damage1_mp);
 			T_SplashDamage(self, self.owner,slagsplashdamage_mp, other, slagsplashradius);
 		}
-		else
-		{
+		else {
 			T_Damage(other, self, self.owner,slagcannon_damage1);
 			T_SplashDamage(self, self.owner,slagsplashdamage, other, slagsplashradius);
 		}
@@ -346,19 +333,15 @@ void() cannon_proj_touch =
 		snd = strcat("impact/projectiles/slag1_explo", ftos(floor(random() * 4) + 1), ".ogg");
 		pointparticles(particleeffectnum("slag"), org, v_forward *(-550), 1);
 		sound(self, CHAN_AUTO, snd, 1, 0.25);
-	    entity head = findradius(self.origin, slagsplashradius - 64);
-	    while (head)
-	    {
-		    if (head.wrathflags & FL_GIB)
-		    {
-			    explo_physics_gibs (self,head,50,3); 	
-		    }
-		    head = head.chain;  // cycle to next head (entity)
-	    }
-
+		entity head = findradius(self.origin, slagsplashradius - 64);
+		while (head) {
+			if (head.wrathflags & FL_GIB) {
+				explo_physics_gibs (self,head,50,3);
+			}
+			head = head.chain;  // cycle to next head (entity)
+		}
 	}
-	else
-	{
+	else {
 		self.classname = "explosion_oreb";
 		if((deathmatch == 1) || (other.classname == "player"))
 		{

@@ -1,9 +1,6 @@
 // --------------------------------------------------------------------------
 // BEGIN REQUIRED CSQC FUNCTIONS
 
-#include "journal.h"
-#include "localization.h"
-
 void() Hud_Init;
 void() rewritefriktether = {};
 void() rewritefrikshrine = {};
@@ -302,71 +299,70 @@ float CSQC_ConsoleCommand(string strMessage)
 
 	local string strCmd;
 	strCmd = argv(0);
-	switch (strCmd)
-	{
+	switch (strCmd) {
 		case CLIENTCOMMAND_ENCOUNTER:
 		case CLIENTCOMMAND_REMOVEALL:
 		case CLIENTCOMMAND_LISTENTITIES:
 		case CLIENTCOMMAND_REMOVEBYCLASSNAME:
 		case CLIENTCOMMAND_SET_ORIGIN:
 		case CLIENTCOMMAND_SET_ANGLES:
-		localcmd("cmd ", strMessage, "\n");
-		break;			
+			localcmd("cmd ", strMessage, "\n");
+			break;
 		case CLIENTCOMMAND_GET_FOG:
-		get_fog_values();
-		/*
-		case CLIENTCOMMAND_GRAVITYFIX:
-		{strCmd = ("exec fonts/font.cfg \n");localcmd(strCmd);}
-		case CLIENTCOMMAND_NOGRAVITYFIX:
-		get_fog_values();
-		case CLIENTCOMMAND_GLSL_SATURATION:
-		get_fog_values();
-		case CLIENTCOMMAND_NOGLSL_SATURATION:
-		get_fog_values();
-		*/
-		break;
+			get_fog_values();
+			/*
+			case CLIENTCOMMAND_GRAVITYFIX:
+			{strCmd = ("exec fonts/font.cfg \n");localcmd(strCmd);}
+			case CLIENTCOMMAND_NOGRAVITYFIX:
+			get_fog_values();
+			case CLIENTCOMMAND_GLSL_SATURATION:
+			get_fog_values();
+			case CLIENTCOMMAND_NOGLSL_SATURATION:
+			get_fog_values();
+			*/
+			break;
 		case CLIENTCOMMAND_PULSE_HEALTH:
-		pulse_health();
-		break;
+			pulse_health();
+			break;
 		case CLIENTCOMMAND_PULSE_ARMOR:
-		pulse_armor();
-		break;
+			pulse_armor();
+			break;
 		case CLIENTCOMMAND_FORCEDONOR:
-		force_donor();
-		break;
+			force_donor();
+			break;
 		case CLIENTCOMMAND_PULSE_DARMOR:
-		pulse_darmor();
-		break;
+			pulse_darmor();
+			break;
 		case CLIENTCOMMAND_PULSE_AMMO:
-		pulse_ammo();
-		break;
+			pulse_ammo();
+			break;
 		case CLIENTCOMMAND_PULSE_ARTIFACT:
-		pulse_artifact();
-		break;
+			pulse_artifact();
+			break;
 		case CLIENTCOMMAND_DELETE_QNG:
-		delete_qng();
-		break;
+			delete_qng();
+			break;
 		case CLIENTCOMMAND_NOATTACK:
-		noattack();
-		break;
+			noattack();
+			break;
 		case CLIENTCOMMAND_JASON:
-		jason();
-		break;
+			jason();
+			break;
 		case CLIENTCOMMAND_REMOVEMONSTERS:
-		removemonsters();
-		break;
+			removemonsters();
+			break;
 		case CLIENTCOMMAND_REPORTMONSTERS:
-		reportmonsters();
-		break;
+			reportmonsters();
+			break;
 		case CLIENTCOMMAND_MARKMONSTERS:
-		markmonsters();
-		break;
+			markmonsters();
+			break;
 		case CLIENTCOMMAND_REMOVEITEMS:
-		removeitems();
-		break;
+			removeitems();
+			break;
 		case CLIENTCOMMAND_DUMP_SPAWNERS:
-		dump_spawner();
-		break;
+			dump_spawner();
+			break;
 	default:
 		nReturn = false;
 		break;
@@ -395,8 +391,7 @@ float lastsoundjournal;
 vector radial_pos;
 vector radial_thumbstick;
 
-float CSQC_InputEvent(float EventType, float charx, float scany)
-{
+float CSQC_InputEvent(float EventType, float charx, float scany) {
 	// determine input type
 	// Reki (December 3 2023): Added this to change behavior based on input type
 	input_modeswitching(EventType, charx, scany);
@@ -630,27 +625,22 @@ float CSQC_InputEvent(float EventType, float charx, float scany)
 // Reki: Added this function from FTE spec, allows CSQC to customize input
 // before it's sent off to the server as a clc
 float zoom_toggle;
-void CSQC_Input_Frame()
-{
+void CSQC_Input_Frame() {
 	// zoom functionality
-	if (input_impulse == 184)
-	{
+	if (input_impulse == 184) {
 		zoom_toggle = !zoom_toggle;
 		input_impulse = 0;
 	}
 	if (zoom_toggle)
 		input_buttons |= 0x0080;
-	//
 }
 
 //#ifdef USE_CSQC_OPTIONALFUNCTIONS
 // CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
 // The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
-void CSQC_Ent_Update(float bIsNewEntity)
-{
+void CSQC_Ent_Update(float bIsNewEntity) {
 	self.enttype = ReadByte();
-	switch (self.enttype)
-	{
+	switch (self.enttype) {
 		case ENT::HUDMSG: Hud_Messages(bIsNewEntity); break;
 		case ENT::HUDMSG2: Hud_Messages2(bIsNewEntity); break;
 		case ENT::HMMSG: Health_Indicator(bIsNewEntity); break;
@@ -663,7 +653,7 @@ void CSQC_Ent_Update(float bIsNewEntity)
 	/*	
 	if (self.enttype == ENT_ARTIFACT)
 		artifact_spawn(bIsNewEntity); */
-};
+}
 
 // CSQC_Ent_Remove : Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.
 void CSQC_Ent_Remove()
@@ -679,20 +669,19 @@ void CSQC_Ent_Remove()
 };
 
 // CSQC_Parse_StuffCmd : Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.
-void CSQC_Parse_StuffCmd(string strMessage)
-{
+void CSQC_Parse_StuffCmd(string strMessage) {
 	localcmd(strMessage);
-};
+}
+
 
 // CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
-void CSQC_Parse_Print(string strMessage)
-{
+void CSQC_Parse_Print(string strMessage) {
 	print(strlocalize(strMessage));
-};
+}
+
 
 // CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
-void CSQC_Parse_CenterPrint(string strMessage)
-{
+void CSQC_Parse_CenterPrint(string strMessage) {
 	if (substring(strMessage, 0, 1) == "&") // if first character is an '&' then we print to the dialog box
 	{
 		strMessage = substring(strMessage, 1, -1);
@@ -701,20 +690,17 @@ void CSQC_Parse_CenterPrint(string strMessage)
 	}
 	
 	centerprint(strlocalize_full(strMessage, TRUE));
-};
+}
+
 
 // CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
 // You must ALWAYS first acquire the temporary ID, which is sent as a byte.
 // Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
-float CSQC_Parse_TempEntity()
-{
-	local float bHandled;
-	bHandled = true;
+float CSQC_Parse_TempEntity() {
+	float bHandled = true;
 	// Acquire TE ID
-	local float nTEID;
-	nTEID = ReadByte();
-	switch (nTEID)
-	{
+	float nTEID = ReadByte();
+	switch (nTEID) {
 		//case TE_GUNSHOT:
 		//	Do something cool with TE_GUNSHOT!
 		//	break;
@@ -857,7 +843,7 @@ float CSQC_Parse_TempEntity()
 
 				cnt.origin = cntimg.origin = msg.origin + [msg.totalsize()[0] + 8, 0];
 			}
-		break;
+			break;
 		case TEMPENT::NOTIFICATION_NOTE:
 			string s_icon = ReadString();
 			float note = ReadByte();
@@ -913,7 +899,7 @@ float CSQC_Parse_TempEntity()
 				msgimg.image = strzone("");
 				msgimg.flags |= UIFLAG_HIDE;
 			}
-		break;
+			break;
 		case TEMPENT::NOTIFICATION_CONTROL:
 			float is_double = ReadByte();
 			string s_format = ReadString();
@@ -951,45 +937,45 @@ float CSQC_Parse_TempEntity()
 				
 				centerprint(sprintf(s_format, s_key));
 			}
-		break;
+			break;
 		case TEMPENT::ACHIEVEMENT_UNLOCK:
 			float achievement = ReadShort();
 			// Steam_AchievementUnlock(world, achievement);
-		break;
+			break;
 		case TEMPENT::STAT_INCREMENT:
 			float stat = ReadShort();
 			float value = ReadLong() / 100;
 			// Steam_StatIncrement(world, stat, value);
-		break;
+			break;
 		case TEMPENT::STAT_SET:
 			float stat = ReadShort();
 			float value = ReadLong() / 100;
 			// Steam_StatSet(world, stat, value);
-		break;
+			break;
 		case TEMPENT::CRYSTALLIZER_BEZIER:
 			TempEnt_Crystallizer_Bezier();
-		break;
+			break;
 		case TEMPENT::BOSS_BEAM:
 			TempEnt_Boss_Beam();
-		break;
+			break;
 		case TEMPENT::LOCALIZATION_FILES:
 			TempEnt_Localization_Files();
-		break;
+			break;
 		case TEMPENT::EXPANDING_ORB:
 			TempEnt_ExpandingOrb();
-		break;
+			break;
 		case TEMPENT::OUTLANDER_UNLOCK:
 			TempEnt_OutlanderUnlock();
-		break;
+			break;
 		case TEMPENT::CENTERPRINT:
 			TempEnt_Centerprint();
-		break;
+			break;
 		case TEMPENT::CONTROLLER_RUMBLE:
 			Controller_Rumble(0, ReadShort() / 2048, ReadShort() / 2048, ReadShort());
-		break;
+			break;
 		case TEMPENT::CONTROLLER_RUMBLETRIGGER:
 			Controller_RumbleTriggers(0, ReadShort() / 2048, ReadShort() / 2048, ReadShort());
-		break;
+			break;
 		default:
 			// No special logic for this temporary entity; return 0 so the engine can handle it
 			bHandled = false;
@@ -997,10 +983,9 @@ float CSQC_Parse_TempEntity()
 	}
 
 	return bHandled;
-};
+}
 
-float CSQC_Event_Sound(float ent, float channel, string soundname, float vol, float attenuation, vector pos, float pitchmod, float flags, float tzoid)
-{
+
+float CSQC_Event_Sound(float ent, float channel, string soundname, float vol, float attenuation, vector pos, float pitchmod, float flags, float tzoid) {
 	return FALSE;
 }
-//endif	///////////////

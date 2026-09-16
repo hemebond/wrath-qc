@@ -10,7 +10,13 @@ void info_null() {
 
 
 /*FGD
-@PointClass base(TargetName) color(.8 .8 .8) size(-8 -8 -8, 8 8 8) = info_notnull : "Used as a positional target for entities that can use directional pointing. A target_position can be used instead of this but was kept in Q3A for legacy purposes." []
+@PointClass
+	base(TargetName)
+	color(.8 .8 .8)
+	size(-8 -8 -8, 8 8 8)
+	model({"path": "tb/info_notnull.png", "scale": "0.125"})
+= info_notnull : "Used as a positional target for entities that can use directional pointing. A target_position can be used instead of this but was kept in Q3A for legacy purposes." [
+]
 */
 void info_notnull() {}
 
@@ -169,6 +175,7 @@ void() boss_light =
 @PointClass
 	color(.65 .65 1)
 	size(-8 -8 -8, 8 8 8)
+	model({"path": "tb/light.png", "scale": "0.125"})
 = light : "Non-displayed point light source. The -pointscale and -scale arguments to Q3Map2 affect the brightness of these lights. The -skyscale argument affects brightness of entity sun lights." [
 	// -------- Q3MAP2 KEYS --------
 	light(float) : "Light Intensity" : "300" : "Overrides the default 300 intensity. Negative values may be used for negative lights."

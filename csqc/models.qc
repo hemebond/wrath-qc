@@ -84,52 +84,43 @@ void Eyeball_Predraw(void)
 	//
 }
 
-void EntUpdate_Eyeball(float is_new)
-{
+void EntUpdate_Eyeball(float is_new) {
 	eyeball_c eyeball = (eyeball_c)self;
 
 	float sendflags = ReadByte();
 
-	if (sendflags & 0x01)
-	{
+	if (sendflags & 0x01) {
 		setorigin(eyeball, ReadVectorL());
 		eyeball.angle_constraint = ReadVectorA();
 		eyeball.angle_constraint[0] *= -1;
 	}
 
-	if (sendflags & 0x02)
-	{
+	if (sendflags & 0x02) {
 		setmodelindex(eyeball, ReadShort());
 	}
 
-	if (sendflags & 0x04)
-	{
+	if (sendflags & 0x04) {
 		self.colormod = ReadVectorB();
 		self.alpha = ReadByte() / 255;
 		self.scale = ReadByte() / 16;
 	}
 
-	if (is_new)
-	{
+	if (is_new) {
 		eyeball.sight_focus = eyeball.origin;
 		eyeball.sight_time = random() * 100;
 		eyeball.predraw = Eyeball_Predraw;
 		eyeball.drawmask = MASK_NORMAL;
 	}
 }
-/* #endregion */
 
 
-
-/* #region Boss 3 */
 // Reki (July 3 2023)
-void Boss3Halo_Destructor()
-{
+void Boss3Halo_Destructor() {
 	self.health = -1;
 }
 
-void Boss3Halo_Predraw()
-{
+
+void Boss3Halo_Predraw() {
 	self.origin[0] = self.oldorigin[0] + sin((time + 11.3) * 0.2) * 6;
 	self.origin[1] = self.oldorigin[1] + sin(time * 0.22) * 6;
 	self.origin[2] = self.oldorigin[2] + sin(time * 0.7) * 8;
@@ -157,8 +148,8 @@ void Boss3Halo_Predraw()
 	self.scale = slerp(0.2, 0.6, self.alpha);
 }
 
-void EntUpdate_Boss3Halo(float is_new)
-{
+
+void EntUpdate_Boss3Halo(float is_new) {
 	float sendflags = ReadByte();
 
 	if (sendflags & 0x01)
@@ -213,8 +204,8 @@ class expandingorb_c {
 	};
 };
 
-void TempEnt_ExpandingOrb()
-{
+
+void TempEnt_ExpandingOrb() {
 	vector org = ReadVectorL();
 	float rad_start = ReadCoord();
 	float rad_end = ReadCoord();
@@ -240,15 +231,3 @@ void TempEnt_ExpandingOrb()
 	orb.predraw = orb.render;
 	orb.drawmask = MASK_NORMAL;
 }
-
-/* #endregion */
-
-
-
-
-
-
-
-
-
-

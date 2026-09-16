@@ -254,8 +254,7 @@ class uielement_c
 ////////////////
 //  List Element
 ////////////////
-class uilist_c : uielement_c
-{
+class uilist_c : uielement_c {
 	vector separation;
 	float scroll;
 	float scroll_count;
@@ -263,7 +262,7 @@ class uilist_c : uielement_c
 	float elements_temp;
 	
 	// preloop
-	nonvirtual void(uielement_c this, __inout vector position) list_preloop {
+	nonvirtual void list_preloop(uielement_c this, __inout vector position) {
 		elements = elements_temp;
 		elements_temp = 0;
 		vector scaled_sep = [separation[0] * ui_scale[0], separation[1] * ui_scale[1]];
@@ -273,26 +272,24 @@ class uilist_c : uielement_c
 		else if (separation[1])
 			scroll_count = floor(size[1] / separation[1]);
 
-		if (elements > scroll_count)
-		{
+		if (elements > scroll_count) {
 			scroll = bound(0, scroll, elements - scroll_count);
 			position += scaled_sep * -scroll;
 		}
-		else
-		{
+		else {
 			scroll = 0;
 		}
 	};
 
 	// loopthrough
-	nonvirtual void(uielement_c this, __inout vector position) list_loopthrough {
+	nonvirtual void list_loopthrough(uielement_c this, __inout vector position) {
 		vector scaled_sep = [separation[0] * ui_scale[0], separation[1] * ui_scale[1]];
 		position += scaled_sep;
 		elements_temp++;
 	};
 
 	// constructor
-	nonvirtual void() uilist_c {
+	nonvirtual void uilist_c() {
 		type = UITYPE_LIST;
 		if (preloop == __NULL__)
 			preloop = list_preloop;
@@ -301,8 +298,7 @@ class uilist_c : uielement_c
 	};
 };
 
-class uismoothlist_c : uilist_c
-{
+class uismoothlist_c : uilist_c {
 	float scroll_smooth;
 	float smoothspeed;
 

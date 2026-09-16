@@ -26,12 +26,14 @@ shepherd.qc
 bezier.qc
 beam.qc
 models.qc
+localized_assets.h
 precaches.qc
 captions.qc
 centerprint.qc
 viewmodel.qc
 ../localization.h
 ../localization.qc
+journal.h
 main.qc
 ../uielement.qc
 journal.qc

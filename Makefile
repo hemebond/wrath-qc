@@ -1,10 +1,11 @@
 CC=fteqcc
-CFLAGS=-Wall -Wno-F302 -Wno-Q207
+CFLAGS=-Wall -Wno-F302 -Wno-Q207 -Wno-F333
 # CFLAGS=-Wno-mundane
 # CFLAGS=-Wno-Q207
 # F302: Potentially uninitialised variable
 # F314: Implicit cast from class
 # Q207: duplicate definition ignored
+# F333: cvar: cvar("vid_conwidth") is deprecated
 
 all: ../progs.dat ../csprogs.dat ../menu.dat wrath.fgd
 

@@ -32,7 +32,12 @@ void() toggle_disarmed =
 	else
 		self.disarmed = 1;
 };
+
+
 void InitTrigger() {
+	dprint("InitTrigger()\n");
+	eprint(self);
+
 	if (self.angles != '0 0 0')
 		SetMovedir();
 
@@ -320,7 +325,7 @@ void(float normal) SUB_AttackFinished = { self.cnt = 0;	// refire count for nigh
 		self.attack_finished = time + normal;
 };
 
-float(entity targ) visible;
+
 void(void() thinkst) SUB_CheckRefire = { if (skill != 3)
 		return;
 	if (self.cnt == 1)
@@ -719,4 +724,19 @@ float GetSkyMaterial() {
 void touchtriggers_think() {
 	self.think = touchtriggers_think;
 	self.nextthink = time + random(2,5);
+}
+
+
+/*
+=============
+SUB_CallAsSelf
+
+wrap the self/oself shuffle for code cleanliness elsewhere
+===============
+*/
+void SUB_CallAsSelf(void() fn, entity newself) {
+	entity oself = self;
+	self = newself;
+	fn();
+	self = oself;
 }
