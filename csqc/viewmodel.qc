@@ -195,20 +195,18 @@ void Viewmodel_CalculateMovement(void)
 		float scaler = (!(pmove_flags_draw & PMF_ONGROUND) || autocvar_cl_bobmodel) ? 1 : 0.7;
 
 		s = time * autocvar_cl_bobmodel_speed * scaler;
-		if (pmove_flags_draw & PMF_ONGROUND)
-		{
-			if (time - hitgroundtime < 0.2)
-			{
+		if (pmove_flags_draw & PMF_ONGROUND) {
+			if (time - hitgroundtime < 0.2) {
 				// just hit the ground, speed the bob back up over the next 0.2 seconds
 				t = time - hitgroundtime;
 				t = bound(0, t, 0.2);
 				t *= 5;
 			}
-			else
+			else {
 				t = 1;
+			}
 		}
-		else
-		{
+		else {
 			// recently left the ground, slow the bob down over the next 0.2 seconds
 			t = time - lastongroundtime;
 			t = 0.2 - bound(0, t, 0.2);

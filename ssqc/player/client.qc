@@ -60,18 +60,17 @@ void() ClientConnect = {
 }
 
 
-void() ClientDisconnect = {
+void ClientDisconnect() {
 	if (self.hudsync)
 	{
 		remove(self.hudsync);
 		self.hudsync = world;
 	}
-};
+}
 
 
 .float hardstoptime;
-void(string locsound, float rnd, float nchannel) playerwsound =
-{
+void playerwsound(string locsound, float rnd, float nchannel) {
 	float r;
 	float wvol = cvar("weapons_fire_volume");
 	string monstersound, rsound;
@@ -84,7 +83,8 @@ void(string locsound, float rnd, float nchannel) playerwsound =
 	rsound = ftos(r);
 	monstersound = strcat(locsound, rsound, ".ogg");
 	sound(self, nchannel, monstersound, wvol, 0.125);
-};
+}
+
 
 void(string locsound, float rnd) playersound =
 {
@@ -205,7 +205,7 @@ void(entity attacker, float dmg) Player_Pain =
 	achievement_takendamage = TRUE; // we took damage, aw :( achievement over
 };
 
-void() PlayerDeathThink = {
+void PlayerDeathThink() {
 	if (self.deadflag == DEAD_DEAD)
 	{
 		client_garbage_collector(self);
@@ -245,12 +245,9 @@ void() PlayerDeathThink = {
 	//localcmd("r_glsl_saturation 0\n");
 	localcmd("v_cshift\n");
 
-
-
 	self.think = SUB_Null;
 	self.nextthink = time;
-	if (deathmatch == 1)
-	{
+	if (deathmatch == 1) {
 		self.deadmenuflag = 0;
 
 		if (self.deadwaiting > time)
@@ -265,7 +262,9 @@ void() PlayerDeathThink = {
 		self.button5 = 0;
 		PutClientInServer();
 	}
-};
+}
+
+
 .float extraongroundtime;
 .float onground_time;
 .float jumptime;
@@ -395,7 +394,7 @@ void() WaterMove = {
 	if (!self.waterlevel)
 	{
 		self.total_time_inlava = time;
-		if (self.flags &FL_INWATER)
+		if (self.flags & FL_INWATER)
 		{
 			// play leave water sound
 			playersound2("player/water_exit", 3, CHAN_VOICE);
@@ -449,7 +448,7 @@ void() WaterMove = {
 		}
 	}
 
-	if (!(self.flags &FL_INWATER))
+	if (!(self.flags & FL_INWATER))
 	{
 		// player enter water sound
 		/*if (self.watertype == CONTENT_LAVA)
@@ -626,7 +625,6 @@ void() UpdateViewOfs = {
 .float slowmouse;
 .float noshake;
 
-
 void() slowmovement = {
 	self.slowmouse = 1;
 	float invrtms;
@@ -636,18 +634,15 @@ void() slowmovement = {
 		invrtms = 0;
 
 	/*
-		if (invrtms == 1)
-		{
+	if (invrtms == 1) {
 		stuffcmd(self, "m_pitch -0.005\n");
 		stuffcmd(self, "m_yaw 0.005\n");
-		}
-		else
-		{
+	}
+	else {
 		stuffcmd(self, "m_pitch 0.005\n");
 		stuffcmd(self, "m_yaw 0.005\n");
-		}
-
-*/
+	}
+	*/
 	self.maxspeed = 0.5;
 };
 void() quickmovement
@@ -692,11 +687,11 @@ void() quickmovement
 .float autosaved;
 .float menuactive;
 
-void() autosave = {
+
+void autosave() {
 	read_currentprofileslot();
 	self.autosaved = 1;
-	string saveloc;
-	saveloc = strcat("save data/profiles/", profilename, "/autosave\n");
+	string saveloc = strcat("save data/profiles/", profilename, "/autosave\n");
 	update_latest_saveslot(3);
 	copy_save_maps(2);
 	stuffcmd(self, "scratch1 1\n");
@@ -706,7 +701,8 @@ void() autosave = {
 		strunzone(profilename);
 	save_screenshot(1, 1.5);
 	writedates(1);
-};
+}
+
 
 .float strafetime;
 .float melee_lunge;
@@ -823,7 +819,7 @@ void PlayerPreThink() {
 		self.attack_finished = time + 5;
 		return;
 	}
-	float maxhfaderate = cvar ("maxhealthfade");
+	float maxhfaderate = cvar("maxhealthfade");
 
 	if ((floor(self.health) > 100) && (self.meaxhealth_finished < time))
 	{
@@ -850,6 +846,7 @@ void PlayerPreThink() {
 
 	if (self.changing_level == 1)
 		return;
+
 	if (self.message_flag == 1)
 	{
 		if (!self.button5)
@@ -2205,17 +2202,22 @@ void() loadlevel = {
 void() changemap = { changelevel(nextmap);
 }
 
-void(entity e) changelevel_wait = { e.changing_level = 1;
+
+void changelevel_wait(entity e) {
+	e.changing_level = 1;
 	e.nextthink = time + 1.5;
 	e.think = changemap;
-};
+}
 
-void(entity e) loadlevel_wait = { e.changing_level = 1;
+
+void loadlevel_wait(entity e) {
+	e.changing_level = 1;
 	e.nextthink = time + 1.5;
 	e.think = loadlevel;
-};
-void(entity e) changeparms2 =
-{
+}
+
+
+void changeparms2(entity e) {
 	parm1 = e.items;
 	parm2 = e.health;
 	parm3 = e.weapon;
@@ -2258,7 +2260,7 @@ void(entity e) changeparms2 =
 	parm40 = (numfield_fetchindex(e.s_relics, 4)) | (numfield_fetchindex(e.s_relics, 5) << 6) | (numfield_fetchindex(e.s_relics, 6) << 12) | (numfield_fetchindex(e.s_relics, 7) << 18);
 	parm41 = e.perfect_maps;
 	parm42 = e.opened_coffers;
-};
+}
 
 
 void GotoNextMap(entity e) {
@@ -2324,134 +2326,119 @@ void GotoNextMap(entity e) {
 
 
 string currentmap;
-void(entity e) write_exploredmap = {read_currentprofileslot();
-	local string saveloc, savestats;
-	saveloc = strcat("save data/profiles/", profilename, "/maps/", currentmap, "\n");
+void write_exploredmap(entity e) {
+	read_currentprofileslot();
+
+	string saveloc = strcat("save data/profiles/", profilename, "/maps/", currentmap, "\n");
 
 	stuffcmd(e, "scratch1 1\n");
 	stuffcmd(e, saveloc);
 	stuffcmd(e, "scratch1 0\n");
-	savestats = strcat("profiles/", profilename, "/maps/", currentmap, ".stats");
-	float save_stats;
-	string writethis;
-	save_stats = fopen_wrath(savestats, FILE_WRITE);
-	writethis = strcat(ftos(killed_monsters), "/", ftos(total_monsters));
-	fputs(save_stats, writethis);fputs(save_stats, "\n");
+	string savestats = strcat("profiles/", profilename, "/maps/", currentmap, ".stats");
+	float save_stats = fopen_wrath(savestats, FILE_WRITE);
+	string writethis = strcat(ftos(killed_monsters), "/", ftos(total_monsters));
+	fputs(save_stats, writethis);
+	fputs(save_stats, "\n");
 	writethis = strcat(ftos(found_secrets), "/", ftos(total_secrets));
-	fputs(save_stats, writethis);fputs(save_stats, "\n");
+	fputs(save_stats, writethis);
+	fputs(save_stats, "\n");
 
 	// Reki (February 6 2024): ... what
 	// I'm at least making these else ifs
 
 	string hasrelic;
-	if (world.model == "maps/intro.bsp")
-	{
-		if (e.foundedrelics &RL_INTR)
+	if (world.model == "maps/intro.bsp") {
+		if (e.foundedrelics & RL_INTR)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e1m1.bsp")
-	{
-		if (e.foundedrelics &RL_E1M1)
+	else if (world.model == "maps/e1m1.bsp") {
+		if (e.foundedrelics & RL_E1M1)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e1m2.bsp")
-	{
-		if (e.foundedrelics &RL_E1M2)
+	else if (world.model == "maps/e1m2.bsp") {
+		if (e.foundedrelics & RL_E1M2)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e1m3.bsp")
-	{
-		if (e.foundedrelics &RL_E1M3)
+	else if (world.model == "maps/e1m3.bsp") {
+		if (e.foundedrelics & RL_E1M3)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e1m4.bsp")
-	{
-		if (e.foundedrelics &RL_E1M4)
+	else if (world.model == "maps/e1m4.bsp") {
+		if (e.foundedrelics & RL_E1M4)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e1m5.bsp")
-	{
-		if (e.foundedrelics &RL_E1M5)
+	else if (world.model == "maps/e1m5.bsp") {
+		if (e.foundedrelics & RL_E1M5)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e2m1.bsp")
-	{
-		if (e.foundedrelics &RL_E2M1)
+	else if (world.model == "maps/e2m1.bsp") {
+		if (e.foundedrelics & RL_E2M1)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e2m2.bsp")
-	{
-		if (e.foundedrelics &RL_E2M2)
+	else if (world.model == "maps/e2m2.bsp") {
+		if (e.foundedrelics & RL_E2M2)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e2m3.bsp")
-	{
-		if (e.foundedrelics &RL_E2M3)
+	else if (world.model == "maps/e2m3.bsp") {
+		if (e.foundedrelics & RL_E2M3)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e2m4.bsp")
-	{
-		if (e.foundedrelics &RL_E2M4)
+	else if (world.model == "maps/e2m4.bsp") {
+		if (e.foundedrelics & RL_E2M4)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e2m5.bsp")
-	{
-		if (e.foundedrelics &RL_E2M5)
+	else if (world.model == "maps/e2m5.bsp") {
+		if (e.foundedrelics & RL_E2M5)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e3m1.bsp")
-	{
-		if (e.foundedrelics &RL_E3M1)
+	else if (world.model == "maps/e3m1.bsp") {
+		if (e.foundedrelics & RL_E3M1)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e3m2.bsp")
-	{
-		if (e.foundedrelics &RL_E3M2)
+	else if (world.model == "maps/e3m2.bsp") {
+		if (e.foundedrelics & RL_E3M2)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e3m3.bsp")
-	{
-		if (e.foundedrelics &RL_E3M3)
+	else if (world.model == "maps/e3m3.bsp") {
+		if (e.foundedrelics & RL_E3M3)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e3m4.bsp")
-	{
-		if (e.foundedrelics &RL_E3M4)
+	else if (world.model == "maps/e3m4.bsp") {
+		if (e.foundedrelics & RL_E3M4)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
 	}
-	else if (world.model == "maps/e3m5.bsp")
-	{
-		if (e.foundedrelics &RL_E3M5)
+	else if (world.model == "maps/e3m5.bsp") {
+		if (e.foundedrelics & RL_E3M5)
 			hasrelic = "1";
 		else
 			hasrelic = "0";
@@ -2463,10 +2450,11 @@ void(entity e) write_exploredmap = {read_currentprofileslot();
 	writethis = (strTime);
 	fputs(save_stats, writethis);fputs(save_stats, "\n");
 	fclose_wrath(save_stats);
-
 	GotoNextMap(e);
-};
-void() changelevel_touch = {
+}
+
+
+void changelevel_touch() {
 	if (self.wait > time)
 		return;
 	if (other.classname != "player")
@@ -2501,8 +2489,7 @@ void() changelevel_touch = {
 	other.timefly = 0;
 
 
-	if (other.journal > 0)
-	{
+	if (other.journal > 0) {
 		sound(self, CHAN_AUTO, "ui/journal/journal_close.ogg", 1, 0);
 		stuffcmd(self, "scratch3 0\n");
 		other.journal = 0;
@@ -2511,13 +2498,11 @@ void() changelevel_touch = {
 	if(self.spawnflags & 2)
 		other.oldrelics = 0;
 
-	if(other.meleeskin == 1)
-	{
+	if(other.meleeskin == 1) {
 		if(!(other.playerflags & FL_BLADEBLOOD))
 			other.playerflags += FL_BLADEBLOOD;
 	}
-	else
-	{
+	else {
 		if(other.playerflags & FL_BLADEBLOOD)
 			other.playerflags -= FL_BLADEBLOOD;
 	}
@@ -2526,156 +2511,133 @@ void() changelevel_touch = {
 		other.location = 0;
 	else
 		other.location = self.location;
+
 	bprint(other.netname);
 	bprint(" exited the level\n");
 	nextmap = self.map;
 
-	local float nLength;
-	local string namewbsp, namecomplete, currentmaplocal;
-	currentmaplocal = world.model;
-	namecomplete = substring(currentmaplocal, 5, 100);
-	nLength = strlen(namecomplete);
-	namewbsp = substring(namecomplete, 0, nLength - 4);
+	string currentmaplocal = world.model;
+	string namecomplete = substring(currentmaplocal, 5, 100);
+	float nLength = strlen(namecomplete);
+	string namewbsp = substring(namecomplete, 0, nLength - 4);
 	currentmap = namewbsp;
 
 	other.items = other.items - (other.items &(IT_KEY1 | IT_KEY2 | IT_KEY3 | IT_COFFERKEY1 | IT_COFFERKEY2| IT_COFFERKEY3));
 	other.slot_keys = 0;
 	SUB_UseTargets();
 
-	local float loadingmap;
-	if (world.model == "maps/intro.bsp")
-	{
+	float loadingmap;
+	if (world.model == "maps/intro.bsp") {
 		if (!(other.explored_maps & LE_INTRO))
 			other.explored_maps += LE_INTRO;
 		loadingmap = 1;
 	}
 
-	if (world.model == "maps/hub1.bsp")
-	{
+	if (world.model == "maps/hub1.bsp") {
 		if (!(other.explored_maps & LE_HUB1))
 			other.explored_maps += LE_HUB1;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e1m1.bsp")
-	{
+	if (world.model == "maps/e1m1.bsp") {
 		if (!(other.explored_maps & LE_E1M1))
 			other.explored_maps += LE_E1M1;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e1m2.bsp")
-	{
+	if (world.model == "maps/e1m2.bsp") {
 		if (!(other.explored_maps & LE_E1M2))
 			other.explored_maps += LE_E1M2;
 		loadingmap = 1;
 	}
 
-	if (world.model == "maps/e1m3.bsp")
-	{
+	if (world.model == "maps/e1m3.bsp") {
 		if (!(other.explored_maps & LE_E1M3))
 			other.explored_maps += LE_E1M3;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e1m4.bsp")
-	{
+	if (world.model == "maps/e1m4.bsp") {
 		if (!(other.explored_maps & LE_E1M4))
 			other.explored_maps += LE_E1M4;
 		loadingmap = 1;
 	}
 
-	if (world.model == "maps/e1m5.bsp")
-	{
+	if (world.model == "maps/e1m5.bsp") {
 		if (!(other.explored_maps & LE_E1M5))
 			other.explored_maps += LE_E1M5;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/boss1.bsp")
-	{
+	if (world.model == "maps/boss1.bsp") {
 		if (!(other.explored_maps & LE_BOSS1))
 			other.explored_maps += LE_BOSS1;
 		loadingmap = 1;
 	}
 
-	if (world.model == "maps/hub2.bsp")
-	{
+	if (world.model == "maps/hub2.bsp") {
 		if (!(other.explored_maps & LE_HUB2))
 			other.explored_maps += LE_HUB2;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e2m1.bsp")
-	{
+	if (world.model == "maps/e2m1.bsp") {
 		if (!(other.explored_maps & LE_E2M1))
 			other.explored_maps += LE_E2M1;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e2m2.bsp")
-	{
+	if (world.model == "maps/e2m2.bsp") {
 		if (!(other.explored_maps & LE_E2M2))
 			other.explored_maps += LE_E2M2;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e2m3.bsp")
-	{
+	if (world.model == "maps/e2m3.bsp") {
 		if (!(other.explored_maps & LE_E2M3))
 			other.explored_maps += LE_E2M3;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e2m4.bsp")
-	{
+	if (world.model == "maps/e2m4.bsp") {
 		if (!(other.explored_maps & LE_E2M4))
 			other.explored_maps += LE_E2M4;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e2m5.bsp")
-	{
+	if (world.model == "maps/e2m5.bsp") {
 		if (!(other.explored_maps & LE_E2M5))
 			other.explored_maps += LE_E2M5;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/boss2.bsp")
-	{
+	if (world.model == "maps/boss2.bsp") {
 		if (!(other.explored_maps & LE_BOSS2))
 			other.explored_maps += LE_BOSS2;
 		loadingmap = 1;
 	}
 
-	if (world.model == "maps/hub3.bsp")
-	{
+	if (world.model == "maps/hub3.bsp") {
 		if (!(other.explored_maps & LE_HUB3))
 			other.explored_maps += LE_HUB3;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e3m1.bsp")
-	{
+	if (world.model == "maps/e3m1.bsp") {
 		if (!(other.explored_maps & LE_E3M1))
 			other.explored_maps += LE_E3M1;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e3m2.bsp")
-	{
+	if (world.model == "maps/e3m2.bsp") {
 		if (!(other.explored_maps & LE_E3M2))
 			other.explored_maps += LE_E3M2;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e3m3.bsp")
-	{
+	if (world.model == "maps/e3m3.bsp") {
 		if (!(other.explored_maps & LE_E3M3))
 			other.explored_maps += LE_E3M3;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e3m4.bsp")
-	{
+	if (world.model == "maps/e3m4.bsp") {
 		if (!(other.explored_maps & LE_E3M4))
 			other.explored_maps += LE_E3M4;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/e3m5.bsp")
-	{
+	if (world.model == "maps/e3m5.bsp") {
 		if (!(other.explored_maps & LE_E3M5))
 			other.explored_maps += LE_E3M5;
 		loadingmap = 1;
 	}
-	if (world.model == "maps/boss3.bsp")
-	{
+	if (world.model == "maps/boss3.bsp") {
 		if (!(other.explored_maps & LE_BOSS3))
 			other.explored_maps += LE_BOSS3;
 		loadingmap = 1;
@@ -2693,25 +2655,8 @@ void() changelevel_touch = {
 	else
 		changelevel_wait(other);
 	//GotoNextMap(other);
-
-};
-
-
-/*FGD
-@SolidClass
-	color(0.5 0.0 0.5)
-= trigger_changelevel : "trigger that will move from one map to the next." [
-	map(string) : "Next Map" : "" : "name of the next map, dont use `.bsp` extension"
-	location(integer) : "Location place" : 0 : "Location place number identifier related to the next map info_player_start."
-]
-*/
-void trigger_changelevel() {
-	if (!self.map)
-		objerror("changelevel trigger doesn't have map");
-	InitTrigger();
-	self.wait = 0;
-	self.touch = changelevel_touch;
 }
+
 
 /*
 ENTITY NAME:     portal_level_to_hub
@@ -3249,13 +3194,11 @@ void RestoreGame() {
 	single_player = self;
 	localcmd("v_cshift\n");
 	timescale(1.0);
-	//stuffcmd(self, "r_glsl_saturation 1\n");
 	stuffcmd(self,"gl_polyblend 1\n");
-
 	stuffcmd(self, "scratch3 a\n");
 	stuffcmd(self, "freelook 1\n");
 	if ((cvar("custom_m_yaw") != 1))
-	stuffcmd(self, "m_yaw 0.022\n");
+		stuffcmd(self, "m_yaw 0.022\n");
 
 	// Reki (February 14 2024)
 	Check_SaveCompatibility();
@@ -3264,11 +3207,9 @@ void RestoreGame() {
 	// this prevents an annoying engine bug where ents don't get linked on load
 	fixitems();
 	entity lst = world;
-	while((lst = nextent(lst)))
-	{
+	while ((lst = nextent(lst))) {
 		setorigin(lst, lst.origin);
 	}
-	//
 
 	// Reki (April 11 2023): enforce cl_movement 0 to prevent collision issues
 	self.disableclientprediction = TRUE;
@@ -3278,8 +3219,7 @@ void RestoreGame() {
 
 	float autofog = cvar ("autofog");
 
-	if((self.fogtrigger != world))
-	{
+	if ((self.fogtrigger != world)) {
 		entity fog_restorer =  spawn();
 		copyentity (self.fogtrigger, fog_restorer);
 		fog_restorer.origin = self.origin;
@@ -3302,11 +3242,9 @@ void RestoreGame() {
 	soundbox_initializeambients();
 	sigils_initializeambients();
 	entity loopedsoundsymbol = nextent(world);
-	while (loopedsoundsymbol)
-	{
+	while (loopedsoundsymbol) {
 		holder = nextent(loopedsoundsymbol);
-		if ((loopedsoundsymbol.classname == "monster_symbol") && (loopedsoundsymbol.health > 0))
-		{
+		if ((loopedsoundsymbol.classname == "monster_symbol") && (loopedsoundsymbol.health > 0)) {
 			entity looper_sound = spawn();
 			looper_sound.owner = loopedsoundsymbol;
 			looper_sound.think = loopedsoundsymbol_think;
@@ -3317,11 +3255,9 @@ void RestoreGame() {
 	}
 
 	entity warpedeffect = nextent(world);
-	while (warpedeffect)
-	{
+	while (warpedeffect) {
 		holder = nextent(warpedeffect);
-		if ((warpedeffect.classname == "enemy_spawner_warp") && (warpedeffect.cnt >= 1) &&(warpedeffect.frame >= 1))
-		{
+		if ((warpedeffect.classname == "enemy_spawner_warp") && (warpedeffect.cnt >= 1) &&(warpedeffect.frame >= 1)) {
 			warpedeffect.think = enemy_spawner_warp_use;
 			warpedeffect.nextthink = time + 0.05;
 		}
@@ -3334,33 +3270,32 @@ void RestoreGame() {
 
 	stuffcmd(self,"snd_identicalsoundrandomization_time 0.1\n");
 	stuffcmd(self,"cl_decals_models 0\n");
-	if (world.model == "maps/boss1.bsp")
-	{
+	if (world.model == "maps/boss1.bsp") {
 		stuffcmd(self,"snd_identicalsoundrandomization_time 0\n");
 	}
+
 	fixcofferkeys();
+
 	if (stof(cvar_string("m_pitch")) < 0)
 		invrtmsb = 1;
 	else
 		invrtmsb = 0;
+
 	if (invrtmsb == 1)
 		stuffcmd(self, "m_pitch -0.022\n");
 	else
 		stuffcmd(self, "m_pitch 0.022\n");
 
 
-	if(self.Aegis_time > time)
-	{
+	if (self.Aegis_time > time) {
 		self.aegisflag = 1;
 	}
 
-	if (self.DrownerApp_time > time)
-	{
+	if (self.DrownerApp_time > time) {
 		stuffcmd(self,"gl_polyblend 0.33\n");
 		self.glpolyblend = 1;
 	}
-	else
-	{
+	else {
 		stuffcmd(self,"gl_polyblend 1\n");
 		self.glpolyblend = 0;
 	}
@@ -3368,8 +3303,7 @@ void RestoreGame() {
 	self.restoredgame = 1;
 	Apply_Lut();
 	entity fixes = findradius(self.origin, 1000000);
-	while (fixes)
-	{
+	while (fixes) {
 		hold = fixes.chain; // Reki (October 6 2023): accessing an entity's fields after a remove is undefined behavior, so let's not do that
 		if ((fixes.classname == "coffer_trap")||(fixes.classname == "dancingfallen"))
 		{
@@ -3379,8 +3313,7 @@ void RestoreGame() {
 		fixes = hold;
 	}
 
-	if((skill == 0) && (world.model == "maps/e1m4.bsp"))
-	{
+	if((skill == 0) && (world.model == "maps/e1m4.bsp")) {
 		local entity fixed_door = find (world, targetname, "finalbars");
 		if (fixed_door)
 		{
@@ -3391,12 +3324,10 @@ void RestoreGame() {
 		}
 	}
 
-	float tetherlimit;
-
-		tetherlimit = 10000;
-	if(skill == 2)
+	float tetherlimit = 10000;
+	if (skill == 2)
 		tetherlimit = 9;
-	if(skill == 3)
+	if (skill == 3)
 		tetherlimit = 3;
 
 
@@ -3405,19 +3336,17 @@ void RestoreGame() {
 		self.SoulTether = tetherlimit;
 
 	//stuffcmd(self, "bf 0 0 0 1.25 0.5\n");
-	if (cvar("cvar_restoregame") == 2)
-	{
-	//message_garbage_collector ();
-	//Hud_message(24, self.origin, self);
-	localcmd("set cvar_restoregame 0\n");
+	if (cvar("cvar_restoregame") == 2) {
+		//message_garbage_collector ();
+		//Hud_message(24, self.origin, self);
+		localcmd("set cvar_restoregame 0\n");
 		return;
 	}
-	if (cvar("cvar_restoregame") == 3)
-	{
-	//message_garbage_collector ();
-	//Hud_message(26, self.origin, self);
-	localcmd("set cvar_restoregame 0\n");
-	return;
+	if (cvar("cvar_restoregame") == 3) {
+		//message_garbage_collector ();
+		//Hud_message(26, self.origin, self);
+		localcmd("set cvar_restoregame 0\n");
+		return;
 	}
 	stuffcmd(self, "cl_movement_maxspeed 416 \n");
 	stuffcmd(self, "sv_maxspeed 416 \n");
@@ -3426,20 +3355,17 @@ void RestoreGame() {
 	stuffcmd(self, "cl_sidespeed 416\n");
 	//stuffcmd(self, "v_idlescale 0 \n");
 
-	if(self.wrath_active >= 1)
-	{
+	if (self.wrath_active >= 1) {
 		self.wrath_active = 1;
 	}
 
-	if(self.displacement_active >= 1)
-	{
+	if (self.displacement_active >= 1) {
 		self.displacement_active = 1;
 		stuffcmd(self, "r_glsl_postprocess_uservec3_enable 1\n");
 		stuffcmd(self, "r_glsl_postprocess_uservec3 \"0.01 2 15 0\"\n");
 	}
 
-	if (cvar("cvar_restoregame") != 1)
-	{
+	if (cvar("cvar_restoregame") != 1) {
 		return;
 	}
 
@@ -3463,8 +3389,7 @@ void RestoreGame() {
 	self.max_health = 100;	// My health (and my max) is 100
 	self.takedamage = DAMAGE_AIM;	// I can be fired at
 	self.solid = SOLID_SLIDEBOX;	// Things sort of 'slide' past me
-	if (self.timefly <= time)
-	{
+	if (self.timefly <= time) {
 		self.radialactive = 0;
 		self.movetype = MOVETYPE_WALK;	// Yep, I want to walk.
 		stuffcmd(self, "alias +button4  \"\" \n");
@@ -3476,8 +3401,7 @@ void RestoreGame() {
 		stuffcmd(self, "-moveup \n");
 		stuffcmd(self, "-movedown \n");
 	}
-	else
-	{
+	else {
 		self.timeflyc = rint(time - self.timefly);
 		if (self.movetype != MOVETYPE_FLY)
 			self.movetype = MOVETYPE_FLY;
@@ -3486,7 +3410,6 @@ void RestoreGame() {
 		stuffcmd(self, "alias +jump  \"+moveup\" \n");
 		stuffcmd(self, "alias -jump  \"-moveup\" \n");
 	}
-
 
 	self.flags = FL_CLIENT;	// Yes, I'm a client.
 	self.origin = spawn_spot.origin;	// + '0 0 10';	// Move to the spawnspot location
@@ -3498,7 +3421,6 @@ void RestoreGame() {
 	self.view_ofs_z = player_zviewofs;	// Center my view
 	self.velocity = '0 0 0';	// Stop any old movement
 	self.revolverclip = 0;
-	//	self.ammo_revolver = 0;
 
 	self.air_finished = time + 12;
 	self.attack_finished = time;
@@ -3589,135 +3511,92 @@ void RestoreGame() {
 };
 
 void check_spotted_maps() {
-	if (world.model == "maps/intro.bsp")
-	{
-		if (!(self.spotted_maps &LE_INTRO))
+	if (world.model == "maps/intro.bsp") {
+		if (!(self.spotted_maps & LE_INTRO))
 			self.spotted_maps += LE_INTRO;
 	}
-
-	if (world.model == "maps/hub1.bsp")
-	{
-		if (!(self.spotted_maps &LE_HUB1))
+	if (world.model == "maps/hub1.bsp") {
+		if (!(self.spotted_maps & LE_HUB1))
 			self.spotted_maps += LE_HUB1;
 	}
-
-	if (world.model == "maps/e1m1.bsp")
-	{
-		if (!(self.spotted_maps &LE_E1M1))
+	if (world.model == "maps/e1m1.bsp") {
+		if (!(self.spotted_maps & LE_E1M1))
 			self.spotted_maps += LE_E1M1;
 	}
-
-	if (world.model == "maps/e1m2.bsp")
-	{
-		if (!(self.spotted_maps &LE_E1M2))
+	if (world.model == "maps/e1m2.bsp") {
+		if (!(self.spotted_maps & LE_E1M2))
 			self.spotted_maps += LE_E1M2;
 	}
-
-	if (world.model == "maps/e1m3.bsp")
-	{
-		if (!(self.spotted_maps &LE_E1M3))
+	if (world.model == "maps/e1m3.bsp") {
+		if (!(self.spotted_maps & LE_E1M3))
 			self.spotted_maps += LE_E1M3;
 	}
-
-	if (world.model == "maps/e1m4.bsp")
-	{
-		if (!(self.spotted_maps &LE_E1M4))
+	if (world.model == "maps/e1m4.bsp") {
+		if (!(self.spotted_maps & LE_E1M4))
 			self.spotted_maps += LE_E1M4;
 	}
-
-	if (world.model == "maps/e1m5.bsp")
-	{
-		if (!(self.spotted_maps &LE_E1M5))
+	if (world.model == "maps/e1m5.bsp") {
+		if (!(self.spotted_maps & LE_E1M5))
 			self.spotted_maps += LE_E1M5;
 	}
-
-	if (world.model == "maps/boss1.bsp")
-	{
-		if (!(self.spotted_maps &LE_BOSS1))
+	if (world.model == "maps/boss1.bsp") {
+		if (!(self.spotted_maps & LE_BOSS1))
 			self.spotted_maps += LE_BOSS1;
 	}
-
-	if (world.model == "maps/hub2.bsp")
-	{
-		if (!(self.spotted_maps &LE_HUB2))
+	if (world.model == "maps/hub2.bsp") {
+		if (!(self.spotted_maps & LE_HUB2))
 			self.spotted_maps += LE_HUB2;
 	}
-
-	if (world.model == "maps/e2m1.bsp")
-	{
-		if (!(self.spotted_maps &LE_E2M1))
+	if (world.model == "maps/e2m1.bsp") {
+		if (!(self.spotted_maps & LE_E2M1))
 			self.spotted_maps += LE_E2M1;
 	}
-
-	if (world.model == "maps/e2m2.bsp")
-	{
-		if (!(self.spotted_maps &LE_E2M2))
+	if (world.model == "maps/e2m2.bsp") {
+		if (!(self.spotted_maps & LE_E2M2))
 			self.spotted_maps += LE_E2M2;
 	}
-
-	if (world.model == "maps/e2m3.bsp")
-	{
-		if (!(self.spotted_maps &LE_E2M3))
+	if (world.model == "maps/e2m3.bsp") {
+		if (!(self.spotted_maps & LE_E2M3))
 			self.spotted_maps += LE_E2M3;
 	}
-
-	if (world.model == "maps/e2m4.bsp")
-	{
-		if (!(self.spotted_maps &LE_E2M4))
+	if (world.model == "maps/e2m4.bsp") {
+		if (!(self.spotted_maps & LE_E2M4))
 			self.spotted_maps += LE_E2M4;
 	}
-
-	if (world.model == "maps/e2m5.bsp")
-	{
-		if (!(self.spotted_maps &LE_E2M5))
+	if (world.model == "maps/e2m5.bsp") {
+		if (!(self.spotted_maps & LE_E2M5))
 			self.spotted_maps += LE_E2M5;
 	}
-
-	if (world.model == "maps/boss2.bsp")
-	{
-		if (!(self.spotted_maps &LE_BOSS2))
+	if (world.model == "maps/boss2.bsp") {
+		if (!(self.spotted_maps & LE_BOSS2))
 			self.spotted_maps += LE_BOSS2;
 	}
-
-	if (world.model == "maps/hub3.bsp")
-	{
-		if (!(self.spotted_maps &LE_HUB3))
+	if (world.model == "maps/hub3.bsp") {
+		if (!(self.spotted_maps & LE_HUB3))
 			self.spotted_maps += LE_HUB3;
 	}
-
-	if (world.model == "maps/e3m1.bsp")
-	{
-		if (!(self.spotted_maps &LE_E3M1))
+	if (world.model == "maps/e3m1.bsp") {
+		if (!(self.spotted_maps & LE_E3M1))
 			self.spotted_maps += LE_E3M1;
 	}
-
-	if (world.model == "maps/e3m2.bsp")
-	{
-		if (!(self.spotted_maps &LE_E3M2))
+	if (world.model == "maps/e3m2.bsp") {
+		if (!(self.spotted_maps & LE_E3M2))
 			self.spotted_maps += LE_E3M2;
 	}
-
-	if (world.model == "maps/e3m3.bsp")
-	{
-		if (!(self.spotted_maps &LE_E3M3))
+	if (world.model == "maps/e3m3.bsp") {
+		if (!(self.spotted_maps & LE_E3M3))
 			self.spotted_maps += LE_E3M3;
 	}
-
-	if (world.model == "maps/e3m4.bsp")
-	{
-		if (!(self.spotted_maps &LE_E3M4))
+	if (world.model == "maps/e3m4.bsp") {
+		if (!(self.spotted_maps & LE_E3M4))
 			self.spotted_maps += LE_E3M4;
 	}
-
-	if (world.model == "maps/e3m5.bsp")
-	{
-		if (!(self.spotted_maps &LE_E3M5))
+	if (world.model == "maps/e3m5.bsp") {
+		if (!(self.spotted_maps & LE_E3M5))
 			self.spotted_maps += LE_E3M5;
 	}
-
-	if (world.model == "maps/boss3.bsp")
-	{
-		if (!(self.spotted_maps &LE_BOSS3))
+	if (world.model == "maps/boss3.bsp") {
+		if (!(self.spotted_maps & LE_BOSS3))
 			self.spotted_maps += LE_BOSS3;
 	}
 }
@@ -3744,8 +3623,7 @@ void CMD_set_angle(string cmd) {
 		return;
 
 	float argc = tokenize_console(cmd);
-	if (argc < 3)
-	{
+	if (argc < 3) {
 		sprint(self, vtos(self.angles), "\n");
 		return;
 	}
@@ -3768,8 +3646,7 @@ void PutClientInServer() {
 	self.nomelee = spawn_spot.nomelee;
 	place_shepherd_filter(); // Reki (October 11 2023): Filter shepherd by .location
 
-	if (deathmatch)
-	{
+	if (deathmatch) {
 		read_currentprofileslot();
 		string playername;
 		if (profilename == "")
@@ -3900,9 +3777,9 @@ void PutClientInServer() {
 	self.autosavetime = time + 0.5;
 	self.menuactive = 0;
 	self.playerdeadtime = 0;
-	self.items = self.items - (self.items &(IT_KEY1 | IT_KEY2 | IT_KEY3 | IT_COFFERKEY1 | IT_COFFERKEY2| IT_COFFERKEY3));
+	self.items = self.items - (self.items & (IT_KEY1 | IT_KEY2 | IT_KEY3 | IT_COFFERKEY1 | IT_COFFERKEY2| IT_COFFERKEY3));
 	self.slot_keys = 0;
-	if (deathmatch == 1)
+	if (deathmatch)
 		self.health =  100;
 	self.viewzoom = 1;
 
@@ -3931,7 +3808,7 @@ void PutClientInServer() {
 			centerprint(self, ("playing a noqcprecached game\n"));
 	}
 
-    	// self.clipgroup = CLIPGROUP_PLAYER;  // Fixme: this breaks multiplayer
+    	// self.clipgroup = CLIPGROUP_PLAYER;  // FIXME: this breaks multiplayer
 	Apply_Lut();
 	stuffcmd(self, "v_flipped 0\n");
 
@@ -3966,12 +3843,13 @@ void PutClientInServer() {
 	stuffcmd(self, "r_glsl_postprocess_uservec3_enable 0\n");
 	stuffcmd(self, "r_glsl_postprocess_uservec3 \"0 0 0 0\"\n");
 
-	float dev = cvar("developer");
-	if (dev >= 1) {
-		float writeparms = fopen(strcat("reportmonsters/", mapname, "_killed_monsters",".txt"), FILE_WRITE);
-		fputs(writeparms,(""));
-		fclose(writeparms);
-	}
+	// Hemebond: disabled 20260917 because we don't need it
+	// float dev = cvar("developer");
+	// if (dev >= 1) {
+	// 	float writeparms = fopen(strcat("reportmonsters/", mapname, "_killed_monsters",".txt"), FILE_WRITE);
+	// 	fputs(writeparms,(""));
+	// 	fclose(writeparms);
+	// }
 
 	// Reki (September 15 2023): initialize sounds here, so we don't cause a race condition please
 	soundbox_initializeambients();

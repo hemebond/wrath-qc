@@ -137,9 +137,8 @@ void lower_think() {
 .entity torso_model;
 .float torso_time;  // FIXME: this isn't actually used, just assigned to
 void torso_think() {
-	if((self.owner.button0) || (self.owner.button3))
-	{
-		if(self.owner.weapon == IT_MELEE) {
+	if ((self.owner.button0) || (self.owner.button3)) {
+		if (self.owner.weapon == IT_MELEE) {
 			// self.frame = 11;
 			self.frame = OUTLANDER_UPPER_MELEE_ATTACK;
 		}
@@ -148,29 +147,17 @@ void torso_think() {
 			self.frame = OUTLANDER_UPPER_RIFLE_ATTACK;
 		}
 	}
-	else
-	{
-		if(self.frame != 25) {
+	else {
+		if (self.frame != 25) {
 			// self.frame = 25;
 			self.frame = OUTLANDER_UPPER_RIFLE;
 		}
 	}
 
-	/*else
-	{
-		if((self.owner.weapon == IT_MELEE)&& (self.frame != 11))
-			self.frame =11;
-		else	
-		{
-			if (self.frame != 16)
-				self.frame =16;
-		}
-	}*/
 	self.angles_x = self.owner.angles_x * 2;
 	self.think = torso_think;
 	self.nextthink = time + 0.025;
-};
-
+}
 
 
 void spawn_player_model(entity e) {
@@ -205,7 +192,6 @@ void spawn_player_model(entity e) {
 	weapon.scale = 0.5;
 	weapon.think = weapon_think;
 	weapon.nextthink = time + 0.05;
-
 }
 
 

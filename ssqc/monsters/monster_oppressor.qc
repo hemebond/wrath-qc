@@ -1,3 +1,48 @@
+/*FGD
+@PointClass
+	base(Monster)
+	color(1 0 0)
+	size(-20 -20 -32, 20 20 56)
+	model({"path": "models/enemies/oppressor/oppressor.md3"})
+= monster_oppressor : "Monster: Oppressor" []
+*/
+void monster_oppressor() {
+	if (deathmatch) {
+		remove(self);
+		return;
+	}
+
+	precache_monster_oppressor();
+
+	if (self.waypointed != 1)
+		self.waypointed = 0;
+	self.solid = SOLID_SLIDEBOX;
+	self.movetype = MOVETYPE_STEP;
+	setmodel(self, "models/enemies/oppressor/oppressor.md3");
+	setsize(self, '-20 -20 -32', '20 20 56');
+
+	self.noise = "enemies/oppressor/sight.ogg";
+	self.health = opp_health;
+	self.damagetopain = opp_dtp;
+ 	self.classname = "monster_oppressor";
+	self.th_stand = oppressor_stand1;
+	self.th_walk = oppressor_walk1;
+	if (!self.turret)
+		self.th_run = oppressor_run1;
+	else
+		self.th_run = oppressor_runtattck1;
+	self.stepheight_delta = 8;
+	self.th_missile = oppressor_runtattck1;
+	self.th_melee = oppressor_runtattck1;
+	self.th_pain = oppressor_pain;
+	self.th_die = oppressor_die;
+	self.turretable = 1;
+	self.heavymonster = 1;
+	self.nextthink = time + 0.1;
+	self.think = walkmonster_start;
+}
+
+
 /*
 opp_health = 1800            //    health
 opp_bbox = '20 20 56'         //    bbox
@@ -37,7 +82,7 @@ mid
 near
 zigzag chance
 zigzag max deviance
-zigzag min deviance 
+zigzag min deviance
 */
 
 $frame opp_pose0
@@ -74,17 +119,15 @@ $frame opp_atkd1 opp_atkd2 opp_atkd3 opp_atkd4 opp_atkd5
 
 $frame opp_paind1 opp_paind2 opp_paind3 opp_paind4 opp_paind5 opp_paind6 opp_paind7 opp_paind8 opp_paind9 opp_paind10
 $frame opp_paind11 opp_paind12 opp_paind13 opp_paind14 opp_paind15 opp_paind16 opp_paind17 opp_paind18 opp_paind19 opp_paind20
-$frame opp_paind21 opp_paind22 
+$frame opp_paind21 opp_paind22
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 void() oppressor_stand1 =[$opp_idle1, oppressor_stand2]{ai_stand();
+	float r = random();
 
-float r = random();
-
-if(( r < 0.3))
-monstersounda("enemies/oppressor/idle", 3, CHAN_VOICE, 0.5);
-
+	if (( r < 0.3))
+		monstersounda("enemies/oppressor/idle", 3, CHAN_VOICE, 0.5);
 };
 void() oppressor_stand2 =[$opp_idle2, oppressor_stand3]{ai_stand();};
 void() oppressor_stand3 =[$opp_idle3, oppressor_stand4]{ai_stand();};
@@ -110,7 +153,7 @@ void() oppressor_stand20 =[$opp_idle20, oppressor_stand1]{ai_stand();};
 void() oppressor_attack;
 void() oppressor_waiting1 =[$opp_idle1, oppressor_waiting2]{ai_face();if (visible(self.enemy)&&(self.shotgun_clip >0)){self.think = oppressor_attack;self.nextthink = time + 0.1;}if((!(self.enemy)) && (self.goalentity))self.enemy = self.goalentity;
 
-	if ((self.friendly_monster == 1) && (self.enemy.classname == "player")) 
+	if ((self.friendly_monster == 1) && (self.enemy.classname == "player"))
 		next_enemy();
 	if(!self.enemy)
 		next_enemy();
@@ -122,7 +165,7 @@ void() oppressor_waiting4 =[$opp_idle4, oppressor_waiting5]{ai_face();if (visibl
 void() oppressor_waiting5 =[$opp_idle5, oppressor_waiting6]{ai_face();
 
 if(self.shotgun_clip <0)
-self.shotgun_clip = 4;	
+self.shotgun_clip = 4;
 if (visible(self.enemy)){self.think = oppressor_attack;self.nextthink = time + 0.1;}};
 void() oppressor_waiting6 =[$opp_idle6, oppressor_waiting7]{ai_face();if (visible(self.enemy)){self.think = oppressor_attack;self.nextthink = time + 0.1;}};
 void() oppressor_waiting7 =[$opp_idle7, oppressor_waiting8]{ai_face();if (visible(self.enemy)){self.think = oppressor_attack;self.nextthink = time + 0.1;}};
@@ -131,7 +174,7 @@ void() oppressor_waiting9 =[$opp_idle9, oppressor_waiting10]{ai_face();if (visib
 void() oppressor_waiting10 =[$opp_idle10, oppressor_waiting11]{ai_face();if (visible(self.enemy)){self.think = oppressor_attack;self.nextthink = time + 0.1;}if((!(self.enemy)) && (self.goalentity))self.enemy = self.goalentity;
 
 if((!self.enemy.health) || (!self.enemy)) next_enemy();
-	if ((self.friendly_monster == 1) && (self.enemy.classname == "player")) 
+	if ((self.friendly_monster == 1) && (self.enemy.classname == "player"))
 		next_enemy();
 	if(!self.enemy)
 		next_enemy();
@@ -170,8 +213,8 @@ void() oppressor_walk10 =[$opp_run10, oppressor_walk1]{ai_walk(opp_wvel);};
 void() oppressor_runtattck1;
 
 void() oppressor_run1 =[$opp_run1, oppressor_run2]
-{	
-	ai_runwalk(opp_wvel);		
+{
+	ai_runwalk(opp_wvel);
 	check_redinvulnerability();
 };
 void() oppressor_run2 =[$opp_run2, oppressor_run3]{ai_runwalk(opp_wvel);
@@ -186,7 +229,7 @@ void() oppressor_run2 =[$opp_run2, oppressor_run3]{ai_runwalk(opp_wvel);
 			if(opp_dr_run >= rp)
 			self.think = oppressor_runtattck1;
 		}
-		if (enemy_range == RANGE_MELEE)		
+		if (enemy_range == RANGE_MELEE)
 			self.think = oppressor_runtattck1;
 		self.nextthink = time + 0.1;
 		return;
@@ -225,7 +268,7 @@ void() oppressor_run7 =[$opp_run7, oppressor_run8]{ai_runwalk(opp_wvel);
 			if(opp_dr_run >= rp)
 			self.think = oppressor_runtattck1;
 		}
-		if (enemy_range == RANGE_MELEE)		
+		if (enemy_range == RANGE_MELEE)
 			self.think = oppressor_runtattck1;
 		self.nextthink = time + 0.1;
 		return;
@@ -237,45 +280,41 @@ void() oppressor_run9 =[$opp_run9, oppressor_run10]{ai_runwalk(opp_wvel);
 	monstersound1("enemies/oppressor/chatter", 5, CHAN_ITEM);
 };
 void() oppressor_run10 =[$opp_run10, oppressor_run1]
-{	
+{
 	ai_runwalk(opp_wvel);
 };
-	
 
-void()oppressor_impact =
-{
+
+void oppressor_impact() {
 	self.frame += 0.5;
-	
-	if (self.alpha <= 0.05)
-	{
-		self.alpha = -1;	
-		self.think = SUB_Remove;	
+
+	if (self.alpha <= 0.05) {
+		self.alpha = -1;
+		self.think = SUB_Remove;
 	}
-	else	
-	{
-	self.alpha -= 0.05;
-	self.think = oppressor_impact;	
+	else {
+		self.alpha -= 0.05;
+		self.think = oppressor_impact;
 	}
 	self.nextthink = time + 0.05;
-};
+}
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-void() oppressor_projectile_touch = { local float damg;
+
+void oppressor_projectile_touch() {
 	if (other == self.owner)
 		return;
+
 	if(other.solid == SOLID_TRIGGER)
 		return;
+
 	self.solid = SOLID_NOT;
-	if (pointcontents(self.origin) == CONTENT_SKY)
-	{
+	if (pointcontents(self.origin) == CONTENT_SKY) {
 		remove(self);
 		return;
 	}
 
-	damg = opp_dmg;
-	if (other.health)
-	{
-		T_Damage(other, self, self.owner, damg);
+	if (other.health) {
+		T_Damage(other, self, self.owner, opp_dmg);
 	}
 	sound(self, CHAN_WEAPON, "misc/null.wav", 1, 1);
 	randomsound2("enemies/oppressor/proj_impact", 3, 1, CHAN_WEAPON, 0, 0.25);
@@ -288,39 +327,37 @@ void() oppressor_projectile_touch = { local float damg;
 	setmodel(self, "models/projectiles/proj_oppressor_explo.md3");
 	self.alpha = 1;
 	entity slag_explo = spawn();
-	float skinn = ceil(random() *4);
+	float skinn = ceil(random() * 4);
 	if (skinn == 4)
 		skinn = 0;
-	//makevectors(self.angles);
-	slag_explo.origin = self.origin;// + v_forward *-12 + v_up *-5;
+	slag_explo.origin = self.origin;
 	slag_explo.skin = skinn * 10;
 	setmodel(slag_explo, "particles/explo/explo_slag2.md3");
 	slag_explo.think = slag2_explode1;
-	slag_explo.nextthink = time + 0.1;	
+	slag_explo.nextthink = time + 0.1;
 	self.nextthink = time;
 	self.think = oppressor_impact;
 
 };
-void()proj_oppressor_think =
-{
-	if(self.frame < 1)
-	self.frame ++;
-	
-	if(self.enemy.health < 0)
-	self.lifetime = 0;
-	if(skill >= 3)
-	{
-	
+void proj_oppressor_think() {
+	if (self.frame < 1)
+		self.frame ++;
+
+	if (self.enemy.health < 0)
+		self.lifetime = 0;
+
+	if (skill >= 3) {
+
 		if((vlen (self.origin - self.enemy.origin) > 128) && (self.magnetized == 1))
 		{
 			local vector	dir, vtemp;
 			vtemp = self.enemy.origin + '0 0 10';
-			dir = normalize(vtemp - self.origin);	
+			dir = normalize(vtemp - self.origin);
 			self.velocity =dir *(opp_projvel);
 			self.angles= vectoangles(dir);
 		}
 		else
-		self.magnetized = 0;	
+		self.magnetized = 0;
 	}
 	if(self.origin ==  self.oldorigin)
 	{
@@ -335,18 +372,17 @@ void()proj_oppressor_think =
 	}
 	self.oldorigin = self.origin;
 	self.nextthink = time + 0.05;
-};	
+};
 
 .float doubleattack;
-void(entity e, string tagname, string muzzletagname) oppressor_missileattack = {
-	local entity projectile;
-	projectile = spawn();
+void oppressor_missileattack(entity e, string tagname, string muzzletagname) {
+	entity projectile = spawn();
 	projectile.owner = e;
-	local vector tagorg;
-	tagorg = tag_origin(tagname, e);
-	setorigin(projectile,tagorg);
+
+	vector tagorg = tag_origin(tagname, e);
+	setorigin(projectile, tagorg);
 	setmodel(projectile, "models/projectiles/proj_oppressor.md3");
-	setsize (projectile, opp_proj_size * -0.5,opp_proj_size * 0.5);
+	setsize (projectile, opp_proj_size * -0.5, opp_proj_size * 0.5);
 	projectile.solid = SOLID_TRIGGER;
 	projectile.enemy = e.enemy;
 	projectile.colormod = '2 2 2';
@@ -356,16 +392,16 @@ void(entity e, string tagname, string muzzletagname) oppressor_missileattack = {
 	projectile.movetype = MOVETYPE_FLYMISSILE;
 
 	float playerspeed = (vlen (self.enemy.velocity));
-	vector nextpos = (normalize (self.enemy.velocity)) * playerspeed;	
+	vector nextpos = (normalize (self.enemy.velocity)) * playerspeed;
 
-	if(self.doubleattack == 1)
+	if (self.doubleattack == 1)
 		vector enemyorigin = self.enemy.origin + '0 0 12' + (nextpos * opp_projvelfactor);
 	else
 		enemyorigin = self.enemy.origin + '0 0 12';
 
 	projectile.velocity = normalize(enemyorigin - tagorg);
 
-	if(self.doubleattack == 1)
+	if (self.doubleattack == 1)
 		projectile.velocity = projectile.velocity * opp_projvel2;
 	else
 		projectile.velocity = projectile.velocity * opp_projvel;
@@ -373,10 +409,10 @@ void(entity e, string tagname, string muzzletagname) oppressor_missileattack = {
 	projectile.angles = vectoangles(projectile.velocity);
 	projectile.touch = oppressor_projectile_touch;
 	projectile.lifetime  = time + 7.5;
-	sound7(projectile, CHAN_WEAPON, "enemies/oppressor/proj_loop.wav", 1, 0.25, 80 + random() *30, 0);
+	sound7(projectile, CHAN_WEAPON, "enemies/oppressor/proj_loop.wav", 1, 0.25, 80 + random() * 30, 0);
 	projectile.nextthink = time + 0.1;
 	projectile.think = proj_oppressor_think;
-	
+
 	entity slag_explo = spawn();
 	setattachment(slag_explo, e, muzzletagname);
 	float skinn = ceil(random() *4);
@@ -386,13 +422,12 @@ void(entity e, string tagname, string muzzletagname) oppressor_missileattack = {
 	slag_explo.skin = skinn * 10;
 	setmodel(slag_explo, "particles/explo/explo_slag2.md3");
 	slag_explo.think = slag2_explode1;
-	slag_explo.nextthink = time + 0.05;	
+	slag_explo.nextthink = time + 0.05;
 	self.shotgun_clip --;
-	
 };
 
 void() oppressor_attacktw1 =[$opp_atktrun1, oppressor_attacktw2]{
-monstersound2("enemies/oppressor/postattack", 5, CHAN_VOICE);
+	monstersound2("enemies/oppressor/postattack", 5, CHAN_VOICE);
 };
 void() oppressor_attacktw2 =[$opp_atktrun2, oppressor_attacktw3]{ai_runwalk(8);};
 void() oppressor_attacktw3 =[$opp_atktrun3, oppressor_attacktw4]{ai_runwalk(8);};
@@ -402,16 +437,16 @@ void()oppressor_predoubleattack1;
 void()oppressor_check_attack =
 {
 	if (self.flags &FL_ONGROUND)
-	{	
+	{
 		vector vdisttofloor;
 		vdisttofloor_z = self.mins_z - 4;
-		traceline (self.origin, self.origin + vdisttofloor, TRUE,self); 
+		traceline (self.origin, self.origin + vdisttofloor, TRUE,self);
 
 		if(trace_fraction == 1)
 		{
 			makevectors(self.angles);
 			self.flags -= FL_ONGROUND;
-			self.velocity += v_forward * 1;	
+			self.velocity += v_forward * 1;
 			self.velocity += ' 0 0 1';
 		}
 	}
@@ -426,11 +461,11 @@ void()oppressor_check_attack =
 				next_enemy();
 			else
 			{
-			if((self.enemy.classname == "player") && (self.player_temp_enemy < time)) 
+			if((self.enemy.classname == "player") && (self.player_temp_enemy < time))
 				next_enemy();
-			}	
-		}		
-	}	
+			}
+		}
+	}
 	if(!self.turret)
 	{
 		if (enemy_is_visible)
@@ -442,7 +477,7 @@ void()oppressor_check_attack =
 				rp = random() *100;
 				if((opp_dr_attack <= rp))
 				self.think = oppressor_attacktw1;
-			}	
+			}
 		}
 		else
 			self.think = oppressor_attacktw1;
@@ -454,13 +489,13 @@ void()oppressor_check_attack =
 	}
 
 
-	if (self.shotgun_clip <= 0)	
+	if (self.shotgun_clip <= 0)
 	{
 		if(self.turret != 1)
 			self.think = oppressor_attacktw1;
 		else
 		{
-			
+
 			float r = random();
 			if (r < 0.1)
 			monstersound2("enemies/oppressor/preattack", 5, CHAN_VOICE);
@@ -480,7 +515,7 @@ void()oppressor_check_attack =
 			}
 			self.nextthink = time + 0.1;
 
-		}			
+		}
 	}
 
 	self.nextthink = time + 0.1;
@@ -489,47 +524,44 @@ void()oppressor_check_attack =
 
 .float oppressor_attack_a;
 
-void() oppressor_attackb1 =[$opp_atkb1, oppressor_attackb2]{ai_face();	monstersound2("enemies/oppressor/fire", 5, CHAN_WEAPON);
-oppressor_missileattack(self,"tag_projb","tag_muzzleb");
-
-
+void() oppressor_attackb1 =[$opp_atkb1, oppressor_attackb2]{ai_face();
+	monstersound2("enemies/oppressor/fire", 5, CHAN_WEAPON);
+	oppressor_missileattack(self, "tag_projb","tag_muzzleb");
 };
 void() oppressor_attackb2 =[$opp_atkb2, oppressor_attackb3]{ai_face();};
 void() oppressor_attackb3 =[$opp_atkb3, oppressor_attackb4]{ai_face();};
 void() oppressor_attackb4 =[$opp_atkb4, oppressor_attackb5]{ai_face();};
 void() oppressor_attackb5 =[$opp_atkb5, oppressor_attacka1]{ai_face();
-self.oppressor_attack_a = 0;
-if(self.shotgun_clip <= 0)
-oppressor_check_attack();
+	self.oppressor_attack_a = 0;
+	if (self.shotgun_clip <= 0)
+		oppressor_check_attack();
 };
 
-void() oppressor_attacka1 =[$opp_atka1, oppressor_attacka2]{ai_face();monstersound2("enemies/oppressor/fire", 5, CHAN_WEAPON);
-oppressor_missileattack(self,"tag_proja","tag_muzzlea");
 
-//self.shotgun_clip --;	
+void() oppressor_attacka1 =[$opp_atka1, oppressor_attacka2]{
+	ai_face();
+	monstersound2("enemies/oppressor/fire", 5, CHAN_WEAPON);
+	oppressor_missileattack(self,"tag_proja","tag_muzzlea");
 };
 void() oppressor_attacka2 =[$opp_atka2, oppressor_attacka3]{ai_face();};
 void() oppressor_attacka3 =[$opp_atka3, oppressor_attacka4]{ai_face();};
 void() oppressor_attacka4 =[$opp_atka4, oppressor_attacka5]{ai_face();};
 void() oppressor_attacka5 =[$opp_atka5, oppressor_attackb1]{ai_face();
-self.oppressor_attack_a = 1;
-if(self.shotgun_clip <= 0)
-oppressor_check_attack();
+	self.oppressor_attack_a = 1;
+	if (self.shotgun_clip <= 0)
+		oppressor_check_attack();
 };
 
-void() oppressor_attack =
-{
-	if (self.flags &FL_ONGROUND)
-	{	
+void oppressor_attack() {
+	if (self.flags & FL_ONGROUND) {
 		vector vdisttofloor;
 		vdisttofloor_z = self.mins_z - 4;
-		traceline (self.origin, self.origin + vdisttofloor, TRUE,self); 
+		traceline (self.origin, self.origin + vdisttofloor, TRUE,self);
 
-		if(trace_fraction == 1)
-		{
+		if (trace_fraction == 1) {
 			makevectors(self.angles);
 			self.flags -= FL_ONGROUND;
-			self.velocity += v_forward * 1;	
+			self.velocity += v_forward * 1;
 			self.velocity += ' 0 0 1';
 		}
 	}
@@ -539,9 +571,9 @@ void() oppressor_attack =
 		self.think = oppressor_attackb1;
 	else
 		self.think = oppressor_attacka1;
-	self.nextthink = time;	
+	self.nextthink = time;
+}
 
-};
 
 void() oppressor_doubleattack1 =[$opp_atkd1, oppressor_doubleattack2]{ai_face();monstersound2("enemies/oppressor/fire", 5, CHAN_WEAPON);
 oppressor_missileattack(self,"tag_proja","tag_muzzlea");
@@ -551,10 +583,9 @@ void() oppressor_doubleattack2 =[$opp_atkd2, oppressor_doubleattack3]{ai_face();
 void() oppressor_doubleattack3 =[$opp_atkd3, oppressor_doubleattack4]{ai_face();};
 void() oppressor_doubleattack4 =[$opp_atkd4, oppressor_doubleattack5]{ai_face();};
 void() oppressor_doubleattack5 =[$opp_atkd5, oppressor_doubleattack1]{ai_face();
-if(self.shotgun_clip <= 0)
-oppressor_check_attack();
+	if (self.shotgun_clip <= 0)
+		oppressor_check_attack();
 };
-
 
 
 void() oppressor_predoubleattack1 = [$opp_prefire1, oppressor_predoubleattack2]{ai_face();};
@@ -569,66 +600,58 @@ void() oppressor_predoubleattack9 = [$opp_prefire9, oppressor_predoubleattack10]
 void() oppressor_predoubleattack10 = [$opp_prefire10, oppressor_doubleattack1]{ai_face();};
 
 void() oppressor_runtattck1 =[$opp_runtattk1, oppressor_runtattck2]{
-	ai_face();self.yaw_speed = 30;monstersound4("enemies/oppressor/step", 5, CHAN_BODY);
+	ai_face();
+	self.yaw_speed = 30;monstersound4("enemies/oppressor/step", 5, CHAN_BODY);
 	monstersound2("enemies/oppressor/preattack", 5, CHAN_VOICE);
 	float r = vlen(self.origin - self.enemy.origin);
-
 
 	if (r > opp_mid)
 		self.doubleattack = 1;
 	else
 		self.doubleattack = 0;
 
-	self.shotgun_clip = 4;	
+	self.shotgun_clip = 4;
 };
 void() oppressor_runtattck2 =[$opp_runtattk2, oppressor_runtattck3]{ai_face();};
 void() oppressor_runtattck3 =[$opp_runtattk3, oppressor_runtattck4]{ai_face();};
 void() oppressor_runtattck4 =[$opp_runtattk4, oppressor_runtattck5]{ai_face();};
-void() oppressor_runtattck5 =[$opp_runtattk5, oppressor_attacka1]{ai_face();self.yaw_speed = 20;
+void() oppressor_runtattck5 =[$opp_runtattk5, oppressor_attacka1]{
+	ai_face();
+	self.yaw_speed = 20;
+	if (self.doubleattack == 1)
+		self.think = oppressor_predoubleattack1;
+	self.nextthink = time + 0.1;
+}
 
-if (self.doubleattack == 1)
-self.think = oppressor_predoubleattack1;
-self.nextthink = time + 0.1;
-	
-};
 
-/////////////////////////////////////////////////////////////////////////////////////////////
 .float maxpainframe;
-void() oppressor_postpain =
-{ 
-	if (self.painframe < self.maxpainframe) 
-	{
-	self.frame ++; 
-	self.painframe ++; 
+void oppressor_postpain() {
+	if (self.painframe < self.maxpainframe) {
+		self.frame ++;
+		self.painframe ++;
 	}
 	if((self.maxpainframe == 10) && (self.painframe == 3))
 		monstersound4("enemies/oppressor/step", 5, CHAN_BODY);
-	if (self.painframe == self.maxpainframe) 
-	{
-		ai_face();	
+	if (self.painframe == self.maxpainframe) {
+		ai_face();
 		enemy_range = range(self.enemy);
-		
-		if(visible(self.enemy))
-		{
-			if (visibleinfront (self.enemy, 2048))
-			{
-				if ((enemy_range == RANGE_NEAR) || (enemy_range == RANGE_MELEE) || (enemy_range == RANGE_MID))
-				{
+
+		if (visible(self.enemy)) {
+			if (visibleinfront (self.enemy, 2048)) {
+				if ((enemy_range == RANGE_NEAR) || (enemy_range == RANGE_MELEE) || (enemy_range == RANGE_MID)) {
 					self.think = oppressor_attacka1;
 					self.nextthink = time + 0.1;
 					return;
 				}
 			}
-			else
-			{
+			else {
 				self.think = oppressor_postpain;
-				self.nextthink = time + 0.1;	
-				return;				
-			}	
+				self.nextthink = time + 0.1;
+				return;
+			}
 		}
-		else
-		{
-			if(!self.turret)
+		else {
+			if (!self.turret)
 				self.think = oppressor_run1;
 			else
 				self.think = oppressor_waiting1;
@@ -637,36 +660,37 @@ void() oppressor_postpain =
 		}
 	}
 	self.think = oppressor_postpain;
-	self.nextthink = time + 0.1;	
-};
+	self.nextthink = time + 0.1;
+}
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-void(entity enemy, float dmg) oppressor_pain = 
-{
-	
+void oppressor_pain(entity enemy, float dmg) {
 	monstersound3("enemies/oppressor/pain", 3, CHAN_VOICE);
-	local float rp;
-	rp = random() *100;
+	float rp = random() *100;
 	if (opp_rtp <= rp)
 		return;
 	self.painframe = 1;
 	float r = random();
-	if(r < 1)
-	{self.frame = $opp_paina1;self.maxpainframe = 5;}
-	if(r < 0.65)
-	{self.frame = $opp_painb1;self.maxpainframe = 5;}
-	if(r < 0.33)
-	{self.frame = $opp_painc1;self.maxpainframe = 10;}
+	if (r < 1) {
+		self.frame = $opp_paina1;
+		self.maxpainframe = 5;
+	}
+	if (r < 0.65) {
+		self.frame = $opp_painb1;
+		self.maxpainframe = 5;
+	}
+	if (r < 0.33) {
+		self.frame = $opp_painc1;
+		self.maxpainframe = 10;
+	}
 	ai_pain(4);
-	//monstersound4("enemies/oppressor/pain", 5, CHAN_VOICE);
 	self.think = oppressor_postpain;
 	self.sustained_damage = 0;
 	self.nextthink = time + 0.1;
-};
+}
 
-void() oppressor_painb =
-{
+
+void oppressor_painb() {
 	monstersound3("enemies/oppressor/pain", 3, CHAN_VOICE);
 	self.frame = $opp_paind1;
 	self.painframe = 1;
@@ -675,38 +699,34 @@ void() oppressor_painb =
 	self.think = oppressor_postpain;
 	self.sustained_damage = 0;
 	self.nextthink = time + 0.1;
-};
+}
 
-///////////////////////////////////////////////////////////////////////////////////////////
-void()	oppressor_glow_fade =
-{
-	if (self.glowmod_x <= 0.1)
-	{
-		self.glowmod = '-1 -1 -1'; 
+
+void oppressor_glow_fade() {
+	if (self.glowmod_x <= 0.1) {
+		self.glowmod = '-1 -1 -1';
 		self.think = SUB_Null;
-		self.nextthink = time + 0.1; 
+		self.nextthink = time + 0.1;
 		return;
 	}
 	self.glowmod_x -= 0.025;
 	self.glowmod_y -= 0.025;
 	self.glowmod_z -= 0.025;
-	self.nextthink = time + 0.05; 
-};
+	self.nextthink = time + 0.05;
+}
 
 
-.float lava_aoe_big;
-void() lava_aoe_think = { local float vcnt, rdamage, radiusretcher;
+void lava_aoe_think() {
+	float vcnt, rdamage, radiusretcher;
 	vcnt = self.cnt / self.oldcnt;
 	rdamage = vcnt *retcheraoedamage *1.5 + 10;
 	radiusretcher = vcnt *128;
 
-	if (self.dmg == 0)
-	{
+	if (self.dmg == 0) {
 		T_SplashDamage(self, world, rdamage *1.25* 0.25, world, radiusretcher);
 		self.cnt -= 0.125;
 	}
-	else
-	{
+	else {
 		T_SplashDamage(self, world, rdamage * 0.25, world, radiusretcher);
 		self.cnt -= 0.125;
 	}
@@ -717,16 +737,18 @@ void() lava_aoe_think = { local float vcnt, rdamage, radiusretcher;
 	else
 		self.think = SUB_Remove;
 	self.nextthink = time + 0.125;
-};
+}
 
-void() lava_aoep_think = { if (self.owner.cnt > 0)
+.float lava_aoe_big;
+
+void lava_aoep_think() {
+	if (self.owner.cnt > 0)
 		self.think = lava_aoep_think;
 	else
 		self.think = SUB_Remove;
 	self.origin = self.owner.origin - '0 0 48';
 	self.effects = 1024;
-	if (self.lava_aoe_big == 1)
-	{
+	if (self.lava_aoe_big == 1) {
 		if ((self.owner.cnt) < (self.cnt / 5))
 			pointparticles(particleeffectnum("lava_aoebig5"), self.origin, v_forward *(-550), (3));
 		else if ((self.owner.cnt) < (self.cnt / 4))
@@ -739,23 +761,23 @@ void() lava_aoep_think = { if (self.owner.cnt > 0)
 			pointparticles(particleeffectnum("lava_aoebig1"), self.origin, v_forward *(-550), (3));
 
 	}
-	else
+	else {
 		pointparticles(particleeffectnum("lava_aoe"), self.origin, v_forward *(-550), (2));
+	}
 	self.nextthink = time + 0.15;
-};
+}
 
-void(entity e, float ltime, float dmge) lava_aoe_spawn = { local entity lava_aoe, lava_aoep;
+
+void lava_aoe_spawn(entity e, float ltime, float dmge) {
+	entity lava_aoe, lava_aoep;
 	lava_aoe = spawn();
 	lava_aoep = spawn();
 	lava_aoe.wrathflags += FL_GARBAGE;
 	lava_aoep.wrathflags += FL_GARBAGE;
-	//lava_aoe.owner = world;
 	lava_aoe.origin = e.origin;
-	//setmodel(lava_aoe,"asdasd");
-	lava_aoep.origin = e.origin;	
+	lava_aoep.origin = e.origin;
 	lava_aoe.classname = "lava_aoe";
 	lava_aoep.classname = "lava_aoep";
-	//lava_aoe.movetype = MOVETYPE_TOSS;
 	lava_aoe.gravity = 0;	//.25;
 
 	lava_aoe.cnt = ltime / 0.5;
@@ -769,61 +791,54 @@ void(entity e, float ltime, float dmge) lava_aoe_spawn = { local entity lava_aoe
 	lava_aoep.origin = e.origin - '0 0 36';
 	lava_aoe.nextthink = time;
 	lava_aoep.nextthink = time;
-	//snd = strcat("impact/projectiles/cyst_lava_aoe", ftos(floor(random() *5) + 1), ".ogg");
-	//sound(lava_aoe, CHAN_WEAPON, snd, 1, 0.5);
 	lava_aoe.think = lava_aoe_think;
 	lava_aoep.think = lava_aoep_think;
-};
+}
 
-void() oppressor_postdie =
-{ 
-	self.frame += 1; 
-	self.painframe += 1; 
-	if(self.fakewatertype != CONTENT_LAVA)
-	{
+
+void oppressor_postdie() {
+	self.frame += 1;
+	self.painframe += 1;
+	if (self.fakewatertype != CONTENT_LAVA) {
 		self.glowmod_x -= 0.05;
 		self.glowmod_y -= 0.05;
 		self.glowmod_z -= 0.05;
 	}
-	if(self.painframe == 10)
-	{
+	if (self.painframe == 10) {
 		checkburnable(self);
 		if(self.fakewatertype != CONTENT_LAVA)
 			self.think = oppressor_glow_fade;
 		else
 			self.think = SUB_Null;
-	}	
-	else
+	}
+	else {
 		self.think = oppressor_postdie;
+	}
 	self.nextthink = time + 0.1;
-};	
+}
 
-void() oppressor_gibdead =
-{
+
+void oppressor_gibdead() {
 	self.alpha = -1;
-	local vector tagorg;
+	vector tagorg;
+	float r;
 
-
-	float r = random();
-	if (r > 0.5)
-	{
+	r = random();
+	if (r > 0.5) {
 		tagorg = tag_origin("tag_cannon_r", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/cannon_r.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib1, self), 0, 3);	// forward,right,up
 	}
-	else
-	{
+	else {
 		tagorg = tag_origin("tag_cannon_l", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/cannon_l.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib2, self), 0, 3);	// forward,right,up
 	}
 
 	r = random();
-	if (r > 0.5)
-	{
+	if (r > 0.5) {
 		tagorg = tag_origin("tag_shoulder_r", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/shoulder_r.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib3, self), 0, 3);	// forward,right,up
 	}
-	else
-	{
+	else {
 		tagorg = tag_origin("tag_shoulder_l", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/shoulder_l.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib4, self), 0, 3);	// forward,right,up
 	}
@@ -838,36 +853,32 @@ void() oppressor_gibdead =
 	ThrowGib3(self, "models/enemies/oppressor/gibs/head_face.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel('150 0 70', self), 0, 3);	// forward,right,up
 	tagorg = tag_origin("tag_head_top", self);
 	ThrowGib3(self, "models/enemies/oppressor/gibs/head_top.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel('-50 0 200', self), 0, 3);	// forward,right,up
-
 	tagorg = tag_origin("tag_pelvis", self);
 	ThrowGib3(self, "models/enemies/oppressor/gibs/pelvis.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib6, self), 0, 3);	// forward,right,up
 
 	r = random();
-	if (r > 0.5)
-	{
+	if (r > 0.5) {
 		tagorg = tag_origin("tag_leg_l", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/leg_l.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib7, self), 0, 3);	// forward,right,up
 	}
-	else
-	{
+	else {
 		tagorg = tag_origin("tag_leg_r", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/leg_r.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib8, self), 0, 3);	// forward,right,up
 	}
+
 	r = random();
-	if (r > 0.5)
-	{
+	if (r > 0.5) {
 		tagorg = tag_origin("tag_foota", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/foota.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib7, self), 0, 3);	// forward,right,up
 	}
-	else
-	{
+	else {
 		tagorg = tag_origin("tag_footb", self);
 		ThrowGib3(self, "models/enemies/oppressor/gibs/footb.md3", self.health *0.25, 0.75, 1, 1, tagorg, relvel(wre_gib8, self), 0, 3);	// forward,right,up
 	}
-	pointparticles(particleeffectnum("oppressor_gib"), self.origin, '0 0 0', 1);		
+	pointparticles(particleeffectnum("oppressor_gib"), self.origin, '0 0 0', 1);
 
 
-	entity	explo = spawn();
+	entity explo = spawn();
 	explo.origin = self.origin + '0 0 24';
 	setmodel(explo, "models/projectiles/proj_slag2_explo.md3");
 	explo.alpha = 3;
@@ -879,7 +890,6 @@ void() oppressor_gibdead =
 	self.effects = EF_NODRAW;
 	self.classname = "monster_oppressor_gibbed";
 	drop_item(self.origin + '0 0 0', "ammo_cannon", 5, self);
-	//decal_monster(self.origin + '0 0 12');
 	self.solid = SOLID_NOT;
 	self.solid = 0;
 	self.takedamage = 0;
@@ -891,16 +901,14 @@ void() oppressor_gibdead =
 	self.th_missile = null;
 	self.th_melee = null;
 	self.th_pain = nullpain;
-	lava_aoe_spawn(self,2.5,0);
+	lava_aoe_spawn(self, 2.5, 0);
 	T_SplashDamage(self, self, 96, world, 96);
 	self.think = SUB_Remove;
 	self.nextthink = time + 2;
-};
+}
 
 
-void() oppressor_die = 
-{ 
-	//decal_monster(self.origin + '0 0 12');
+void oppressor_die() {
 	self.takedamage = 0;
 	self.flags = 0;
 	self.movetype = MOVETYPE_TOSS;
@@ -911,118 +919,111 @@ void() oppressor_die =
 	self.th_melee = null;
 	self.th_pain = nullpain;
 	self.solid = SOLID_TRIGGER;
-	//drop_item(self.origin + '0 0 0', "shells_inv", 4, self);
 	self.painframe = 1;
 	self.glowmod = '1 1 1';
 	float r = random();
-	if(r < 1)
-	{	
+	if (r < 1) {
 		self.frame = $opp_deatha1;
 		sound(self, CHAN_AUTO, "enemies/oppressor/die1.ogg", 1, 0.25);
 	}
-	if(r < 0.67)
-	{	
+	if (r < 0.67) {
 		self.frame = $opp_deathb1;
 		sound(self, CHAN_AUTO, "enemies/oppressor/die2.ogg", 1, 0.25);
 	}
-	if(r < 0.33)
-	{	
+	if (r < 0.33) {
 		self.frame = $opp_deathc1;
 		sound(self, CHAN_AUTO, "enemies/oppressor/die3.ogg", 1, 0.25);
 	}
 
-	if(self.health < opp_dtg )
+	if (self.health < opp_dtg ) {
 		self.think = oppressor_gibdead;
-	else
-	{
+	}
+	else {
 		self.think = oppressor_postdie;
 		drop_item(self.origin + '0 0 0', "ammo_cannon", 5, self);
 	}
 	self.nextthink = time;
-};
+}
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-void() precache_monster_oppressor =
-{
-precache_model("models/enemies/oppressor/oppressor.md3");
-precache_model("particles/oppressor/oppressor_fire1_1.md3");
-precache_model("particles/oppressor/oppressor_fire1_2.md3");
-precache_model("particles/oppressor/oppressor_fire1_3.md3");
-precache_model("particles/oppressor/oppressor_fire1_4.md3");
-precache_model("particles/oppressor/oppressor_fire1_5.md3");
-precache_model("particles/oppressor/oppressor_fire2_1.md3");
-precache_model("particles/oppressor/oppressor_fire2_2.md3");
-precache_model("particles/oppressor/oppressor_fire2_3.md3");
-precache_model("particles/oppressor/oppressor_fire2_4.md3");
-precache_model("particles/oppressor/oppressor_fire2_5.md3");
-precache_model("particles/impact/impact_oppressor1.md3");
-precache_model("particles/impact/impact_oppressor2.md3");
-precache_model("particles/impact/impact_oppressor3.md3");
-precache_model("particles/impact/impact_oppressor4.md3");
-precache_model("particles/impact/impact_oppressor5.md3");
-precache_model("models/enemies/oppressor/gibs/cannon_l.md3");
-precache_model("models/enemies/oppressor/gibs/cannon_r.md3");
-precache_model("models/enemies/oppressor/gibs/foota.md3");
-precache_model("models/enemies/oppressor/gibs/footb.md3");
-precache_model("models/enemies/oppressor/gibs/head_back.md3");
-precache_model("models/enemies/oppressor/gibs/head_bot_l.md3");
-precache_model("models/enemies/oppressor/gibs/head_bot_r.md3");
-precache_model("models/enemies/oppressor/gibs/head_face.md3");
-precache_model("models/enemies/oppressor/gibs/head_top.md3");
-precache_model("models/enemies/oppressor/gibs/leg_l.md3");
-precache_model("models/enemies/oppressor/gibs/leg_r.md3");
-precache_model("models/enemies/oppressor/gibs/pelvis.md3");
-precache_model("models/enemies/oppressor/gibs/shoulder_l.md3");
-precache_model("models/enemies/oppressor/gibs/shoulder_r.md3");
-precache_sound("enemies/oppressor/chatter1.ogg");
-precache_sound("enemies/oppressor/chatter2.ogg");
-precache_sound("enemies/oppressor/chatter3.ogg");
-precache_sound("enemies/oppressor/chatter4.ogg");
-precache_sound("enemies/oppressor/chatter5.ogg");
-precache_sound("enemies/oppressor/die1.ogg");
-precache_sound("enemies/oppressor/die2.ogg");
-precache_sound("enemies/oppressor/die3.ogg");
-precache_sound("enemies/oppressor/fire1.ogg");
-precache_sound("enemies/oppressor/fire2.ogg");
-precache_sound("enemies/oppressor/fire3.ogg");
-precache_sound("enemies/oppressor/fire4.ogg");
-precache_sound("enemies/oppressor/fire5.ogg");
-precache_sound("enemies/oppressor/idle1.ogg");
-precache_sound("enemies/oppressor/idle2.ogg");
-precache_sound("enemies/oppressor/idle3.ogg");
-precache_sound("enemies/oppressor/pain1.ogg");
-precache_sound("enemies/oppressor/pain2.ogg");
-precache_sound("enemies/oppressor/pain3.ogg");
-precache_sound("enemies/oppressor/preattack1.ogg");
-precache_sound("enemies/oppressor/preattack2.ogg");
-precache_sound("enemies/oppressor/preattack3.ogg");
-precache_sound("enemies/oppressor/preattack4.ogg");
-precache_sound("enemies/oppressor/preattack5.ogg");
-precache_sound("enemies/oppressor/postattack1.ogg");
-precache_sound("enemies/oppressor/postattack2.ogg");
-precache_sound("enemies/oppressor/postattack3.ogg");
-precache_sound("enemies/oppressor/postattack4.ogg");
-precache_sound("enemies/oppressor/postattack5.ogg");
-precache_sound("enemies/oppressor/sight.ogg");
-precache_sound("enemies/oppressor/step1.ogg");
-precache_sound("enemies/oppressor/step2.ogg");
-precache_sound("enemies/oppressor/step3.ogg");
-precache_sound("enemies/oppressor/step4.ogg");
-precache_sound("enemies/oppressor/step5.ogg");
-precache_sound("enemies/oppressor/proj_impact1.ogg");
-precache_sound("enemies/oppressor/proj_impact2.ogg");
-precache_sound("enemies/oppressor/proj_impact3.ogg");
-precache_sound("enemies/oppressor/proj_loop.wav");
-//precache_sound("enemies/oppressor/fire_loop.wav");
-};
+void precache_monster_oppressor() {
+	precache_model("models/enemies/oppressor/oppressor.md3");
+	precache_model("particles/oppressor/oppressor_fire1_1.md3");
+	precache_model("particles/oppressor/oppressor_fire1_2.md3");
+	precache_model("particles/oppressor/oppressor_fire1_3.md3");
+	precache_model("particles/oppressor/oppressor_fire1_4.md3");
+	precache_model("particles/oppressor/oppressor_fire1_5.md3");
+	precache_model("particles/oppressor/oppressor_fire2_1.md3");
+	precache_model("particles/oppressor/oppressor_fire2_2.md3");
+	precache_model("particles/oppressor/oppressor_fire2_3.md3");
+	precache_model("particles/oppressor/oppressor_fire2_4.md3");
+	precache_model("particles/oppressor/oppressor_fire2_5.md3");
+	precache_model("particles/impact/impact_oppressor1.md3");
+	precache_model("particles/impact/impact_oppressor2.md3");
+	precache_model("particles/impact/impact_oppressor3.md3");
+	precache_model("particles/impact/impact_oppressor4.md3");
+	precache_model("particles/impact/impact_oppressor5.md3");
+	precache_model("models/enemies/oppressor/gibs/cannon_l.md3");
+	precache_model("models/enemies/oppressor/gibs/cannon_r.md3");
+	precache_model("models/enemies/oppressor/gibs/foota.md3");
+	precache_model("models/enemies/oppressor/gibs/footb.md3");
+	precache_model("models/enemies/oppressor/gibs/head_back.md3");
+	precache_model("models/enemies/oppressor/gibs/head_bot_l.md3");
+	precache_model("models/enemies/oppressor/gibs/head_bot_r.md3");
+	precache_model("models/enemies/oppressor/gibs/head_face.md3");
+	precache_model("models/enemies/oppressor/gibs/head_top.md3");
+	precache_model("models/enemies/oppressor/gibs/leg_l.md3");
+	precache_model("models/enemies/oppressor/gibs/leg_r.md3");
+	precache_model("models/enemies/oppressor/gibs/pelvis.md3");
+	precache_model("models/enemies/oppressor/gibs/shoulder_l.md3");
+	precache_model("models/enemies/oppressor/gibs/shoulder_r.md3");
+	precache_sound("enemies/oppressor/chatter1.ogg");
+	precache_sound("enemies/oppressor/chatter2.ogg");
+	precache_sound("enemies/oppressor/chatter3.ogg");
+	precache_sound("enemies/oppressor/chatter4.ogg");
+	precache_sound("enemies/oppressor/chatter5.ogg");
+	precache_sound("enemies/oppressor/die1.ogg");
+	precache_sound("enemies/oppressor/die2.ogg");
+	precache_sound("enemies/oppressor/die3.ogg");
+	precache_sound("enemies/oppressor/fire1.ogg");
+	precache_sound("enemies/oppressor/fire2.ogg");
+	precache_sound("enemies/oppressor/fire3.ogg");
+	precache_sound("enemies/oppressor/fire4.ogg");
+	precache_sound("enemies/oppressor/fire5.ogg");
+	precache_sound("enemies/oppressor/idle1.ogg");
+	precache_sound("enemies/oppressor/idle2.ogg");
+	precache_sound("enemies/oppressor/idle3.ogg");
+	precache_sound("enemies/oppressor/pain1.ogg");
+	precache_sound("enemies/oppressor/pain2.ogg");
+	precache_sound("enemies/oppressor/pain3.ogg");
+	precache_sound("enemies/oppressor/preattack1.ogg");
+	precache_sound("enemies/oppressor/preattack2.ogg");
+	precache_sound("enemies/oppressor/preattack3.ogg");
+	precache_sound("enemies/oppressor/preattack4.ogg");
+	precache_sound("enemies/oppressor/preattack5.ogg");
+	precache_sound("enemies/oppressor/postattack1.ogg");
+	precache_sound("enemies/oppressor/postattack2.ogg");
+	precache_sound("enemies/oppressor/postattack3.ogg");
+	precache_sound("enemies/oppressor/postattack4.ogg");
+	precache_sound("enemies/oppressor/postattack5.ogg");
+	precache_sound("enemies/oppressor/sight.ogg");
+	precache_sound("enemies/oppressor/step1.ogg");
+	precache_sound("enemies/oppressor/step2.ogg");
+	precache_sound("enemies/oppressor/step3.ogg");
+	precache_sound("enemies/oppressor/step4.ogg");
+	precache_sound("enemies/oppressor/step5.ogg");
+	precache_sound("enemies/oppressor/proj_impact1.ogg");
+	precache_sound("enemies/oppressor/proj_impact2.ogg");
+	precache_sound("enemies/oppressor/proj_impact3.ogg");
+	precache_sound("enemies/oppressor/proj_loop.wav");
+}
+
 
 .string tagattached;
 .float isplayingsound;
 
 
-void() oppressor_emitter =
-{
+void oppressor_emitter() {
 	// Reki (June 13 2023): if we're outside the PVS, just wait a bit before checking again
 	if (!checkpvs(single_player.origin + single_player.view_ofs, self.owner))
 	{
@@ -1031,24 +1032,21 @@ void() oppressor_emitter =
 		return;
 	}
 
-	self.think = oppressor_emitter;	
+	self.think = oppressor_emitter;
 	self.nextthink = time + self.delay;
 
-	if ((self.owner.classname != "crystallised"))
-	{
+	if ((self.owner.classname != "crystallised")) {
 		// Reki (June 13 2023): Moved oppressor fire over to particles instead of emitter entities
 		pointparticles(particleeffectnum(self.particlename), self.origin, '0 0 0', 1);
 		//spawn_model_emitter(self);
 	}
 
-	if (self.isplayingsound == 1)
-	{
+	if (self.isplayingsound == 1) {
 		self.isplayingsound = 0;
 		sound(self, CHAN_WEAPON, "enemies/oppressor/fire_loop.wav", 1, 0.25);
 	}
-	
-	if ((self.owner.health < 0) || (self.owner.classname == "crystallised") || (self.owner.classname != "monster_oppressor"))
-	{	
+
+	if ((self.owner.health < 0) || (self.owner.classname == "crystallised") || (self.owner.classname != "monster_oppressor")) {
 		sound(self, CHAN_WEAPON, "misc/null.wav", 1, 1);
 		self.think = SUB_Remove;
 	}
@@ -1058,27 +1056,26 @@ void() oppressor_emitter =
 		tagorg = tag_origin(self.tagattached, self.owner);
 		setorigin(self, tagorg);
 	}
-};
-void() oppressor_particles =
-{
+}
+
+
+void oppressor_particles() {
 	if ((self.owner.classname != "crystallised"))
 		pointparticles(particleeffectnum(self.particlename), self.origin, '0 0 0', 1);
-	if((self.owner.health < 0)|| (self.owner.classname == "crystallised")||(self.classname != "monster_oppressor"))
-	{
+
+	if ((self.owner.health < 0)|| (self.owner.classname == "crystallised")||(self.classname != "monster_oppressor")) {
 		self.think = SUB_Remove;
 	}
-	else
-	{
-		self.think = oppressor_particles;	
-		local vector tagorg;
-		tagorg = tag_origin(self.tagattached, self.owner);
+	else {
+		self.think = oppressor_particles;
+		vector tagorg = tag_origin(self.tagattached, self.owner);
 		setorigin(self,tagorg);
 	}
 	self.nextthink = time + 0.5;
-};
+}
 
-void(entity e) spawn_emitters =
-{
+
+void spawn_emitters(entity e) {
 	entity core = spawn();
 	core.count = 1;
 	core.tagattached = "tag_core";
@@ -1102,7 +1099,7 @@ void(entity e) spawn_emitters =
 	core.model4 =  "particles/oppressor/oppressor_fire1_4.md3";
 	core.model5 = "particles/oppressor/oppressor_fire1_5.md3";
 	core.particlename = "oppressor_fire_core";
-	
+
 	entity foot = spawn();
 	foot.count = 1;
 	setmodel(foot, "models/misc/null.md3");
@@ -1126,7 +1123,7 @@ void(entity e) spawn_emitters =
 	foot.model4 = "particles/oppressor/oppressor_fire2_4.md3";
 	foot.model5 = "particles/oppressor/oppressor_fire2_5.md3";
 	foot.particlename = "oppressor_fire_foot";
-	
+
 	entity foot2 = spawn();
 	foot2.count = 1;
 	setmodel(foot2, "models/misc/null.md3");
@@ -1158,13 +1155,13 @@ void(entity e) spawn_emitters =
 	core.nextthink = time + (1 * random());
 	foot.nextthink = time + (1 * random());
 	foot2.nextthink = time + (1 * random());
-	
+
 	entity dripa = spawn();
 	setmodel(dripa, "models/misc/null.md3");
 	dripa.tagattached = "tag_dripa";
 	entity dripb = spawn();
 	setmodel(dripb, "models/misc/null.md3");
-	dripb.tagattached = "tag_dripb";	
+	dripb.tagattached = "tag_dripb";
 	dripa.owner = e;
 	dripb.owner = e;
 	dripa.origin = e.origin;
@@ -1175,51 +1172,7 @@ void(entity e) spawn_emitters =
 	dripb.think = oppressor_particles;
 	dripa.nextthink = time + (1 * random());
 	dripb.nextthink = time + (1 * random());
-		
-};	
+
+};
 
 .vector bbvv;
-
-/*FGD
-@PointClass
-	base(Monster)
-	color(1 0 0)
-	size(-20 -20 -32, 20 20 56)
-	model({"path": "models/enemies/oppressor/oppressor.md3"})
-= monster_oppressor : "Monster: Oppressor" []
-*/
-void() monster_oppressor = {
-	if (deathmatch) {
-		remove(self);
-		return;
-	}
-
-	precache_monster_oppressor();
-
-	if (self.waypointed != 1)
-		self.waypointed = 0;
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	setmodel(self, "models/enemies/oppressor/oppressor.md3");
-	setsize(self, '-20 -20 -32', '20 20 56');
-
-	self.noise = "enemies/oppressor/sight.ogg";
-	self.health = opp_health;
-	self.damagetopain = opp_dtp;
- 	self.classname = "monster_oppressor";
-	self.th_stand = oppressor_stand1;
-	self.th_walk = oppressor_walk1;
-	if (!self.turret)
-		self.th_run = oppressor_run1;
-	else
-		self.th_run = oppressor_runtattck1;
-	self.stepheight_delta = 8;
-	self.th_missile = oppressor_runtattck1;
-	self.th_melee = oppressor_runtattck1;
-	self.th_pain = oppressor_pain;
-	self.th_die = oppressor_die;
-	self.turretable = 1;
-	self.heavymonster = 1;
-	self.nextthink = time + 0.1;
-	self.think = walkmonster_start;
-};

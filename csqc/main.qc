@@ -780,8 +780,7 @@ float CSQC_Parse_TempEntity() {
 			cntimg.flags |= UIFLAG_HIDE;
 
 			// figure out icon size
-			if (msg_mode & 0x02)
-			{
+			if (msg_mode & 0x02) {
 				vector isize = draw_getimagesize(s_icon);
 				isize[1] = max(isize[1], 1); // prevent div0 error
 				icon.size = [(isize[0] / isize[1]) * 32, 32];
@@ -791,8 +790,7 @@ float CSQC_Parse_TempEntity() {
 				precache_pic(s_icon);
 				icon.flags &= ~UIFLAG_HIDE;
 			}
-			else
-			{
+			else {
 				msg.origin = msgpic.origin = '0 0';
 				icon.flags |= UIFLAG_HIDE;
 			}

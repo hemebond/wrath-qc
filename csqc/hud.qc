@@ -3148,6 +3148,3 @@ local vector angulos, origen;
 		drawpic('0 0 0'+ res, "gfx/crt.tga", vid_width *'0.5 0 0' + vid_height *'0 0.5 0', '1 1 1', crt_active, 0);
 	}
 };
-
-////////////////end of qc file
-////////////////end of qc file

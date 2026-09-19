@@ -65,6 +65,7 @@ entities/func/illusionary.qc
 entities/func/train.qc
 entities/func/flicker.qc
 entities/trigger.qc
+entities/trigger/changelevel.qc
 entities/info_chain.qc
 entities/entity_model.qc
 entities/object_eyeball.qc
