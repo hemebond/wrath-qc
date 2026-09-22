@@ -780,8 +780,7 @@ void lava_ball_touch_small() {
 		self.velocity  = '0 0 0';
 		self.solid = 0;
 		self.movetype = 0;
-		if (r < 0.25)
-		{
+		if (r < 0.25) {
 			setmodel(self,"");
 			self.effects = EF_FLAME;
 			float ball_duration = self.owner.lifetime * 0.85;
@@ -797,17 +796,17 @@ void lava_ball_touch_small() {
 
 
 void lava_ball_touch() {
-	if (other.solid ==SOLID_TRIGGER)
+	if (other.solid == SOLID_TRIGGER)
 		return;
 
-	if ((other.solid ==SOLID_BSP)||(other.solid == SOLID_BBOX) || (other.solid == SOLID_SLIDEBOX)) {
-		setorigin (self,self.origin + '0 0 38');
+	if ((other.solid == SOLID_BSP) || (other.solid == SOLID_BBOX) || (other.solid == SOLID_SLIDEBOX)) {
+		setorigin(self,self.origin + '0 0 38');
 		T_SplashDamage(self, self, 96, world, 96);
 		pointparticles(particleeffectnum("oppressor_gib"), self.origin, '0 0 0', 1);
 		lava_aoe_spawn(self, max(0.1, self.owner.lifetime), self.dmg);
 		self.touch = SUB_Null;
 		self.effects = EF_NODRAW;
-		sound7(self,CHAN_AUTO,"impact/projectiles/slag2_explo2.ogg",0.5,0.25,random(200,270),0);
+		sound7(self, CHAN_AUTO, "impact/projectiles/slag2_explo2.ogg", 0.5, 0.25, random(200,270), 0);
 		self.think = SUB_Remove;
 		self.nextthink = time + 5;
 	}
@@ -815,7 +814,7 @@ void lava_ball_touch() {
 
 
 void lava_ball_think() {
-	if ((self.cnt != 1) && (self.velocity_z < 0)&&(self.owner.count > 1)) {
+	if ((self.cnt != 1) && (self.velocity_z < 0) && (self.owner.count > 1)) {
 		self.gravity = self.scale;
 		float wnr_rspeed = self.owner.speed * 0.125;
 		if (self.scale <= 1) {
@@ -831,7 +830,7 @@ void lava_ball_think() {
 				lava_ball.movetype = MOVETYPE_TOSS;
 				lava_ball.owner = self.owner;
 				setsize(lava_ball, '-1 -1 -1', '1 1 1');
-				lava_ball.scale = random(0.1,0.25);
+				lava_ball.scale = random(0.1, 0.25);
 				lava_ball.angles = self.angles;
 				lava_ball.gravity = self.gravity * random(0.85,1);
 				lava_ball.velocity_x = self.velocity_x* random(0.85,1.15);
@@ -840,7 +839,6 @@ void lava_ball_think() {
 				lava_ball.traileffectnum = particleeffectnum("lavatrail2");
 				lava_ball.touch = lava_ball_touch_small;
 				lava_count --;
-
 			}
 		}
 

@@ -1,21 +1,4 @@
-/*FGD
-@PointClass
-	color(.8 .6 .4)
-	size(-8 -8 -8, 8 8 8)
-	model({{
-		model -> model, "models/misc/chain.md3"
-	}})
-= info_chain : "Procedural hanging chain." [
-	target(target_destination) : "Target" : : "Target this to an info_notnull"
-	height(float) : "Height" : : "Relative height of chain curve ( slack )"
-	offset_angle(float) : "Offset Angle"
-	scale(float) : "Scale" : : "Scale of chain models"
-	lip(float) : "Lip" : "0" : "Adds or subtracts links from end of the chain"
-	auto_angle(integer) : "Auto Angle" : 0
-	tag_name(string) : "Tag Name" : "tag_chain"
-]
-*/
-
+// This isn't really used as-is in a map, this seems to be a dev tool for creating chains
 
 .entity lastchain;
 .float arch;

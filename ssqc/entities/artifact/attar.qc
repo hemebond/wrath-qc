@@ -219,7 +219,7 @@ void spawn_attar_cloud(vector org) {
 
 void attar_cloud_touch() {
 	if (
-		(other.classentity ==  "monsters") &&
+		(other.classentity == "monsters") &&
 		(other.friendly_monster != 1) &&
 		(other.warped_time < time)
 	)
@@ -229,18 +229,16 @@ void attar_cloud_touch() {
 
 
 void attar_think_fly() {
-	vector source;
-	entity head;
-	source = self.origin;
-	head = findradius(source, 16);
+	entity head = findradius(self.origin, 16);
 	float fm = 0;
 	while (head) {
-		if ((head.classentity ==  "monsters") && (head.warped_time < time)&& (head.friendly_monster != 1)) {
+		if ((head.classentity ==  "monsters") && (head.warped_time < time) && (head.friendly_monster != 1)) {
 			fm = 1;
 		}
 		head = head.chain;
 	}
-	if(fm == 1)
+
+	if (fm == 1)
 		self.think = attar_touch;
 	else
 		self.think = attar_think_fly;
@@ -253,11 +251,11 @@ void Attar_selected() {
 	// Throw the purple jar
 	//
 
-	if(!self.Attar)
+	if (!self.Attar)
 		return;
-	entity missile;
-	missile = spawn ();
-	self.Attar --;
+
+	entity missile = spawn();
+	self.Attar--;
 	self.radial_time = time + 1;
 	missile.owner = self;
 	missile.movetype = MOVETYPE_BOUNCE;
@@ -266,25 +264,22 @@ void Attar_selected() {
 	sound(self, CHAN_AUTO, "items/artifacts/artifactD_use.ogg", 1, 0.25);
 	Controller_Rumble(self, 0, 0.8, 120);
 	makevectors(self.v_angle);
-	if (self.v_angle_x)
-		missile.velocity = v_forward*attar_vel + v_up * attar_velz + crandom()*v_right*1 + crandom()*v_up*1;
-	else
-	{
-		//missile.velocity = aim(self, 10000);
-		missile.velocity = normalize(self.cursor_trace_endpos - missile.origin) *attar_vel;
-		//missile.velocity = missile.velocity * attar_vel;
+	if (self.v_angle_x) {
+		missile.velocity = v_forward * attar_vel + v_up * attar_velz + crandom() * v_right * 1 + crandom() * v_up * 1;
+	}
+	else {
+		missile.velocity = normalize(self.cursor_trace_endpos - missile.origin) * attar_vel;
 		missile.velocity_z += attar_velz;
 	}
 	missile.angles = vectoangles(missile.velocity);
 	missile.gravity = attar_grav;
 	missile.touch = attar_touch;
 	missile.think = attar_think_fly;
-	//missile.avelocity_x = random( -250,250);
-	missile.avelocity_y = 360; //crandom( -150,150);
+	missile.avelocity_y = 360;
 	missile.avelocity_z = random( -250,250);
 	missile.traileffectnum = particleeffectnum("attarparticle");
 	missile.nextthink = time + 0.05;
-	setmodel (missile, "models/artifacts/effects/confounding_attar_proj.md3");
+	setmodel(missile, "models/artifacts/effects/confounding_attar_proj.md3");
 	setsize(missile, attar_pbboxn,attar_pbbox);
-	setorigin (missile, self.origin);
-};
+	setorigin(missile, self.origin);
+}

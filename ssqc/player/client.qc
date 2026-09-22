@@ -737,19 +737,19 @@ void autosave() {
 
 void PlayerPreThink() {
 	self.shadowangle = normalize('1 0 0');
+
 	// Reki (May 9 2023): Fixed this anti-rj logic because it was bugged and a bit inflexible
 	if (self.flags & FL_ONGROUND && self.velocity_z < 200)
 		self.rocketjumpcnt = 0;
 	else
 		self.rocketjumpcnt = max(0, self.rocketjumpcnt - (frametime * 0.2));
 
-	if((self.aegisflag == 1) && (self.Aegis_time < time))
-	{
+	if ((self.aegisflag == 1) && (self.Aegis_time < time)) {
 		//stuffcmd(self, "r_glsl_saturation 1\n");
 		self.aegisflag = 0;
 	}
-	if(self.vhud == 3)
-	{
+
+	if (self.vhud == 3) {
 		UpdateCameras(self.active_camera);
 		self.velocity = '0 0 0';
 	}
@@ -1251,12 +1251,6 @@ void PlayerPreThink() {
 
 	UpdateViewOfs();
 
-	if ((self.radial_time < time) && (self.radialruning == 1))
-	{
-		//self.radialactive = 0;
-		self.radialruning = 0;
-	}
-
 	// Reki (April 20 2023): Refactored use traces to use traceline and not prydon cursor
 	makevectors(self.v_angle);
 	vector usable_trace_start = self.origin + self.view_ofs;
@@ -1418,10 +1412,11 @@ void PlayerPreThink() {
 	}
 };
 
-.float jump_flag;	// player jump flag
 
+.float jump_flag;	// player jump flag
 .float nomelee;
 .float checkweaponflag;
+
 void nowater_type() {
 	self.waterlevel = 0;
 	self.fakewatertype = 0;
@@ -1430,13 +1425,14 @@ void nowater_type() {
 	self.fwatershift = 0;
 }
 
-void() check_weapons = {
+
+void check_weapons() {
 	self.checkweaponflag = 1;
-};
+}
+
 
 .float tether_model_client;
 .float shrine_model_client;
-
 .float sigil_model_client;
 .float v_nextthink;
 .entity artifact_client2;
@@ -3741,12 +3737,12 @@ void PutClientInServer() {
 	stuffcmd(self, "alias -jump  \"\" \n");
 	stuffcmd(self, "cl_movement_maxspeed 416 \n");
 	stuffcmd(self, "sv_maxspeed 416 \n");
-	stuffcmd(self, "cl_forwardspeed 416\n");
-	stuffcmd(self, "cl_backspeed 416\n");
-	stuffcmd(self, "cl_sidespeed 416\n");
-	stuffcmd(self, "scratch3 1\n");
+	stuffcmd(self, "cl_forwardspeed 416 \n");
+	stuffcmd(self, "cl_backspeed 416 \n");
+	stuffcmd(self, "cl_sidespeed 416 \n");
+	stuffcmd(self, "scratch3 1 \n");
 	stuffcmd(self, "v_idlescale 0 \n");
-	stuffcmd(self, "freelook 1\n");
+	stuffcmd(self, "freelook 1 \n");
 
 	if ((cvar("custom_m_yaw") != 1))
 		stuffcmd(self, "m_yaw 0.022\n");

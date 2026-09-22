@@ -1025,8 +1025,7 @@ void precache_monster_oppressor() {
 
 void oppressor_emitter() {
 	// Reki (June 13 2023): if we're outside the PVS, just wait a bit before checking again
-	if (!checkpvs(single_player.origin + single_player.view_ofs, self.owner))
-	{
+	if (!checkpvs(single_player.origin + single_player.view_ofs, self.owner)) {
 		self.think = oppressor_emitter;
 		self.nextthink = time + 0.2;
 		return;
@@ -1050,10 +1049,8 @@ void oppressor_emitter() {
 		sound(self, CHAN_WEAPON, "misc/null.wav", 1, 1);
 		self.think = SUB_Remove;
 	}
-	else
-	{
-		local vector tagorg;
-		tagorg = tag_origin(self.tagattached, self.owner);
+	else {
+		vector tagorg = tag_origin(self.tagattached, self.owner);
 		setorigin(self, tagorg);
 	}
 }

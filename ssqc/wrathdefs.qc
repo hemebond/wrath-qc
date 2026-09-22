@@ -543,10 +543,9 @@ enumflags DEFLECTION:float {
 };
 
 ///radialmenu
-.float radial_time;
+.float radial_time;  // Time when the currently active artifact will run out
 .float radialactive;
 .float rmenu;
-.float radialruning;
 
 .float LifeSiphon;
 .float LifeSiphon_time;

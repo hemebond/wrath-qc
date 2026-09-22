@@ -67,8 +67,8 @@ void multi_trigger() {
 }
 
 
-void() multi_killed = 
-{ 
+void() multi_killed =
+{
 	self.enemy = damage_attacker;
 	multi_trigger();
 };
@@ -358,7 +358,7 @@ void counter_use() {
 
 //============================================================================
 
-void() play_teleport = 
+void() play_teleport =
 {
 	local float v;
 	local string tmpstr;
@@ -384,7 +384,7 @@ void() play_teleport =
 	remove(self);
 };
 
-void(vector org) spawn_tfog = 
+void(vector org) spawn_tfog =
 {
 	s = spawn();
 	s.origin = org;
@@ -392,7 +392,7 @@ void(vector org) spawn_tfog =
 	s.think = play_teleport;
 };
 
-void() tdeath_touch = 
+void() tdeath_touch =
 {
 	if (other == self.owner)
 		return;
@@ -419,7 +419,7 @@ void() tdeath_touch =
 	}
 };
 
-void(vector org, entity death_owner) spawn_tdeath = 
+void(vector org, entity death_owner) spawn_tdeath =
 {
 	local entity death;
 
@@ -438,8 +438,8 @@ void(vector org, entity death_owner) spawn_tdeath =
 	force_retouch = 2;	// make sure even still objects get hit
 };
 
-void() teleport_touch = 
-{ 
+void() teleport_touch =
+{
 	local entity t;
 	local vector org;
 	if (other.teleported_time > time)
@@ -542,7 +542,7 @@ void trigger_teleport() {
 	InitTrigger();
 	self.touch = teleport_touch;
 
-	// find the destination 
+	// find the destination
 	if (!self.target)
 		objerror("no target");
 
@@ -648,16 +648,16 @@ void trigger_monsterjump_touch() {
 		if(!activejump)
 			return;
 	}
-	if(self.type == 1)	
+	if(self.type == 1)
 	{
 		if((other.enemy.origin_z - other.origin_z) > 8)
-		return;		
+		return;
 	}
 
-	if(self.type == 2)	
+	if(self.type == 2)
 	{
 		if((other.origin_z - other.enemy.origin_z) > 8)
-		return;		
+		return;
 	}
 	other.timeangles3 = time + 3;
 	// set XY even if not on ground, so the jump will clear lips
@@ -680,137 +680,44 @@ void trigger_monsterjump_touch() {
 
 
 void JumpBack(entity e, entity b) {
+	//
+	// Push entity e (player) away from entity b (brush)
+	//
+
 	vector borg = (b.absmax + b.absmin) * 0.5;
-
-
 	vector dir = normalize(borg - e.origin);
+
 	e.stoptime = time + 0.5;
 	e.lungefree = time + 0.5;
 	e.hardstoptime = other.stoptime;
-	if(!(e.flags & FL_IGNOREINPUT))
+
+	if (!(e.flags & FL_IGNOREINPUT))
 		e.flags += FL_IGNOREINPUT;
 
-	if(e.flags & FL_ONGROUND)
+	if (e.flags & FL_ONGROUND)
 		e.flags -= FL_ONGROUND;
 
 	borg = (e.origin + borg) * 0.5;
 	borg_z = e.origin_z + e.view_ofs_z;
 
-	if(b.classname == "trigger_fly") {
+	if (b.classname == "trigger_fly") {
 		pointparticles(particleeffectnum("forcefieldflight"), borg , '0 0 0', 1);
 		te_customflash(borg, 128, 1, '0.75 0.75 1');
 	}
 
-	if(b.classname == "trigger_wrath") {
+	if (b.classname == "trigger_wrath") {
 		pointparticles(particleeffectnum("forcefieldwrath"), borg , '0 0 0', 1);
 		te_customflash(borg, 128, 1, '1 0.75 0.75');
 	}
 
-	if(b.classname == "trigger_displacement") {
+	if (b.classname == "trigger_displacement") {
 		pointparticles(particleeffectnum("forcefielddisplacement"), borg , '0 0 0', 1);
 		te_customflash(borg, 128, 1, '0.5 0.5 0.25');
 	}
+
 	e.velocity = dir * - 256;
 	e.velocity_z = 128;
 }
-
-
-.float sigiltouchingtime;
-void() trigger_fly_touch = 
-{
-	if (other.classname != "player")
-		return;
-
-	if(other.radial_time > time)
-	{
-		if(other.time_hudmessage < time)
-			sound7(other,CHAN_AUTO,"weapons/lance/shield_fire1.ogg",0.75,0.25,75,0);
-		Hud_CantUseSigilNotification(other);
-		JumpBack(other,self);
-		return;	
-	}
-	if(self.timefly <= 0)
-	{
-		other.takenflytime = 0;
-		other.radialactive = 0;
-		other.timefly = 0;
-		other.sigil_time = 0;
-		other.flightflag = 2;
-		other.movetype = MOVETYPE_WALK;
-	}
-	else
-	{
-		if (((other.timefly - time) < 8) || (other.sigiltouchingtime < time))
-		{
-			sound (other, CHAN_AUTO, "items/sigils/sigil_flight_start.ogg",1 ,1);
-			te_customflash(other.origin, 256, 1, '0.3 0.7 1');
-			string flash_command_a = strcat ("bf ",ftos(flash_color_x)," ",ftos(flash_color_y)," ");
-			string flash_command_b = strcat (ftos(flash_color_z)," ",ftos(flash_alpha)," ",ftos(flash_fade),"\n");
-			string flash_command =  strcat (flash_command_a,flash_command_b);
-			stuffcmd (other, flash_command);
-			other.takenflytime = self.timefly;
-			other.radialactive = 20;
-			other.timefly = time + self.timefly;
-			other.sigil_time = time + self.timefly;
-			other.flightflag = 1;
-			//Hud_message(29, other.origin, other);
-			Hud_SendNotification(other, "sigil_flight", "$NOTIFY_SIGIL_FLIGHT");
-		}
-	}
-
-	other.sigiltouchingtime = time + 0.5;
-};
-
-void() sigil = 
-{
-	if (!self.duration)
-		self.duration = 10;
-	self.timefly = self.duration;
-	self.model = "models/objects/sigil.md3";
-	setmodel(self, self.model);
-	setsize(self, '-16 -48 -80', '16 48 80');
-	self.solid = SOLID_TRIGGER;
-	self.touch = trigger_fly_touch;
-};
-
-
-/*FGD
-@SolidClass color(0.5 0.0 0.5) = trigger_fly : "Sigil of Flight" [
-    duration(float) : "Fly Duration" : "10" : "Number in seconds of the duration of the effect. A value of -1 will stop the flying effect."
-]
-*/
-void() trigger_fly = 
-{	
-
-	if(!self.timefly)
-	self.timefly = self.duration;
-
-	if (!self.timefly)
-		self.timefly = 10;
-
-	self.touch = trigger_fly_touch;
-	self.solid = SOLID_TRIGGER;
-	setmodel(self, self.model);
-	vector center = (self.absmax + self.absmin) / 2;  
-
-	if(!self.volume)
-		self.volume = 1;	
-
-	if(self.volume > 0)
-	{
-		self.noise = "objects/pylon_loop.ogg";
-		precache_sound(self.noise);
-		ambientsound(center, self.noise, self.volume, 0.45);
-	}
-
-	self.modelindex = 0;
-	self.model = string_null;
-};
-
-
-
-
-
 
 
 void(entity e) turn_invisible_andnonsolid =
@@ -824,12 +731,12 @@ void(entity e) turn_invisible_andnonsolid =
 	if(self.classname == "func_door")
 		self.solid = 0;
 	if(self.classname == "object_switch")
-	{	
+	{
 		self.usable = 0;
 		self.solid = SOLID_BSP;
 	}
 
-	
+
 	if(self.think)
 	{
 		self.think = self.oldthink;
@@ -863,12 +770,12 @@ void(entity e) turn_visible_andsolid =
 	if(self.classname == "func_door")
 		self.solid = SOLID_BSP;
 	if(self.classname == "object_switch")
-	{	
+	{
 		self.usable = 1;
 		self.solid = SOLID_BSP;
 	}
 	if(self.classname == "nonsolidswitch")
-	{	
+	{
 		self.alpha = 1;
 		self.usable = 1;
 		self.solid = SOLID_TRIGGER;
@@ -885,12 +792,12 @@ void(entity e) turn_visible_andsolid =
 	}
 };
 
-void(float type) toggle_displacement = 
-{ 
+void(float type) toggle_displacement =
+{
 	local entity invisible;
 	//invisible = findradius('0 0 0', 1000000);
 	invisible = nextent(world);
-	while (invisible)	
+	while (invisible)
 	{
 		entity holder = nextent(invisible);
 		if(invisible.oldclassname == "monster_incisor")
@@ -905,7 +812,7 @@ void(float type) toggle_displacement =
 			}
 			else
 			{
-				
+
 				invisible.pflags = 0;
 				invisible.colormod = '1 1 1';
 				invisible.effects = 0;
@@ -919,13 +826,13 @@ void(float type) toggle_displacement =
 			invisible.oldthink = invisible.think;
 			else
 			invisible.oldthink = SUB_Null;
-	
+
 			if(invisible.classname == "spleetcyst")
 				invisible.lifetime = 0;
 
 			entity oself = self;
 			self =  invisible;
-			
+
 			if(self.displacement == -1)
 			{
 				if(type != 1)
@@ -944,39 +851,32 @@ void(float type) toggle_displacement =
 			self = oself;
 		}
 
-		invisible = holder;	
+		invisible = holder;
 	}
 	if(type == 1)
     	stuffcmd (single_player, "bf 1 0.7 0.7 1.05 1\n");
 };
 
 
-void() sigil_ambientsound_check
-{
-	if((self.owner.classname != self.oldclassname) || (wasfreed(self.owner))) 
-	{
-		soundwrath(self, CHAN_VOICE, "misc/null.wav", 0, 1,100,0,1);
+void sigil_ambientsound_check() {
+	if ((self.owner.classname != self.oldclassname) || (wasfreed(self.owner))) {
+		soundwrath(self, CHAN_VOICE, "misc/null.wav", 0, 1, 100, 0, 1);
 		remove(self);
 		return;
-	} 
-	else
-	{
-		self.think = sigil_ambientsound_check;
 	}
 	self.nextthink = time + 0.05;
+}
 
-};
-void() sigil_ambientsound_think = 
-{
-	soundwrath(self, CHAN_VOICE, self.owner.noise, 1, self.owner.atten,100,2,0.25);
+
+void sigil_ambientsound_think() {
+	soundwrath(self, CHAN_VOICE, self.owner.noise, 1, self.owner.atten,100, 2, 0.25);
 	self.think = sigil_ambientsound_check;
 	self.nextthink = time;
-};
+}
 
-void sigils_initializeambients(void)
-{
-	for(entity loopedsound = findchain(::classname, "sigilsoundentity"); loopedsound; loopedsound = loopedsound.chain)
-	{
+
+void sigils_initializeambients(void) {
+	for (entity loopedsound = findchain(::classname, "sigilsoundentity"); loopedsound; loopedsound = loopedsound.chain) {
 		loopedsound.think = sigil_ambientsound_think;
 		loopedsound.nextthink = time + 0.5;
 	}
@@ -1006,7 +906,7 @@ void trigger_displacement() {
 	setmodel(self, self.model);
 
 	if (!self.rad_sound)
-		self.rad_sound = 512;	
+		self.rad_sound = 512;
 
 	self.atten = 512 / self.rad_sound;
 	if (self.duration > 0) {
@@ -1018,7 +918,7 @@ void trigger_displacement() {
 			sigilsoundentity.origin = (self.absmin + self.absmax ) * 0.5 ;
 			sigilsoundentity.classname = "sigilsoundentity";
 		}
-	}	
+	}
 	self.modelindex = 0;
 	self.model = string_null;
 }
@@ -1061,107 +961,13 @@ void trigger_displacement_touch() {
 }
 
 
-void() trigger_wrath_touch= 
-{ 
-	if(other.classname != "player")
-		return;
-
-	if(other.radial_time > time)
-	{
-		/*other.Aegis_time = 0;  other.LifeSiphon_time = 0;  other.DrownerApp_time = 0;  other.Tether_time = 0;
-		other.wrath_time = 0;	
-		other.radial_time = 0;
-		other.radialactive = 0;*/
-		if(other.time_hudmessage < time)
-			sound7(other,CHAN_AUTO,"weapons/lance/shield_fire1.ogg",0.75,0.25,75,0);
-		Hud_CantUseSigilNotification(other);
-		JumpBack(other,self);
-		return;	
-	}
-
-
-
-	if((other.wrath_time < (time + (self.duration - 5))) || (other.sigiltouchingtime < time))
-	{
-
-		sound7(other, CHAN_SIGIL, "items/sigils/sigil_wrath_active.ogg", 1, 1, 100, 0);
-		sound7(other, CHAN_AUTO, "items/sigils/sigil_wrath_start.ogg", 1, 1, 100, 0);
-
-		Hud_SendNotification(other, "sigil_wrath", "$NOTIFY_SIGIL_WRATH"); // Reki (February 20 2024): added this
-		
-		other.takenwrath_time = self.duration;
-		other.wrath_kills = 0;
-		other.wrath_time = time + self.duration + 0.5;
-		other.sigil_time = time + self.duration+ 0.5;
-		other.radialactive = 22;
-		entity oself = self;
-		self = other;
-		self.radialruning = 1;
-
-		if (single_player.weapon != IT_MACE && single_player.weapon != IT_MELEE) // swap weapons if not on a melee
-		{
-			if (single_player.items & IT_MACE)
-				self.impulse = 9;
-			else
-				self.impulse = 1;
-		}
-		self.wrath_active = 1;
-
-		te_customflash (self.origin,128,1,'1 0.3 0.3');
-		stuffcmd (self, "bf 1 0.23 0.23 0.5 0.5\n");
-		W_ChangeWeapon();
-		self = oself;
-
-
-		local entity destructwrath;
-		destructwrath = nextent(world);
-		while (destructwrath)	
-		{
-			entity holder = nextent (destructwrath);
-			if((destructwrath.classname == "func_destruct") && (destructwrath.wrath_active == 1))
-			{
-				destructwrath.takedamage = DAMAGE_YES;
-				destructwrath.wrath_active = 2;
-				item_glowmodcontroller_flicker_spawn(destructwrath);
-			}
-			destructwrath = holder;	
-		}
-
-
-	}
-		other.sigiltouchingtime = time + 0.5;
-};
-
-void() trigger_wrath = 
-{	
-	self.noise = "objects/sigil_wrath.ogg";
-		precache_sound(self.noise);
-
-	precache_sound("items/sigils/sigil_wrath_active.ogg");
-	precache_sound("items/sigils/sigil_wrath_start.ogg");
-	precache_sound("items/sigils/sigil_wrath_end.ogg");
-
-	if(!self.duration)
-	self.duration = 20;
-	if(self.duration < 5)
-		self.duration = 5;
-
-	self.touch = trigger_wrath_touch;
-	self.solid = SOLID_TRIGGER;
-	setmodel(self, self.model);
-	vector center = (self.absmax + self.absmin) / 2;  
-	ambientsound(center, self.noise, 1, 0.45);
-	self.modelindex = 0;
-	self.model = string_null;
-};
-
 //============================================================================
 .entity lightson;
-void() trigger_shrine_touch = 
-{ 
+void() trigger_shrine_touch =
+{
 	if (other.classname != "player")
 		return;
-	
+
 	te_customflash((self.absmin + self.absmax) / 2, 256, 3, '0.3 1 0.7');
 
 	entity oself;
@@ -1170,11 +976,11 @@ void() trigger_shrine_touch =
 	nowater_type();
 	self = oself;
 	message_garbage_collector ();
-	
+
 	write_shrine(0);
 
 	// Steam_StatIncrement(other, ST_STATS::saved_shrines, 1);
-	
+
 	read_currentprofileslot();
 	copy_save_maps(0);
 	local string saveloc;
@@ -1203,13 +1009,13 @@ void() trigger_shrine_touch =
 		other.health = 100;
 		stuffcmd (other,"pulsehealth\n");
 	}
-	
+
 	SUB_UseTargets();
 	oself = self;
 	self = self.owner;
 	self.think = self.use;
 	self.nextthink = time;
-	self = oself;	
+	self = oself;
 
 	remove(self);
 	message_garbage_collector ();
@@ -1220,12 +1026,12 @@ void() trigger_shrine_touch =
 
 void() fdupdate =
 {
-	
+
 	if(time > self.attack_finished)
-	{	
+	{
 		sound7(self, CHAN_BODY, "bullet16.ogg", 1, 0.75,100,2);
 		self.attack_finished = time + 27.569;
-		self.wrath_time = time + 1.8425;	
+		self.wrath_time = time + 1.8425;
 	}
 	if(time > self.wrath_time)
 	{
@@ -1244,15 +1050,15 @@ void() fdupdate =
 		if(r < 0.25)
 			rlight = '1 0 1';
 
-		te_customflash(self.origin + '0 0 64', 256, 1, rlight);		
-		self.wrath_time = time + 2.46795;	
+		te_customflash(self.origin + '0 0 64', 256, 1, rlight);
+		self.wrath_time = time + 2.46795;
 	}
 
 
 	self.frame ++;
 	if(self.frame > 456)
 		self.frame = 0;
-		
+
 	self.think = fdupdate;
 	self.nextthink = time + 0.025;
 };
@@ -1286,7 +1092,7 @@ void func_shrine_use() {
 	if(self.glowmod_x > 1)
 		self.glowmod = '0.95 0.95 0.95';
 	self.lightson.light_lev -= 3;
-	
+
 	self.colormod_x -= 0.0125;
 	self.colormod_y -= 0.013;
 	self.colormod_z -= 0.015;
@@ -1352,17 +1158,17 @@ void func_shrine() {
 //============================================================================
 
 .float exit;
-void() end_trigger_restart = 
+void() end_trigger_restart =
 {
 	stuffcmd(self.enemy, "restart\n");
 	remove(self);
 };
-void() end_trigger_restart2 = 
+void() end_trigger_restart2 =
 {
 	stuffcmd(self.enemy, "impulse 190");
 	remove(self);
 };
-void() remove_tether = 
+void() remove_tether =
 {
 	read_currentprofileslot();
 	local string campaignloc;
@@ -1376,7 +1182,7 @@ void() remove_tether =
 	fputs(writeparms, "\n");	//and again
 	fclose(writeparms);
 };
-void() trigger_restart_touch = 
+void() trigger_restart_touch =
 {
 	if (other.classname != "player")
 		return;
@@ -1403,7 +1209,7 @@ void() trigger_restart_touch =
 	}
 };
 
-void() trigger_restart = 
+void() trigger_restart =
 {
 	if (!self.exit)
 		self.exit = 1;
@@ -1420,7 +1226,7 @@ void() trigger_restart =
 
 //============================================================================
 
-void() trigger_secret_touch = 
+void() trigger_secret_touch =
 {
 
 	if (other.classname != "player")
@@ -1476,9 +1282,9 @@ void()afflicted_atk1;
 void()determine_subangle;
 void()invader_preattack;
 void()oppressor_attacka1;
-			
-void() trigger_turret_touch = 
-{ 
+
+void() trigger_turret_touch =
+{
 	if (!(other.flags & FL_MONSTER))
 		return;
 
@@ -1487,12 +1293,12 @@ void() trigger_turret_touch =
 
 	if(!other.trigger_angle_use)
 		return;
-	
-	if(other.turret_time > time)	
+
+	if(other.turret_time > time)
 		return;
 
-	if(other.warped_time > time)	
-		return;	
+	if(other.warped_time > time)
+		return;
 
 	if(self.turret_enemy_visible)
 	{
@@ -1501,8 +1307,8 @@ void() trigger_turret_touch =
 		self = other;
 		if (!(visible(self.enemy)))
 			return;
-		self = oself;	
-	}	
+		self = oself;
+	}
 
 	if((!other.takedamage) && (other.classentity == "monsters"))
 		other.takedamage = DAMAGE_AIM;
@@ -1519,11 +1325,11 @@ void() trigger_turret_touch =
 		else
 			other.minorangle = -1;
 		other.temp_turret = 1;
-	}	
+	}
 
 	if (other.turret != 1)
 	{
-		other.turret_time = time + 2.5;	
+		other.turret_time = time + 2.5;
 		other.turret = 1;
 		if(self.turret_enemy_visible)
 			other.turret_enemy_visible = 1;
@@ -1550,12 +1356,12 @@ void() trigger_turret_touch =
 	target(target_destination) : "Target" : : "if present target info_angle to set y angles"
 ]
 */
-void() trigger_turret = 
+void() trigger_turret =
 {
 	self.touch = trigger_turret_touch;
 	if(!self.angle_deviance)
 		self.angle_deviance = 90;
-	
+
 	if(self.angle_deviance > 180)
 		self.angle_deviance =180;
 	self.angle_deviance = self.angle_deviance * 2;
@@ -1579,10 +1385,10 @@ void() hurt_on =
 
 void() SUB_Die =
 {
-	randompointsound(self.origin,"impact/gibs/gib_explo", 3, random(0.7,1));	
-	randompointsound(self.origin,"impact/gibs/gib_hit", 3, random(0.3,1));	
-	explo_blood(2, self.origin+ randomvector('-7 -7 7','7 7 7'));	
-	explo_blood(9, self.origin+ randomvector('-7 -7 7','7 7 7'));	
+	randompointsound(self.origin,"impact/gibs/gib_explo", 3, random(0.7,1));
+	randompointsound(self.origin,"impact/gibs/gib_hit", 3, random(0.3,1));
+	explo_blood(2, self.origin+ randomvector('-7 -7 7','7 7 7'));
+	explo_blood(9, self.origin+ randomvector('-7 -7 7','7 7 7'));
 	pointparticles(particleeffectnum("wretch_bloodshower"), self.origin , '0 0 0', 1);
 	sound(self, CHAN_BODY, "misc/null.wav", 0, 1);
 	sound(self, CHAN_ITEM, "misc/null.wav", 0, 1);
@@ -1590,7 +1396,7 @@ void() SUB_Die =
 	sound(self, CHAN_VOICE, "misc/null.wav", 0, 1);
 	sound(self, CHAN_ITEM, "misc/null.wav", 0, 1);
 	sound(self, CHAN_FOOT, "misc/null.wav", 0, 1);
-	remove(self);	
+	remove(self);
 };
 void() hurt_touch =
 {
@@ -1598,7 +1404,7 @@ void() hurt_touch =
 		return;
 	if ((other.takedamage) && (self.using ==  1))
 	{
-		if((self.kill_player == 1) && (other.classname == "player") && (other.health >0) &&(!(other.flags &FL_GODMODE))) 
+		if((self.kill_player == 1) && (other.classname == "player") && (other.health >0) &&(!(other.flags &FL_GODMODE)))
 		{
 			other.health = -100;
 			entity oself = self;
@@ -1616,8 +1422,8 @@ void() hurt_touch =
 				makevectors (other.v_angle);
 				vector tagorg = other.origin  + v_forward * 32 + v_up * -32;
 				pointparticles(particleeffectnum("wretch_bloodshower"), tagorg , '0 0 0', 1);
-				explo_blood(2, tagorg+ randomvector('-24 -24 24','24 24 24'));	
-				explo_blood(9, tagorg+ randomvector('-24 -24 24','24 24 24'));	
+				explo_blood(2, tagorg+ randomvector('-24 -24 24','24 24 24'));
+				explo_blood(9, tagorg+ randomvector('-24 -24 24','24 24 24'));
 				pointparticles(particleeffectnum("wretch_bloodshower"), tagorg , '0 0 0', 1);
 				ThrowGib3(self, "models/gibs/gib_small.md3", 0, 0.75, 1, 2, tagorg + randomvector('-24 -24 24','24 24 24'), relvel('12 12 -24', self), 0, 3);	// relvel: forward, right, up
 				ThrowGib3(self, "models/gibs/gib_small.md3", 0, 0.75, 1, 2, tagorg+ randomvector('-24 -24 24','24 24 24'), relvel('32 -12 -32', self), 0, 3);	// relvel: forward, right, up
@@ -1635,7 +1441,7 @@ void() hurt_touch =
 
 				other.th_die = SUB_Die;
 				other.voided = 1;
-				Killed(other,self,0);	
+				Killed(other,self,0);
 				return;
 			}
 
@@ -1650,7 +1456,7 @@ void() hurt_touch =
 		if((active_punchangle == 1) && (self.punch_time < time))
 		{
 			self.punch_time = time + 0.25;
-			if(self.cnt == 1)	
+			if(self.cnt == 1)
 			{
 			other.punchangle_x = self.dmg * -0.25;
 			self.cnt = 0;
@@ -1665,7 +1471,7 @@ void() hurt_touch =
 		self.solid = SOLID_NOT;
 		if(self.allowoverlap == 1)
 			other.allowoverlap = time + self.wait;
-		
+
 		if(self.wait > 0)
 		{
 			self.think = hurt_on;
@@ -1673,7 +1479,7 @@ void() hurt_touch =
 		}
 		else
 			remove(self);
-			
+
 
 	}
 
@@ -1722,8 +1528,8 @@ void() void_touch =
 	if((other.th_die) && (other.voided != 1))
 	{
 		other.voided = 1;
-			
-		Killed(other,self,0);	
+
+		Killed(other,self,0);
 	}
 };
 
@@ -1736,7 +1542,7 @@ void() trigger_void =
 
 .string changetarget;
 .string changetargetname;
-void() change_target = 
+void() change_target =
 {
 	entity t = find(world, changetargetname, self.target);
 	t.target = self.changetarget;
@@ -1771,14 +1577,14 @@ void()  assign_random_org =
 
 		if(t.targetname == self.target)
 		{
-			self.count --;		
-			if(self.count <= 0)	
+			self.count --;
+			if(self.count <= 0)
 			{
 				org = t.origin;
-				ang = self.angles;	
+				ang = self.angles;
 				tcount = 0;
 			}
-	
+
 		}
 		t = find(t, targetname, self.target);
     }
@@ -1804,7 +1610,7 @@ void() trigger_changer_origin_think =
 };
 
 
-void() trigger_changer_origin = 
+void() trigger_changer_origin =
 {
 	setmodel(self,"");
 	//self.use = change_origin;

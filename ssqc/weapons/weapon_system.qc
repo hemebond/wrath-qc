@@ -1394,12 +1394,13 @@ void raise_weapon() {
 
 
 void W_ChangeWeapon() {
-	Check_FrikFile();
+	// Check_FrikFile();  // hemebond: disabled 20260922
 
 	self.realoding = 0;
 
-	if(self.wrath_time > time)
-	{
+	// Do not let the player switch to a non-melee weapon
+	// when they are affected by the Sigil of Wrath
+	if (self.wrath_time > time) {
 		if ((self.impulse > 1) && (self.impulse < 9))
 			return;
 	}
@@ -1412,8 +1413,7 @@ void W_ChangeWeapon() {
 	self.hasmelee = 0;
 	float fl, oldweapon;
 
-	if ((time < self.timesound))
-	{
+	if ((time < self.timesound)) {
 		sound(self, CHAN_WEAPON2, "weapons/spitter/fire1_release.wav", 1, ATTN_NORM);
 		self.timesound = 0;
 	}
@@ -1441,7 +1441,7 @@ void W_ChangeWeapon() {
 	self.noammobutton = 0;
 	self.noammobutton2 = 0;
 
-	if (!(self.items &fl)) {
+	if (!(self.items & fl)) {
 		// don't have the weapon or the ammo
 		sprint(self, "no weapon.\n");
 		return;
