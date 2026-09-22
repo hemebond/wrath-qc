@@ -230,6 +230,10 @@ void precaches() {
 	precache_model("models/player/outlander/head.md3");
 	precache_model("models/player/outlander/lower.md3");
 	precache_model("models/player/outlander/upper.md3");
+
+	precache_model("models/player/outlander/outlander_new_lower.md3");
+	precache_model("models/player/outlander/outlander_new_upper.md3");
+
 	precache_model("models/artifacts/active/flask_active.md3");
 	precache_model("models/artifacts/active/life_siphon_active.md3");
 	precache_model("models/artifacts/active/sigil_flight_active.md3"); //

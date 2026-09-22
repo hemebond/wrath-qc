@@ -74,7 +74,7 @@ void() weapon_think =
 };
 
 .float onground_time;
-void lower_think() {
+void legs_think() {
 	// hemebond: I don't know what this is for. Cleanup when player is removed?
 	// if((self.owner.vhud != 3) && (self.exteriormodeltoclient != self.owner)) {
 	// 	self.exteriormodeltoclient = self.owner;
@@ -125,7 +125,7 @@ void lower_think() {
 	}
 
 	self.angles_x = -self.owner.angles_x;  // Negate the player pitch angle to stop the legs from angling forward and backwards
-	self.think = lower_think;
+	self.think = legs_think;
 	self.nextthink = time + 0.01;
 
 	// float tag_index = gettagindex(self, "tag_mid");
@@ -160,33 +160,26 @@ void torso_think() {
 }
 
 
-void spawn_player_model(entity e) {
-	entity playermodel = spawn();
-	e.player_model = playermodel;
-	playermodel.owner = e;
-	playermodel.wrathflags = FL_GARBAGE;
-	setattachment(playermodel, e, "");
-	playermodel.frame = OUTLANDER_LEGS_STAND_IDLE;
-	playermodel.exteriormodeltoclient = e;
-	precache_model("models/player/outlander/outlander_new_lower.md3");
-	setmodel(playermodel, "models/player/outlander/outlander_new_lower.md3");
-	playermodel.think = lower_think;
-	playermodel.nextthink = time + 0.05;
+void spawn_player_model(entity player) {
+	entity legs = spawn();
+	player.player_model = legs;
+	legs.owner = player;
+	setattachment(legs, player, "");
+	legs.frame = OUTLANDER_LEGS_STAND_IDLE;
+	setmodel(legs, "models/player/outlander/outlander_new_lower.md3");
+	legs.think = legs_think;
+	legs.nextthink = time + 0.05;
 
 	entity torso = spawn();
-	torso.owner = e;
-	e.torso_model = torso;
-	precache_model("models/player/outlander/outlander_new_upper.md3");
+	torso.owner = player;
 	setmodel(torso, "models/player/outlander/outlander_new_upper.md3");
-	setattachment(torso, playermodel, "tag_mid");
+	setattachment(torso, legs, "tag_mid");
 	torso.frame = OUTLANDER_UPPER_RIFLE;
-	torso.wrathflags = FL_GARBAGE;
 	torso.think = torso_think;
 	torso.nextthink = time + 0.05;
 
 	entity weapon = spawn();
-	weapon.wrathflags = FL_GARBAGE;
-	weapon.owner = e;
+	weapon.owner = player;
 	setmodel(weapon, "models/weapons/shotgun/w_shotgun.md3");
 	setattachment(weapon, torso, "tag_weapon");
 	weapon.scale = 0.5;
@@ -214,7 +207,6 @@ void spawn_dead_model(vector org, vector ang) {
 	if (r < 0.35)
 		fakeplayer.frame = 4;
 
-
 	entity playermodel, torso;
 	playermodel = spawn();
 	playermodel.owner = fakeplayer;
@@ -231,6 +223,7 @@ void spawn_dead_model(vector org, vector ang) {
 	torso.frame = fakeplayer.frame;
 	torso.think = corpse_dead_think;
 	torso.nextthink = time + 1.55;
+
 	entity head = spawn();
 	head.owner = fakeplayer;
 	setmodel(head, "models/player/outlander/head.md3");
