@@ -3,14 +3,12 @@
 // handling for ent updates
 // for model ents from SSQC
 
-/* #region Eyeball */
 class eyeball_c {
 	float sight_distracted;
 	float sight_time;
 	float sight_timemult;
 	vector sight_focus;
 	vector sight_random;
-
 	vector angle_constraint;
 };
 

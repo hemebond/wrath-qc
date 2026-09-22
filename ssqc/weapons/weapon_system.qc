@@ -833,7 +833,7 @@ void Weapon_Fire() {
 			if (self.ammo_cannon <= 0)
 			{
 				if (checked7)
-				nextweapon();
+					nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
 				return;
@@ -848,7 +848,7 @@ void Weapon_Fire() {
 			if (self.ammo_lance <= 0)
 			{
 				if (checked7)
-				nextweapon();
+					nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
 				return;
@@ -864,7 +864,7 @@ void Weapon_Fire() {
 			if (self.ammo_crystal < 1)
 			{
 				if (checked7)
-				nextweapon();
+					nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
 				return;
@@ -897,7 +897,7 @@ void Weapon_Fire() {
 			{
 				sound(self, CHAN_AUTO, "weapons/spitter/dryfire.ogg", 1, ATTN_NORM);
 				if (checked7)
-				nextweapon();
+					nextweapon();
 				self.attack_finished = time + 0.25;
 				self.noammobutton = 1;
 				return;
@@ -1092,7 +1092,7 @@ void Weapon_Sfire() {
 
 
 void Think_Vweapon() {
-	if(self.owner.vhud == 3)
+	if (self.owner.vhud == 3)
 		self.effects = EF_NODRAW;
 	else
 		self.effects = 0;
@@ -1312,21 +1312,19 @@ void raise_weapon() {
 	W_SetWeapon();
 	self.attack_finished = time + 0.0125;
 	self.lastweapon = self.weapon;
+
 	if (self.weapon != IT_REVOLVER)
 		self.vweaponglowmod = '0 0 0';
-	if (self.weapon == IT_MELEE)
-	{
+	if (self.weapon == IT_MELEE) {
 		raise_melee();
 	}
-	if (self.weapon == IT_SHOTGUN)
-	{
+	if (self.weapon == IT_SHOTGUN) {
 		if (self.time_pickupweapon > time)
 			pick_up_shotgun();
 		else
 			raise_shotgun();
 	}
-	if (self.weapon == IT_REVOLVER)
-	{
+	if (self.weapon == IT_REVOLVER) {
 		self.vweaponskin = self.revolverclip;
 		self.vweaponglowmod = '-0.1 -0.1 -0.1';
 		if (self.time_pickupweapon > time)
@@ -1334,56 +1332,49 @@ void raise_weapon() {
 		else
 			raise_revolver();
 	}
-	if (self.weapon == IT_CANNON)
-	{
+	if (self.weapon == IT_CANNON) {
 		self.vweaponskin = 0;
 		if (self.time_pickupweapon > time)
 			pick_up_cannon();
 		else
 			raise_cannon();
 	}
-	if (self.weapon == IT_LANCE)
-	{
+	if (self.weapon == IT_LANCE) {
 		self.vweaponskin = 0;
 		if (self.time_pickupweapon > time)
 			pick_up_lance();
 		else
 			raise_lance();
 	}
-	if (self.weapon == IT_CRYSTAL)
-	{
+	if (self.weapon == IT_CRYSTAL) {
 		self.vweaponskin = 0;
 		if (self.time_pickupweapon > time)
 			pick_up_crystal();
 		else
 			raise_crystal();
 	}
-	if (self.weapon == IT_RETCHER)
-	{
+	if (self.weapon == IT_RETCHER) {
 		self.vweaponskin = 0;
 		if (self.time_pickupweapon > time)
 			pick_up_retcher();
 		else
 			raise_retcher();
 	}
-	if (self.weapon == IT_SPITTER)
-	{
+	if (self.weapon == IT_SPITTER) {
 		self.vweaponskin = 0;
 		if (self.time_pickupweapon > time)
 			pick_up_spitter();
 		else
 			raise_spitter();
 	}
-	if (self.weapon == IT_MACE)
-	{
+	if (self.weapon == IT_MACE) {
 		self.vweaponskin = 0;
 		if (self.time_pickupweapon > time)
 			pick_up_bfg();
 		else
 			raise_bfg();
 	}
-	if (self.weapon == IT_VIEWMODEL)
-	{
+	if (self.weapon == IT_VIEWMODEL) {
 		self.vweaponskin = 0;
 		raise_vmodel();
 	}
@@ -2061,30 +2052,29 @@ void() Toggle_HUD = { if (self.vhud == 1)
 
 
 void killemall() {
-	if(self.killemalltime > time)
+	if (self.killemalltime > time)
 		return;
 
 	entity monster = nextent(world);
 	while (monster) {
 		entity holder = nextent(monster);  // hemebond: why here?
 		if (monster.flags & FL_MONSTER) {
-				T_Damage(monster, self, self, 100000);
+			T_Damage(monster, self, self, 100000);
 		}
-		if(monster.classname == "monster_keeper") {
-				T_Damage(monster, self, self, 100000);
+		if (monster.classname == "monster_keeper") {
+			T_Damage(monster, self, self, 100000);
 		}
-		if(monster.classname == "boss_guardian1") {
-			if(monster.bosspain_finished < time) {
-				if(monster.bosscnt == 3)
+		if (monster.classname == "boss_guardian1") {
+			if (monster.bosspain_finished < time) {
+				if (monster.bosscnt == 3)
 					monster.health = 19999;
-				if(monster.bosscnt == 2)
+				if (monster.bosscnt == 2)
 					monster.health = 9999;
-				if(monster.bosscnt == 1)
+				if (monster.bosscnt == 1)
 					monster.health = 4999;
 			}
 			else {
 				T_Damage(monster.pipes, self, self, 125);
-
 			}
 		}
 		monster = holder;
@@ -2144,81 +2134,70 @@ void() removeitems =
 
 };
 
-void() killemall2 =
-{
-	if(self.killemalltime > time)
+void killemall2() {
+	if (self.killemalltime > time)
 		return;
 
-
-	local entity monster;
-	monster = nextent(world);
-	while (monster)
-	{
+	entity monster = nextent(world);
+	while (monster) {
 		entity holder = nextent(monster);
-		if (monster.flags &FL_MONSTER)
-		{
-				remove(monster);
-		}
-		if((monster.classname == "boss_guardian1") || (monster.classname == "monster_keeper")|| (monster.classname == "enemy_spawner_warp"))
-		{
+		if (monster.flags & FL_MONSTER) {
 			remove(monster);
 		}
-
-		if (monster.classname == "enemy_spawner")
-		{
+		if ((monster.classname == "boss_guardian1") || (monster.classname == "monster_keeper")|| (monster.classname == "enemy_spawner_warp")) {
+			remove(monster);
+		}
+		if (monster.classname == "enemy_spawner") {
 			remove(monster);
 		}
 		monster = holder;
 	}
 	self.killemalltime = time + 0.25;
-};
-void() node_debug_think = { local entity nodes;
-	nodes = find(world,classname, "nodegraph_debug");
-	while (nodes)	//Loops through everything put in the missile entity
-	{
-		{
-			if(test_ia == 1)
-			{
-				nodes.think = nodegraph_debug_think;
-				nodes.nextthink = time + 0.1;
-			}
-			else
-			{
-				nodes.think= SUB_Null;
-				nodes.nextthink = time + 1;
-			}
+}
+
+
+void node_debug_think() {
+	entity nodes = find(world, classname, "nodegraph_debug");
+	while (nodes) {
+		if (test_ia == 1) {
+			nodes.think = nodegraph_debug_think;
+			nodes.nextthink = time + 0.1;
 		}
-		nodes =  find(world,classname, "nodegraph_debug");
-	}
-};
-void() node_debug = { local entity nodes;
-	nodes = find(world,classname, "info_node");
-	while (nodes)	//Loops through everything put in the missile entity
-	{
-		{
-			if(test_ia == 1)
-				nodes.effects = 0;
-			else
-				nodes.effects = EF_NODRAW;
+		else {
+			nodes.think= SUB_Null;
+			nodes.nextthink = time + 1;
 		}
-		nodes =  find(world,classname, "info_node");
+		nodes = find(world, classname, "nodegraph_debug");
 	}
-};
-void() delebboxesandrespawnthem =
-{
-	local entity garbage;
-	garbage = nextent(world);
-	while (garbage)
-	{
+}
+
+
+void node_debug() {
+	entity nodes = find(world, classname, "info_node");
+	while (nodes) {
+		if (test_ia == 1)
+			nodes.effects = 0;
+		else
+			nodes.effects = EF_NODRAW;
+
+		nodes = find(world, classname, "info_node");
+	}
+}
+
+
+void delebboxesandrespawnthem() {
+	entity garbage = nextent(world);
+	while (garbage) {
 		entity hold = nextent(garbage); // Reki (October 6 2023): accessing an entity's fields after a remove is undefined behavior, so let's not do that
-		if (garbage.classname == "bbox_touch")
-		{
+		if (garbage.classname == "bbox_touch") {
 			remove(garbage);
 		}
 		garbage = hold;	//links every garbagegram found so they all go BOOM!
 	}
 
-};
+}
+
+
 .float noattack;
 
 void() giveme_oldrelics =
@@ -2447,7 +2426,6 @@ void() ImpulseCommands =
 	}
 	if(self.impulse == 186)
 		mark_monsters();
-
 	if(self.impulse == 195)
 	{
 		if (self.noattack == 1)
@@ -2461,8 +2439,7 @@ void() ImpulseCommands =
 			self.noattack = 1;
 		}
 	}
-	if(self.impulse == 196)
-	{
+	if (self.impulse == 196) {
 		recount_spawner_monsters(0);
 		recount_spawner_monsters(1);
 		recount_spawner_monsters(2);
@@ -2474,16 +2451,14 @@ void() ImpulseCommands =
 	}
 	if(self.impulse == 197)
 		delebboxesandrespawnthem();
-	if(self.impulse == 198)
-	{
+	if(self.impulse == 198) {
 		float deletedqng = nodegraph_graphset_remove();
 		if (deletedqng == 1)
 			bprint("deleted qng file\n");
 		else
 			bprint("qng file not found\n");
 	}
-	if (self.impulse == 199)
-	{
+	if (self.impulse == 199) {
 		killemall();
 		self.impulse = 0;
 	}

@@ -1,19 +1,12 @@
-// --------------------------------------------------------------------------
-// BEGIN REQUIRED CSQC FUNCTIONS
-
 float rmenu;
 
-// CSQC_Init : Called every time the CSQC code is initialized (essentially at map load)
-void CSQC_Init(void)
-{
-	local string strCmd;
-	strCmd = "";
-	//	strCmd = strcat (strCmd, "vid_conwidth 960 \n");
-	//	strCmd = strcat (strCmd, "vid_conheight 540 \n");
-	///strCmd = ("exec fonts/font.cfg \n");
-	//localcmd(strCmd);
+void CSQC_Init(void) {
+	/*
+	Called every time the CSQC code is initialized (essentially at map load)
+	*/
+
+	string strCmd = "";
 	cvar_set("r_glsl_postprocess_uservec1", "0 0 0 0");
-	//cvar_set("r_viewscale", "1");
 	cvar_set("sv_maxvelocity", "100000");
 	localization_precaches();
 	Hud_Init();
@@ -43,16 +36,13 @@ void CSQC_Init(void)
 	registercommand(CLIENTCOMMAND_REMOVEBYCLASSNAME);
 	registercommand(CLIENTCOMMAND_SET_ORIGIN);
 	registercommand(CLIENTCOMMAND_SET_ANGLES);
-	registercvar ("_fog_d",ftos(getproperty(VF_FOG_DENSITY)));
+	registercvar("_fog_d",ftos(getproperty(VF_FOG_DENSITY)));
 	registercvar("_fog_color",vtos(getpropertyvec(VF_FOG_COLOR)));
-	//registercvar ("_fog_r",ftos(getproperty(VF_FOG_COLOR_R)));
-	//registercvar ("_fog_g",ftos(getproperty(VF_FOG_COLOR_G)));
-	//registercvar ("_fog_b",ftos(getproperty(VF_FOG_COLOR_B)));
-	registercvar ("_fog_a",ftos(getproperty(VF_FOG_ALPHA)));
-	registercvar ("_fog_s",ftos(getproperty(VF_FOG_START)));
-	registercvar ("_fog_e",ftos(getproperty(VF_FOG_END)));
-	registercvar ("_fog_h",ftos(getproperty(VF_FOG_HEIGHT)));
-	registercvar ("_fog_f",ftos(getproperty(VF_FOG_FADEDEPTH)));
+	registercvar("_fog_a",ftos(getproperty(VF_FOG_ALPHA)));
+	registercvar("_fog_s",ftos(getproperty(VF_FOG_START)));
+	registercvar("_fog_e",ftos(getproperty(VF_FOG_END)));
+	registercvar("_fog_h",ftos(getproperty(VF_FOG_HEIGHT)));
+	registercvar("_fog_f",ftos(getproperty(VF_FOG_FADEDEPTH)));
 
 	float scale_crosshair = cvar ("saved8");
 	if (scale_crosshair < 1)
@@ -92,6 +82,7 @@ void CSQC_Init(void)
 			precache_pic(search_getfilename(searchhandle, i));
 		search_end(searchhandle);
 	}
+	// FIXME: Should this be _after_ the fallback search?
 	string searchpath = sprintf("gfx/hud/messages/%s/*.tga", cvar_string("prvm_language"));
 	float searchhandle = search_begin(searchpath, TRUE, TRUE);
 	if (searchhandle >= 0)
@@ -148,19 +139,20 @@ void CSQC_Init(void)
 		Localization_LoadFile(csprogname, cvar_string("prvm_language_fallback"));
 		Localization_LoadFile("common", cvar_string("prvm_language_fallback"));
 	}
-	//
 
 	// Reki (July 17 2023): Precache some models
 	precache_model("models/dev/sphere.md3");
 };
 
-// CSQC_Shutdown : Called every time the CSQC code is shutdown (changing maps, quitting, etc)
-void CSQC_Shutdown(void) {};
+
+void CSQC_Shutdown(void) {
+	/*
+	Called every time the CSQC code is shutdown (changing maps, quitting, etc)
+	*/
+}
 
 
-void()get_fog_values =
-{
-
+void get_fog_values() {
 	/*
 	#define VF_FOG_DENSITY        202 //(float)
 	#define VF_FOG_COLOR        203 //(vector)
@@ -177,21 +169,21 @@ void()get_fog_values =
 	//float fog_d, fog_r, fog_g, fog_b, fog_a, fog_s, fog_e, fog_h, fog_f;
 
 	cvar_set("_fog_d",ftos(getproperty(VF_FOG_DENSITY)));
-	cvar_set ("_fog_color",vtos(getpropertyvec(VF_FOG_COLOR)));
-	cvar_set ("_fog_a",ftos(getproperty(VF_FOG_ALPHA)));
-	cvar_set ("_fog_s",ftos(getproperty(VF_FOG_START)));
-	cvar_set ("_fog_e",ftos(getproperty(VF_FOG_END)));
-	cvar_set ("_fog_h",ftos(getproperty(VF_FOG_HEIGHT)));
-	cvar_set ("_fog_f",ftos(getproperty(VF_FOG_FADEDEPTH)));
+	cvar_set("_fog_color",vtos(getpropertyvec(VF_FOG_COLOR)));
+	cvar_set("_fog_a",ftos(getproperty(VF_FOG_ALPHA)));
+	cvar_set("_fog_s",ftos(getproperty(VF_FOG_START)));
+	cvar_set("_fog_e",ftos(getproperty(VF_FOG_END)));
+	cvar_set("_fog_h",ftos(getproperty(VF_FOG_HEIGHT)));
+	cvar_set("_fog_f",ftos(getproperty(VF_FOG_FADEDEPTH)));
 }
+
 
 float nexartifacticon;
 float nexartifacticon_int;
-void() pulse_artifact = 
-{
+void pulse_artifact() {
 	string strCmd = ("impulse 188\n");
 	localcmd(strCmd);
-    nexartifacticon = 50;
+	nexartifacticon = 50;
 	nexartifacticon_int = 2;
 };
 
@@ -269,19 +261,19 @@ void TempEnt_OutlanderUnlock(void)
 	}
 }
 
-// CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
-// Return value should be 1 if CSQC handled the command, otherwise return 0 to have the engine handle it.
-float CSQC_ConsoleCommand(string strMessage)
-{
-	local float nReturn;
-	nReturn = true;
+float CSQC_ConsoleCommand(string strMessage) {
+	/*
+	CSQC_ConsoleCommand : Used to parse commands in the console that have been registered with the "registercmd" function
+	Return value should be 1 if CSQC handled the command, otherwise return 0 to have the engine handle it.
+	*/
+
+	float nReturn = true;
 
 	// Tokenize String
 	tokenize(strMessage);
 	// Acquire Command
 
-	local string strCmd;
-	strCmd = argv(0);
+	string strCmd = argv(0);
 	switch (strCmd) {
 		case CLIENTCOMMAND_ENCOUNTER:
 		case CLIENTCOMMAND_REMOVEALL:
@@ -293,16 +285,6 @@ float CSQC_ConsoleCommand(string strMessage)
 			break;
 		case CLIENTCOMMAND_GET_FOG:
 			get_fog_values();
-			/*
-			case CLIENTCOMMAND_GRAVITYFIX:
-			{strCmd = ("exec fonts/font.cfg \n");localcmd(strCmd);}
-			case CLIENTCOMMAND_NOGRAVITYFIX:
-			get_fog_values();
-			case CLIENTCOMMAND_GLSL_SATURATION:
-			get_fog_values();
-			case CLIENTCOMMAND_NOGLSL_SATURATION:
-			get_fog_values();
-			*/
 			break;
 		case CLIENTCOMMAND_PULSE_HEALTH:
 			pulse_health();
@@ -352,10 +334,10 @@ float CSQC_ConsoleCommand(string strMessage)
 	}
 
 	return nReturn;
-};
+}
 
-void GameCommand(string s)
-{
+
+void GameCommand(string s) {
 	float argc = tokenize(s);
 	string cmd = argv(0);
 
@@ -365,9 +347,6 @@ void GameCommand(string s)
 	// 	CSQC_Steam_StatValue(argv(1), stof(argv(2)));
 }
 
-// CSQC_InputEvent : Used to perform actions based on any key pressed or released by the client.
-// Return value should be 1 if CSQC handled the key press, otherwise return 0 to have the key passed to the engine.
-
 float tether;
 float dmenualpha;
 float lastsoundjournal;
@@ -375,6 +354,11 @@ vector radial_pos;
 vector radial_thumbstick;
 
 float CSQC_InputEvent(float EventType, float charx, float scany) {
+	/*
+	CSQC_InputEvent : Used to perform actions based on any key pressed or released by the client.
+	Return value should be 1 if CSQC handled the key press, otherwise return 0 to have the key passed to the engine.
+	*/
+
 	// determine input type
 	// Reki (December 3 2023): Added this to change behavior based on input type
 	input_modeswitching(EventType, charx, scany);
@@ -383,10 +367,8 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 	// even if the player isn't in the radial (since joyaxis only happens when the value CHANGES)
 	input_thumbsticks(EventType, charx, scany);
 
-	if ((EventType == 0) && (charx == K_ESCAPE))
-	{
+	if ((EventType == 0) && (charx == K_ESCAPE)) {
 		localcmd("cmd dmenu_close\n");
-		//localcmd("impulse 90\n");
 	}
 	
 	if ((EventType == 0) && (DMselected >= 1))
@@ -399,7 +381,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 				write_tether2(1);
 				localcmd("stopsound\n");
 				localcmd("slowmo 1\n");
-				//localcmd("r_glsl_saturation 1\n");
 				setcursormode(0);
 				load_tether();
 				localcmd("scratch3 0\n");
@@ -410,7 +391,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 				write_shrine(1);
 				localcmd("slowmo 1\n");
 				localcmd("stopsound\n");
-				//localcmd("r_glsl_saturation 1\n");
 				setcursormode(0);
 				load_shrine();
 				localcmd("scratch3 0\n");
@@ -420,7 +400,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 			{
 				localcmd("slowmo 1\n");
 				localcmd("stopsound\n");
-				//localcmd("r_glsl_saturation 1\n");
 				setcursormode(0);
 				load_autosave();
 				localcmd("scratch3 0\n");
@@ -446,7 +425,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 				write_tether2(1);
 				localcmd("stopsound\n");
 				localcmd("slowmo 1\n");
-				//localcmd("r_glsl_saturation 1\n");
 				load_tether();
 				localcmd("scratch3 0\n");
 				setcursormode(0);
@@ -457,7 +435,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 				write_shrine(1);
 				localcmd("slowmo 1\n");
 				localcmd("stopsound\n");
-				//localcmd("r_glsl_saturation 1\n");
 				load_shrine();
 				localcmd("scratch3 0\n");
 				setcursormode(0);
@@ -467,7 +444,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 			{
 				localcmd("slowmo 1\n");
 				localcmd("stopsound\n");
-				//localcmd("r_glsl_saturation 1\n");
 				setcursormode(0);
 				load_autosave();
 				localcmd("scratch3 0\n");
@@ -486,12 +462,10 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 		}
 	}
 
-	//float showjournal;
 	showjournal = getstatf(STAT_JOURNAL);
 	if ((EventType == 0) && (charx == K_ESCAPE) && (showjournal > 0))
 	{
 		localcmd("cmd journal_close\n");
-		//localcmd("impulse 35\n");
 		return TRUE;
 	}
 
@@ -582,7 +556,6 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 		if (EventType == IE_MOUSEDELTA)
 		{
 			radial_pos += [charx / ui_scale[0], scany / ui_scale[1]] * 0.08;
-			//radial_pos += [charx, scany] * 0.03 * autocvar_sensitivity;
 
 			float radial_dist = vlen(radial_pos);
 			vector radial_norm = normalize(radial_pos);
@@ -604,10 +577,13 @@ float CSQC_InputEvent(float EventType, float charx, float scany) {
 // --------------------------------------------------------------------------
 // BEGIN OPTIONAL CSQC FUNCTIONS
 
-// Reki: Added this function from FTE spec, allows CSQC to customize input
-// before it's sent off to the server as a clc
 float zoom_toggle;
 void CSQC_Input_Frame() {
+	/*
+	Reki: Added this function from FTE spec, allows CSQC to customize input
+	before it's sent off to the server as a clc
+	*/
+
 	// zoom functionality
 	if (input_impulse == 184) {
 		zoom_toggle = !zoom_toggle;
@@ -617,10 +593,13 @@ void CSQC_Input_Frame() {
 		input_buttons |= 0x0080;
 }
 
-//#ifdef USE_CSQC_OPTIONALFUNCTIONS
-// CSQC_Ent_Update : Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
-// The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
+
 void CSQC_Ent_Update(float bIsNewEntity) {
+	/*
+	Called every frame that the server has indicated an update to the SSQC / CSQC entity has occured.
+	The only parameter reflects if the entity is "new" to the client, meaning it just came into the client's PVS.
+	*/
+
 	self.enttype = ReadByte();
 	switch (self.enttype) {
 		case ENT::HUDMSG: Hud_Messages(bIsNewEntity); break;
@@ -637,9 +616,12 @@ void CSQC_Ent_Update(float bIsNewEntity) {
 		artifact_spawn(bIsNewEntity); */
 }
 
-// CSQC_Ent_Remove : Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.
-void CSQC_Ent_Remove()
-{
+
+void CSQC_Ent_Remove() {
+	//
+	// Called when the server requests a SSQC / CSQC entity to be removed.  Essentially call remove(self) as well.
+	//
+
 	if (self.enttype == ENT::HUDMSG)
 		Remove_Message();
 	else if (self.enttype == ENT::HUDMSG2)
@@ -648,22 +630,32 @@ void CSQC_Ent_Remove()
 		Boss3Halo_Destructor();
 	else
 		remove(self);
-};
+}
 
-// CSQC_Parse_StuffCmd : Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.
+
 void CSQC_Parse_StuffCmd(string strMessage) {
+	//
+	// Provides the stuffcmd string in the first parameter that the server provided.  To execute standard behavior, simply execute localcmd with the string.
+	//
+
 	localcmd(strMessage);
 }
 
 
-// CSQC_Parse_Print : Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
 void CSQC_Parse_Print(string strMessage) {
+	//
+	// Provides the print string in the first parameter that the server provided.  To execute standard behavior, simply execute print with the string.
+	//
+
 	print(strlocalize(strMessage));
 }
 
 
-// CSQC_Parse_CenterPrint : Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
 void CSQC_Parse_CenterPrint(string strMessage) {
+	//
+	// Provides the centerprint string in the first parameter that the server provided.  To execute standard behavior, simply execute cprint with the string.
+	//
+
 	if (substring(strMessage, 0, 1) == "&") // if first character is an '&' then we print to the dialog box
 	{
 		strMessage = substring(strMessage, 1, -1);
@@ -675,17 +667,17 @@ void CSQC_Parse_CenterPrint(string strMessage) {
 }
 
 
-// CSQC_Parse_TempEntity : Handles all temporary entity network data in the CSQC layer.
-// You must ALWAYS first acquire the temporary ID, which is sent as a byte.
-// Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
+
 float CSQC_Parse_TempEntity() {
+	/*
+	Handles all temporary entity network data in the CSQC layer.
+	You must ALWAYS first acquire the temporary ID, which is sent as a byte.
+	Return value should be 1 if CSQC handled the temporary entity, otherwise return 0 to have the engine process the event.
+	*/
+
 	float bHandled = true;
-	// Acquire TE ID
 	float nTEID = ReadByte();
 	switch (nTEID) {
-		//case TE_GUNSHOT:
-		//	Do something cool with TE_GUNSHOT!
-		//	break;
 		case TEMPENT::NOTIFICATION:
 			float m_flags = ReadByte();
 			string s_icon = ReadString();
@@ -794,7 +786,6 @@ float CSQC_Parse_TempEntity() {
 				msg.origin = msgpic.origin = '0 0';
 				icon.flags |= UIFLAG_HIDE;
 			}
-			//
 
 			icon.image = strzone(s_icon);
 			if (msg_mode & 0x01) // img mode
@@ -856,8 +847,7 @@ float CSQC_Parse_TempEntity() {
 			string s_msg = strzone(sprintf("%s: %s", _("NOTIFY_JOURNAL_NOTEADDED"), note_name));
 			//string s_msg_pic = sprintf("gfx/hud/messages/%s/note_%s.tga", cvar_string("prvm_language"), jentry.msgimg);
 			string s_msg_pic = Localization_FindFile(sprintf("gfx/hud/messages/%%s/note_%s.tga", jentry.msgimg), TRUE);
-			if (fexists_pak(s_msg_pic))
-			{
+			if (fexists_pak(s_msg_pic)) {
 				msgimg.image = strzone(s_msg_pic);
 
 				msg.text = strzone(s_msg);
@@ -871,8 +861,7 @@ float CSQC_Parse_TempEntity() {
 				isize[1] = max(isize[1], 1); // prevent div0 error
 				msgimg.size = [(isize[0] / isize[1]) * 32, 32];
 			}
-			else
-			{
+			else {
 				msg.text = strzone(s_msg);
 				msg.flags &= ~UIFLAG_HIDE;
 
@@ -885,8 +874,7 @@ float CSQC_Parse_TempEntity() {
 			string s_format = ReadString();
 			string s_cmd = ReadString();
 			
-			if (is_double)
-			{
+			if (is_double) {
 				string s_cmd2 = ReadString();
 				// get bound key
 				tokenize(findkeysforcommand(s_cmd, 0));
@@ -905,8 +893,7 @@ float CSQC_Parse_TempEntity() {
 				
 				centerprint(sprintf(s_format, s_key, s_key2));
 			}
-			else
-			{
+			else {
 				// get bound key
 				tokenize(findkeysforcommand(s_cmd, 0));
 				string s_key;

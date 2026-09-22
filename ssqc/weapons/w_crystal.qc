@@ -819,23 +819,21 @@ void() monster_goodbye_touch =
 	self.movetype = MOVETYPE_TOSS;
 };
 
-void() monster_pregoodbye =
-{
-
-	if (!(self.flags &FL_ONGROUND))
-	{
+void monster_pregoodbye() {
+	if (!(self.flags & FL_ONGROUND)) {
 		self.jump_flag = self.velocity_z;
 	}
 	else
 		self.jump_flag = 0;
 
 	if(self.jump_flag <= -250)
-	self.touch = monster_goodbye_touch;
+		self.touch = monster_goodbye_touch;
 
 	self.movetype = MOVETYPE_TOSS;
 	self.think = monster_pregoodbye;
 	self.nextthink = time + 0.05;
-};
+}
+
 
 void() monster_flyer_pregoodbye =
 {
@@ -859,10 +857,7 @@ void() monster_flyer_pregoodbye =
 };
 
 
-void()cist_crystal_think =
-{
-
-
+void cist_crystal_think() {
 	self.velocity_x = self.velocity_x * 0.9;
 	self.velocity_y = self.velocity_y * 0.9;
 
@@ -890,7 +885,8 @@ void()cist_crystal_think =
 		self.think 	= galphafade;
 		self.nextthink = time + random (15,25);
 	}
-};
+}
+
 
 void()cist_crystal_prethink =
 {
@@ -935,10 +931,7 @@ void()cist_crystal_touch =
 };
 
 
-void() death_crystal_gibs =
-{
-
-
+void death_crystal_gibs() {
 	self.effects = EF_NODRAW;
 	self.flags = 0;
 	self.think = SUB_Remove;
@@ -947,8 +940,6 @@ void() death_crystal_gibs =
 	self.solid = SOLID_NOT;
 	self.takedamage = 0;
 	self.th_die = SUB_Null;
-
-
 
 	gibaccount = self.maxs_x;
 	if((self.classname == "func_destruct") &&(self.gibcount > 0))
@@ -962,8 +953,7 @@ void() death_crystal_gibs =
 	if(self.classname == "func_destruct")
 		SUB_UseTargets();
 
-	//	void(string locsound, float rnd, float vol, float nchannel, float iswav, float atten) randomsound2 =
-	randomsound2("impact/destruct/glass_break",3,1,CHAN_AUTO,0,0.25);
+	randomsound2("impact/destruct/glass_break", 3, 1, CHAN_AUTO, 0, 0.25);
 
 	while(gibaccount > 0)
 	{
@@ -1151,28 +1141,31 @@ void() glowmodderthink =
 };
 
 
-void(entity e, float chan, string samp, float vol, float attenn) msound;
-void()heretic_run;
 .float movingz;
-void() loop_widow_soundoff;
-float(float dmgmultiplier) crystal_impact =
-{
+
+float crystal_impact(float dmgmultiplier) {
 	vector org = trace_endpos;
-	if(trace_ent.classname == "player")
-		float tdmg = crystal2_damage_mp * dmgmultiplier * 2;
-	else
+
+	float tdmg;
+	if (trace_ent.classname == "player") {
+		tdmg = crystal2_damage_mp * dmgmultiplier * 2;
+	}
+	else {
 		tdmg = crystal2_damage * dmgmultiplier * 2;
-		tdmg += 1.5;
+	}
+	tdmg += 1.5;
 
-	if ((trace_fraction != 1.0)  && (trace_ent.takedamage))
-	{
-
-
-		if((trace_ent.wrathflags & FL_CRYSTAL))
+	if ((trace_fraction != 1.0)  && (trace_ent.takedamage)) {
+		if ((trace_ent.wrathflags & FL_CRYSTAL))
 		    T_Damage(trace_ent, self, self, tdmg);
 
-		if ((trace_ent.flags &FL_MONSTER) && ((trace_ent.health <= trace_ent.max_health * 0.25) || (tdmg >= trace_ent.health)))
-		{
+		if (
+			(trace_ent.flags & FL_MONSTER) &&
+			(
+				(trace_ent.health <= trace_ent.max_health * 0.25) ||
+				(tdmg >= trace_ent.health)
+			)
+		) {
 			self.enemy = self;
 			entity oself = self;
 			self =trace_ent;
@@ -1187,10 +1180,6 @@ float(float dmgmultiplier) crystal_impact =
 			self.old2movetype = self.movetype; // dont change oldmovetype!!
 			self.oldflags = self.flags;
 			pointparticles(particleeffectnum("crystallize"), self.origin, '0 0 0', 2);
-			//self.alpha = 0.9;
-			//if(self.classname == "monster_widow")
-			//	loop_widow_soundoff();
-			//msound(self, CHAN_VOICE, "enemies/widow/run.ogg", 0, 0);
 
 			sound(self, CHAN_BODY, "misc/null.wav", 0, 1);
 			sound(self, CHAN_ITEM, "misc/null.wav", 0, 1);
@@ -1201,100 +1190,89 @@ float(float dmgmultiplier) crystal_impact =
 			sound(self, CHAN_ITEM, "misc/null.wav", 0, 1);
 			sound(self, CHAN_FOOT, "misc/null.wav", 0, 1);
 
-			if(self.classname == "monster_afflicted")
-			{			crystalized(self,"tag_leg_r_l.tag_leg_r_b.tag_leg_r_a.tag_leg_l_a.tag_head.tag_arm_r_b.tag_arm_r_a.tag_arm_l_b.tag_arm_l_a.tag_hand.tag_a.tag_b.tag_c.tag_d",5);
+			if (self.classname == "monster_afflicted") {			crystalized(self,"tag_leg_r_l.tag_leg_r_b.tag_leg_r_a.tag_leg_l_a.tag_head.tag_arm_r_b.tag_arm_r_a.tag_arm_l_b.tag_arm_l_a.tag_hand.tag_a.tag_b.tag_c.tag_d",5);
 				self.skin = 1;
-
 			}
-			if(self.classname == "monster_brute")
-			{
+			if (self.classname == "monster_brute") {
 				crystalized(self,"tag_face.tag_arma.tag_armb.tag_armc.tag_armd.tag_arme.tag_lega.tag_legb.tag_legc.tag_legd.tag_lege.tag_back.tag_howitzer.tag_howitzer_gun",8.5);
 				self.skin += 2;
 			}
-			else if(self.classname == "executioner")
-			{
+			else if (self.classname == "executioner") {
 				crystalized(self,"tag_head.tag_arma.tag_armb.tag_armc.tag_armd.tag_lega.tag_legb.tag_legc.tag_legd.tag_lege.tag_backa.tag_backb.tag_arm_left.tag_arm_right.tag_fake",8.5);
 				self.skin = self.skin + 3;
 			}
-			else if(self.classname == "monster_fallen")
-			{
+			else if (self.classname == "monster_fallen") {
 				crystalized(self,"tag_head.tag_waist.tag_torso.tag_leg_b_r.tag_leg_b_l.tag_knee_r.tag_knee_l.tag_arm_b_l.tag_arm_b_r.tag_arm_a_l.tag_arm_a_r", 0.5);
 				self.skin = self.skin + 6;
 			}
-			else if(self.classname == "monster_heretic")
-			{
+			else if (self.classname == "monster_heretic") {
 				crystalized(self,"tag_muzzle.tag_tongues.tag_jawb.tag_jawa.tag_heada.tag_headb.tag_headc.tag_jawc.tag_backa.tag_backb",3.5);
 				self.skin = 1;
 			}
-			else if(self.classname == "monster_incisor")
-			{
+			else if (self.classname == "monster_incisor") {
 				crystalized(self,"tag_Head.tag_R_Upper_Arm.tag_R_Mid_Arm.tag_R_Lower_Arm.tag_L_Upper_Arm.tag_L_Mid_Arm.tag_L_Lower_Arm.tag_R_Leg_Thigh.tag_R_Leg_Mid.tag_R_Leg_Calf.tag_L_Leg_Thigh.tag_L_Leg_Mid.tag_L_Leg_Calf",3);
 				self.skin = 1;
 				self.alpha = 1;
 				self.effects = 0;
-
 			}
-			else if(self.classname == "monster_invader")
-			{
+			else if (self.classname == "monster_invader") {
 				crystalized(self,"tag_leg_r.tag_leg.tag_head.tag_body.tag_head.tag_arm_r.tag_arm_l.tag_hair_a.tag_hair_b.tag_hair_c.tag_fake",3);
 				self.skin = self.skin + 4;
 			}
-			else if(self.classname == "monster_lurker")
-			{
+			else if (self.classname == "monster_lurker") {
 				crystalized(self,"tag_arm_a_l.tag_arm_a_r.tag_arm_b_l.tag_arm_b_r.tag_head_a.tag_head_b.tag_head_c.tag_tail_a.tag_tail_b",3);
 				self.skin = 1;
 				self.alpha = 1;
 				self.effects = 0;
 			}
-			else if(self.classname == "monster_oppressor")
-			{
+			else if (self.classname == "monster_oppressor") {
 				crystalized(self,"tag_shoulder_r.tag_shoulder_l.tag_pelvis.tag_leg_r.tag_leg_l.tag_head_face.tag_head_top.tag_foota.tag_footb.tag_dripa.tag_dripb.tag_core.tag_cannon_r.tag_cannon_l",3);
 				self.skin = 1;
 			}
-			else if(self.classname == "monster_stricken")
-			{
-			self.skin = 1;
-crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cyst_explo.tag_sides.tag_arm_l_b.tag_arm_l_a.tag_tail.tag_arm_r_b.tag_arm_r_a.tag_jaw.tag_head.tag_mouth",9);
+			else if (self.classname == "monster_stricken") {
+				self.skin = 1;
+				crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cyst_explo.tag_sides.tag_arm_l_b.tag_arm_l_a.tag_tail.tag_arm_r_b.tag_arm_r_a.tag_jaw.tag_head.tag_mouth",9);
 			}
 
-			else if(self.classname == "monster_symbol")
-			{
+			else if (self.classname == "monster_symbol") {
 				crystalized(self,"tag_muzzle_a.tag_muzzle_b.tag_muzzle_c.tag_muzzle_d.tag_c_br.tag_c_bl.tag_head.tag_t_fl.tag_t_fm.tag_t_fr.tag_t_bl.tag_t_bm.tag_t_br.tag_c_tl.tag_c_tr",7);
 				self.skin = 1;
 			}
-			else if(self.classname == "monster_wraith")
-			{
+			else if (self.classname == "monster_wraith") {
 				crystalized(self,"tag_head.tag_muzzle.tag_arm1.tag_arm2.tag_arm3.tag_arm4.tag_back1.tag_back2.tag_back3.tag_tail1.tag_tail2",3);
 				self.skin = 1;
 			}
-			else if(self.classname == "monster_wretch")
-			{
+			else if (self.classname == "monster_wretch") {
 				crystalized(self,"tag_leg2_l.tag_leg2_r.tag_leg1_1.tag_leg1_r.tag_head.tag_proj.tag_dest.tag_arm2_l.tag_arm2_r.tag_arm1_l.tag_arm1_r",5);
 				self.skin = 1;
 			}
-			else if(self.classname == "monster_widow")
-			{
+			else if (self.classname == "monster_widow") {
 				crystalized(self,"tag_leg_r_b.tag_leg_l_b.tag_leg_r_a.tag_leg_l_a.tag_head.tag_arm_r_b.tag_arm_r_a.tag_arm_l_b.tag_arm_l_a",3);
 				self.skin = 1;
 			}
-			else
+			else {
 				crystalized(self,"tag_head.tag_arm_b_l.tag_arm_b_r.tag_arm_a_l.tag_arm_a_r",1);
+			}
 
-			self.movetype = 0;
-		    self.movetype = MOVETYPE_WALK;
+			self.movetype = MOVETYPE_WALK;
 			self.gravity = 1;
-			if (self.classname == "monster_heretic")
-			{
+
+			if (self.classname == "monster_heretic") {
 				self.think = heretic_run;
 				self.chasing = 0;
 				self.movingz = 0;
-				self.gravity = 1;
 				self.skin = 1;
 			}
-			if((self.classname == "monster_wraith")||(self.classname == "monster_heretic")||(self.classname == "monster_symbol"))
-			{
-				if(self.flags & FL_FLY)
-				self.flags -= FL_FLY;
+
+			// Cause flying monsters to fall and shatter
+			if (
+				(self.classname == "monster_wraith") ||
+				(self.classname == "monster_heretic") ||
+				(self.classname == "monster_symbol")
+			) {
+				if (self.flags & FL_FLY)
+					self.flags -= FL_FLY;
+
 				self.gravity = 1.25;
 				vector height;
 				height_z = (self.absmax_z - self.absmin_z) * 1.2;
@@ -1304,34 +1282,30 @@ crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cys
 				else
 					self.movetype = MOVETYPE_TOSS;
 
-
 				self.velocity_x =  self.velocity_x * 0.2;
 				self.velocity_y =  self.velocity_y * 0.2;
 				self.velocity_z =  self.velocity_z * 0.2;
 
-				if(self.classname == "monster_wraith")
-				{
+				if (self.classname == "monster_wraith") {
 					self.velocity += v_forward * (tdmg / 2);
-					self.velocity_z += random(64,128);
+					self.velocity_z += random(64, 128);
 					self.ammo_revolver = 2;
 				}
-				if(self.classname == "monster_heretic")
-				{
+				if (self.classname == "monster_heretic") {
 					self.velocity += v_forward * (tdmg / 1.75);
-					self.velocity_z += random(64,128);
+					self.velocity_z += random(64, 128);
 					self.ammo_revolver = 5;
 				}
-				if(self.classname == "monster_symbol")
-				{
+				if (self.classname == "monster_symbol") {
 					self.velocity = v_forward * (tdmg / 1.75);
-					self.velocity_z += random(128,256);
+					self.velocity_z += random(128, 256);
 					self.ammo_revolver = 10;
 				}
-				self.avelocity_z = random (-128,128);
-
+				self.avelocity_z = random (-128, 128);
 			}
-			else
+			else {
 				self.velocity += v_forward * (tdmg / 4);
+			}
 
 			if (self.classname == "monster_fallen")
 				self.journal_jmessagesm = JB_A;
@@ -1363,9 +1337,9 @@ crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cys
 				self.journal_jmessagesm = JB_N;
 			if (self.classname == "monster_keeper")
 				self.journal_jmessagesm = JB_O;
+
 			entity pl = find(world, classname, "player");
-			if (!(pl.journal_jmessagesm &self.journal_jmessagesm) && (self.flags &FL_MONSTER))
-			{
+			if (!(pl.journal_jmessagesm & self.journal_jmessagesm) && (self.flags & FL_MONSTER)) {
 				pl.journal_jmessagesm += self.journal_jmessagesm;
 				//Hud_message(35, pl.origin, pl);
 				Hud_JournalNotification(pl);
@@ -1375,18 +1349,9 @@ crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cys
 			self.classname = "crystallised";
 			killed_monsters = killed_monsters + 1;
 			WriteByte(MSG_ALL, SVC_KILLEDMONSTER);
-			/*entity glowmodder = spawn();
-			glowmodder.owner = self;
-			glowmodder.oldcolormod = '3 1 3';
-			glowmodder.owner.colormod = '7 1 7';
-			glowmodder.glowmod = '-1 -1 -1';
-			glowmodder.think = glowmodderthink;
-			glowmodder.nextthink = time;
-			glowmodder.delay = 0.05;*/
 
 			self.oldthink = self.think;
 			self.health = 1;
-
 			self.flags = 0;
 			self.wrathflags += FL_CRYSTAL;
 			self.classentity = "corpse";
@@ -1406,46 +1371,32 @@ crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cys
 			self.colormod_x = 0.3 + flight_x * 0.7;
 			self.colormod_y = 0.3 + flight_y * 0.7;
 			self.colormod_z = 0.3 + flight_z * 0.7;
-			if((self.movetype == MOVETYPE_BOUNCE) || (self.movetype == MOVETYPE_TOSS))
-			{
+			if ((self.movetype == MOVETYPE_BOUNCE) || (self.movetype == MOVETYPE_TOSS)) {
 				self.touch = monster_goodbye_touch;
 				self.think = monster_flyer_pregoodbye;
 				self.nextthink = time + random(0.1,0.3);
 			}
-			else
-			{
+			else {
 				self.think = monster_pregoodbye;
 				self.nextthink = time + 0.333;
 			}
 
-
-			if (oself.LifeSiphon_time > time)
-			{
+			if (oself.LifeSiphon_time > time) {
 				life_siphon_gain(oself,self);
 			}
 
 			self = oself;
 		}
-		else
-		{
-			if ((trace_ent.health > trace_ent.max_health * 0.25)&& (trace_ent.flags & FL_MONSTER))
-			{
+		else {
+			if ((trace_ent.health > trace_ent.max_health * 0.25) && (trace_ent.flags & FL_MONSTER)) {
 				if(trace_ent.colormod == '0 0 0')
 				trace_ent.colormod = '1 1 1';
-				/*glowmodder = spawn();
-				glowmodder.owner = trace_ent;
-				glowmodder.oldcolormod = trace_ent.colormod;
-				glowmodder.owner.colormod = '3 1 3';
-				glowmodder.think = glowmodderthink;
-				glowmodder.nextthink = time;
-				glowmodder.delay = 0.0125;*/
 				trace_ent.sustained_damage = trace_ent.damagetopain + 1;
 			}
-			if(!(trace_ent.wrathflags & FL_CRYSTAL))
-			T_Damage(trace_ent, self, self, tdmg);
+			if (!(trace_ent.wrathflags & FL_CRYSTAL))
+				T_Damage(trace_ent, self, self, tdmg);
 
-			if(trace_ent.bloody == 2)
-			{
+			if (trace_ent.bloody == 2) {
 				SpawnBlood(trace_endpos, '0 0 0', 20, BLOOD_DEFAULT, 0);
 				if ((bossvulnerable == 1))
 				{
@@ -1465,18 +1416,17 @@ crystalized(self,"tag_cyst_a.tag_cyst_b.tag_cyst_c.tag_cyst_d.tag_cyst_e.tag_cys
 			}
 
 			pointparticles(particleeffectnum("crystallize"), trace_ent.origin, '0 0 0', 1);
-			explo_physics(self,trace_ent, 50, 3);//(entity inflictor, entity targ, float damage, float pushfactor)
+			explo_physics(self, trace_ent, 50, 3);
 		}
 
-	return TRUE;
+		return TRUE;
 	}
-	else
-	{
+	else {
 		pointparticles(particleeffectnum("crystal_impact"), org, v_forward *(-24), 1);
-	return FALSE;
+		return FALSE;
 	}
+}
 
-};
 
 void()crystals_muzzle_think =
 {

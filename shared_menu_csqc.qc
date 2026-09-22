@@ -1,24 +1,15 @@
-void(string filefrom, string fileto)fcopy_wrath2 =
-{
+void data_fremove(string s) {
+	string filename = substring (s,5,(strlen(s) -5));
+	fremove(filename);
+}
 
-if(fexists(strcat ("data/",filefrom)))
-fcopy (filefrom, fileto);
-};
 
-void(string s)data_fremove =
-{
-//substring(string s, float start, float length) substring = #116; // returns a section of a string as a tempstring - see FTE_STRINGS for enhanced version
-string filename = substring (s,5,(strlen(s) -5));
-fremove(filename);
-};
-
-void(float istether) load_save_maps =
-{
+void load_save_maps(float istether) {
 	read_currentprofileslot();
 
 	// episode 1
 
-	local string intromap, hub1map, e1m1map, e1m2map, e1m3map, e1m4map, e1m5map, boss1map;
+	string intromap, hub1map, e1m1map, e1m2map, e1m3map, e1m4map, e1m5map, boss1map;
 	intromap = strcat("data/profiles/", profilename, "/maps/intro.sav");
 	hub1map = strcat("data/profiles/", profilename, "/maps/hub1.sav");
 	e1m1map = strcat("data/profiles/", profilename, "/maps/e1m1.sav");
@@ -28,14 +19,14 @@ void(float istether) load_save_maps =
 	e1m5map = strcat("data/profiles/", profilename, "/maps/e1m5.sav");
 	boss1map = strcat("data/profiles/", profilename, "/maps/boss1map.sav");
 
-	if(fexists(intromap)) data_fremove (intromap);
-	if(fexists(hub1map)) data_fremove (hub1map);
-	if(fexists(e1m1map)) data_fremove (e1m1map);
-	if(fexists(e1m2map)) data_fremove (e1m2map);
-	if(fexists(e1m3map)) data_fremove (e1m3map);
-	if(fexists(e1m4map)) data_fremove (e1m4map);
-	if(fexists(e1m5map)) data_fremove (e1m5map);
-	if(fexists(boss1map)) data_fremove (boss1map);
+	if (fexists(intromap)) data_fremove (intromap);
+	if (fexists(hub1map)) data_fremove (hub1map);
+	if (fexists(e1m1map)) data_fremove (e1m1map);
+	if (fexists(e1m2map)) data_fremove (e1m2map);
+	if (fexists(e1m3map)) data_fremove (e1m3map);
+	if (fexists(e1m4map)) data_fremove (e1m4map);
+	if (fexists(e1m5map)) data_fremove (e1m5map);
+	if (fexists(boss1map)) data_fremove (boss1map);
 
 
 	string tointromap, tohub1map, toe1m1map, toe1m2map, toe1m3map, toe1m4map, toe1m5map, toboss1map;
@@ -52,7 +43,7 @@ void(float istether) load_save_maps =
 
 	string fromintromap, fromhub1map, frome1m1map, frome1m2map, frome1m3map, frome1m4map, frome1m5map, fromboss1map;
 
-	if(istether == 1)
+	if (istether == 1)
 	{
 		fromintromap = strcat("profiles/", profilename, "/tether/maps/intro.sav");
 		fromhub1map = strcat("profiles/", profilename, "/tether/maps/hub1.sav");
@@ -63,7 +54,7 @@ void(float istether) load_save_maps =
 		frome1m5map = strcat("profiles/", profilename, "/tether/maps/e1m5.sav");	
 		fromboss1map = strcat("profiles/", profilename, "/tether/maps/boss1.sav");	
 	}
-	if(istether == 2)
+	if (istether == 2)
 	{
 		fromintromap = strcat("profiles/", profilename, "/shrine/maps/intro.sav");
 		fromhub1map = strcat("profiles/", profilename, "/shrine/maps/hub1.sav");
@@ -74,7 +65,7 @@ void(float istether) load_save_maps =
 		frome1m5map = strcat("profiles/", profilename, "/shrine/maps/e1m5.sav");	
 		fromboss1map = strcat("profiles/", profilename, "/shrine/maps/boss1.sav");	
 	}	
-	if(istether == 3)
+	if (istether == 3)
 	{
 		fromintromap = strcat("profiles/", profilename, "/autosave/maps/intro.sav");
 		fromhub1map = strcat("profiles/", profilename, "/autosave/maps/hub1.sav");
@@ -127,8 +118,7 @@ void(float istether) load_save_maps =
 
 	string fromintrostat, fromhub1stat, frome1m1stat, frome1m2stat, frome1m3stat, frome1m4stat, frome1m5stat, fromboss1stat;
 
-	if (istether == 1)
-	{
+	if (istether == 1) {
 		fromintrostat = strcat("profiles/", profilename, "/tether/maps/intro.stats");
 		fromhub1stat = strcat("profiles/", profilename, "/tether/maps/hub1.stats");
 		frome1m1stat = strcat("profiles/", profilename, "/tether/maps/e1m1.stats");
@@ -139,8 +129,7 @@ void(float istether) load_save_maps =
 		fromboss1stat = strcat("profiles/", profilename, "/tether/maps/boss1.stats");
 	}
 
-	if (istether == 2)
-	{
+	if (istether == 2) {
 		fromintrostat = strcat("profiles/", profilename, "/shrine/maps/intro.stats");
 		fromhub1stat = strcat("profiles/", profilename, "/shrine/maps/hub1.stats");
 		frome1m1stat = strcat("profiles/", profilename, "/shrine/maps/e1m1.stats");
@@ -151,8 +140,7 @@ void(float istether) load_save_maps =
 		fromboss1stat = strcat("profiles/", profilename, "/shrine/maps/boss1.stats");
 	}
 
-	if (istether == 3)
-	{
+	if (istether == 3) {
 		fromintrostat = strcat("profiles/", profilename, "/autosave/maps/intro.stats");
 		fromhub1stat = strcat("profiles/", profilename, "/autosave/maps/hub1.stats");
 		frome1m1stat = strcat("profiles/", profilename, "/autosave/maps/e1m1.stats");
@@ -184,15 +172,16 @@ void(float istether) load_save_maps =
 	e2m5map = strcat("data/profiles/", profilename, "/maps/e2m5.sav");
 	boss2map = strcat("data/profiles/", profilename, "/maps/boss2.sav");
 
-	if(fexists(hub2map)) fremove (hub2map);
-	if(fexists(e2m1map)) fremove (e2m1map);
-	if(fexists(e2m2map)) fremove (e2m2map);
-	if(fexists(e2m3map)) fremove (e2m3map);
-	if(fexists(e2m4map)) fremove (e2m4map);
-	if(fexists(e2m5map)) fremove (e2m5map);
-	if(fexists(boss2map)) fremove (boss2map);
+	if (fexists(hub2map)) fremove (hub2map);
+	if (fexists(e2m1map)) fremove (e2m1map);
+	if (fexists(e2m2map)) fremove (e2m2map);
+	if (fexists(e2m3map)) fremove (e2m3map);
+	if (fexists(e2m4map)) fremove (e2m4map);
+	if (fexists(e2m5map)) fremove (e2m5map);
+	if (fexists(boss2map)) fremove (boss2map);
 
 	string tohub2map, toe2m1map, toe2m2map, toe2m3map, toe2m4map, toe2m5map, toboss2map;
+
 	tohub2map = strcat("profiles/", profilename, "/maps/hub2.sav");
 	toe2m1map = strcat("profiles/", profilename, "/maps/e2m1.sav");
 	toe2m2map = strcat("profiles/", profilename, "/maps/e2m2.sav");
@@ -202,8 +191,8 @@ void(float istether) load_save_maps =
 	toboss2map = strcat("profiles/", profilename, "/maps/boss2.sav");
 
 	string fromhub2map, frome2m1map, frome2m2map, frome2m3map, frome2m4map, frome2m5map, fromboss2map;
-	if(istether == 1)
-	{
+
+	if (istether == 1) {
 		fromhub2map = strcat("profiles/", profilename, "/tether/maps/hub2.sav");
 		frome2m1map = strcat("profiles/", profilename, "/tether/maps/e2m1.sav");
 		frome2m2map = strcat("profiles/", profilename, "/tether/maps/e2m2.sav");	
@@ -212,8 +201,7 @@ void(float istether) load_save_maps =
 		frome2m5map = strcat("profiles/", profilename, "/tether/maps/e2m5.sav");	
 		fromboss2map = strcat("profiles/", profilename, "/tether/maps/boss2.sav");	
 	}
-	if(istether == 2)
-	{
+	if (istether == 2) {
 		fromhub2map = strcat("profiles/", profilename, "/shrine/maps/hub2.sav");
 		frome2m1map = strcat("profiles/", profilename, "/shrine/maps/e2m1.sav");
 		frome2m2map = strcat("profiles/", profilename, "/shrine/maps/e2m2.sav");	
@@ -222,8 +210,7 @@ void(float istether) load_save_maps =
 		frome2m5map = strcat("profiles/", profilename, "/shrine/maps/e2m5.sav");	
 		fromboss2map = strcat("profiles/", profilename, "/shrine/maps/boss2.sav");	
 	}	
-	if(istether == 3)
-	{
+	if (istether == 3) {
 		fromhub2map = strcat("profiles/", profilename, "/autosave/maps/hub2.sav");
 		frome2m1map = strcat("profiles/", profilename, "/autosave/maps/e2m1.sav");
 		frome2m2map = strcat("profiles/", profilename, "/autosave/maps/e2m2.sav");	
@@ -252,17 +239,18 @@ void(float istether) load_save_maps =
 	e2m5stat = strcat("profiles/", profilename, "/maps/e2m5.stats");
 	boss2stat = strcat("profiles/", profilename, "/maps/boss2.stats");
 
-	if(fexists(hub2stat)) fremove (hub2stat);
-	if(fexists(e2m1stat)) fremove (e2m1stat);
-	if(fexists(e2m2stat)) fremove (e2m2stat);
-	if(fexists(e2m3stat)) fremove (e2m3stat);
-	if(fexists(e2m4stat)) fremove (e2m4stat);
-	if(fexists(e2m5stat)) fremove (e2m5stat);
-	if(fexists(boss2stat)) fremove (boss2stat);
+	if (fexists(hub2stat)) fremove (hub2stat);
+	if (fexists(e2m1stat)) fremove (e2m1stat);
+	if (fexists(e2m2stat)) fremove (e2m2stat);
+	if (fexists(e2m3stat)) fremove (e2m3stat);
+	if (fexists(e2m4stat)) fremove (e2m4stat);
+	if (fexists(e2m5stat)) fremove (e2m5stat);
+	if (fexists(boss2stat)) fremove (boss2stat);
 
 
 	string tohub2stat, toe2m1stat, toe2m2stat, toe2m3stat, toe2m4stat, toe2m5stat, toboss2stat;
 	string fromhub2stat, frome2m1stat, frome2m2stat, frome2m3stat, frome2m4stat, frome2m5stat, fromboss2stat;
+
 	tohub2stat = strcat("profiles/", profilename, "/maps/hub2.stats");
 	toe2m1stat = strcat("profiles/", profilename, "/maps/e2m1.stats");
 	toe2m2stat = strcat("profiles/", profilename, "/maps/e2m2.stats");
@@ -271,8 +259,7 @@ void(float istether) load_save_maps =
 	toe2m5stat = strcat("profiles/", profilename, "/maps/e2m5.stats");
 	toboss2stat = strcat("profiles/", profilename, "/maps/boss2.stats");
 
-	if (istether == 1)
-	{
+	if (istether == 1) {
 		fromhub2stat = strcat("profiles/", profilename, "/tether/maps/hub2.stats");
 		frome2m1stat = strcat("profiles/", profilename, "/tether/maps/e2m1.stats");
 		frome2m2stat = strcat("profiles/", profilename, "/tether/maps/e2m2.stats");
@@ -282,8 +269,7 @@ void(float istether) load_save_maps =
 		fromboss2stat = strcat("profiles/", profilename, "/tether/maps/boss2.stats");
 	}
 
-	if (istether == 2)
-	{
+	if (istether == 2) {
 		fromhub2stat = strcat("profiles/", profilename, "/shrine/maps/hub2.stats");
 		frome2m1stat = strcat("profiles/", profilename, "/shrine/maps/e2m1.stats");
 		frome2m2stat = strcat("profiles/", profilename, "/shrine/maps/e2m2.stats");
@@ -293,8 +279,7 @@ void(float istether) load_save_maps =
 		fromboss2stat = strcat("profiles/", profilename, "/shrine/maps/boss2.stats");
 	}
 
-	if (istether == 3)
-	{
+	if (istether == 3) {
 		fromhub2stat = strcat("profiles/", profilename, "/autosave/maps/hub2.stats");
 		frome2m1stat = strcat("profiles/", profilename, "/autosave/maps/e2m1.stats");
 		frome2m2stat = strcat("profiles/", profilename, "/autosave/maps/e2m2.stats");
@@ -343,8 +328,7 @@ void(float istether) load_save_maps =
 	toboss3map = strcat("profiles/", profilename, "/maps/boss3.sav");
 
 	string fromhub3map, frome3m1map, frome3m2map, frome3m3map, frome3m4map, frome3m5map, fromboss3map;
-	if(istether == 1)
-	{
+	if (istether == 1) {
 		fromhub3map = strcat("profiles/", profilename, "/tether/maps/hub3.sav");
 		frome3m1map = strcat("profiles/", profilename, "/tether/maps/e3m1.sav");
 		frome3m2map = strcat("profiles/", profilename, "/tether/maps/e3m2.sav");	
@@ -353,8 +337,7 @@ void(float istether) load_save_maps =
 		frome3m5map = strcat("profiles/", profilename, "/tether/maps/e3m5.sav");	
 		fromboss3map = strcat("profiles/", profilename, "/tether/maps/boss3.sav");	
 	}
-	if(istether == 2)
-	{
+	if (istether == 2) {
 		fromhub3map = strcat("profiles/", profilename, "/shrine/maps/hub3.sav");
 		frome3m1map = strcat("profiles/", profilename, "/shrine/maps/e3m1.sav");
 		frome3m2map = strcat("profiles/", profilename, "/shrine/maps/e3m2.sav");	
@@ -363,8 +346,7 @@ void(float istether) load_save_maps =
 		frome3m5map = strcat("profiles/", profilename, "/shrine/maps/e3m5.sav");	
 		fromboss3map = strcat("profiles/", profilename, "/shrine/maps/boss3.sav");	
 	}	
-	if(istether == 3)
-	{
+	if (istether == 3) {
 		fromhub3map = strcat("profiles/", profilename, "/autosave/maps/hub3.sav");
 		frome3m1map = strcat("profiles/", profilename, "/autosave/maps/e3m1.sav");
 		frome3m2map = strcat("profiles/", profilename, "/autosave/maps/e3m2.sav");	
@@ -393,13 +375,13 @@ void(float istether) load_save_maps =
 	e3m5stat = strcat("profiles/", profilename, "/maps/e3m5.stats");
 	boss3stat = strcat("profiles/", profilename, "/maps/boss3.stats");
 
-	if(fexists(hub3stat)) fremove (hub3stat);
-	if(fexists(e3m1stat)) fremove (e3m1stat);
-	if(fexists(e3m2stat)) fremove (e3m2stat);
-	if(fexists(e3m3stat)) fremove (e3m3stat);
-	if(fexists(e3m4stat)) fremove (e3m4stat);
-	if(fexists(e3m5stat)) fremove (e3m5stat);
-	if(fexists(boss3stat)) fremove (boss3stat);
+	if (fexists(hub3stat)) fremove (hub3stat);
+	if (fexists(e3m1stat)) fremove (e3m1stat);
+	if (fexists(e3m2stat)) fremove (e3m2stat);
+	if (fexists(e3m3stat)) fremove (e3m3stat);
+	if (fexists(e3m4stat)) fremove (e3m4stat);
+	if (fexists(e3m5stat)) fremove (e3m5stat);
+	if (fexists(boss3stat)) fremove (boss3stat);
 
 
 	string tohub3stat, toe3m1stat, toe3m2stat, toe3m3stat, toe3m4stat, toe3m5stat, toboss3stat;
@@ -412,8 +394,7 @@ void(float istether) load_save_maps =
 	toe3m5stat = strcat("profiles/", profilename, "/maps/e3m5.stats");
 	toboss3stat = strcat("profiles/", profilename, "/maps/boss3.stats");
 
-	if (istether == 1)
-	{
+	if (istether == 1) {
 		fromhub3stat = strcat("profiles/", profilename, "/tether/maps/hub3.stats");
 		frome3m1stat = strcat("profiles/", profilename, "/tether/maps/e3m1.stats");
 		frome3m2stat = strcat("profiles/", profilename, "/tether/maps/e3m2.stats");
@@ -423,8 +404,7 @@ void(float istether) load_save_maps =
 		fromboss3stat = strcat("profiles/", profilename, "/tether/maps/boss3.stats");
 	}
 
-	if (istether == 2)
-	{
+	if (istether == 2) {
 		fromhub3stat = strcat("profiles/", profilename, "/shrine/maps/hub3.stats");
 		frome3m1stat = strcat("profiles/", profilename, "/shrine/maps/e3m1.stats");
 		frome3m2stat = strcat("profiles/", profilename, "/shrine/maps/e3m2.stats");
@@ -434,8 +414,7 @@ void(float istether) load_save_maps =
 		fromboss3stat = strcat("profiles/", profilename, "/shrine/maps/boss3.stats");
 	}
 
-	if (istether == 3)
-	{
+	if (istether == 3) {
 		fromhub3stat = strcat("profiles/", profilename, "/autosave/maps/hub3.stats");
 		frome3m1stat = strcat("profiles/", profilename, "/autosave/maps/e3m1.stats");
 		frome3m2stat = strcat("profiles/", profilename, "/autosave/maps/e3m2.stats");
@@ -454,57 +433,43 @@ void(float istether) load_save_maps =
 	fcopy_wrath(fromboss3stat, toboss3stat);
 };
 
-void() load_tether = { cmd("set cvar_restoregame 2\n");
-	cmd("slowmo 1\n");//cmd("r_glsl_saturation 1\n");
+
+void load_tether() {
+	cmd("set cvar_restoregame 2\n");
+	cmd("slowmo 1\n");
 	read_currentprofileslot();
 	load_save_maps(1);
-	string cname;
-	cname = strcat("load data/profiles/", profilename, "/tether.sav\n");
-	//	bprint(cname);
+	string cname = strcat("load data/profiles/", profilename, "/tether.sav\n");
 	cmd("scratch3 0 \n");
 	cmd(cname);
-};
-void() load_shrine = { cmd("set cvar_restoregame 3\n");
-	cmd("slowmo 1\n");//cmd("r_glsl_saturation 1\n");
+}
+
+
+void load_shrine() {
+	cmd("set cvar_restoregame 3\n");
+	cmd("slowmo 1\n");
 	read_currentprofileslot();
 	load_save_maps(2);
-	string cname;
-	cname = strcat("load data/profiles/", profilename, "/shrine.sav\n");
+	string cname = strcat("load data/profiles/", profilename, "/shrine.sav\n");
 	cmd("scratch3 0 \n");
-	//	bprint(cname);
 	cmd(cname);
-};
-void() load_autosave = { cmd("set cvar_restoregame 0\n");
-	cmd("slowmo 1\n");//cmd("r_glsl_saturation 1\n");
+}
+
+
+void load_autosave() {
+	cmd("set cvar_restoregame 0\n");
+	cmd("slowmo 1\n");
 	read_currentprofileslot();
 	load_save_maps(3);
 	string savename = strcat("profiles/", profilename, "/autosave.sav\n");
-
-//	if(fexists(strcat ("data/",savename)))
-//	{
-		string cname = strcat("load ","data/", savename);
-		cmd("scratch3 0 \n");
-		cmd(cname);
-//	}
-//	else
-//		cmd("restart\n");
-
-};
+	string cname = strcat("load ","data/", savename);
+	cmd("scratch3 0 \n");
+	cmd(cname);
+}
 
 
 // Reki (November 15 2023): String parsing helper functions
-string str_removeblank(string s)
-{
-	// strip block comments
-	#if 0
-	float o = -1;
-	while ((o = strstrofs(s, "/*", 0)) >= 0);
-	{
-		float d = strstrofs(s, "*/", o);
-		s = substring(s, o, (d - o) + 1);
-	}
-	#endif
-
+string str_removeblank(string s) {
 	// strip line comments
 	float o = -1;
 	o = strstrofs(s, "//", 0);
@@ -520,8 +485,8 @@ string str_removeblank(string s)
 	return s;
 }
 
-string str_replaceallwith(string s, string offender, string replace)
-{
+
+string str_replaceallwith(string s, string offender, string replace) {
 	float o = -1;
 	while((o = strstrofs(s, offender, 0)) >= 0)
 	{
@@ -534,8 +499,8 @@ string str_replaceallwith(string s, string offender, string replace)
 	return s;
 }
 
-string XML_ParseEscapeString(string es)
-{
+
+string XML_ParseEscapeString(string es) {
 	es = str_replaceallwith(es, "&lt;", "<");
 	es = str_replaceallwith(es, "&gt;", ">");
 	es = str_replaceallwith(es, "&amp;", "&");
@@ -603,6 +568,7 @@ string XML_ParseEscapeString(string es)
 	return es;
 }
 
+
 // Reki (February 1 2024): parse info out of a .sav file (depends on 64 parms and version 5)
 #define NUM_PARMS 64
 typedef struct {
@@ -613,8 +579,7 @@ typedef struct {
 	string mapname;
 } saveinfo_t;
 
-void parse_savefile(string savpath, __out saveinfo_t info)
-{
+void parse_savefile(string savpath, __out saveinfo_t info) {
 	float f = fopen(savpath, FILE_READ);
 	if (f < 0)
 		return;

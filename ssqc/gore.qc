@@ -307,7 +307,6 @@ void() checking_ground =
 .float liquidtouch_timing;
 float magnetic_time;
 
-void(entity targ, entity inflictor, entity attacker, float damage) T_Damage;
 void() gib_touch = { local vector v;
 	self.gravity = 1;
 

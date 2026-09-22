@@ -40,25 +40,24 @@ const .float population_control_fields[] = {
 	max_keeper
 };
 
-void() info_population_control {
-	
-	if (population_control)
-	{
+
+void info_population_control() {
+	if (population_control) {
 		remove(self);
 		return;
 	}
 
 	population_control = self;
 
-	for(float i = 0; i < population_control_fields.length; i++)
-	{
+	for(float i = 0; i < population_control_fields.length; i++) {
 		.float fld = population_control_fields[i];
 		if (self.fld == 0) // ignore populations that aren't defined
 			self.fld = -1;
 	}
 }
 
-void(entity e) pop_entitycleanup {
+
+void pop_entitycleanup(entity e) {
 	if (!population_control)
 		return;
 
@@ -68,4 +67,3 @@ void(entity e) pop_entitycleanup {
 	population_control.(e.pop_field)++; // add 1 to the population controller's field, since we subtracted 1 on spawn
 	e.pop_field = __NULL__;
 }
-

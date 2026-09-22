@@ -1927,12 +1927,9 @@ $frame Vicious_idle
 $frame Vicious_shake
 $frame Vicious_death
 float test_ia;
-void()vicious_idol_waiting1;
-void()vicious_idol_attacka1;
-void()vicious_idol_attacka6;
 
 
-void() 	recheck_vicious_enemies =
+void() recheck_vicious_enemies =
 {
 	entity viciousenemy = nextent(world);
 	while (viciousenemy)

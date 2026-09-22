@@ -1,5 +1,4 @@
 void(float index, float type, .string) SV_AddStatString = #232;
-
 void(float index, float type, .float) SV_AddStatFloat = #232;
 
 // vector xmacro
@@ -56,7 +55,7 @@ void(float index, float type, .float) SV_AddStatFloat = #232;
 .float foundedrelics;
 
 
-float EF_NOPVSCULL 				= 8192;
+float EF_NOPVSCULL = 8192;
 
 float AS_STRING = 1;
 float AS_FLOAT_TRUNCATED = 2;
@@ -269,7 +268,7 @@ lightparams_t dl_darkarmor = {
 .float cam_ang_z;
 
 // stats!
-const float		STAT_VIEWHEIGHT					= 16;
+const float STAT_VIEWHEIGHT = 16;
 const float STAT_RMENU = 34;
 const float STAT_LF = 35;
 const float STAT_AMMO_FLAMETHROWER = 36;
@@ -280,9 +279,6 @@ const float STAT_AMMO_SHOTGUN = 40;
 const float STAT_AMMO_LANCE = 41;
 const float STAT_AMMO_CRYSTAL = 42;
 const float STAT_AMMO_MACE = 43;
-
-
-
 
 
 const float STAT_RD_MR = 50; // mark revelation
@@ -366,7 +362,6 @@ float IT_RETCHER = 8;
 float IT_CANNON = 16;
 float IT_MELEE = 32;
 float IT_LANCE = 64;
-//float IT_EXTRA_WEAPON = 128;
 float IT_CRYSTAL = 128;
 float IT_VIEWMODEL = 512;
 float IT_MACE = 1024;
@@ -620,8 +615,8 @@ const float PERFECT_LOREB = 0x000000;
 /*
 1 = first artifact
 2 = first time to open inventory
-4 =  first soul tether
-8 =  first use of soul tether
+4 = first soul tether
+8 = first use of soul tether
 16 =
 32 = 
 64 =
@@ -678,37 +673,40 @@ float SG_MathModulus(float a, float b)
 	return (a - (floor(a / b) *b));
 }
 
-string SG_GetFormattedTimeStringUnZoned(float tTime)
-{
-	local float nTime;
-	nTime = rint(tTime);
-	local string strTime;
-	local float nMinutes;
-	nMinutes = floor(nTime / 60);
-	strTime = ftos(nMinutes);
+string SG_GetFormattedTimeStringUnZoned(float tTime) {
+	float nTime = rint(tTime);
+	float nMinutes = floor(nTime / 60);
+
+	string strTime = ftos(nMinutes);
 	strTime = strcat(strTime, ":");
-	local float nSeconds;
-	nSeconds = SG_MathModulus(nTime, 60);
+
+	float nSeconds = SG_MathModulus(nTime, 60);
 	if (nSeconds < 10)
 		strTime = strcat(strTime, "0", ftos(nSeconds));
 	else
 		strTime = strcat(strTime, ftos(nSeconds));
+
 	return strTime;
 }
 
-string(string strtofix) case_fixed = {
-	if (strlen(strtofix) == 1)
+
+string case_fixed(string strtofix) {
+	// FIXME: Reorganise so the language check comes first, because everything except "en" returns uppercase
+
+	if (strlen(strtofix) == 1) {
+		// One letter, make it uppercase
 		strtofix = strtoupper(strtofix);
-	else
-	{
+	}
+	else {
+		// First letter uppercase, rest of the word lowercase
 		strtofix = strtolower(strtofix);
 		string uppercase = substring(strtofix, 0, 1);
 		uppercase = strtoupper(uppercase);
 		string restoftheword = substring(strtofix, 1, strlen(strtofix));
 		strtofix = strcat(uppercase, restoftheword);
 	}
-	if (cvar_string("prvm_language") == "en")
-	{
+
+	if (cvar_string("prvm_language") == "en") {
 		if (strtofix == "Shift")
 			strtofix = "Left Shift";
 		if (strtofix == "Ctrl")
@@ -724,10 +722,10 @@ string(string strtofix) case_fixed = {
 		if (strtofix == "Mwheeldown")
 			strtofix = "Mouse Wheel Down";
 	}
-	else
-	{
+	else {
 		strtofix = strtoupper(strtofix);
 	}
+
 	strtofix = strcat("[", strtofix, "]");
 	return strtofix;
 }
@@ -749,49 +747,46 @@ float slerp(float x0, float x1, float t)
     return x0 + t*(x1-x0);
 }
 
-vector(vector a, vector b, float mix) lerpVector =
-{
+
+vector lerpVector(vector a, vector b, float mix) {
 	if (mix <= 0) return a;
 	if (mix >= 1) return b;
 	return (b * mix + a * ( 1 - mix ) );
 }
 
+
 // binary utils
 // Returns position of the only set bit in 'n' 
-float powerofTwo(float n) 
+float power_of_two(float n)
 { 
     return n && (!(n & (n - 1))); 
 } 
 
-float findPosition(float n) 
-{
-    if !(powerofTwo(n))
-	{
+float findPosition(float n) {
+	if (!(power_of_two(n))) {
 		return 0;
 	}
 	
 	float i = 1;
 	float pos = 0;
-	
-	
-    while (!(i & n)) { 
-        // shift over to next bit, inserting a 0 in its place
-        i = i << 1; 
-  
-        // increment return value by 1
-        pos++; 
-    } 
-  
-    return pos; 
+
+	while (!(i & n)) {
+		// shift over to next bit, inserting a 0 in its place
+		i = i << 1;
+
+		// increment return value by 1
+		pos++;
+	}
+
+	return pos;
 } 
 
-void numfield_addtostring(__inout string numfield, float insert)
-{
+
+void numfield_addtostring(__inout string numfield, float insert) {
 	float argc = tokenizebyseparator(numfield, "&")-1;
 	string numstr = strcat(numfield, "");
 	
-	for(float i = 1; i <= argc; i++)
-	{
+	for (float i = 1; i <= argc; i++) {
 		float val = stof(argv(i));
 		if (val == insert)
 			return;
@@ -803,13 +798,12 @@ void numfield_addtostring(__inout string numfield, float insert)
 	numfield = strzone(strcat(numstr, "&", ftos(floor(insert))));
 }
 
-void numfield_deletefromstring(__inout string numfield, float insert) 
-{
+
+void numfield_deletefromstring(__inout string numfield, float insert) {
 	float argc = tokenizebyseparator(numfield, "&")-1;
 	string numstr = "";
 	
-	for(float i = 1; i <= argc; i++)
-	{
+	for (float i = 1; i <= argc; i++) {
 		float val = stof(argv(i));
 		if (val == insert)
 			continue;
@@ -821,6 +815,7 @@ void numfield_deletefromstring(__inout string numfield, float insert)
 
 	numfield = strzone(numstr);
 }
+
 
 float numfield_fetchindex(string numfield, float index)
 {

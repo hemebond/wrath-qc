@@ -538,14 +538,14 @@ float crouchcheck(entity targ) {
 
 
 .float crouchingtime;
-void() Crouch_Off = {
+void crouch_off() {
 	if (self.crouch && (crouchcheck(self))) {
 		//get up
 
-		if((self.groundentity.solid == SOLID_BBOX) &&  (self.flags & FL_ONGROUND))
+		if ((self.groundentity.solid == SOLID_BBOX) &&  (self.flags & FL_ONGROUND))
 			self.velocity_z  = 90;
 
-		if(!(self.flags & FL_JUMPRELEASED))
+		if (!(self.flags & FL_JUMPRELEASED))
 			self.flags += FL_JUMPRELEASED;
 
 		setsize(self, '-16 -16 -32', '16 16 32');	//changes the size of the player to the normal size
@@ -559,21 +559,18 @@ void() Crouch_Off = {
 	}
 
 	self.attemptcrouch = 1;
-};
+}
 
 
-
-void() Crouch_On = {
-	if ((!self.crouch) /*&& (!self.velocity_z)*/)	//crouch down
-	{
+void crouch_on() {
+	if (!self.crouch) {
 		setsize(self, '-16 -16 -16', '16 16 8');	//changes the size of the player !!!
 
 		self.crouchingtime = time + 0.25;
-
 		self.crouch = 1;
 		self.attemptcrouch = 1;
-		if (self.flags & FL_ONGROUND)
-		{
+
+		if (self.flags & FL_ONGROUND) {
 			if (time < self.lspeedtime)
 				self.maxspeed = 0.5;
 			else
@@ -582,9 +579,8 @@ void() Crouch_On = {
 
 		return;
 	}
-
 	self.attemptcrouch = 0;
-};
+}
 
 
 
@@ -677,7 +673,7 @@ void() quickmovement
 
 .float changing_level;
 .float heretic_sloweffect;
-.float heretic_sloweffectime;
+.float heretic_sloweffecttime;
 
 .float usingnonsolidswitch;
 .entity nonsolidswitch;
@@ -733,6 +729,11 @@ void autosave() {
 .float aegisflag;
 .float rocketjumpcnt;
 .vector shadowangle;
+
+
+float crouch_button_pressed() {
+	return self.button4;
+}
 
 
 void PlayerPreThink() {
@@ -1035,7 +1036,7 @@ void PlayerPreThink() {
 		{
 			if((self.flags & FL_ONGROUND) && (self.maxspeed != 1))
 			{
-			if (self.heretic_sloweffectime > time)
+			if (self.heretic_sloweffecttime > time)
 				self.maxspeed = 0.75;
 			else
 				self.maxspeed = 1;
@@ -1052,11 +1053,12 @@ void PlayerPreThink() {
 		}
 	}
 
-	if ((self.lspeedtime > time) && (self.slowmouse != 1) && (self.heretic_sloweffectime < time))
+	if ((self.lspeedtime > time) && (self.slowmouse != 1) && (self.heretic_sloweffecttime < time))
 		slowmovement();
 
-	if ((time > self.lspeedtime) && (self.slowmouse == 1) && (self.heretic_sloweffectime < time))
+	if ((time > self.lspeedtime) && (self.slowmouse == 1) && (self.heretic_sloweffecttime < time))
 		quickmovement();
+
 	if(self.flags & FL_ONGROUND)
 		self.onground_time = time + 0.2;
 
@@ -1159,90 +1161,97 @@ void PlayerPreThink() {
 		}
 	}
 
-
-
-
-
-
-	if (((!(self.button4)) && (self.crouch))   && (self.crushingtime <= time)  && (self.crouchingtime <= time) )
-	{
-	if (self.rmenu == 1)
-		return;
-		Crouch_Off();
+	if (
+		(!crouch_button_pressed() && (self.crouch)) &&
+		(self.crushingtime <= time) &&
+		(self.crouchingtime <= time)
+	) {
+		if (self.rmenu == 1)
+			return;
+		crouch_off();
 	}
 
-	if (((self.button4) && (!self.crouch)) || ((self.crushingtime > time)&& (!self.crouch)))
-	{
-	if (self.rmenu == 1)
-		return;
-		Crouch_On();
+	if (
+		(crouch_button_pressed() && (!self.crouch)) ||
+		((self.crushingtime > time) && (!self.crouch))
+	) {
+		if (self.rmenu == 1)
+			return;
+		crouch_on();
 	}
 
-
-
-	if((self.flags & FL_ONGROUND) && ((self.groundentity.classname == "boss_guardian1")|| (self.groundentity.flags & FL_MONSTER)||(self.groundentity.wrathflags & FL_NOONTOP)) && (self.onmonsterjumptime < time) &&(self.groundentity != world) )
-	{
+	if (
+		(self.flags & FL_ONGROUND) &&
+		(
+			(self.groundentity.classname == "boss_guardian1") ||
+			(self.groundentity.flags & FL_MONSTER) ||
+			(self.groundentity.wrathflags & FL_NOONTOP)
+		) &&
+		(self.onmonsterjumptime < time) &&
+		(self.groundentity != world)
+	) {
 		self.onmonsterjumptime = time  + 0.3;
 		self.velocity = v_forward * -92 + v_right * random(-32, 32);
 		self.velocity_z  += random(50,70);
-		self.velocity_x  += random(90, 120) * crandom2() ;
+		self.velocity_x  += random(90, 120) * crandom2();
 		self.velocity_y  += random(90, 120) * crandom2();
-		if(self.groundentity.classname == "boss_guardian1")
-		{
-			self.velocity_z  += 192;
-			self.onmonsterjumptime = time  + 0.1;
+
+		// Make the player bounce on the bosses head
+		if (self.groundentity.classname == "boss_guardian1") {
+			self.velocity_z += 192;
+			self.onmonsterjumptime = time + 0.1;
 		}
-		if(self.groundentity.classname == "monster_afflicted")
-		{
+
+		// Afflicted will burst if you step on them
+		if (self.groundentity.classname == "monster_afflicted") {
 			Killed(self.groundentity, world, 1);
 		}
-		if((self.groundentity.classname == "object_torch1"))
-		{
 
+		// When a player stands on a wall torch, create a burst
+		// particle effect, hurt the player, and try and push them off
+		if (self.groundentity.classname == "object_torch1") {
 			vector hangles = self.angles;
 			hangles_x = 0;
 			hangles_y = 0;
 
-			makevectors (hangles);
-			traceline (self.origin,self.origin + v_forward * -128,MOVE_WORLDONLY,self);
+			makevectors(hangles);
+			traceline(self.origin, self.origin + v_forward * -128, MOVE_WORLDONLY, self);
+
 			if (trace_fraction == 1.0)
 				self.velocity = v_forward * -92 + v_right * random(-32, 32);
 			else
 				self.velocity = v_forward * 92 + v_right * random(-32, 32);
 
 			self.velocity_z  = random(16,32);
-			if(self.flags & FL_ONGROUND)
+
+			if (self.flags & FL_ONGROUND)
 				self.flags -= FL_ONGROUND;
-			if(!(self.flags & FL_IGNOREINPUT))
-			{
+
+			if (!(self.flags & FL_IGNOREINPUT)) {
 				self.flags += FL_IGNOREINPUT;
 				self.hardstoptime = time + 0.3;
 			}
+
 			self.onmonsterjumptime = time  + 0.1;
 
-			if(self.groundentity.attack_finished < time)
-			{
-				pointparticles(particleeffectnum("EF_FLAME"), self.groundentity.origin + '0 0 12' , '0 0 0',1);
+			if (self.groundentity.attack_finished < time) {
+				pointparticles(particleeffectnum("EF_FLAME"), self.groundentity.origin + '0 0 12' , '0 0 0', 1);
 				T_Damage(self, self.groundentity, self.groundentity, 5);
 				self.groundentity.attack_finished = (time + 0.2);
 			}
-
 		}
-
 	}
-	if ((self.heretic_sloweffectime > time))
-	{
-		if ((self.crouch == 1) && (self.flags &FL_ONGROUND) && (self.maxspeed != 0.5))
+
+	if ((self.heretic_sloweffecttime > time)) {
+		if ((self.crouch == 1) && (self.flags & FL_ONGROUND) && (self.maxspeed != 0.5))
 			self.maxspeed = 0.5;	// multiplier of the velocity of the player
 	}
-	else
-	{
-		if ((self.crouch == 1) && (self.flags &FL_ONGROUND) && (self.maxspeed != 0.65))
+	else {
+		if ((self.crouch == 1) && (self.flags & FL_ONGROUND) && (self.maxspeed != 0.65))
 			self.maxspeed = 0.65;	// multiplier of the velocity of the player
 	}
 
-	if (self.noshake == 2)
-	{
+	if (self.noshake == 2) {
 		stuffcmd(self, "v_kickroll 0.7\n");
 		stuffcmd(self, "v_kickpitch 0.7\n");
 		self.noshake = 0;
@@ -1261,8 +1270,10 @@ void PlayerPreThink() {
 	self.dphitcontentsmask = DPCONTENTS_OPAQUE | DPCONTENTS_SOLID | DPCONTENTS_BODY | DPCONTENTS_CORPSE | DPCONTENTS_INTERACTCLIP;
 	traceline(usable_trace_start, usable_trace_endpos, MOVE_NORMAL, self);
 	self.dphitcontentsmask = o_dphitcontents;
+
 	if (trace_ent.effects & EF_NODRAW) // to mimick prydon cursor, we can't hit things we can't see
 		trace_ent = world;
+
 	if (!(trace_ent && trace_ent.usable) && (self.cursor_trace_ent && self.cursor_trace_ent.usable) && !(trace_dphitcontents & DPCONTENTS_INTERACTCLIP)) // hack in prydon cursor for some edge cases (like solid_trigger :\)
 	{
 		trace_ent = self.cursor_trace_ent;
@@ -1272,35 +1283,31 @@ void PlayerPreThink() {
 	usable_trace_ent = trace_ent; usable_trace_fraction = trace_fraction; usable_trace_endpos = trace_endpos;
 
 	float use_range = 72;
-	if ((usable_trace_ent.usable >= 1) && vlen(usable_trace_endpos - usable_trace_start) < use_range)
-	{
+	if ((usable_trace_ent.usable >= 1) && vlen(usable_trace_endpos - usable_trace_start) < use_range) {
 		if (!(self.crosshairflag &1))
 			self.crosshairflag += 1;
 
 		if ((usable_trace_ent.classname == "readable") && (self.message_flag != 1))
 			usable_trace_ent.effects = EF_SELECTABLE;
 
-		if((usable_trace_ent.classname == "ssoundbox")&&(self.use_finished2 > time))
-		{
+		if ((usable_trace_ent.classname == "ssoundbox")&&(self.use_finished2 > time)) {
 
 			usable_trace_ent.think = soundbox_visible_toggle;
 			usable_trace_ent.nextthink = time + 0.01;
 			self.use_finished = time + 0.75;
 		}
 
-		if (usable_trace_ent.classname == "nonsolidswitch")
-		{
+		if (usable_trace_ent.classname == "nonsolidswitch") {
 			self.usingnonsolidswitch = TRUE;
 			self.nonsolidswitch = usable_trace_ent;
 		}
-		if (usable_trace_ent.classname == "switchmodel")
-		{
+
+		if (usable_trace_ent.classname == "switchmodel") {
 			self.usingnonsolidswitch = TRUE;
 			self.nonsolidswitch = usable_trace_ent.owner;
 		}
 	}
-	else
-	{
+	else {
 		if (self.crosshairflag &1)
 			self.crosshairflag -= 1;
 		if (((usable_trace_ent.classname == "readable") && (usable_trace_ent.effects == EF_SELECTABLE)))
@@ -1312,48 +1319,39 @@ void PlayerPreThink() {
 		}
 	}
 
-	if ((usable_trace_ent.classname == "monster_martyffr") && (usable_trace_ent.walktime < time))
-	{
+	if ((usable_trace_ent.classname == "monster_martyffr") && (usable_trace_ent.walktime < time)) {
 		usable_trace_ent.strafetime = time + random(0.25,0.75);
 		usable_trace_ent.walktime =  time + random(0.75,1);
 		self.strafetime = 0;
 	}
 
-	if ((usable_trace_ent.flags & FL_MONSTER) && (usable_trace_ent.health > 0) && (vlen(usable_trace_endpos - usable_trace_start) < 4096))
-	{
+	if ((usable_trace_ent.flags & FL_MONSTER) && (usable_trace_ent.health > 0) && (vlen(usable_trace_endpos - usable_trace_start) < 4096)) {
 		if (!(self.crosshairflag &2))
 			self.crosshairflag += 2;
 	}
-	else
-	{
+	else {
 		if (self.crosshairflag &2)
 			self.crosshairflag -= 2;
 	}
 
-	if (boss3_crosshairhighlight(usable_trace_ent))
-	{
+	if (boss3_crosshairhighlight(usable_trace_ent)) {
 		self.crosshairflag |= 2;
 	}
 
-	if (time > self.maxspeedtime)
-	{
-		if(self.maxspeed < self.realmaxspeed)
-		{
+	if (time > self.maxspeedtime) {
+		if (self.maxspeed < self.realmaxspeed) {
 			self.realmaxspeed -= sliding_ammount_d;
 		}
-		if(self.maxspeed > self.realmaxspeed)
-		{
+		if (self.maxspeed > self.realmaxspeed) {
 			self.realmaxspeed += sliding_ammount_i;
 		}
 		self.maxspeedtime =  time + 1/sliding_fps;
 	}
 
-
-	if((self.shake_camera_time > time) && (self.charge_time < time) && (self.shake2_camera_time < time))
-	{
-		if(self.shake_camera_delay > time)
+	if((self.shake_camera_time > time) && (self.charge_time < time) && (self.shake2_camera_time < time)) {
+		if (self.shake_camera_delay > time)
 			return;
-		if(self.shaked == 1) {
+		if (self.shaked == 1) {
 			if((self.shake_camera_time - time) > 1)
 				float fade_multiplier = 1;
 			else
@@ -1373,15 +1371,13 @@ void PlayerPreThink() {
 
 
 
-	if((self.shake2_camera_time > time) && (self.charge_time < time))
-	{
-		if(self.shake2_camera_delay > time)
+	if ((self.shake2_camera_time > time) && (self.charge_time < time)) {
+		if (self.shake2_camera_delay > time)
 			return;
 		vector shakecamera;
 		shakecamera_x = self.shake2_camera_ammountx + self.shake_camera_ammountx;
 		shakecamera_y = self.shake2_camera_ammounty + self.shake_camera_ammounty;
-		if(self.shaked == 1)
-		{
+		if (self.shaked == 1) {
 			if((self.shake2_camera_time - time) > 1)
 				fade_multiplier = 1;
 			else
@@ -1390,27 +1386,24 @@ void PlayerPreThink() {
 			self.punchangle_y =random(shakecamera_y * -1, shakecamera_y * -0.5) * fade_multiplier;
 			self.shaked = 2;
 		}
-		else
-		{
+		else {
 			self.punchangle_x =random(shakecamera_x * 0.5, shakecamera_x) * fade_multiplier;
 			self.punchangle_y =random(shakecamera_y * 0.5,shakecamera_y) * fade_multiplier;
 			self.shaked = 1;
 		}
 		self.shake2_camera_delay = time + self.shake2_camera_refresh_rate;
 	}
-	if(self.shake_camera_time < time)
-	{
+	if (self.shake_camera_time < time) {
 		self.shake_camera_ammountx = 0;
 		self.shake_camera_ammounty = 0;
 	}
 
-	if((self.macesoultime > time) && (self.macesoultimer < time))
-	{
+	if ((self.macesoultime > time) && (self.macesoultimer < time)) {
 		float tagindex = gettagindex(self.vweapon, "tag_mace_fx");
 		self.maceorigin = gettaginfo(self.vweapon, tagindex);
 		self.macesoultimer = time + 0.05;
 	}
-};
+}
 
 
 .float jump_flag;	// player jump flag
@@ -2942,7 +2935,7 @@ void() SetChangeParms = {
 	parm43 = 1;
 };
 
-void() SetNewParms = {
+void SetNewParms() {
 	if (!self.nomelee) {
 		parm1 = IT_MELEE + IT_VIEWMODEL;	//items
 		parm3 = IT_MELEE;	// weapon
@@ -2993,9 +2986,10 @@ void() SetNewParms = {
 	parm41 = 0; // Reki (July 24 2023): parm41 stores "perfect_maps" using the LE_* constants
 	parm42 = 0; // Reki (July 24 2023): parm42 stores total number of opened coffers
 	parm43 = 0; // Reki (October 6 2023): parm43 for checking if this is a fresh save
-};
+}
 
-void() DecodeLevelParms = {
+
+void DecodeLevelParms() {
 	self.items = parm1;
 	self.health = parm2;
 	self.weapon = parm3;
@@ -3746,6 +3740,7 @@ void PutClientInServer() {
 
 	if ((cvar("custom_m_yaw") != 1))
 		stuffcmd(self, "m_yaw 0.022\n");
+
 	self.r_saturation = 1;
 
 	float invrtmsb;

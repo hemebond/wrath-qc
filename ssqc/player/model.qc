@@ -99,7 +99,7 @@ void legs_think() {
 	else {
 		self.origin_z = 0;
 	}
-	if(self.owner.onground_time > time) {
+	if (self.owner.onground_time > time) {
 		float speed = vlen(self.owner.velocity);
 		if (speed > 30) {
 			// Running
@@ -135,7 +135,6 @@ void legs_think() {
 
 
 .entity torso_model;
-.float torso_time;  // FIXME: this isn't actually used, just assigned to
 void torso_think() {
 	if ((self.owner.button0) || (self.owner.button3)) {
 		if (self.owner.weapon == IT_MELEE) {

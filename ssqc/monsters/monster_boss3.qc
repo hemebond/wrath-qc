@@ -1,8 +1,5 @@
 #pragma warning disable F328
 
-// Need this ifndef to stop fteqcc choking on the class
-#ifndef BOSS3COMPILE
-#define BOSS3COMPILE
 
 enum int 
 {
@@ -3696,7 +3693,7 @@ void() spawnfunc_boss_guardian3
 	precache_sound("enemies/boss3/firehoming.ogg");
 	precache_sound("enemies/boss3/tower_destroy.ogg");
 
-    spawnfunc_boss3_c(); // spawn the class
+	spawnfunc_boss3_c(); // spawn the class
 	boss3_c boss = (boss3_c)self;
 	boss3_entity = boss;
 
@@ -3733,5 +3730,3 @@ entity spawn_lava_ball(vector org) { // Reki (October 12 2023): Repurposed this 
 
 	return lava_ball;
 }
-
-#endif

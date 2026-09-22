@@ -3499,8 +3499,7 @@ void MenuInit_Options_Audio(void)
 	//
 }
 
-void MenuInit_Options_Gameplay(void)
-{
+void MenuInit_Options_Gameplay(void) {
 	float(uielement_c this, float nkey, float ascii, float released) option_input = {
 		if (released)
 		{

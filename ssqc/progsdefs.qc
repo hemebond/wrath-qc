@@ -135,7 +135,7 @@ void		end_sys_globals;		// flag for structure dumping
 .void()		blocked;		// for doors or plats, called when can't push other
 
 .float		nextthink;
-.entity		groundentity;
+.entity		groundentity;           // automatically points to what this entity is standing on, e.g., world
 
 // stats
 .float		health;

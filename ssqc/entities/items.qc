@@ -3873,10 +3873,11 @@ void cannon_item() {
 
 
 void write_stuff_monsters(string classnme, vector org, float c1, float c2, float c3, float c4, float c5, float coun, float collectedrelics) {
-	float writeparms;
+	float fp;
 	string m_name;
 
-	string sorg = vtos (org);
+	string sorg = vtos(org);
+
 	if ((c1 <0) || (c1 > 16) || ( c1 == 13))
 		c1 = 0;
 	if ((c2 <0) || (c2 > 16) || ( c2 == 13))
@@ -3918,123 +3919,83 @@ void write_stuff_monsters(string classnme, vector org, float c1, float c2, float
 	if (collectedrelics == 4)
 	    m_name = monst_lookup[c5];
 
-	if (m_name != "null")
-	{
-		while (coun > 0)
-		{
-			writeparms = fopen (strcat ("reportmonsters/",mapname, "_encounter_",ftos(collectedrelics + 1),".txt"), FILE_APPEND);    //open what file to use in write mode
-			string string1 = strcat ("origin ",sorg," --",m_name,"\n");
-			fputs (writeparms,(string1));
+	if (m_name != "null") {
+		fp = fopen(strcat("reportmonsters/", mapname, "_encounter_", ftos(collectedrelics + 1), ".txt"), FILE_APPEND);  // open what file to use in write mode
+		while (coun > 0) {
+			string string1 = strcat("origin ", sorg, " --", m_name, "\n");
+			fputs(fp, (string1));
 			coun --;
 		}
+		fclose(fp);
 	}
-    fclose (writeparms);
-};
+}
 
-void(float collectedrelics) recount_spawner_monsters =
-{
+
+void recount_spawner_monsters(float collectedrelics) {
 	entity spawner = findradius(self.origin, 1000000);
 
-	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_encounter_",ftos(collectedrelics + 1),".txt"), FILE_WRITE);
-	fputs (writeparms,(""));
-	fclose (writeparms);
-	while (spawner)	//Loops through everything put in the missile entit
-	{
-		if ((spawner.wrathflags &FL_SPAWNER))
-		{
-			write_stuff_monsters(spawner.classname,spawner.origin, spawner.classmonster1, spawner.classmonster2, spawner.classmonster3, spawner.classmonster4, spawner.classmonster5, spawner.count,collectedrelics);
+	// Empty the file
+	float writeparms = fopen(strcat("reportmonsters/", mapname, "_encounter_", ftos(collectedrelics + 1), ".txt"), FILE_WRITE);
+	fputs(writeparms, (""));
+	fclose(writeparms);
+
+	// Loops through everything put in the missile entity
+	while (spawner)	{
+		if ((spawner.wrathflags & FL_SPAWNER)) {
+			write_stuff_monsters(spawner.classname, spawner.origin, spawner.classmonster1, spawner.classmonster2, spawner.classmonster3, spawner.classmonster4, spawner.classmonster5, spawner.count, collectedrelics);
 		}
 		spawner = spawner.chain;
 	}
-};
-void (string classnme,vector org,float mhealth) write_stuff_alivemonsters =
-{
+}
+
+
+void write_stuff_alivemonsters(string classnme,vector org,float mhealth) {
 	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_alive_monsters",".txt"), FILE_APPEND);    //open what file to use in write mode
 	string string1 = strcat (classnme," origin:",vtos(org)," health:",ftos(mhealth),"\n");
-	fputs (writeparms,(string1));
-	fclose (writeparms);
-};
+	fputs(writeparms,(string1));
+	fclose(writeparms);
+}
 
-void() recount_alive_monsters =
-{
-	entity alivemonster;
-	alivemonster = findradius(self.origin, 1000000);
+
+void recount_alive_monsters() {
+	entity alivemonster = findradius(self.origin, 1000000);
 
 	float writeparms = fopen (strcat ("reportmonsters/",mapname, "_alive_monsters",".txt"), FILE_WRITE);
 	fputs (writeparms,(""));
-    fclose (writeparms);
-	while (alivemonster)	//Loops through everything put in the missile entit
-	{
-		if ((alivemonster.flags &FL_MONSTER) && (alivemonster.health > 0))
-		{
-			write_stuff_alivemonsters(alivemonster.classname,alivemonster.origin,alivemonster.health);
+	fclose (writeparms);
+
+	//Loops through everything put in the missile entity
+	while (alivemonster) {
+		if ((alivemonster.flags & FL_MONSTER) && (alivemonster.health > 0)) {
+			write_stuff_alivemonsters(alivemonster.classname, alivemonster.origin, alivemonster.health);
 		}
 		alivemonster = alivemonster.chain;
 	}
-};
-void (vector org, float c1, float c2,float c3,float c4,float c5) write_stuff_items =
-{
-	local float	writeparms;
-	local string	s1, s2, s3, s4, s5;
-	writeparms = fopen (strcat ("reportmonsters/",mapname, "items_list.txt"), FILE_APPEND);    //open what file to use in write mode
-	string sorg = vtos (org);
-	s1 =  ftos (c1);
-	s2 =  ftos (c2);
-	s3 =  ftos (c3);
-	s4 =  ftos (c4);
-	s5 =  ftos (c5);
-	string string1 = strcat ("item_spawner ","origin ",sorg," ",s1," ",s2," ");
-	string string2 =  strcat (s3," ",s4," ",s5,"\n");
-	fputs (writeparms, strcat (string1,string2));
-	fclose (writeparms);
-};
-
-void() recount_spawner_itemss =
-{
-
-	float writeparms = fopen (strcat (mapname, "items_list.txt"), FILE_WRITE);
-	fputs (writeparms,(""));
-	fclose (writeparms);
-
-	local entity spawner;
-	spawner = findradius(self.origin, 1000000);
-	while (spawner)	//Loops through everything put in the missile entit
-	{
-		if ((spawner.classname == "item_spawner"))
-		{
-			write_stuff_items(spawner.origin, spawner.classitem1, spawner.classitem2, spawner.classitem3, spawner.classitem4, spawner.classitem5);
-		}
-
-		spawner = spawner.chain;
-	}
-
-};
-
-void() recount_spawner_items =
-{
-/*
-1 : "Slugs" - TOTAL AMOUNT IN MAP
-2 : "Cysts" - TOTAL AMOUNT IN MAP
-3 : "Shells" - TOTAL AMOUNT IN MAP
-4 : "Fans" - TOTAL AMOUNT IN MAP
-25 : "Ammo Cannon" - TOTAL AMOUNT IN MAP
-26 : "Ammo Lance" - TOTAL AMOUNT IN MAP
-5 : "Armor Shard" - TOTAL AMOUNT IN MAP
-6 : "Armor Armor" - TOTAL AMOUNT IN MAP
-7 : "Armor Helm" - TOTAL AMOUNT IN MAP
-8 : "Dark Armor Shard" - TOTAL AMOUNT IN MAP
-9 : "Dark Armor Armor" - TOTAL AMOUNT IN MAP
-10 : "Dark Armor Helm" - TOTAL AMOUNT IN MAP
-11 : "Health Vial" - TOTAL AMOUNT IN MAP
-12 : "Health Baker" - TOTAL AMOUNT IN MAP
-20 : "Artifact Apparatus" - TOTAL AMOUNT IN MAP
-21 : "Artifact Theter" - TOTAL AMOUNT IN MAP
-22 : "Artifact Siphon" - TOTAL AMOUNT IN MAP
-23 : "Artifact Aegis" - TOTAL AMOUNT IN MAP
-24 : "Confounding Attar" - TOTAL AMOUNT IN MAP
-*/
+}
 
 
+void recount_spawner_items() {
+	/*
+	1 : "Slugs" - TOTAL AMOUNT IN MAP
+	2 : "Cysts" - TOTAL AMOUNT IN MAP
+	3 : "Shells" - TOTAL AMOUNT IN MAP
+	4 : "Fans" - TOTAL AMOUNT IN MAP
+	25 : "Ammo Cannon" - TOTAL AMOUNT IN MAP
+	26 : "Ammo Lance" - TOTAL AMOUNT IN MAP
+	5 : "Armor Shard" - TOTAL AMOUNT IN MAP
+	6 : "Armor Armor" - TOTAL AMOUNT IN MAP
+	7 : "Armor Helm" - TOTAL AMOUNT IN MAP
+	8 : "Dark Armor Shard" - TOTAL AMOUNT IN MAP
+	9 : "Dark Armor Armor" - TOTAL AMOUNT IN MAP
+	10 : "Dark Armor Helm" - TOTAL AMOUNT IN MAP
+	11 : "Health Vial" - TOTAL AMOUNT IN MAP
+	12 : "Health Baker" - TOTAL AMOUNT IN MAP
+	20 : "Artifact Apparatus" - TOTAL AMOUNT IN MAP
+	21 : "Artifact Theter" - TOTAL AMOUNT IN MAP
+	22 : "Artifact Siphon" - TOTAL AMOUNT IN MAP
+	23 : "Artifact Aegis" - TOTAL AMOUNT IN MAP
+	24 : "Confounding Attar" - TOTAL AMOUNT IN MAP
+	*/
 
 	float ammount1, ammount2, ammount3, ammount4, ammount5;
 	float ammounta1, ammounta2, ammounta3, ammounta4, ammounta5;
@@ -4059,29 +4020,28 @@ void() recount_spawner_items =
 
 	local entity spawner;
 	spawner = findradius(self.origin, 1000000);
-	while (spawner)	//Loops through everything put in the missile entit
-	{
-		if ((spawner.classname == "item_spawner"))
-		{
-			if(spawner.classitem1 == 1) ammount1 ++;		if(spawner.classitem2 == 1) ammount2 ++;		if(spawner.classitem3 == 1) ammount3 ++;		if(spawner.classitem4 == 1) ammount4 ++; if(spawner.classitem5 == 1) ammount5 ++;
-			if(spawner.classitem1 == 2) ammounta1 ++;	if(spawner.classitem2 == 2) ammounta2 ++;	if(spawner.classitem3 == 2) ammounta3 ++;	if(spawner.classitem4 == 2) ammounta4 ++; if(spawner.classitem5 == 2) ammounta5 ++;
-			if(spawner.classitem1 == 3) ammountb1 ++;	if(spawner.classitem2 == 3) ammountb2 ++;	if(spawner.classitem3 == 3) ammountb3 ++;	if(spawner.classitem4 == 3) ammountb4 ++; if(spawner.classitem5 == 3) ammountb5 ++;
-			if(spawner.classitem1 == 4) ammountc1 ++;	if(spawner.classitem2 == 4) ammountc2 ++;	if(spawner.classitem3 == 4) ammountc3 ++;	if(spawner.classitem4 == 4) ammountc4 ++; if(spawner.classitem5 == 4) ammountc5 ++;
-			if(spawner.classitem1 == 25) ammountd1 ++;	if(spawner.classitem2 == 25) ammountd2 ++;	if(spawner.classitem3 == 25) ammountd3 ++;	if(spawner.classitem4 == 25) ammountd4 ++; if(spawner.classitem5 == 25) ammountd5 ++;
-			if(spawner.classitem1 == 26) ammounte1 ++;	if(spawner.classitem2 == 26) ammounte2 ++;	if(spawner.classitem3 == 26) ammounte3 ++;	if(spawner.classitem4 == 26) ammounte4 ++; if(spawner.classitem5 == 26) ammounte5 ++;
-			if(spawner.classitem1 == 5) ammountf1 ++;	if(spawner.classitem2 == 5) ammountf2 ++;	if(spawner.classitem3 == 5) ammountf3 ++;	if(spawner.classitem4 == 5) ammountf4 ++; if(spawner.classitem5 == 5) ammountf5 ++;
-			if(spawner.classitem1 == 6) ammountg1 ++;	if(spawner.classitem2 == 6) ammountg2 ++;	if(spawner.classitem3 == 6) ammountg3 ++;	if(spawner.classitem4 == 6) ammountg4 ++; if(spawner.classitem5 == 6) ammountg5 ++;
-			if(spawner.classitem1 == 7) ammounth1 ++;	if(spawner.classitem2 == 7) ammounth2 ++;	if(spawner.classitem3 == 7) ammounth3 ++;	if(spawner.classitem4 == 7) ammounth4 ++; if(spawner.classitem5 == 7) ammounth5 ++;
-			if(spawner.classitem1 == 8) ammountz1 ++;	if(spawner.classitem2 == 8) ammountz2 ++;	if(spawner.classitem3 == 8) ammountz3 ++;		if(spawner.classitem4 == 8) ammountz4 ++; if(spawner.classitem5 == 8) ammountz5 ++;
-			if(spawner.classitem1 == 9) ammounti1 ++;	if(spawner.classitem2 == 9) ammounti2 ++;	if(spawner.classitem3 == 9) ammounti3 ++;	if(spawner.classitem4 == 9) ammounti4 ++; if(spawner.classitem5 == 9) ammounti5 ++;
-			if(spawner.classitem1 == 10) ammountj1 ++;	if(spawner.classitem2 == 10) ammountj2 ++;	if(spawner.classitem3 == 10) ammountj3 ++;	if(spawner.classitem4 == 10) ammountj4 ++; if(spawner.classitem5 == 10) ammountj5 ++;
-			if(spawner.classitem1 == 11) ammountk1 ++;	if(spawner.classitem2 == 11) ammountk2 ++;	if(spawner.classitem3 == 11) ammountk3 ++;	if(spawner.classitem4 == 11) ammountk4 ++; if(spawner.classitem5 == 11) ammountk5 ++;
-			if(spawner.classitem1 == 12) ammountl1 ++;	if(spawner.classitem2 == 12) ammountl2 ++;	if(spawner.classitem3 == 12) ammountl3 ++;	if(spawner.classitem4 == 12) ammountl4 ++; if(spawner.classitem5 == 12) ammountl5 ++;
-			if(spawner.classitem1 == 20) ammountm1 ++;	if(spawner.classitem2 == 20) ammountm2 ++;	if(spawner.classitem3 == 20) ammountm3 ++;	if(spawner.classitem4 == 20) ammountm4 ++; if(spawner.classitem5 == 20) ammountm5 ++;
-			if(spawner.classitem1 == 21) ammountn1 ++;	if(spawner.classitem2 == 21) ammountn2 ++;	if(spawner.classitem3 == 21) ammountn3 ++;	if(spawner.classitem4 == 21) ammountn4 ++; if(spawner.classitem5 == 21) ammountn5 ++;
-			if(spawner.classitem1 == 22) ammounto1 ++;	if(spawner.classitem2 == 22) ammounto2 ++;	if(spawner.classitem3 == 22) ammounto3 ++;	if(spawner.classitem4 == 22) ammounto4 ++; if(spawner.classitem5 == 22) ammounto5 ++;
-			if(spawner.classitem1 == 23) ammountp1 ++;	if(spawner.classitem2 == 23) ammountp2 ++;	if(spawner.classitem3 == 23) ammountp3 ++;	if(spawner.classitem4 == 23) ammountp4 ++; if(spawner.classitem5 == 23) ammountp5 ++;
-			if(spawner.classitem1 == 24) ammountq1 ++;	if(spawner.classitem2 == 24) ammountq2 ++;	if(spawner.classitem3 == 24) ammountq3 ++;	if(spawner.classitem4 == 24) ammountq4 ++; if(spawner.classitem5 == 24) ammountq5 ++;
+	//Loops through everything put in the missile entit
+	while (spawner) {
+		if ((spawner.classname == "item_spawner")) {
+			if(spawner.classitem1 == 1) ammount1 ++;    if(spawner.classitem2 == 1) ammount2 ++;    if(spawner.classitem3 == 1) ammount3 ++;    if(spawner.classitem4 == 1) ammount4 ++;    if(spawner.classitem5 == 1) ammount5 ++;
+			if(spawner.classitem1 == 2) ammounta1 ++;   if(spawner.classitem2 == 2) ammounta2 ++;   if(spawner.classitem3 == 2) ammounta3 ++;   if(spawner.classitem4 == 2) ammounta4 ++;   if(spawner.classitem5 == 2) ammounta5 ++;
+			if(spawner.classitem1 == 3) ammountb1 ++;   if(spawner.classitem2 == 3) ammountb2 ++;   if(spawner.classitem3 == 3) ammountb3 ++;   if(spawner.classitem4 == 3) ammountb4 ++;   if(spawner.classitem5 == 3) ammountb5 ++;
+			if(spawner.classitem1 == 4) ammountc1 ++;   if(spawner.classitem2 == 4) ammountc2 ++;   if(spawner.classitem3 == 4) ammountc3 ++;   if(spawner.classitem4 == 4) ammountc4 ++;   if(spawner.classitem5 == 4) ammountc5 ++;
+			if(spawner.classitem1 == 25) ammountd1 ++;  if(spawner.classitem2 == 25) ammountd2 ++;  if(spawner.classitem3 == 25) ammountd3 ++;  if(spawner.classitem4 == 25) ammountd4 ++;  if(spawner.classitem5 == 25) ammountd5 ++;
+			if(spawner.classitem1 == 26) ammounte1 ++;  if(spawner.classitem2 == 26) ammounte2 ++;  if(spawner.classitem3 == 26) ammounte3 ++;  if(spawner.classitem4 == 26) ammounte4 ++;  if(spawner.classitem5 == 26) ammounte5 ++;
+			if(spawner.classitem1 == 5) ammountf1 ++;   if(spawner.classitem2 == 5) ammountf2 ++;   if(spawner.classitem3 == 5) ammountf3 ++;   if(spawner.classitem4 == 5) ammountf4 ++;   if(spawner.classitem5 == 5) ammountf5 ++;
+			if(spawner.classitem1 == 6) ammountg1 ++;   if(spawner.classitem2 == 6) ammountg2 ++;   if(spawner.classitem3 == 6) ammountg3 ++;   if(spawner.classitem4 == 6) ammountg4 ++;   if(spawner.classitem5 == 6) ammountg5 ++;
+			if(spawner.classitem1 == 7) ammounth1 ++;   if(spawner.classitem2 == 7) ammounth2 ++;   if(spawner.classitem3 == 7) ammounth3 ++;   if(spawner.classitem4 == 7) ammounth4 ++;   if(spawner.classitem5 == 7) ammounth5 ++;
+			if(spawner.classitem1 == 8) ammountz1 ++;   if(spawner.classitem2 == 8) ammountz2 ++;   if(spawner.classitem3 == 8) ammountz3 ++;   if(spawner.classitem4 == 8) ammountz4 ++;   if(spawner.classitem5 == 8) ammountz5 ++;
+			if(spawner.classitem1 == 9) ammounti1 ++;   if(spawner.classitem2 == 9) ammounti2 ++;   if(spawner.classitem3 == 9) ammounti3 ++;   if(spawner.classitem4 == 9) ammounti4 ++;   if(spawner.classitem5 == 9) ammounti5 ++;
+			if(spawner.classitem1 == 10) ammountj1 ++;  if(spawner.classitem2 == 10) ammountj2 ++;  if(spawner.classitem3 == 10) ammountj3 ++;  if(spawner.classitem4 == 10) ammountj4 ++;  if(spawner.classitem5 == 10) ammountj5 ++;
+			if(spawner.classitem1 == 11) ammountk1 ++;  if(spawner.classitem2 == 11) ammountk2 ++;  if(spawner.classitem3 == 11) ammountk3 ++;  if(spawner.classitem4 == 11) ammountk4 ++;  if(spawner.classitem5 == 11) ammountk5 ++;
+			if(spawner.classitem1 == 12) ammountl1 ++;  if(spawner.classitem2 == 12) ammountl2 ++;  if(spawner.classitem3 == 12) ammountl3 ++;  if(spawner.classitem4 == 12) ammountl4 ++;  if(spawner.classitem5 == 12) ammountl5 ++;
+			if(spawner.classitem1 == 20) ammountm1 ++;  if(spawner.classitem2 == 20) ammountm2 ++;  if(spawner.classitem3 == 20) ammountm3 ++;  if(spawner.classitem4 == 20) ammountm4 ++;  if(spawner.classitem5 == 20) ammountm5 ++;
+			if(spawner.classitem1 == 21) ammountn1 ++;  if(spawner.classitem2 == 21) ammountn2 ++;  if(spawner.classitem3 == 21) ammountn3 ++;  if(spawner.classitem4 == 21) ammountn4 ++;  if(spawner.classitem5 == 21) ammountn5 ++;
+			if(spawner.classitem1 == 22) ammounto1 ++;  if(spawner.classitem2 == 22) ammounto2 ++;  if(spawner.classitem3 == 22) ammounto3 ++;  if(spawner.classitem4 == 22) ammounto4 ++;  if(spawner.classitem5 == 22) ammounto5 ++;
+			if(spawner.classitem1 == 23) ammountp1 ++;  if(spawner.classitem2 == 23) ammountp2 ++;  if(spawner.classitem3 == 23) ammountp3 ++;  if(spawner.classitem4 == 23) ammountp4 ++;  if(spawner.classitem5 == 23) ammountp5 ++;
+			if(spawner.classitem1 == 24) ammountq1 ++;  if(spawner.classitem2 == 24) ammountq2 ++;  if(spawner.classitem3 == 24) ammountq3 ++;  if(spawner.classitem4 == 24) ammountq4 ++;  if(spawner.classitem5 == 24) ammountq5 ++;
 		}
 
 		spawner = spawner.chain;
@@ -4163,28 +4123,27 @@ void() recount_spawner_items =
 	string subline19b =strcat((ftos (ammountq4)),  " enc5:",(ftos (ammountq5)));
 	string line19 = strcat (subline19, subline19b);
 
-	local float	writeparms;
-	writeparms = fopen(strcat(mapname, "items_list.txt"), FILE_APPEND);    //open what file to use in write mode
-	fputs(writeparms, strcat(line1,"\n"));
-	fputs(writeparms, strcat(line2,"\n"));
-	fputs(writeparms, strcat(line3,"\n"));
-	fputs(writeparms, strcat(line4,"\n"));
-	fputs(writeparms, strcat(line5,"\n"));
-	fputs(writeparms, strcat(line6,"\n"));
-	fputs(writeparms, strcat(line7,"\n"));
-	fputs(writeparms, strcat(line8,"\n"));
-	fputs(writeparms, strcat(line9,"\n"));
-	fputs(writeparms, strcat(line10,"\n"));
-	fputs(writeparms, strcat(line11,"\n"));
-	fputs(writeparms, strcat(line12,"\n"));
-	fputs(writeparms, strcat(line13,"\n"));
-	fputs(writeparms, strcat(line14,"\n"));
-	fputs(writeparms, strcat(line15,"\n"));
-	fputs(writeparms, strcat(line16,"\n"));
-	fputs(writeparms, strcat(line17,"\n"));
-	fputs(writeparms, strcat(line18,"\n"));
-	fputs(writeparms, strcat(line19,"\n"));
-	fclose(writeparms);
+	float fp = fopen(strcat(mapname, "items_list.txt"), FILE_APPEND);    //open what file to use in write mode
+	fputs(fp, strcat(line1,"\n"));
+	fputs(fp, strcat(line2,"\n"));
+	fputs(fp, strcat(line3,"\n"));
+	fputs(fp, strcat(line4,"\n"));
+	fputs(fp, strcat(line5,"\n"));
+	fputs(fp, strcat(line6,"\n"));
+	fputs(fp, strcat(line7,"\n"));
+	fputs(fp, strcat(line8,"\n"));
+	fputs(fp, strcat(line9,"\n"));
+	fputs(fp, strcat(line10,"\n"));
+	fputs(fp, strcat(line11,"\n"));
+	fputs(fp, strcat(line12,"\n"));
+	fputs(fp, strcat(line13,"\n"));
+	fputs(fp, strcat(line14,"\n"));
+	fputs(fp, strcat(line15,"\n"));
+	fputs(fp, strcat(line16,"\n"));
+	fputs(fp, strcat(line17,"\n"));
+	fputs(fp, strcat(line18,"\n"));
+	fputs(fp, strcat(line19,"\n"));
+	fclose(fp);
 
 };
 
@@ -4313,10 +4272,8 @@ void item_donor_think() {
 }
 
 
-void() item_donor_forcethink =
-{
-	for(entity itemdonor = findchain(::classname, "item_donor"); itemdonor; itemdonor = itemdonor.chain)
-	{
+void item_donor_forcethink() {
+	for (entity itemdonor = findchain(::classname, "item_donor"); itemdonor; itemdonor = itemdonor.chain) {
 		itemdonor.think = item_donor_think;
 		itemdonor.nextthink = time + 1;
 	}
@@ -4324,7 +4281,7 @@ void() item_donor_forcethink =
 
 
 void item_donor_mapforcethink() {
-	for(entity itemdonor = findchain(::classname, "item_donor_map"); itemdonor; itemdonor = itemdonor.chain) {
+	for (entity itemdonor = findchain(::classname, "item_donor_map"); itemdonor; itemdonor = itemdonor.chain) {
 		itemdonor.think = item_donor_think;
 		itemdonor.nextthink = time + 1;
 	}

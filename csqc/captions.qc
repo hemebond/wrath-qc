@@ -1,6 +1,3 @@
-
-
-
 class caption_text_c;
 caption_text_c caption_list;
 caption_text_c caption_list_tail;
@@ -15,7 +12,7 @@ class caption_text_c {
 	caption_text_c _next;
 
 	nonvirtual void() caption_text_c {
-		
+
 		if (!text)
 		{
 			remove(this);
@@ -32,7 +29,7 @@ class caption_text_c {
 			caption_list._prev = this;
 		else
 			caption_list_tail = this;
-		
+
 		// make head of list
 		this._next = caption_list;
 		caption_list = this;
@@ -60,7 +57,7 @@ class caption_text_c {
 			caption_list = this._next;
 		else
 			this._prev._next = this._next;
-		
+
 		if (this._next)
 			this._next._prev = this._prev;
 		else if (caption_list_tail == this)
@@ -129,7 +126,7 @@ void HUD_InitializeCaptions(void)
 			ui_scale = '1 1';
 
 			uifill_c backdrop = (uifill_c)line.partner;
-			
+
 			line.origin = o;
 			backdrop.origin = line.origin + '0 -1';
 			backdrop.alpha = line.alpha * 0.4;
@@ -148,7 +145,7 @@ void HUD_InitializeCaptions(void)
 		float linecount = 0;
 		float linewidth = 0;
 		float offs = 0;
-		#if 1
+
 		for(dialogue = caption_list_tail; dialogue; dialogue = dialogue._prev)
 		{
 			float i = 0;
@@ -179,7 +176,7 @@ void HUD_InitializeCaptions(void)
 
 					continue;
 				}
-				
+
 				if (textwidth >= (maxwidth * 0.5)) // we need to split this line sadly
 				{
 					float length = strlen(text);
@@ -206,7 +203,7 @@ void HUD_InitializeCaptions(void)
 					}
 					continue;
 				}
-				
+
 				//line.text = strzone(line.text);
 				text = strcat(NEWLINE_TAB, text);
 				fix_backdrop_for_line(line, dialogue, offs);
@@ -221,8 +218,6 @@ void HUD_InitializeCaptions(void)
 			if (linecount >= caption_lines.length)
 				break;
 		}
-		//
-		#endif
 
 		// zone all remaining lines
 		for(float i = 0; i < caption_lines.length; i++)
@@ -230,7 +225,6 @@ void HUD_InitializeCaptions(void)
 			uitext_c line = caption_lines[i];
 			line.text = strzone(line.text);
 		}
-		//
 
 		drawfont = o_font;
 	};
@@ -244,7 +238,7 @@ void HUD_InitializeCaptions(void)
 
 	uifill_c fillbox = spawn(uifill_c, owner: captionbox, origin: '0 -68', anchor: '0.5 1', justify: '0.5 1', size: '400 120', color: '-1 -1 -1', alpha: 0.001);
 		fillbox.preloop = fillbox_preloop;
-	
+
 	for(float i = caption_lines.length - 1; i >= 0; i--) // inverted loop so we draw sort front to back
 	{
 		uifill_c backdrop = spawn(uifill_c, owner:fillbox, anchor: '0.5 0', justify: '0.5 0', color: CONVERT_TO_DP_SHITTY_COLOR('0 0 0'), alpha: 0.4);
@@ -256,12 +250,3 @@ void HUD_InitializeCaptions(void)
 	//spawn(caption_text_c, text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet sem varius, blandit quam luctus, condimentum lacus.");
 	//spawn(caption_text_c, text: "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890uvwxyz");
 }
-
-
-
-
-
-
-
-
-

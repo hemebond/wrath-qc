@@ -176,7 +176,6 @@ void() Ammo_Hud = { float c_w, c_a, digits, cws;
 	c_ammo = ftos(c_a);
 	if (c_a < 0)
 		c_a = 0;
-
 	if (c_a <= 0)
 		digits = 0;
 	if (c_a > 0)
@@ -187,7 +186,6 @@ void() Ammo_Hud = { float c_w, c_a, digits, cws;
 		digits = 3;
 	if (c_a >= 1000)
 		digits = 4;
-
 
 	cws = getstatf(STAT_VWEAPONSTATE);
 
@@ -319,21 +317,6 @@ void() Ammo_Hud = { float c_w, c_a, digits, cws;
 			DrawSheet(dammo_pos + ammo_pos2 + ammo_pos2, picofnammo,'280 360 0', '28 36 0',fdigit1,'1 1 1');
 		}
 	}
-
-	/*
-	float timef;
-	timef = getstatf (STAT_TIMEFLY) *-1;
-	string timefl;
-	timefl = ftos (timef); 
-	if (timef > 0)
-		DString (ammo_pos + ammo_pos2 + ammo_pos2 + ammo_pos2 +  ammo_pos2, timefl, 1, ammo_scale, '1 3 2', '18 18 0');
-	float timels;
-	timels = getstatf (STAT_TIMELS) *-1;
-	string stimels;
-	stimels = ftos (timels); 
-	if (timels > 0)
-		DString (ammo_pos + ammo_pos2+ ammo_pos2+ ammo_pos2 + ammo_pos2 + ammo_pos2 + ammo_pos2 + ammo_pos2, stimels, 1, ammo_scale, '7 1 1', '18 18 0');
-	*/
 };
 float blalphaflag;
 float blalpha;
@@ -342,11 +325,8 @@ float stalpha;
 float bbar;
 float old_artifact_count;
 
-
-
 float pulseammo_icon;
 float pulsedarmor_icon;
-
 float pulsearmor_icon;
 
 void() pulse_armor = 
@@ -376,8 +356,8 @@ void() Hud_Armor =
 			fphicona = floor(arphicon);
 			if (fphicona <= 1) pulse_y = 10;
 			if (fphicona == 2) pulse_y = 20;
-			if (fphicona == 3)pulse_y = 30;
-			if (fphicona == 4) pulse_y =40;
+			if (fphicona == 3) pulse_y = 30;
+			if (fphicona == 4) pulse_y = 40;
 			if (fphicona == 5) pulse_y = 50;
 			if (fphicona == 6) pulse_y = 60;
 			if (fphicona == 7) pulse_y = 70;
@@ -406,11 +386,9 @@ void() Hud_Armor =
 		float fdigit2 = (((c_armr - fdigit3) * 0.1) %10); 
 		float fdigit1 = 1;
 			
-			
 		fdigit3 += pulse_y; 
 		fdigit2 += pulse_y;
 		fdigit1 += pulse_y;
-
 
 		if (digits == 1)
 		{
@@ -506,8 +484,17 @@ float ui_oldweaponselected;
 float ui_ammoslide;
 void HUD_InitializeUnderUI(void)
 {
-	float(uielement_c this) condtional = { if (getstatf(STAT_ARTIFACTTIME) && (getstatf(STAT_RADIALACTIVE) == 2)) {appparatus_using = 1; return TRUE; } appparatus_using = 0; return FALSE; };
-	void(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) apparatus_prerender = { alpha_to_render *= appparatus_flash; };
+	float condtional(uielement_c this) {
+		if (getstatf(STAT_ARTIFACTTIME) && (getstatf(STAT_RADIALACTIVE) == 2)) {
+			appparatus_using = 1;
+			return TRUE;
+		}
+		appparatus_using = 0;
+		return FALSE;
+	};
+	void apparatus_prerender(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) {
+		alpha_to_render *= appparatus_flash;
+	};
 	uifill_c apparatus_fill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '0 0 0.25', alpha: 0.25);
 		apparatus_fill.active_condition = condtional;
 		apparatus_fill.prerender = apparatus_prerender;
@@ -518,8 +505,17 @@ void HUD_InitializeUnderUI(void)
 	apparatus_mask.size = draw_getimagesize(apparatus_mask.image);
 	
 	// healthhaze fill
-	float(uielement_c this) condtional = { if (getstatf(STAT_HEALTHHAZE) > 0) return TRUE; return FALSE; };
-	void(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) healthhaze_prerender = { float a = getstatf(STAT_HEALTHHAZE); if (floor(getstatf(STAT_THWOFG))) a = 0; alpha_to_render *= a; };
+	float condtional(uielement_c this) {
+		if (getstatf(STAT_HEALTHHAZE) > 0)
+			return TRUE;
+		return FALSE;
+	};
+	void healthhaze_prerender(uifill_c this, __inout vector color_to_render, __inout float alpha_to_render) {
+		float a = getstatf(STAT_HEALTHHAZE);
+		if (floor(getstatf(STAT_THWOFG)))
+			a = 0;
+		alpha_to_render *= a;
+	};
 	uifill_c healthhaze_fill = spawn(uifill_c, flags: UIFLAG_STRETCH, color: '0.7 -1 -1', alpha: 0.5);
 		healthhaze_fill.active_condition = condtional;
 		healthhaze_fill.prerender = healthhaze_prerender;
@@ -817,7 +813,7 @@ void HUD_InitializeUI(void)
 
 		uispritesheet_c ring_sprite = (uispritesheet_c)this.partner5;
 		//uipicture_c ring_pulse = (uipicture_c)this.partner7;
-		uispritesheet_c artifact_icon = (uipicture_c)this.partner6;
+		uispritesheet_c artifact_icon = (uispritesheet_c)this.partner6;
 		//uipicture_c artifact_hightlightA = (uipicture_c)this.partner3;
 		//uipicture_c artifact_hightlightB = (uipicture_c)this.partner4;
 
@@ -924,20 +920,7 @@ void HUD_InitializeUI(void)
 			else
 				artifact_icon.color = '1 1 1';
 
-			//artifact_icon.alpha = art_alpha;
-			//artifact_hightlightA.alpha = hla_alpha;
-			//artifact_hightlightB.alpha = hlb_alpha;
-
 			artifact_icon.flags &= ~UIFLAG_HIDE;
-			//artifact_hightlightA.flags &= ~UIFLAG_HIDE;
-			//artifact_hightlightB.flags &= ~UIFLAG_HIDE;
-
-			if (artifact_time > 0)
-			{
-				//this.partner.flags |= UIFLAG_HIDE;
-				//this.partner2.flags |= UIFLAG_HIDE;
-				//return;
-			}
 
 			this.partner.flags &= ~UIFLAG_HIDE;
 			this.partner2.flags &= ~UIFLAG_HIDE;
@@ -966,14 +949,9 @@ void HUD_InitializeUI(void)
 
 	// cooldown ring
 	artifact.partner5 = spawn(uispritesheet_c, owner: artifact, origin: '0 0', size: '64 64', image: "gfx/hud/cooldown/cd_sheet.tga", sheet_size: '12 12');
-	//artifact.partner7 = spawn(uipicture_c, owner: artifact, origin: '0 0', size: '64 64', image: "gfx/hud/cooldown/cd_pulse.tga");
 
 	// image itself
 	artifact.partner6 = spawn(uispritesheet_c, owner: artifact, origin: '0 0', size: '64 64', sheet_size: '5 1');
-
-	// highlight images
-	//artifact.partner3 = spawn(uipicture_c, owner: artifact, origin: '0 0', size: '64 64');
-	//artifact.partner4 = spawn(uipicture_c, owner: artifact, origin: '0 0', size: '64 64');
 
 	// number
 	artifact.partner = spawn(uipicture_c, owner: artifact, anchor: '1 1', origin: '-16 -8', size: '8 8', justify: '0 1');
@@ -1411,8 +1389,6 @@ void HUD_InitializeArtifactRadial(void)
 		float dir = vectoangles(normalize(radial_pos))[1] - (270 - (ang_sep / 2));
 		if (dir < 0)
 			dir += 360;
-		//dir /= ang_sep;
-		//print(sprintf("%g, %g\n", dir, dir / ang_sep));
 
 		if (radial_dist >= RADIAL_SELECT_THRESHOLD)
 			radial_selected = ceil(dir / ang_sep);
@@ -1514,8 +1490,7 @@ void HUD_InitializeArtifactRadial(void)
 	float dist = 148;
 	float ang_sep = (360 * DEG2RAD) / 10;
 	float ang_curr = 270 * DEG2RAD;
-	for(float i = 0; i < 10; i++, ang_curr += ang_sep)
-	{
+	for (float i = 0; i < 10; i++, ang_curr += ang_sep) {
 		vector pos = [floor(cos(ang_curr) * dist), floor(sin(ang_curr) * dist)];
 		uipicture_c ring = spawn(uipicture_c, owner: radial_fill, anchor: '0.5 0.5', origin: pos, size: '96 96', justify: '0.5 0.5',
 			image: ring_images[i],
@@ -1628,7 +1603,6 @@ void HUD_InitializeDeathMenu(void)
 	// restart
 	void(uielement_c this) button_click = {
 		localcmd("stopsound\n");
-		//localcmd("r_glsl_saturation 1\n");
 		load_autosave();
 		localcmd("scratch3 0\n");
 	};
@@ -1668,7 +1642,6 @@ void HUD_InitializeDeathMenu(void)
 	void(uielement_c this) button_click = {
 		write_shrine(1);
 		localcmd("stopsound\n");
-		//localcmd("r_glsl_saturation 1\n");
 		load_shrine();
 		localcmd("scratch3 0\n");
 	};
@@ -1711,7 +1684,6 @@ void HUD_InitializeDeathMenu(void)
 	void(uielement_c this) button_click = {
 		write_tether2(1);
 		localcmd("stopsound\n");
-		//localcmd("r_glsl_saturation 1\n");
 		load_tether();
 		localcmd("scratch3 0\n");
 	};
@@ -1815,7 +1787,8 @@ void HUD_InitializeEndscreen(void)
 }
 #endif
 
-void() Hud = { vector postimage;
+void() Hud = {
+	vector postimage;
 	string time0, time1, time2, time3, time4;
 	postimage = '240 -480 0';
 
@@ -1829,11 +1802,6 @@ void() Hud = { vector postimage;
 	time2 = ftos(1 / gettime2);
 	time3 = ftos(gettime(3));
 	time4 = ftos(frametime);
-	//DString (postimage,(time0), 1, 1, '1 1 1',' 14 14 0');postimage += '0 20 0';
-	//DString (postimage,(time1), 1, 1, '1 1 1',' 14 14 0');postimage += '0 20 0';
-	//DString (postimage,(time2), 1, 1, '1 1 1',' 14 14 0');postimage += '0 20 0';
-	//DString (postimage,(time3), 1, 1, '1 1 1',' 14 14 0');postimage += '0 20 0';
-	//DString (postimage,(time4), 1, 1, '1 1 1',' 14 14 0');postimage += '0 20 0';
 	local float health, kitems, digits, fphicon;
 	health = getstati(STAT_HEALTH);
 
@@ -1910,8 +1878,6 @@ void() Hud = { vector postimage;
 
 	}
 
-	//drawstring('0 0 0', ftos(sl_slotkeys), '8 8 0', '3 3 3', 1);     	// Draw the "slotkeyused"
-
 	realkeypos_y += 48;
 	if (kitems & IT_COFFERKEY1)
 		DImage2(realkeypos, "gfx/hud/messages/icons/msgicon_coffer_key.tga", 1, keyscale, '1 1 1', '16 16 0', keyflag);
@@ -1940,10 +1906,6 @@ void() Hud = { vector postimage;
 		slotunits = stof(slotdigitsunit);
 
 		slot_realrelicpos = realkeypos;
-/*		if ((slotthous) && (!slotcents) && (!slotdozens) && (!slotunits))
-		{
-			slot_realrelicpos = realkeypos;
-		}*/
 		if ((slotthous) && (!slotcents) && (!slotdozens) && (!slotunits))
 		{
 			slot_realrelicpos = realkeypos;
@@ -1973,8 +1935,6 @@ void() Hud = { vector postimage;
 			slot_realrelicpos4 = realkeypos + (vkeysep *3);
 			slot_realrelicpos5 = realkeypos + (vkeysep *4);
 		}
-		//drawstring('30 0 0', strcat (slotdigits," ",ftos (slotthous)," ",ftos (slotcents)," ",ftos (slotdozens)," ",ftos (slotunits)), '8 8 0', '12 12 0', 1, 0);     	// Draw the "cursor"
-	
 
 		if ((sl_slotrelics >= 10000) && (sl_slotrelics < 20000))
 			DImage2(slot_realrelicpos, "gfx/hud/messages/icons/msgicon_relic_e1m1.tga", 1, keyscale, '1 1 1', '16 16 0', keyflag);
@@ -2035,7 +1995,6 @@ void() Hud = { vector postimage;
 
 	string ring_artifact, ring_artifact2, ring_artifact3, timer_artifact;
 	string ring_tether, ring_tether2, ring_tether3;
-	//DImage(artr1,"gfx/hud/rings.tga",1,artr2,'1 1 1','160 60 0');
 	local float radialactive, radialtime, tether_time,tetheractive;
 	radialactive = getstatf(STAT_RADIALACTIVE);
 	tetheractive = getstatf(STAT_RD_ST);
@@ -2165,7 +2124,6 @@ void() Hud = { vector postimage;
 		if (radialactive == 22) ring_artifact2 = "gfx/hud/cooldown/sigil_wrath_pulseA.tga";
 		if (radialactive == 22) ring_artifact3 = "gfx/hud/cooldown/sigil_wrath_pulseB.tga";
 
-		//spos_x = spos_x;
 		spos_x = arti_pos_x + 9 + artic_x;
 		spos_y = arti_pos_y + 5 + artic_y;
 		float artifact_count;
@@ -2315,13 +2273,8 @@ void() Hud = { vector postimage;
 	}
 
 };
-//vector view_origin;
-
-//	view_origin = pmove_org + '0 0 1' * getstati(STAT_VIEWHEIGHT);
 
 float dmues;
-
-//string v_sfps;
 float autocvar_scr_nohud;
 float vshift_alreadychecked;
 vector locked_viewangle;
@@ -2393,10 +2346,7 @@ void CSQC_UpdateView(float b, float c)
 	float hidehud;
 	hidehud = floor(getstatf(STAT_THWOFG));
 
-
-
-local vector angulos, origen;
-
+	local vector angulos, origen;
 	static vector radial_viewmodel_ang;
 	static float radial_viewmodel_frac;
 
@@ -2484,9 +2434,7 @@ local vector angulos, origen;
 
 	addentities(MASK_NORMAL | MASK_ENGINE);
 
-	if (hidehud == 3)
-	{
-
+	if (hidehud == 3) {
 		float stat_angles_x = getstatf(CAM_ANG_X);
 		float stat_angles_y = getstatf(CAM_ANG_Y);
 		float stat_angles_z = getstatf(CAM_ANG_Z);
@@ -2511,11 +2459,11 @@ local vector angulos, origen;
 
 		// Reki (January 8 2024): consistent camera fov (yoinked from DOOMBRINGER, originally added by andrew apted)
 		const float h_fov = 90;
-		local float frustumy = tan(h_fov * M_PI / 360.0) * 0.75;
-		local float frustumx = frustumy * vid_width / vid_height / cvar("vid_pixelheight");
+		float frustumy = tan(h_fov * M_PI / 360.0) * 0.75;
+		float frustumx = frustumy * vid_width / vid_height / cvar("vid_pixelheight");
 	
-		local float fovx = atan(frustumx) * 360.0 / M_PI;
-		local float fovy = atan(frustumy) * 360.0 / M_PI;
+		float fovx = atan(frustumx) * 360.0 / M_PI;
+		float fovy = atan(frustumy) * 360.0 / M_PI;
 	
 		setproperty(VF_FOVX, fovx);
 		setproperty(VF_FOVY, fovy);
@@ -2523,10 +2471,9 @@ local vector angulos, origen;
 	
 	renderscene();
 
-
-	float fdev = cvar ("developer");
-	float fcamera_stage = cvar ("camera_stage");
-	if((fdev >= 1) && (hidehud == 3) &&(fcamera_stage > 0)) 
+	float fdev = cvar("developer");
+	float fcamera_stage = cvar("camera_stage");
+	if((fdev >= 1) && (hidehud == 3) && (fcamera_stage > 0))
 	{
 		drawstring('0 0 0', strcat("camera stage: ",""), '16 16 0', '1 1 1', 1, 0);
 		drawstring('0 0 0', strcat("              ",ftos(fcamera_stage)), '16 16 0', '1 1 0', 1, 0);
@@ -2558,67 +2505,6 @@ local vector angulos, origen;
 		rndm = random() *0.5 + 1.5;
 	}
 
-/*	float wlightning;
-
-	wlightning = rint(getstatf(STAT_WLIGHTNING));
-	vector lorg, ldest, ldorg;
-
-	vector lb, lbd;
-
-	vector spos, sposd, align;
-	spos_x = 300;
-	spos_y = 100;
-	spos_z = -60;
-	sposd_x = 370;
-	sposd_y = 100;
-	sposd_z = -60;
-	align_x = 240;
-	align_y = vid_height - 27;
-	spos_x = spos_x + align_x;
-	spos_y = spos_y + align_y;
-	spos_z = spos_z + align_z;
-	sposd_x = sposd_x + align_x;
-	sposd_y = sposd_y + align_y;
-	sposd_z = sposd_z + align_z;
-
-	lorg = cs_unproject(spos);
-
-	ldorg = cs_unproject(sposd);
-
-	ldest_x = getstatf(STAT_LDX);
-	ldest_y = getstatf(STAT_LDY);
-	ldest_z = getstatf(STAT_LDZ);
-
-	lb_x = getstatf(STAT_LOX);
-	lb_y = getstatf(STAT_LOY);
-	lb_z = getstatf(STAT_LOZ);
-
-	lbd_x = getstatf(STAT_LODX);
-	lbd_y = getstatf(STAT_LODY);
-	lbd_z = getstatf(STAT_LODZ);
-
-	lorg = (lb + lorg) *0.5;
-	ldorg = (lbd + ldorg) *0.5;
-
-	if (wlightning == 1)
-	{
-		lbeam(lorg_x, lorg_y, lorg_z, ldest_x, ldest_y, ldest_z, '1 1 1', ldorg_x, ldorg_y, ldorg_z);
-	}
-
-	if (wlightning == 2)
-	{
-		railbeam(lorg_x, lorg_y, lorg_z, ldest_x, ldest_y, ldest_z, '1 1 1', ldorg_x, ldorg_y, ldorg_z);
-		arailb = (arailb - frametime) *0.8;
-	}
-	else
-	{
-		if (arailb != 2)
-			arailb = 2;
-	}
-*/
-	//////////////////	
-	//float sorete = getproperty(VF_FOG_DENSITY);
-	//drawstring('0 0 0', ftos(sorete), '20 20 0', '1 1 1', 1, 0);
 	inventory_active = rmenu;
 	wdscreen = getstatf(STAT_WRATHDEBUGSCREEN);
 	if (wdscreen == 1)
@@ -2632,40 +2518,25 @@ local vector angulos, origen;
 		DString('-150 -50 0', vframe, 1, 2, '3 1 1', '10 10 0');
 		DString('-150 -90 0', enemyclass, 1, 2, '3 1 1', '10 10 0');
 		DString('-150 -70 0', enemyhealth, 1, 2, '3 1 1', '10 10 0');
-
-		/*
-		vector player_org;
-		player_org_x =  getstatf(STAT_X);
-		player_org_y =  getstatf(STAT_Y);
-		player_org_z =  getstatf(STAT_Z);
-		*/
 		DString('-150 10 0', vtos(pmove_org), 1, 2, '1 1 3', '10 10 0');
-
-//		DrawSheet('-150 -130 0', "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',20);
-		//DrawSheet('-150 -0 0', "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',4);
-		//DrawSheet('-150 30 0', "gfx/hud/health_sheet.tga",'280 360 0', '28 36 0',36);
-
-//void( vector pos,string pic, vector imgsize, vector slotsize, float slotnumber) DrawSheet = 
-
 	}
 
 	float fclframetime = gettime(2);
 	if(!fclframetime)
-	fclframetime = 0.002;
+		fclframetime = 0.002;
 
 	float vfpsmultiplier;
 	if(fclframetime > 0)
-	vfpsmultiplier = (1 + ((300 - (1 / fclframetime)) / 220));
+		vfpsmultiplier = (1 + ((300 - (1 / fclframetime)) / 220));
 	else
-	vfpsmultiplier = 1;
+		vfpsmultiplier = 1;
 	float vfps = 60 + 30 * vfpsmultiplier;
 	
 	if(fclframetime > 0)
 	{
-	if (1 / fclframetime > 100)
-		vfps = 60;
+		if (1 / fclframetime > 100)
+			vfps = 60;
 	}
-	//	drawstring('0 0 0', ftos (fclframetime), '8 8 0', '12 12 0', 1, 0);     	// Draw the "cursor"
 
 	float v_sfps = vfps / ((rint(1 / (fclframetime + 0.1))));
 
@@ -2675,11 +2546,9 @@ local vector angulos, origen;
 
 
 
-
-	local float f, dm;
-	f = getstati(STAT_HEALTH);
-	dm = floor(getstatf(STAT_DEADMENU));
-	if (/*(f <= 0) && */(dm == 1) && FALSE)
+	float f = getstati(STAT_HEALTH);
+	float dm = floor(getstatf(STAT_DEADMENU));
+	if ((dm == 1) && FALSE)
 	{
 		if (theter_alreadychecked != 1)
 		{
@@ -2717,8 +2586,6 @@ local vector angulos, origen;
 				localcmd("v_cshift\n");
 			vshift_alreadychecked = 1;
 		}
-
-		//Death_Menu();
 	}
 	else
 	{
@@ -2728,17 +2595,7 @@ local vector angulos, origen;
 			
 		if (vshift_alreadychecked == 1)
 		vshift_alreadychecked = 0;
-		/*
-		if (theter_alreadychecked == 1)
-		{
-			theter_alreadychecked = 0;
-			setcursormode(0);
-			localcmd("crosshair 1\n");
-			localcmd("scratch3 0\n");
-		}
-		*/
 
-		//float showjournal;
 		if (showjournal == 2)
 		{
 			if (mrmenualpha < 1)
@@ -2908,8 +2765,6 @@ local vector angulos, origen;
 		if (dmg_indicator & 2)
 			dmu = 1;
 		if (dmg_indicator & 1)
-		//		{dmu -= clframetime;drawpic('240 0 0',"gfx/hud/di_top.tga", vid_width *'0.5 0 0' + vid_height *'0 0.5 0', '1 1 1', dmu, 0);}
-
 		{
 			dmu -= clframetime;
 			drawpic('0 0 0', "gfx/hud/di_top.tga", vid_width *'1 0 0' + vid_height *'0 1 0', '1 1 1', dmu, 0);
@@ -2920,8 +2775,6 @@ local vector angulos, origen;
 		if (dmg_indicator & 8)
 			dmd = 1;
 		if (dmg_indicator & 4)
-		//	{dmd -= clframetime;drawpic('240 270 0',"gfx/hud/di_bottom.tga", vid_width *'0.5 0 0' + vid_height *'0 0.5 0', '1 1 1', dmd, 0);}
-
 		{
 			dmd -= clframetime;
 			drawpic('0 0 0', "gfx/hud/di_bottom.tga", vid_width *'1 0 0' + vid_height *'0 1 0', '1 1 1', dmd, 0);
@@ -2932,8 +2785,6 @@ local vector angulos, origen;
 		if (dmg_indicator & 32)
 			dml = 1;
 		if (dmg_indicator & 16)
-		//	{dml -= clframetime;drawpic('0 135 0',"gfx/hud/di_left.tga", vid_width *'0.5 0 0' + vid_height *'0 0.5 0', '1 1 1', dml, 0);}
-
 		{
 			dml -= clframetime;
 			drawpic('0 0 0', "gfx/hud/di_left.tga", vid_width *'1 0 0' + vid_height *'0 1 0', '1 1 1', dml, 0);
@@ -2944,8 +2795,6 @@ local vector angulos, origen;
 		if (dmg_indicator & 128)
 			dmr = 1;
 		if (dmg_indicator & 64)
-		//	{dmr -= clframetime ;drawpic('480 135 0',"gfx/hud/di_right.tga", vid_width *'0.5 0 0' + vid_height *'0 0.5 0', '1 1 1', dmr, 0);}
-
 		{
 			dmr -= clframetime;
 			drawpic('0 0 0', "gfx/hud/di_right.tga", vid_width *'1 0 0' + vid_height *'0 1 0', '1 1 1', dmr, 0);
@@ -2961,14 +2810,9 @@ local vector angulos, origen;
 		if (showjournal == 1)
 		{
 			if(deathmatch == 1)
-			showscores = 1;
+				showscores = 1;
 			else
 			{
-				/*
-				using_cursor = 1;
-				setcursormode(1);
-				show_journal_ui();
-				*/
 				if (!journal_chapter)
 					journal_chapter = 1;
 				if (!journal_firstopen)
@@ -2980,13 +2824,8 @@ local vector angulos, origen;
 		}
 		else if (showjournal == 2)
 		{
-			//if(deathmatch == 1)
-			//	showscores = 0;
-			//else
-			{
-				show_messages_ui();
-				journal_page_maps = 0;
-			}
+			show_messages_ui();
+			journal_page_maps = 0;
 		}
 		else
 		{
@@ -2999,10 +2838,7 @@ local vector angulos, origen;
 			}
 		}
 
-		//{
-		float showingmessageshud;
-		showingmessageshud = getstati(STAT_TIME_HUDMESSAGE);
-
+		float showingmessageshud = getstati(STAT_TIME_HUDMESSAGE);
 		if ((showingmessageshud <= 0) && (hud_messages > 0))
 			hud_messages = 0;
 
@@ -3039,104 +2875,89 @@ local vector angulos, origen;
 			setcursormode(0);
 		ui_oldusemouse = ui_usemouse;
 
-		//if (hidehud == 0)
+		e = self;
+		for (self = world;
+			(self = nextent(self));)
+			if (self.draw2d)
+				self.draw2d();
+		self = e;
+
+		// Reki: Update journal stats
+		jitems_armory = getstati(STAT_ITEMS);
+		jitems_bestiary = getstatf(STAT_JOURNAL_MESSAGESM);
+		jitems_visitedmaps = getstatf(STAT_SPOTTED_MAPS);
+		jitems_relics = getstatf(STAT_FOUND_RELICS);
+		jitems_notes = getstatf(STAT_JOURNAL_MESSAGES);
+		jitemsb_notes = getstatf(STAT_JOURNAL_MESSAGESB);
+
+		// Reki: Zoom hud fadeout
+		#define HUDALPHA_SPEED 2.5
+		#define HUDALPHA_STEPS 4
+		static float hud_alpha;
+		float hud_alpha_wanted = 1;
+		hud_alpha_wanted *= getstatf(STAT_ZOOM); // zoom
+		if (getstati(STAT_HEALTH) <= 0) // health
+			hud_alpha_wanted = 0;
+		else if (getstatf(STAT_JOURNAL))
+			hud_alpha_wanted = 0;
+
+		hud_alpha_wanted = bound(0, hud_alpha_wanted, 1);
+		if (hud_alpha < hud_alpha_wanted)
+			hud_alpha = min(hud_alpha_wanted, hud_alpha + (clframetime * HUDALPHA_SPEED * 1.1));
+		else
+			hud_alpha = max(hud_alpha_wanted, hud_alpha - (clframetime * HUDALPHA_SPEED));
+
+		if (hidehud > 0) // if we should hide the hud, do it!
+			hud_alpha = 0;
+
+		ui_hud.alpha = slerp(0, 1, hud_alpha);
+		ui_hud.alpha = round(ui_hud.alpha * HUDALPHA_STEPS) / HUDALPHA_STEPS;
+
+		if (autocvar_scr_nohud == 1)
+			ui_hud.alpha = 0;
+		//
+
+		ui_clipsize = '0 0';
+		uielement_c old_hover = ui_hover;
+		float old_usemouse = ui_usemouse;
+		ui_hover = __NULL__;
+		ui_mouseposition = getpointerpos();
+		ui_usemouse = FALSE;
+		ui_renderframe = TRUE;
+		ui_alpha = 1;
+		for(uielement_c ui_chain = ui_screen_queue; ui_chain; ui_chain = ui_chain._next)
 		{
-			//Ammo_Hud();
-			//Hud_Armor();
-			//Hud();
-			e = self;
-			for (self = world;
-				(self = nextent(self));)
-				if (self.draw2d)
-					self.draw2d();
-			self = e;
-			
-			// Reki: Update journal stats
-			jitems_armory = getstati(STAT_ITEMS);
-			jitems_bestiary = getstatf(STAT_JOURNAL_MESSAGESM);
-			jitems_visitedmaps = getstatf(STAT_SPOTTED_MAPS);
-			jitems_relics = getstatf(STAT_FOUND_RELICS);
-			jitems_notes = getstatf(STAT_JOURNAL_MESSAGES);
-			jitemsb_notes = getstatf(STAT_JOURNAL_MESSAGESB);
-			//jitems_notes = jitemsb_notes = jitems_relics = jitems_visitedmaps = jitems_armory = jitems_bestiary = 0xFFFFFF;
-			// Reki: Draw UI elements
-			//if (ui_usemouse)
-			//	drawfill('0 0 0', [vid_width, vid_height], '0 0 0', 0.65, 0);
-			
-			// Reki: Zoom hud fadeout
-			#define HUDALPHA_SPEED 2.5
-			#define HUDALPHA_STEPS 4
-			static float hud_alpha;
-			float hud_alpha_wanted = 1;
-			hud_alpha_wanted *= getstatf(STAT_ZOOM); // zoom
-			if (getstati(STAT_HEALTH) <= 0) // health
-				hud_alpha_wanted = 0;
-			else if (getstatf(STAT_JOURNAL))
-				hud_alpha_wanted = 0;
-
-			hud_alpha_wanted = bound(0, hud_alpha_wanted, 1);
-			if (hud_alpha < hud_alpha_wanted)
-				hud_alpha = min(hud_alpha_wanted, hud_alpha + (clframetime * HUDALPHA_SPEED * 1.1));
-			else
-				hud_alpha = max(hud_alpha_wanted, hud_alpha - (clframetime * HUDALPHA_SPEED));
-			
-			if (hidehud > 0) // if we should hide the hud, do it!
-				hud_alpha = 0;
-			
-			ui_hud.alpha = slerp(0, 1, hud_alpha);
-			ui_hud.alpha = round(ui_hud.alpha * HUDALPHA_STEPS) / HUDALPHA_STEPS;
-
-			if (autocvar_scr_nohud == 1)
-				ui_hud.alpha = 0;
-			//
-
-			ui_clipsize = '0 0';
-			uielement_c old_hover = ui_hover;
-			float old_usemouse = ui_usemouse;
+			UI_RenderElements(ui_chain);
+		}
+		if (!ui_usemouse)
 			ui_hover = __NULL__;
-			ui_mouseposition = getpointerpos();
-			ui_usemouse = FALSE;
-			ui_renderframe = TRUE;
-			ui_alpha = 1;
-			for(uielement_c ui_chain = ui_screen_queue; ui_chain; ui_chain = ui_chain._next)
-			{
-				UI_RenderElements(ui_chain);
-			}
-			if (!ui_usemouse)
-				ui_hover = __NULL__;
-			if (ui_hover != old_hover)
-			{
-				if (old_hover.m_leave)
-					old_hover.m_leave(old_hover);
-			}
-			if (ui_hover && ui_hover.m_over)
-				ui_hover.m_over(ui_hover);
-			drawresetcliparea();
-			ui_clipsize = '0 0';
-			ui_renderframe = FALSE;
-			//
+		if (ui_hover != old_hover)
+		{
+			if (old_hover.m_leave)
+				old_hover.m_leave(old_hover);
+		}
+		if (ui_hover && ui_hover.m_over)
+			ui_hover.m_over(ui_hover);
+		drawresetcliparea();
+		ui_clipsize = '0 0';
+		ui_renderframe = FALSE;
+		//
 
-			if (hud_messages >= 12)
-				hud_messages = 0;
-			
-			if (dmues > 0)
-			{
-				dmues -= clframetime;
-				drawpic('0 0 0', "gfx/splashes/endgame.tga", vid_width *'1 0 0' + vid_height *'0 1 0', '1 1 1', dmues, 0);
-			}
-			
-			if (ui_usemouse && getkeydest() == KEY_GAME)
-				drawpic(ui_mouseposition, "gfx/cursor.tga", '20 20 0', '1 1 1', 1, 0);
+		if (hud_messages >= 12)
+			hud_messages = 0;
+
+		if (dmues > 0)
+		{
+			dmues -= clframetime;
+			drawpic('0 0 0', "gfx/splashes/endgame.tga", vid_width *'1 0 0' + vid_height *'0 1 0', '1 1 1', dmues, 0);
 		}
 
-		//}
+		if (ui_usemouse && getkeydest() == KEY_GAME)
+			drawpic(ui_mouseposition, "gfx/cursor.tga", '20 20 0', '1 1 1', 1, 0);
 	}
 
-	//drawpic([vid_width * 0.5, vid_height * 0.5] + radial_pos, "gfx/cursor.tga", '20 20 0', '1 1 1', 1, 0);
-
 	float crt_active = cvar ("crt");
-	if(crt_active > 0)
-	{
+	if (crt_active > 0) {
 		vector res;
 		drawpic('0 0 0', "gfx/crt.tga", vid_width *'0.5 0 0' + vid_height *'0 0.5 0', '1 1 1', crt_active, 0);
 		res_x =  vid_width *0.5;

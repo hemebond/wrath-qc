@@ -250,7 +250,7 @@ void object_torch1() {
 	precache_sound("fx/fire2.ogg");
 	setsize(self, '-4 -4 -8', '4 4 8');
 
-	if(self.episode == 2) {
+	if (self.episode == 2) {
 		self.solid = SOLID_BBOX;
 		self.wrathflags += FL_NOONTOP;
 		setsize(self, '-4 -4 -30', '4 4 12');

@@ -79,7 +79,8 @@ void() w_vmodel_slash = { local float r;
 	self.nextthink = time;
 };
 
-void() raise_vmodel = { self.weapon = IT_VIEWMODEL;
+void raise_vmodel() {
+	self.weapon = IT_VIEWMODEL;
 	self.vweaponskin = 0;
 	self.vweaponglowmod = '0 0 0';
 	setmodel(self.vweapon, self.vvweapon_model);
@@ -91,6 +92,4 @@ void() raise_vmodel = { self.weapon = IT_VIEWMODEL;
 	self.vweapon.origin_z = self.vvweapon_z;
 	self.attack_finished = time + 0.05;
 	W_SetWeapon();
-};
-
-///////////////////////////////////end of qc file
+}
