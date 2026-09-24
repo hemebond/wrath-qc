@@ -3807,18 +3807,20 @@ void PutClientInServer() {
 	stuffcmd(self, "r_glsl_postprocess_uservec3_enable 0\n");
 	stuffcmd(self, "r_glsl_postprocess_uservec3 \"0 0 0 0\"\n");
 
-	// Hemebond: disabled 20260917 because we don't need it
-	// float dev = cvar("developer");
-	// if (dev >= 1) {
-	// 	float writeparms = fopen(strcat("reportmonsters/", mapname, "_killed_monsters",".txt"), FILE_WRITE);
-	// 	fputs(writeparms,(""));
-	// 	fclose(writeparms);
-	// }
-
 	// Reki (September 15 2023): initialize sounds here, so we don't cause a race condition please
 	soundbox_initializeambients();
 	sigils_initializeambients();
 	item_donor_forcethink();
+
+	// Check to see if other players are in a cutscene
+	// if so, join their camera
+	entity other_player = find(world, classname, "player");
+	if (other_player) {
+		if (other_player.vhud == 3 && other_player.active_camera) {
+			self.vhud = 3;
+			self.active_camera = other_player.active_camera;
+		}
+	}
 }
 
 void ClientObituary(entity targ, entity attacker) {
