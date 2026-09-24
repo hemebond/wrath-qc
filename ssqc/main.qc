@@ -1,9 +1,12 @@
 .float timeflyc;
-.float vhud;
-void() main = {};
+.float vhud;  // Used to control player view during cutscenes
 .float message_number;
-void() CSQC_AddStats = 
-{ 
+
+
+void() main = {};
+
+
+void CSQC_AddStats() {
 	SV_AddStatFloat(STAT_RMENU, 8, rmenu);
 	SV_AddStatFloat(STAT_LF, 8, lf);
 	SV_AddStatFloat(STAT_RARM, 8, rarmorvalue);
@@ -16,7 +19,6 @@ void() CSQC_AddStats =
 	SV_AddStatFloat(STAT_AMMO_LANCE, 8, ammo_lance);
 	SV_AddStatFloat(STAT_AMMO_CRYSTAL, 8, ammo_crystal);
 	SV_AddStatFloat(STAT_AMMO_MACE, 8, ammo_bfg);
-
 
 	SV_AddStatFloat(STAT_RD_ST, 8, SoulTether);
 
@@ -31,7 +33,6 @@ void() CSQC_AddStats =
 	SV_AddStatFloat(STAT_RD_VI, 8, ViciousIdol);
 	SV_AddStatFloat(STAT_RD_RF, 8, ShockWave);
 
-
 	SV_AddStatFloat(STAT_RADIALACTIVE, 8, radialactive);
 	SV_AddStatFloat(STAT_ARTIFACTTIME, 8, artifacttime);
 	SV_AddStatFloat(STAT_TETHERTIME, 8, tethertime);
@@ -43,7 +44,6 @@ void() CSQC_AddStats =
 	SV_AddStatFloat(STAT_TIMELS, 8, timels);
 	SV_AddStatFloat(STAT_THWOFG, 8, vhud);
 	SV_AddStatFloat(STAT_WRATHACTIVE, 8, wrath_active);
-
 
 	SV_AddStatFloat(STAT_JOURNAL, 8, journal);
 	SV_AddStatFloat(STAT_JOURNAL_MESSAGES, 8, journal_jmessages);
@@ -77,9 +77,10 @@ void() CSQC_AddStats =
 	SV_AddStatFloat(STAT_ZOOM, 8, r_zoom);
 
 	SV_AddStatFloat(STAT_ENDSCREENSTART, 8, r_endscreen);
-};
+}
 
-void(entity client, string s) centerprint = {
+
+void centerprint(entity client, string s) {
 	float msg_type = MSG_ALL;
 	if (client != world)
 		msg_type = MSG_ONE;
@@ -90,9 +91,9 @@ void(entity client, string s) centerprint = {
 	WriteString(msg_type, s);
 }
 
+
 entity lastspawn;
 .float episode;
-
 
 
 /*FGD
@@ -152,7 +153,7 @@ void worldspawn() {
 
 	if (!(world.episode))
 		world.episode = 1;
-	
+
 	// Reki (February 14 2024): keep track of our up-to-date save
 	// compatibility versions, we'll need to fix stuff if this changes
 	map_save_version = world.map_version;
@@ -175,7 +176,6 @@ void worldspawn() {
 
 	CSQC_AddStats();
 
-	globalfake_illumination = 1;
 	initLightStyles();
 }
 
@@ -221,10 +221,11 @@ void initLightStyles() {
 	lightstyle(63, "a");
 }
 
-void StartFrame()
-{
+
+void StartFrame() {
 	Timescale_RunFrame();
 }
+
 
 void precaches() {
 	precache_model("models/player/outlander/head.md3");
@@ -236,7 +237,7 @@ void precaches() {
 
 	precache_model("models/artifacts/active/flask_active.md3");
 	precache_model("models/artifacts/active/life_siphon_active.md3");
-	precache_model("models/artifacts/active/sigil_flight_active.md3"); //
+	precache_model("models/artifacts/active/sigil_flight_active.md3");
 	precache_model("models/artifacts/active/soul_tether_active.md3");
 	precache_model("models/artifacts/active/sigil_wrath_active.md3");
 	precache_model("models/artifacts/artifact_animus_proj.md3");
@@ -409,7 +410,6 @@ void precaches() {
 	precache_model("particles/explo/explo_slag1.md3");
 	precache_model("particles/explo/explo_slag2.md3");
 	precache_model("models/objects/decor/crystals/crystal_base.md3");
-	//precache_model("models/weapons/lance/v_lance_wrath.md3");
 	precache_model("models/artifacts/effects/revelation_particle.md3");
 	precache_model("models/artifacts/effects/orb_blackhole_small.md3");
 	precache_model("models/projectiles/proj_mace.md3");
@@ -424,19 +424,21 @@ void precaches() {
 	precache_sound("enemies/symbol/fire.ogg");
 
 	precache_monster_afflicted();
-	precache_monster_afflicted();
+	precache_monster_boss1();
+	precache_monster_brute();
 	precache_monster_executioner();
 	precache_monster_fallen();
 	precache_monster_heretic();
 	precache_monster_invader();
+	precache_monster_keeper();
+	precache_monster_lurker();
 	precache_monster_oppressor();
+	precache_monster_prowler();
 	precache_monster_stricken();
 	precache_monster_symbol();
 	precache_monster_widow();
 	precache_monster_wraith();
 	precache_monster_wretch();
-	precache_monster_brute();
-	precache_monster_boss1();
 
 	precache_sound ("doors/glyph_locked.ogg");
 	precache_sound ("doors/glyph_unlocked.ogg");
@@ -597,7 +599,6 @@ void precaches() {
 	precache_sound ("items/artifacts/artifactH_end.ogg");
 	precache_sound ("items/artifacts/artifactH_pickup.ogg");
 	precache_sound ("items/artifacts/artifactH_use.ogg");
-
 
 	precache_sound ("items/artifacts/void_grenade_explosion.ogg");
 	precache_sound ("items/artifacts/void_grenade_throw.ogg");
@@ -828,7 +829,7 @@ void precaches() {
 	precache_sound ("weapons/crystal/crystallizer_release3.ogg");
 	precache_sound ("weapons/crystal/crystallizer_release4.ogg");
 	precache_sound ("weapons/crystal/crystallizer_release5.ogg");
-	
+
 	precache_sound ("weapons/crystal/crystallizer_fire_loop.ogg");
 
 	precache_sound ("weapons/crystal/crystallizer_fire_alt_loop.ogg");
@@ -848,7 +849,6 @@ void precaches() {
 	precache_sound ("weapons/crystal/crystallizer_select2.ogg");
 	precache_sound ("weapons/crystal/crystallizer_select3.ogg");
 	precache_sound ("weapons/crystal/crystallizer_altfire_stinger.ogg");
-	
 
 	precache_sound ("weapons/lance/fire1.ogg");
 	precache_sound ("weapons/lance/fire2.ogg");
@@ -978,8 +978,5 @@ void precaches() {
 	precache_sound ("weapons/spitter/lower.ogg");
 	precache_sound ("weapons/spitter/raise.ogg");
 	precache_sound ("weapons/spitter/raise.ogg");
-	precache_monster_prowler();
-	precache_monster_lurker();
-	precache_monster_keeper();
-	precache_sound ( "impact/destruct/skullbreak.ogg");
+	precache_sound ("impact/destruct/skullbreak.ogg");
 };

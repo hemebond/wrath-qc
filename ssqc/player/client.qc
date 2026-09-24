@@ -144,15 +144,11 @@ void playersound2(string locsound, float rnd, float nchannel) {
 }
 
 
-void() delete_shrine =
-{
-	local float writeparms;
-	local string writethis;
+void delete_shrine() {
 	read_currentprofileslot();
-	local string campaignloc;
-	campaignloc = strcat("profiles/", profilename, "/shrine.txt");
-	writeparms = fopen(campaignloc, FILE_WRITE);	//open what file to use in write mode
-	writethis = ftos(0);	//prepare the next thing to write
+	string campaignloc = strcat("profiles/", profilename, "/shrine.txt");
+	float writeparms = fopen(campaignloc, FILE_WRITE);	//open what file to use in write mode
+	string writethis = ftos(0);	//prepare the next thing to write
 	fputs(writeparms, writethis);	//line 1
 	fputs(writeparms, "\n");	//and again
 	fclose(writeparms);
@@ -160,7 +156,7 @@ void() delete_shrine =
 
 .float playerdeadtime;
 void() Player_Die = {
-	delete_shrine();
+	delete_shrine();  // FIXME: Why are we deleting the shrine when the player dies?
 	if (self.health >= 0)
 		self.health = -1;
 	remove(self.vweapon);
@@ -185,25 +181,27 @@ void() Player_Die = {
 };
 
 
-void(entity attacker, float dmg) Player_Pain =
-{
-
+void Player_Pain(entity attacker, float dmg) {
 	if(self.Aegis_time > time)
 		return;
+
 	if (self.pain_finished > time)
 		return;
+
 	self.pain_finished = time + 0.25;
-	if (self.waterlevel >= 3)
-	{
+
+	if (self.waterlevel >= 3) {
 		self.underwaterdamaged = 1;
 		playersound("player/hurt_underwater", 3);
 		makevectors(self.v_angle);
 		pointparticles(particleeffectnum("bubbles"), self.origin + self.view_ofs + v_forward * 12,v_forward * 24, 1);
 	}
-	else
+	else {
 		playersound("player/hurt", 5);
+	}
 	achievement_takendamage = TRUE; // we took damage, aw :( achievement over
-};
+}
+
 
 void PlayerDeathThink() {
 	if (self.deadflag == DEAD_DEAD)
@@ -242,7 +240,6 @@ void PlayerDeathThink() {
 
 	//if (deathmatch != 1)
 	//	localcmd("slowmo 0.1\n");
-	//localcmd("r_glsl_saturation 0\n");
 	localcmd("v_cshift\n");
 
 	self.think = SUB_Null;
@@ -746,7 +743,6 @@ void PlayerPreThink() {
 		self.rocketjumpcnt = max(0, self.rocketjumpcnt - (frametime * 0.2));
 
 	if ((self.aegisflag == 1) && (self.Aegis_time < time)) {
-		//stuffcmd(self, "r_glsl_saturation 1\n");
 		self.aegisflag = 0;
 	}
 
@@ -803,12 +799,10 @@ void PlayerPreThink() {
 		self.menuactive = 1;
 	}
 
-	if (self.splashtime > time)
-	{
+	if (self.splashtime > time) {
 		self.vhud = 2;
 	}
-	else
-	{
+	else {
 		if (self.vhud == 2)
 			self.vhud = 0;
 	}
@@ -826,7 +820,6 @@ void PlayerPreThink() {
 	{
 		self.health --;
 		self.meaxhealth_finished = time + (100 / (self.health * maxhfaderate));
-		//stuffcmd(self,"pulsehealth\n");
 	}
 	if (self.deadflag >= DEAD_DEAD)
 	{
@@ -1139,13 +1132,13 @@ void PlayerPreThink() {
 	if (self.waterlevel == 2)
 		CheckWaterJump();
 
-	if ((self.button2) && (!self.crouch)&& (self.vhud != 3))
-	{
+	if ((self.button2) && (!self.crouch) && (self.vhud != 3)) {
 
 		PlayerJump();
 	}
-	else
+	else {
 		self.flags = self.flags | FL_JUMPRELEASED;
+	}
 
 	if ((self.watertype == CONTENT_LAVA) || (self.fakewatertype == CONTENT_LAVA))
 	{
@@ -1736,13 +1729,11 @@ void PlayerPostThink() {
 	float saturation_speed = 0.5;
 	float healthhaze_wanted = 0;
 	float healthhaze_speed = 0.2;
-	if (self.deadflag != DEAD_NO)
-	{
+	if (self.deadflag != DEAD_NO) {
 		saturation_wanted = 0.05;
 		saturation_speed = 1;
 	}
-	else
-	{
+	else {
 		if (self.displacement_active)
 		{
 			saturation_wanted = min(saturation_wanted, 0.7);
@@ -1801,8 +1792,7 @@ void PlayerPostThink() {
 	// Added zoom button
 	#define ZOOM_SPEED 11
 	float zoom_wanted = 1;
-	if (self.button8 && !self.deadflag)
-	{
+	if (self.button8 && !self.deadflag) {
 		zoom_wanted = 0;
 	}
 	if (self.r_zoom < zoom_wanted)
@@ -1840,91 +1830,73 @@ void PlayerPostThink() {
 
 	if (self.deadflag)
 		return;
+
 	if (self.playerdeadtime > time)
 		return;
 
-	if (self.changing_level == 1)
+	if (self.changing_level)
 		return;
-	if(self.vhud == 3)
-	{
-		//self.movetype = 0;
+
+	if (self.vhud == 3) {
 		return;
 	}
-	///////
-	if (self.dmgbscreenf < time)
-	{
+
+	if (self.dmgbscreenf < time) {
 		if (self.damagescreen &2)
 			self.damagescreen -= 2;
 	}
 
-	if (self.dmgscreenf > time)
-	{
+	if (self.dmgscreenf > time) {
 		if (!(self.damagescreen &1))
 			self.damagescreen += 1;
 	}
-	else
-	{
+	else {
 		if (self.damagescreen &1)
 			self.damagescreen -= 1;
 	}
 
-	///////
-	if (self.dmgbscreenb < time)
-	{
+	if (self.dmgbscreenb < time) {
 		if (self.damagescreen &8)
 			self.damagescreen -= 8;
 	}
 
-	if (self.dmgscreenb > time)
-	{
+	if (self.dmgscreenb > time) {
 		if (!(self.damagescreen &4))
 			self.damagescreen += 4;
 	}
-	else
-	{
+	else {
 		if (self.damagescreen &4)
 			self.damagescreen -= 4;
 	}
 
-	///////
-	if (self.dmgbscreenl < time)
-	{
+	if (self.dmgbscreenl < time) {
 		if (self.damagescreen &32)
 			self.damagescreen -= 32;
 	}
 
-	if (self.dmgscreenl > time)
-	{
+	if (self.dmgscreenl > time) {
 		if (!(self.damagescreen &16))
 			self.damagescreen += 16;
 	}
-	else
-	{
+	else {
 		if (self.damagescreen &16)
 			self.damagescreen -= 16;
 	}
 
-	///////
-	if (self.dmgbscreenr < time)
-	{
+	if (self.dmgbscreenr < time) {
 		if (self.damagescreen &128)
 			self.damagescreen -= 128;
 	}
 
-	if (self.dmgscreenr > time)
-	{
+	if (self.dmgscreenr > time) {
 		if (!(self.damagescreen &64))
 			self.damagescreen += 64;
 	}
-	else
-	{
+	else {
 		if (self.damagescreen &64)
 			self.damagescreen -= 64;
 	}
 
-	///////
-
-	//////////////////////
 	if ((self.flags & FL_ONGROUND) && (self.lungefree > time)) {
 		self.lungefree = 0;
 	}
@@ -2059,20 +2031,21 @@ void() monster_relocator = {
 		monster = holder;
 	}
 };
-void(entity ownr) client_garbage_collector = { local entity garbage;
-	garbage = nextent(world);
-	while (garbage)
-	{
+
+
+void client_garbage_collector(entity ownr) {
+	entity garbage = nextent(world);
+	while (garbage) {
 		entity holder = nextent(garbage);
-		if ((garbage.wrathflags &FL_GARBAGE) && (garbage.owner == ownr))
-		{
+		if ((garbage.wrathflags & FL_GARBAGE) && (garbage.owner == ownr)) {
 			remove(garbage);
 		}
 
 		garbage = holder;
 	}
 	spawn_dead_model(ownr.origin, ownr.angles); // player models
-};
+}
+
 
 void() garbage_collector = { local entity garbage;
 	garbage = nextent(world);

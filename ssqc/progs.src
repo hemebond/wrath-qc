@@ -64,10 +64,16 @@ entities/func/ray.qc
 entities/func/illusionary.qc
 entities/func/train.qc
 entities/func/flicker.qc
+entities/func/shrine.qc
 entities/trigger.qc
 entities/trigger/changelevel.qc
 entities/trigger/wrath.qc
 entities/trigger/fly.qc
+entities/trigger/teleport.qc
+entities/trigger/monsterjump.qc
+entities/trigger/displacement.qc
+entities/trigger/shrine.qc
+entities/trigger/secret.qc
 entities/info_chain.qc
 entities/entity_model.qc
 entities/object_eyeball.qc

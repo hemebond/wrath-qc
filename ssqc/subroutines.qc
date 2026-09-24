@@ -496,27 +496,30 @@ void(entity e, vector s2, vector sz) setsize2 = {
 	e.nsize_bbox = s2;
 	e.size_bbox = sz;
 };
-void() toggle_use = { if (self.using == 1)
+void() toggle_use = {
+	if (self.using == 1)
 		self.using = 0;
 	else
 		self.using = 1;
 };
-vector(entity ent) rorigin = { if (ent.crouch == 1)
+vector(entity ent) rorigin = {
+	if (ent.crouch == 1)
 		return (ent.absmin + ent.absmax) *0.5 + '0 0 24';
 	else
 		return (ent.absmin + ent.absmax) *0.5;
 };
-void(entity ent) copy_old_data = { ent.effects = ent.effects;
-	ent.solid = ent.solid;
+
+
+void copy_old_data(entity ent) {
 	ent.olduse = ent.use;
 	ent.oldtouch = ent.touch;
 	ent.oldwait = ent.wait;
 	ent.oldcount = ent.count;
 	ent.olddelay = ent.delay;
-	ent.targetname = ent.targetname;
 	ent.oldtarget = ent.target;
 	ent.oldenemy = ent.enemy;
-};
+}
+
 
 .float local_classmonster;
 .float episode;

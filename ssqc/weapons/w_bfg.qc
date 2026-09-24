@@ -7,16 +7,14 @@
 = weapon_mace : "Mace" []
 */
 
-void() weapon_mace = {
+void weapon_mace() {
 	self.items = IT_MACE;
 	self.itemisweapon = 1;
 
-	//setmodel(self, "models/weapons/mace/w_mace_open.md3");
 	setmodel(self, "models/weapons/mace/w_mace.md3");
 	setsize(self, '-12 -12 -24' ,'12 12 8');
 	self.noise  ="weapons/mace/mace_unfold1.ogg";
 	precache_sound(self.noise);
-	//self.ammo_lance = 20;
 	self.rwpn = 1;
 	self.scale = 1;
 	StartItem(1);
@@ -25,7 +23,7 @@ void() weapon_mace = {
 	self.msg = 97;
 	self.msg_icon = "mace";
 	self.msg_text = "$NOTIFY_WEP_MACE";
-};
+}
 
 
 .float oldrandomattack;
@@ -34,8 +32,8 @@ void() weapon_mace = {
 .float wretch_gibbing;
 
 
-void() v_bfg_idle = 
-{ 
+void() v_bfg_idle =
+{
 	if (self.playerdeadtime > time)
 	{
 		self.think = PlayerDeathThink;
@@ -45,14 +43,14 @@ void() v_bfg_idle =
 	if (self.pick_bfg == 1)
 	{
 		//Hud_message(258, other.origin, other);
-		//Hud_SendNotification_Control2(self, "HELP_ATTACK"), "+attack", "+button3";
-		//centerprint(self, "$HELP_ATTACK");
+		// Hud_SendNotification_Control2(self, "HELP_ATTACK"), "+attack", "+button3";
+		// centerprint(self, "$HELP_ATTACK");
 		self.pick_bfg = 0;
 	}
 
 
 	if(self.totallungetime > time)
-	self.totallungetime = 0;
+		self.totallungetime = 0;
 
 	self.realoding = 0;
 	self.vweaponstate = 0;
@@ -103,40 +101,40 @@ void launch_projectile_bfg(float spread, float total_to_spawn) {
 	SUB_CallAsSelf(projectile_bfg, mis);
 };
 
-void() wsfire_bfg4 = 
-{ 
-	
-	self.think = v_bfg_idle; 
+void() wsfire_bfg4 =
+{
+
+	self.think = v_bfg_idle;
 	self.nextthink = time + 1;
 };
 
-void() wsfire_bfg3 = 
-{ 	
+void() wsfire_bfg3 =
+{
 	string snd = strcat("weapons/spitter/fire2_", ftos(floor(random() *spitter_svsf) + 1), ".wav");
 	float snd_pitch;
 	snd_pitch = 107 - (self.ammo_bfg * 7);
 	float wvol = cvar ("weapons_fire_volume");
 	sound7(self, CHAN_AUTO, snd, wvol, ATTN_NORM,snd_pitch ,0);
-	self.think = wsfire_bfg4; 
+	self.think = wsfire_bfg4;
 	self.nextthink = time;
 };
 
-void() wsfire_bfg2 = 
-{ 
+void() wsfire_bfg2 =
+{
 	float active_punchangle = cvar ("cl_punch");
 	if(active_punchangle == 1)
 		self.punchangle_x = -5 -(self.ammo_bfg * 0.3);
 
 
-	if(deathmatch == 1) 
+	if(deathmatch == 1)
 		vector dir = v_forward * ((self.ammo_bfg + 7) * -45);
 	else
 		dir = v_forward * ((self.ammo_bfg + 7) * -45);
 
 	if(self.flags & FL_ONGROUND)
 	self.flags -= FL_ONGROUND;
-	dir_z =  dir_z * 0.75; 
-	self.velocity += '0 0 24'; 
+	dir_z =  dir_z * 0.75;
+	self.velocity += '0 0 24';
 	self.velocity += dir;
 	local vector tagorg;
 	local float tagindex;
@@ -145,20 +143,20 @@ void() wsfire_bfg2 =
 
 	te_customflash(tagorg,64,1,'3 0.05 0.05');
 
-	spawn_shaker(self,self.ammo_bfg * 3,1,512);	
+	spawn_shaker(self,self.ammo_bfg * 3,1,512);
 	Controller_Rumble(self, 0.2 + min(1, (self.ammo_bfg / 10) * 0.7), 0.23 + (self.ammo_bfg / 100), 340 + (self.ammo_bfg * 4));
 
-	entity enemyhead = findradius(self.origin, 99999);	
+	entity enemyhead = findradius(self.origin, 99999);
 	while (enemyhead)
 	{
 		if((enemyhead.flags & FL_MONSTER) || ((enemyhead.classname == "boss_guardian1") || (enemyhead.classname == "boss_guardian2") ||(enemyhead.classname == "boss_guardian3")))
 		{
-			enemyhead.max_homing_projectile  = 0;				
+			enemyhead.max_homing_projectile  = 0;
 		}
-		enemyhead = enemyhead.chain; 
-	} 
+		enemyhead = enemyhead.chain;
+	}
 
-	
+
 	float start_ammo = self.ammo_bfg;
 	while(self.ammo_bfg > 0)
 	{
@@ -171,16 +169,16 @@ void() wsfire_bfg2 =
 	if(self.playerflags & FL_MACECHARGED)
 		self.playerflags -= FL_MACECHARGED;
 	self.vweaponframe = 6;
-	self.think = wsfire_bfg3; 
+	self.think = wsfire_bfg3;
 	self.nextthink = time;
 };
 
-void() wsfire_bfg = 
-{ 
+void() wsfire_bfg =
+{
 	self.vweaponframe = 5;
 	self.think = wsfire_bfg2;
 	playerwsound("weapons/mace/mace_altfire", 3, CHAN_AUTO);
-	
+
 	float active_punchangle = cvar ("cl_punch");
 	if(active_punchangle == 1)
 		self.punchangle_x = 2;
@@ -191,8 +189,8 @@ void() wsfire_bfg =
 	self.attack_finished = time + 2;
 };
 
-void() wsfullcharge_bfg = 
-{ 
+void() wsfullcharge_bfg =
+{
 	sound(single_player, CHAN_AUTO,"weapons/mace/mace_unfold1.ogg", 1, ATTN_NORM);
 	self.vweaponframe = 8;
 	self.playerflags += FL_MACECHARGED;
@@ -201,26 +199,6 @@ void() wsfullcharge_bfg =
 	self.attack_finished = time + 0.05;
 };
 
-void(float x_ang, float y_ang) bfg_angles = 
-{ 
-	x_ang = x_ang *0.25;
-	y_ang = y_ang *0.25;
-
-	msg_entity = self;
-	WriteByte(MSG_ONE, SVC_SETVIEWANGLES);
-	WriteAngle(MSG_ONE, self.v_angle_x + x_ang);
-	WriteAngle(MSG_ONE, self.v_angle_y + y_ang);
-	WriteAngle(MSG_ONE, self.v_angle_z);
-};
-
-void() bfg_angles_center = 
-{ 
-	msg_entity = self;
-	WriteByte(MSG_ONE, SVC_SETVIEWANGLES);
-	WriteAngle(MSG_ONE, 0);
-	WriteAngle(MSG_ONE, self.v_angle_y);
-	WriteAngle(MSG_ONE, self.v_angle_z);
-};
 
 .float bfg_dmg_ammount;
 void() soulintag =
@@ -230,7 +208,7 @@ void() soulintag =
 	self.scale = self.scale * 0.9;
 	if (self.scale < 0.3)
 	{
-		self.think = SUB_Remove;	
+		self.think = SUB_Remove;
 		if (single_player.ammo_bfg < 10)
 			single_player.ammo_bfg += 1;
 		pointparticles(particleeffectnum("soul_mace"), single_player.maceorigin, '0 0 0', single_player.ammo_bfg);
@@ -246,7 +224,7 @@ void() soulintag =
 		// Steam_StatIncrement(single_player, ST_STATS::souls_harvested, 1);
 	}
 	else
-		self.think = soulintag;	
+		self.think = soulintag;
 	self.nextthink = time + 0.01;
 };
 void() soulhome =
@@ -265,21 +243,21 @@ void() soulhome =
 		{
 			randompointsound(self.origin,"weapons/mace/mace_soul_release", 8, random(0.9,1));
 			self.count = 2;
-		}	
+		}
 	}
 
 
 	float dist = vlen (self.origin - vtemp);
 
 	if(self.alpha >= 0.5)
-	{		
+	{
 		self.alpha = 1;
 
 		float playerisvisible = 0;
-		
+
 		if(self.type != 1)
 		{
-			if(self.attack_finished < time) 
+			if(self.attack_finished < time)
 			{
 				playerisvisible = visibleb(self.origin,single_player.origin,world);
 				self.attack_finished = time + 0.5;
@@ -311,15 +289,14 @@ void() soulhome =
 				}
 
 			    self.nextthink = time + 0.05;
-			    self.think = soulhome;	
+			    self.think = soulhome;
 				return;
 			}
 			self.movetype = 0;
 			self.pflags = 0;
 			self.type = 0;
 	        self.nextthink = time + 0.01;
-	        self.think = soulhome;	
-			//remove(self);
+	        self.think = soulhome;
 			return;
 		}
 		if (self.type == 1)
@@ -336,10 +313,9 @@ void() soulhome =
 				self.scale = self.scale * 0.95;
 			if(dist < 12)
 			{
-				//stuffcmd (single_player, "bf 1 0.5 0.5 0.5 1 \n");
 				self.velocity = dir * 64;
 				self.nextthink = time + 0.01;
-				self.think = soulintag;	
+				self.think = soulintag;
 				return;
 			}
 			if(self.count != 1)
@@ -360,10 +336,10 @@ void() soulhome =
 	else
 		self.oldorigin = self.origin;
 	self.nextthink = time + 0.01;
-	self.think = soulhome;	
+	self.think = soulhome;
 };
 
-void() soulcolormod_controller = 
+void() soulcolormod_controller =
 {
 	if(!self.cnt)
 	{
@@ -374,10 +350,10 @@ void() soulcolormod_controller =
 		entity gibspawned = findradius(self.chain.origin, 1024);
 		while (gibspawned)
 		{
-			if (gibspawned.gibowner == self.chain) 
+			if (gibspawned.gibowner == self.chain)
 			{
 				entity colormod_controller = spawn();
-				colormod_controller.pipes = self.pipes;	
+				colormod_controller.pipes = self.pipes;
 				colormod_controller.oldorigin = self.chain.origin;
 				colormod_controller.chain = gibspawned;
 				if(!(colormod_controller.effects & 512))
@@ -391,7 +367,7 @@ void() soulcolormod_controller =
 			gibspawned = gibspawned.chain; // go to next enemy
 		}
 		self.cnt = 1;
-	}		
+	}
 	if((self.cnt == 2) && (self.attack_finished < time))
 	{
 		float dist = vlen (self.chain.origin - (self.pipes.origin + '0 0 24'));
@@ -414,9 +390,9 @@ void() soulcolormod_controller =
 		self.attack_finished = time + random(0.0125, 0.05);
 	}
 	self.ldorigin = getlight(self.chain.origin);
-	self.colormod_x -= 0.15;	
-	self.colormod_y -= 0.025;	
-	self.colormod_z -= 0.025;	
+	self.colormod_x -= 0.15;
+	self.colormod_y -= 0.025;
+	self.colormod_z -= 0.025;
 	if(self.colormod_x <= self.ldorigin_x)
 	{
 		if(self.chain.effects & 512)
@@ -430,7 +406,7 @@ void() soulcolormod_controller =
 	self.nextthink = time + 0.025;
 };
 
-void (float dir, float dirv, float damg) w_bfg_slash = 
+void (float dir, float dirv, float damg) w_bfg_slash =
 {
 	local vector source, org, orn, ornv;
 
@@ -470,7 +446,7 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 	if (trace_ent.takedamage)
 	{
 		if(damg ==100)
-		spawn_shaker(self,3 + self.ammo_bfg * 1.75,0.75,512);	
+		spawn_shaker(self,3 + self.ammo_bfg * 1.75,0.75,512);
 		if (trace_ent.bloody == 1)
 			SpawnBlood(org, '0 0 0', 20, BLOOD_NORMAL2, floor(1 + (self.ammo_bfg / 2)));
 		if (trace_ent.flags & FL_MONSTER)
@@ -502,10 +478,10 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 
 			soul.think = soulhome;
 			soul.solid = SOLID_NOT;
-			soul.movetype = MOVETYPE_FLY;			
+			soul.movetype = MOVETYPE_FLY;
 			soul.traileffectnum = particleeffectnum("soul_mace_trail");
 			soul.velocity_z = 32;
-			soul.lifetime = time + 0.95; 
+			soul.lifetime = time + 0.95;
 			soul.alpha = 0.025;
 			soul.nextthink = time;
 			entity colormod_controller = spawn();
@@ -537,12 +513,12 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 					else
 						explo_blood_sprite(5, trace_endpos);
 				}
-				
+
 			}
         }
 		if (old_ent.bloodimpact)
 			explo_blood_sprite(old_ent.bloodimpact, trace_endpos);
-		
+
 		self.bfg_dmg_ammount -= 10;
 	}
 	else
@@ -552,7 +528,7 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 			float material = GetTraceMaterial();
 	        vector partvel =normalize(trace_plane_normal) * 92;
 			if (material == MAT_SNOW)
-			{	
+			{
 				randompointsound7(trace_endpos,"impact/projectiles/bullet", 10, 1, random (60,75));
 				randompointsound7(trace_endpos,"impact/projectiles/bullet", 10, 1, random (100,120));
 				pointparticles(particleeffectnum("snowparticles"),org, partvel * random (1,1.5), 1);
@@ -581,10 +557,9 @@ void (float dir, float dirv, float damg) w_bfg_slash =
 	}
 };
 
+
 .float fakeframe;
 .float punchangletime;
-
-
 
 
 void() mace_push_gibs =
@@ -608,8 +583,8 @@ void() mace_push_gibs =
 	gibpusher.nextthink = time + 0.25;
 }
 
-void() w_bfg_slash2 = 
-{ 
+void() w_bfg_slash2 =
+{
 	self.fakeframe += 1;
 	if (self.fakeframe == 4)
 		playerwsound("weapons/mace/mace_attack", 4, CHAN_AUTO);
@@ -624,7 +599,7 @@ void() w_bfg_slash2 =
 			self.punchangle_y = 0.375 * self.ammo_bfg;
 		if (self.randomattack == 4)
 			self.punchangle_x = 0.375 * self.ammo_bfg;
-		self.punchangletime = -1;	
+		self.punchangletime = -1;
 		mace_push_gibs();
 	}
 	if (self.randomattack == 1)
@@ -741,8 +716,8 @@ void() w_bfg_attack = { local float r;
 .entity vbfg2;
 .entity vbfg3;
 
-void() lower_bfg2 = 
-{ 
+void() lower_bfg2 =
+{
 	self.vweaponframe += 1;
 	if (self.vweaponframe == 17)
 	{
@@ -760,8 +735,8 @@ void() lower_bfg2 =
 	self.nextthink = time + 0.025;
 };
 
-void() lower_bfg = 
-{ 
+void() lower_bfg =
+{
 	self.vweaponframe = 14;
 	self.attack_finished = time + 0.25;
 	self.think = lower_bfg2;
@@ -769,8 +744,8 @@ void() lower_bfg =
 	self.macemeleeskin_time = time + 30;
 	self.nextthink = time + 0.025;
 };
-void() v_bfg_blood_think_fading = 
-{ 
+void() v_bfg_blood_think_fading =
+{
 	self.glowmod = self.owner.vweaponglowmod;
 	self.alpha -= 0.0125;
 	self.owner.macemeleeskin = 0;
@@ -791,8 +766,8 @@ void() v_bfg_blood_think_fading =
 	self.nextthink = time + 0.025;
 }
 
-void() v_bfg_blood_think = 
-{ 
+void() v_bfg_blood_think =
+{
 
 	self.ammo_bfg = self.owner.ammo_bfg / 2;
 	if(self.owner.ammo_bfg >= 10)
@@ -834,8 +809,8 @@ void() v_bfg_blood_think =
 	self.nextthink = time + 0.025;
 };
 
-void() v_bfg_mace_think = 
-{ 
+void() v_bfg_mace_think =
+{
 	self.skin = self.owner.macemeleeskin;
 	self.glowmod = self.owner.vweaponglowmod;
 	self.alpha = 1;
@@ -873,8 +848,8 @@ void() v_bfg_mace_think =
 	self.nextthink = time + 0.05;
 };
 
-void() v_bfg_mace_think2 = 
-{ 	
+void() v_bfg_mace_think2 =
+{
 	self.cnt += 1;
 	if (self.cnt < 60)
 	{
@@ -904,8 +879,8 @@ void() v_bfg_mace_think2 =
 	self.nextthink = time + 0.05;
 
 };
-void() v_bfg_mace_think3 = 
-{ 
+void() v_bfg_mace_think3 =
+{
 	self.skin = self.owner.macemeleeskin;
 	self.glowmod = self.owner.vweaponglowmod;
 	self.cnt += 1;
@@ -923,8 +898,8 @@ void() v_bfg_mace_think3 =
 
 };
 
-void(entity e, entity vweapn) spawn_v_bfg_mace2 = 
-{ 
+void(entity e, entity vweapn) spawn_v_bfg_mace2 =
+{
 	e.vbfg = spawn();
 	e.vbfg.wrathflags += FL_GARBAGE;
 	e.vbfg.owner = e;
@@ -959,14 +934,14 @@ void(entity e, entity vweapn) spawn_v_bfg_mace2 =
 
 };
 
-void(entity e, entity vweapn) spawn_v_bfg_mace = 
-{ 
+void(entity e, entity vweapn) spawn_v_bfg_mace =
+{
 	e.vbfg = spawn();
 	e.vbfg.wrathflags += FL_GARBAGE + FL_SUBWEAPONMODEL;
 	e.vbfg.owner = e;
 	e.vbfg.scale = 1;
 	e.vbfg.classname = "mace_submodel";
-	//e.vbfg.colormod = '0.89 0.54 0.89'; 
+	//e.vbfg.colormod = '0.89 0.54 0.89';
 	setmodel(e.vbfg, "models/weapons/mace/v_mace.md3");
 	setattachment(e.vbfg, vweapn, "tag_mace");
 	e.vbfg.glowmod = '0.1 0.1 0.1';
@@ -974,8 +949,8 @@ void(entity e, entity vweapn) spawn_v_bfg_mace =
 	e.vbfg.nextthink = time;
 };
 
-void(entity e, entity vweapn) spawn_v_bfg_blood = 
-{ 
+void(entity e, entity vweapn) spawn_v_bfg_blood =
+{
 	e.vblood = spawn();
 	e.vblood.wrathflags += FL_GARBAGE + FL_SUBWEAPONMODEL;
 	e.vblood.owner = e;
@@ -985,8 +960,8 @@ void(entity e, entity vweapn) spawn_v_bfg_blood =
 	e.vblood.nextthink = time;
 };
 
-void() raise_bfg2 = 
-{ 
+void() raise_bfg2 =
+{
 	if (self.vweaponframe == 47)
 		W_SetWeapon();
 	self.vweaponframe += 1;
@@ -1005,8 +980,8 @@ void() raise_bfg2 =
 	self.nextthink = time + 0.025;
 };
 
-void() raise_bfg = 
-{ 
+void() raise_bfg =
+{
 	self.weapon = IT_MACE;
 	W_SetWeapon();
 	self.vweaponskin = 0;
@@ -1023,8 +998,8 @@ void() raise_bfg =
 	self.nextthink = time + 0.025;
 };
 
-void() pick_up_bfg = 
-{ 
+void() pick_up_bfg =
+{
 	self.weapon = IT_MACE;
 	W_SetWeapon();
 	self.vweaponskin = 0;
@@ -1040,25 +1015,4 @@ void() pick_up_bfg =
 	self.think = v_bfg_idle;
 	self.pick_bfg = 1;
 	self.nextthink = time + 3.95;
-};
-
-void() Tbfg_touch = 
-{ 
-	if (other.classname != "player")
-		return;
-	if (other.items &IT_MACE)
-		return;
-	other.time_pickupweapon = time + 0.75;
-
-	stuffcmd(other, "impulse 101\n");
-	remove(self);
-};
-
-void() trigger_bfg = 
-{ 
-	self.solid = SOLID_TRIGGER;
-	self.alpha = -1;
-	setmodel(self, self.model);
-	self.touch = Tbfg_touch;
-
 };

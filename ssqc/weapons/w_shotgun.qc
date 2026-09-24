@@ -561,20 +561,16 @@ void()shotgun_projectile_touch =
 };
 
 .float drunktime;
-void() shotgun_projectile_drunk =
-{
-
+void shotgun_projectile_drunk() {
 	if(time < self.drunktime)
-	self.velocity = ((self.velocity + ((v_right *proj_shotgun_drunkfactorh) *crandom())) + ((v_up *proj_shotgun_drunkfactorv) *crandom()));
+		self.velocity = ((self.velocity + ((v_right * proj_shotgun_drunkfactorh) * crandom())) + ((v_up *proj_shotgun_drunkfactorv) * crandom()));
+
 	self.drunktime = time + proj_shotgun_timing;	// screw up fast
 
-	if(self.origin ==  self.oldorigin)
-	{
+	if (self.origin ==  self.oldorigin) {
 		self.think = shotgun_projectile_explo;
 	}
-
-	else
-	{
+	else {
 		if (self.lifetime > time)
 			self.think = shotgun_projectile_drunk;
 		else
@@ -582,8 +578,7 @@ void() shotgun_projectile_drunk =
 	}
 	self.oldorigin = self.origin;
 	self.nextthink = time + 0.05;
-
-};
+}
 
 
 .float time_piston;

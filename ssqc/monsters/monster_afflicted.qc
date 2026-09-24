@@ -1143,7 +1143,7 @@ void afflicted_pain(entity attacker, float damage) {
 	afflicted_rpain();
 };
 
-void() precache_monster_afflicted = {
+void precache_monster_afflicted() {
 	precache_sound("enemies/afflicted/attack1.ogg");
 	precache_sound("enemies/afflicted/attack2.ogg");
 	precache_sound("enemies/afflicted/attack3.ogg");
@@ -1191,7 +1191,7 @@ void() precache_monster_afflicted = {
 	precache_model("models/enemies/afflicted/gibs/gib_leg_l_b.md3");
 	precache_model("models/enemies/afflicted/gibs/gib_head.md3");
 	precache_model("particles/explo/explo_afflicted.md3");
-};
+}
 
 
 /*FGD

@@ -1,8 +1,8 @@
 .float rise;
 
 
-void() check_relics = 
-{ 
+void() check_relics =
+{
     self.local_classmonster = self.classmonster1;
 	local entity pl;
 	pl = find(world, classname, "player");
@@ -45,31 +45,31 @@ void() check_spawner_counter = {
 	{
 		if (self.classmonster5 > 0)
 			total_monsters = total_monsters + m_counter;
-		return;	
+		return;
 	}
 	if (pl.oldrelics == 3)
 	{
 		if (self.classmonster4 > 0)
 			total_monsters = total_monsters + m_counter;
-		return;	
+		return;
 	}
 	if (pl.oldrelics == 2)
 	{
 		if (self.classmonster3 > 0)
 			total_monsters = total_monsters + m_counter;
-		return;	
+		return;
 	}
 	if (pl.oldrelics == 1)
 	{
 		if (self.classmonster2 > 0)
 			total_monsters = total_monsters + m_counter;
-		return;	
+		return;
 	}
 	if (!pl.oldrelics)
 	{
 		if (self.classmonster1 > 0)
 			total_monsters = total_monsters + m_counter;
-		return;	
+		return;
 	}
 
 */
@@ -77,8 +77,8 @@ check_relics();
 };
 
 
-float() monster_counter = 
-{ 
+float() monster_counter =
+{
 	local entity monster;
 	local float monster_counter;
 	monster = nextent(world);
@@ -86,8 +86,8 @@ float() monster_counter =
 	{
 		entity holder = nextent(monster);
 		if ((monster.flags &FL_MONSTER) && (monster.health >= 0))
-			monster_counter ++; 
-		monster = holder;	
+			monster_counter ++;
+		monster = holder;
 	}
 	return monster_counter;
 };
@@ -113,7 +113,7 @@ void() recount_monsters =
 			{
 				if (spawner.classmonster5 > 0)
 					total_monsters = total_monsters + m_counter;
-			}			
+			}
 			if (plrelics == 3)
 			{
 				if (spawner.classmonster4 > 0)
@@ -144,10 +144,10 @@ void() recount_monsters =
 
 
 void() enemy_spawner_use = {
-	
+
 	if (self.warped != 1)
 	{
-		
+
 		if (self.local_classmonster <= 0)
 		{
 			remove(self);
@@ -202,7 +202,7 @@ void() enemy_spawner_use = {
 
 			if (population_control) // subtract 1 from the available population points for this monster types
 			{
-				(population_control.population_fld)--; 
+				(population_control.population_fld)--;
 				enemy.pop_field = population_fld; // track this for later, when the monster dies it relinquishes its slot
 			}
 
@@ -253,7 +253,7 @@ void() enemy_spawner_use = {
 
 				if (self.type == 1)
 					enemy.grosstime = time + 1.5;
-				enemy.warped_time = time + 3;	
+				enemy.warped_time = time + 3;
 				enemy.warped = 1;
 				enemy.colormod = '5 0 0';
 				//enemy.glowmod = '10 2 2';
@@ -472,6 +472,12 @@ void() enemy_spawner_use_wait = { self.think = enemy_spawner_use;
 ]
 */
 void enemy_spawner() {
+	if (self.targetname == "") {
+		eprint(self);
+		objerror("enemy_spawner has no targetname");
+		return;
+	}
+
 	if (!self.classmonster2)
 		self.classmonster2 = self.classmonster1;
 	if (!self.classmonster3)
@@ -480,10 +486,10 @@ void enemy_spawner() {
 		self.classmonster4 = self.classmonster1;
 	if (!self.classmonster5)
 		self.classmonster5 = self.classmonster1;
+
 	self.local_classmonster = self.classmonster1;
 
-	if (self.local_classmonster <= 0)
-	{
+	if (self.local_classmonster <= 0) {
 		self.think = SUB_Remove;
 		self.nextthink = time + 0.1;
 		return;
@@ -494,23 +500,20 @@ void enemy_spawner() {
 		self.count = 1;
 	if (!self.delay)
 		self.delay = 5;
+
 	setmodel(self, "");
 
 	if (self.wait)
 		self.use = enemy_spawner_use_wait;
 	else
 		self.use = enemy_spawner_use;
+
 	self.think = check_spawner_counter;
 	self.nextthink = time + 0.25;
-	if (!self.targetname)
-	{				
-		self.think = wrath_objerror;
-		self.nextthink = time + random();
-	}
 }
 
 .float fastwarp;
-void() enemy_spawner_warp_use = { 
+void() enemy_spawner_warp_use = {
 	if (self.local_classmonster <= 0)
 	{
 		remove(self);
@@ -701,8 +704,8 @@ void enemy_spawner_warp() {
 	}
 }
 
-void() trigger_aggro_touch = 
-{ 
+void() trigger_aggro_touch =
+{
 	if(self.disarmed == 1)
 		return;
 	if (other.classname != "player")
@@ -728,7 +731,7 @@ void() trigger_aggro_touch =
 /*FGD
 @SolidClass base(Target) color(0.5 0.0 0.5) = trigger_aggro : "Targeted monster will become angry at player." []
 */
-void() trigger_aggro = { 
+void() trigger_aggro = {
 
 	self.touch = trigger_aggro_touch;
 	self.solid = SOLID_TRIGGER;

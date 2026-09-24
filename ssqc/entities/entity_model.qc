@@ -327,98 +327,80 @@ void CyExplosionBody() {
 	newcyst.think = cys_explode1b;
 	newcyst.nextthink = time + 0.1;
 };
+
+
 .float cyst_flag;
 .float cyst_rate_scale;
 .float cyst_rate_glowmod;
-void() cyst_think =
-{
-	if ((self.owner.wrathflags & FL_ALWAYSTOUCH))
-	{
+
+
+void cyst_think() {
+	if ((self.owner.wrathflags & FL_ALWAYSTOUCH)) {
 		remove(self);
 		return;
 	}
-	if (self.cyst_flag)
-	{
+
+	if (self.cyst_flag) {
 		if(self.owner.classname != "monster_fallen")
-			self.scale = (self.scale - (self.cyst_rate_glowmod / FL_SWIM));
+			self.scale = (self.scale - (self.cyst_rate_glowmod / 2));
 		self.glowmod_x = (self.glowmod_x - self.cyst_rate_glowmod);
 		self.glowmod_y = (self.glowmod_y - self.cyst_rate_glowmod);
 		self.glowmod_z = (self.glowmod_z - self.cyst_rate_glowmod);
-		if ((self.glowmod_x <= 0.5))
-		{
+		if ((self.glowmod_x <= 0.5)) {
 			self.cyst_flag = FALSE;
 		}
 	}
-	else
-	{
-		if(self.owner.classname != "monster_fallen")
-			self.scale = (self.scale + (self.cyst_rate_glowmod / FL_SWIM));
+	else {
+		if (self.owner.classname != "monster_fallen")
+			self.scale = (self.scale + (self.cyst_rate_glowmod / 2));
 		self.glowmod_x = (self.glowmod_x + self.cyst_rate_glowmod);
 		self.glowmod_y = (self.glowmod_y + self.cyst_rate_glowmod);
 		self.glowmod_z = (self.glowmod_z + self.cyst_rate_glowmod);
-		if ((self.glowmod_x >= TRUE))
-		{
+		if ((self.glowmod_x >= TRUE)) {
 			self.cyst_flag = TRUE;
 		}
 	}
-	if ((self.cnt == TRUE))
-	{
-		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / CAM_ORG_X) * 20))))
-		{
+	if ((self.cnt == TRUE)) {
+		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / 100) * 20)))) {
 			self.think = CyExplosionBody;
 		}
-		else
-		{
+		else {
 			self.think = cyst_think;
 		}
 	}
-	if ((self.cnt == FL_SWIM))
-	{
-		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / CAM_ORG_X) * STAT_AMMO_SHOTGUN))))
-		{
+	if ((self.cnt == 2)) {
+		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / 100) * 40)))) {
 			self.think = CyExplosionBody;
 		}
-		else
-		{
+		else {
 			self.think = cyst_think;
 		}
 	}
-	if ((self.cnt == MOVETYPE_WALK))
-	{
-		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / CAM_ORG_X) * STAT_RD_ST))))
-		{
+	if ((self.cnt == 3)) {
+		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / 100) * 60)))) {
 			self.think = CyExplosionBody;
 		}
-		else
-		{
+		else {
 			self.think = cyst_think;
 		}
 	}
-	if ((self.cnt == MOVETYPE_STEP))
-	{
-		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / CAM_ORG_X) * STAT_SHRINE))))
-		{
+	if ((self.cnt == 4)) {
+		if ((self.owner.health < (afflictedhealth - ((afflictedhealth / 100) * 80)))) {
 			self.think = CyExplosionBody;
 		}
-		else
-		{
+		else {
 			self.think = cyst_think;
 		}
 	}
 	self.nextthink = (time + 0.05);
-};
+}
+
 
 void spawn_cysts(entity e) {
-	entity cst1;
-	entity cst2;
-	entity cst3;
-	entity cst4;
-	float pos;
-
-	cst1 = spawn();
-	cst2 = spawn();
-	cst3 = spawn();
-	cst4 = spawn();
+	entity cst1 = spawn();
+	entity cst2 = spawn();
+	entity cst3 = spawn();
+	entity cst4 = spawn();
 	cst1.owner = e;
 	cst2.owner = e;
 	cst3.owner = e;
@@ -439,41 +421,35 @@ void spawn_cysts(entity e) {
 	setmodel(cst2, "models/enemies/afflicted/cyst_b.md3");
 	setmodel(cst3, "models/enemies/afflicted/cyst_c.md3");
 	setmodel(cst4, "models/enemies/afflicted/cyst_d.md3");
-	pos = ceil(((random() * 5) + 1));
-	if ((pos > 5))
-	{
+	float pos = ceil(((random() * 5) + 1));
+	if ((pos > 5)) {
 		pos = 5;
 	}
-	if ((pos == 1))
-	{
+	if ((pos == 1)) {
 		cst1.cnt = 4;
 		cst2.cnt = 3;
 		cst3.cnt = 2;
 		cst4.cnt = 1;
 	}
-	if ((pos == 2))
-	{
+	if ((pos == 2)) {
 		cst1.cnt = 3;
 		cst2.cnt = 4;
 		cst3.cnt = 2;
 		cst4.cnt = 1;
 	}
-	if ((pos == 3))
-	{
+	if ((pos == 3)) {
 		cst1.cnt = 2;
 		cst2.cnt = 3;
 		cst3.cnt = 4;
 		cst4.cnt = 1;
 	}
-	if ((pos == 4))
-	{
+	if ((pos == 4)) {
 		cst1.cnt = 1;
 		cst2.cnt = 2;
 		cst3.cnt = 4;
 		cst4.cnt = 3;
 	}
-	if ((pos == 5))
-	{
+	if ((pos == 5)) {
 		cst1.cnt = 1;
 		cst2.cnt = 2;
 		cst3.cnt = 3;
@@ -492,9 +468,7 @@ void spawn_cysts(entity e) {
 	cst3.glowmod = '0.5 0.5 0.5';
 	cst4.glowmod = '0.5 0.5 0.5';
 
-
-	if(e.classname == "monster_fallen")
-	{
+	if (e.classname == "monster_fallen") {
 		cst1.scale = 0.15;
 		cst2.scale = 0.15;
 		cst3.scale = 0.15;
@@ -504,8 +478,7 @@ void spawn_cysts(entity e) {
 		setattachment(cst3, e, "tag_arm_b_r");
 		setattachment(cst4, e, "tag_arm_a_l");
 	}
-	else
-	{
+	else {
 		setattachment(cst1, e, "tag_a");
 		setattachment(cst2, e, "tag_b");
 		setattachment(cst3, e, "tag_c");
@@ -515,7 +488,8 @@ void spawn_cysts(entity e) {
 	cst2.nextthink = (time + random());
 	cst3.nextthink = (time + random());
 	cst4.nextthink = (time + random());
-};
+}
+
 
 .float sizeflag;
 .string dmodel;

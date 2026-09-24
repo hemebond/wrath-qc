@@ -95,59 +95,6 @@ void() nodegraph_debug_think =
 	self.nextthink = time + 0.1;
 };
 
-void() nodegraph_debug_thinkscxzxc =
-{
-	local float i, j, graph_nodes_count, queryid, query_entries_count, nodeidto;
-	local vector nodefrom, nodeto;
-	if (test_ia == 1)
-	{
-		graph_nodes_count = nodegraph_graph_nodes_count(0);
-
-		i = 0;
-
-		while (i < graph_nodes_count)
-		{
-			nodefrom = nodegraph_graph_get_node(0, i);
-			//if(test_ia == 1)
-			//pointparticles(particleeffectnum("cystbody"), nodefrom + '0 0 16', '0 0 16', 1);
-
-			queryid = nodegraph_graph_query_nodes_linked(0, i);
-
-			if (nodegraph_query_is_valid(queryid))
-			{
-				query_entries_count = nodegraph_query_entries_count(queryid);
-
-				j = 0;
-
-				while (j < query_entries_count)
-				{
-					nodeidto = nodegraph_query_get_nodeid(queryid, j);
-
-					if (i != nodeidto)
-					{
-					
-					
-						nodeto = nodegraph_graph_get_node(0, nodeidto);
-						//if	(visibleb(nodefrom,nodeto,self.owner) && (test_ia == 1) && (checkpvs(self.owner.origin + self.owner.view_ofs,self)))
-							//te_custombeam("models/dev/nodeline.md3", world, nodefrom, nodeto);
-			
-							//te_beam(world,nodefrom, nodeto);
-							
-							//float topl =
-							
-					}
-
-					j = j + 1;
-				}
-	
-				nodegraph_query_release(queryid);
-			}
-
-			i = i + 1;
-		}
-	}
-	self.nextthink = time + 0.1;
-};
 
 // ============================================================================
 void() nodegraph_queue_initialize =

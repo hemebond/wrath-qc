@@ -40,7 +40,7 @@ void() SV_PlayerPhysics = { local vector wishvel, wishdir, v;
 		sv_stopspeed = cvar("sv_stopspeed");
 		sv_edgefriction = cvar("edgefriction");
 		// LordHavoc: this *4 is an optimization
-		cl_rollangle = cvar("cl_rollangle") *4;
+		cl_rollangle = cvar("cl_rollangle") * 4;
 		// LordHavoc: this 1 / is an optimization
 		cl_divspeed = 1 / cvar("cl_rollspeed");
 	}
@@ -71,7 +71,7 @@ void() SV_PlayerPhysics = { local vector wishvel, wishdir, v;
 	if (self.waterlevel >= 2)
 		if (self.movetype != MOVETYPE_NOCLIP)
 		{
-			self.flags = self.flags - (self.flags &FL_ONGROUND);
+			self.flags = self.flags - (self.flags & FL_ONGROUND);
 
 			if (self.movement == '0 0 0')
 				wishvel = '0 0 -60';	// drift towards bottom

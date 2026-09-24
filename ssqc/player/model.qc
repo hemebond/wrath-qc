@@ -45,51 +45,43 @@ float PLAYER_STANDING_LEFT = 8;
 float PLAYER_STANDING_RIGHT = 9;
 
 
-
-.entity player_model;
-void() weapon_think =
-{
-	if(self.owner.weapon != self.weapon)
-	{
+void weapon_think() {
+	if (self.owner.weapon != self.weapon) {
 		self.colormod = self.owner.vweapon.colormod;
-		if(self.owner.weapon == IT_MELEE)
+		if (self.owner.weapon == IT_MELEE)
 			setmodel(self, "models/weapons/melee/v_blade.md3");
-		if(self.owner.weapon == IT_REVOLVER)
+		if (self.owner.weapon == IT_REVOLVER)
 			setmodel(self, "models/weapons/revolver/w_revolver.md3");
-		if(self.owner.weapon == IT_SHOTGUN)
+		if (self.owner.weapon == IT_SHOTGUN)
 			setmodel(self, "models/weapons/shotgun/w_shotgun.md3");
-		if(self.owner.weapon == IT_SPITTER)
+		if (self.owner.weapon == IT_SPITTER)
 			setmodel(self, "models/weapons/spitter/w_spitter.md3");
-		if(self.owner.weapon == IT_RETCHER)
+		if (self.owner.weapon == IT_RETCHER)
 			setmodel(self, "models/weapons/retcher/w_retcher.md3");
-		if(self.owner.weapon == IT_CANNON)
+		if (self.owner.weapon == IT_CANNON)
 			setmodel(self, "models/weapons/cannon/w_cannon.md3");
-		if(self.owner.weapon == IT_LANCE)
+		if (self.owner.weapon == IT_LANCE)
 			setmodel(self, "models/weapons/lance/w_lance.md3");
 
 		self.weapon = self.owner.weapon;
 	}
 	self.think = weapon_think;
 	self.nextthink = time + 0.05;
-};
+}
+
 
 .float onground_time;
 void legs_think() {
-	// hemebond: I don't know what this is for. Cleanup when player is removed?
-	// if((self.owner.vhud != 3) && (self.exteriormodeltoclient != self.owner)) {
-	// 	self.exteriormodeltoclient = self.owner;
-	// 	self.effects = 0;
-	// }
-	// if((self.owner.vhud == 3) && (self.exteriormodeltoclient == self.owner)) {
-	// 	self.exteriormodeltoclient = world;
-	// 	self.effects = EF_NODRAW;
-	// }
+	if ((self.owner.vhud != 3) && (self.exteriormodeltoclient != self.owner)) {
+		self.exteriormodeltoclient = self.owner;
+		self.effects = 0;
+	}
 
-	//local string lmessage;
-	//lmessage =strcat ((vtos(self.owner.angles)),("\n")) ;
-	//bprint (lmessage);
-	//setorigin (self, self.owner.origin);
-//	if((self.owner.wrathflags & FL_WONGROUND))
+	// Hide the player model during cutscenes
+	if ((self.owner.vhud == 3) && (self.exteriormodeltoclient == self.owner)) {
+		self.exteriormodeltoclient = world;
+		self.effects = EF_NODRAW;
+	}
 
 	if (self.owner.crouch) {
 		// stop the player going into the floor
@@ -99,6 +91,7 @@ void legs_think() {
 	else {
 		self.origin_z = 0;
 	}
+
 	if (self.owner.onground_time > time) {
 		float speed = vlen(self.owner.velocity);
 		if (speed > 30) {
@@ -160,9 +153,12 @@ void torso_think() {
 
 
 void spawn_player_model(entity player) {
+	// Entities get "wrathflags |= FL_GARBAGE" so they get garbage collected when the player dies
+
 	entity legs = spawn();
-	player.player_model = legs;
 	legs.owner = player;
+	legs.wrathflags = FL_GARBAGE;
+	legs.exteriormodeltoclient = player;  // Stop the model showing up in cutscenes?
 	setattachment(legs, player, "");
 	legs.frame = OUTLANDER_LEGS_STAND_IDLE;
 	setmodel(legs, "models/player/outlander/outlander_new_lower.md3");
@@ -171,6 +167,7 @@ void spawn_player_model(entity player) {
 
 	entity torso = spawn();
 	torso.owner = player;
+	torso.wrathflags = FL_GARBAGE;
 	setmodel(torso, "models/player/outlander/outlander_new_upper.md3");
 	setattachment(torso, legs, "tag_mid");
 	torso.frame = OUTLANDER_UPPER_RIFLE;
@@ -179,6 +176,7 @@ void spawn_player_model(entity player) {
 
 	entity weapon = spawn();
 	weapon.owner = player;
+	weapon.wrathflags = FL_GARBAGE;
 	setmodel(weapon, "models/weapons/shotgun/w_shotgun.md3");
 	setattachment(weapon, torso, "tag_weapon");
 	weapon.scale = 0.5;
@@ -194,37 +192,38 @@ void corpse_dead_think() {
 }
 
 void spawn_dead_model(vector org, vector ang) {
-	entity fakeplayer = spawn();
-	setmodel(fakeplayer, "models/misc/null.md3");
-	fakeplayer.origin = org;
-	fakeplayer.angles_y =ang_y;
+	entity corpse = spawn();
+	setmodel(corpse, "models/misc/null.md3");
+	corpse.origin = org;
+	corpse.angles_y = ang_y;
+
 	float r = random();
 	if (r < 1)
-		fakeplayer.frame = 0;
+		corpse.frame = 0;
 	if (r < 0.65)
-		fakeplayer.frame = 2;
+		corpse.frame = 2;
 	if (r < 0.35)
-		fakeplayer.frame = 4;
+		corpse.frame = 4;
 
-	entity playermodel, torso;
-	playermodel = spawn();
-	playermodel.owner = fakeplayer;
-	playermodel.wrathflags = EF_LOWPRECISION;
-	setattachment(playermodel, fakeplayer,"");
-	setmodel(playermodel, "models/player/outlander/lower.md3");
-	playermodel.think = corpse_dead_think;
-	playermodel.nextthink = time + 1.55;
-	playermodel.frame = fakeplayer.frame;
-	torso = spawn();
-	torso.owner = fakeplayer;
+	entity legs = spawn();
+	legs.owner = corpse;
+	legs.wrathflags = EF_LOWPRECISION;
+	setattachment(legs, corpse, "");
+	setmodel(legs, "models/player/outlander/lower.md3");
+	legs.think = corpse_dead_think;
+	legs.nextthink = time + 1.55;
+	legs.frame = corpse.frame;
+
+	entity torso = spawn();
+	torso.owner = corpse;
 	setmodel(torso, "models/player/outlander/upper.md3");
-	setattachment(torso,playermodel, "tag_torso");
-	torso.frame = fakeplayer.frame;
+	setattachment(torso, legs, "tag_torso");
+	torso.frame = corpse.frame;
 	torso.think = corpse_dead_think;
 	torso.nextthink = time + 1.55;
 
 	entity head = spawn();
-	head.owner = fakeplayer;
+	head.owner = corpse;
 	setmodel(head, "models/player/outlander/head.md3");
 	setattachment(head,torso, "tag_head");
 	head.think = corpse_dead_think;

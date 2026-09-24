@@ -542,8 +542,8 @@ void v_cshift_changes() {
 .float wait6;
 
 
-void SetViewPoint(entity ent) {
-	msg_entity = single_player;
+void set_view_point(entity player, entity target_entity) {
+	msg_entity = player;
 	WriteByte(MSG_ONE, SVC_SETVIEW);
-	WriteEntity(MSG_ONE, ent);
+	WriteEntity(MSG_ONE, target_entity);
 }

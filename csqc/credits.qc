@@ -7,7 +7,6 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 	if (f < 0)
 		return;
 
-	
 	vector pos = '16 0';
 	float k = 16; // only tolerate 16 blank lines in a row, stupid DP not letting us check EOF
 	chara s;
@@ -42,7 +41,7 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 				case "txt": break;
 				case "img": {
 					s = __NULL__;
-					
+
 					string pic = argv(1);
 					vector isz = '128 128';
 					vector image_size = drawgetimagesize(pic);
@@ -61,7 +60,7 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 				s = (chara)substring((string)s, o + 1, strlen((string)s));
 			}
 		}
-		
+
 		if ((string)s && (string)s != "")
 		{
 			block = spawn(uitext_c, owner: credits, origin: pos, font: FONT_USER6, size: [fsz, fsz], text: strzone((string)s));
@@ -76,8 +75,6 @@ void Credits_LoadfromFile(string fp, uielement_c credits)
 }
 
 
-
-
 float endscreen_startfade;
 const float endscreen_fadelength = 15;
 float endscreen_creditstart;
@@ -85,6 +82,7 @@ const float endscreen_creditspeed = 40;
 const float endscreen_creditfade = 0.2;
 const float endscreen_creditwait = 768;
 const float endscreen_creditfadeduration = endscreen_creditspeed * 4;
+
 
 void HUD_InitializeEndscreen(void)
 {
@@ -128,7 +126,7 @@ void HUD_InitializeEndscreen(void)
 			splash.alpha = 1 - splash_fade;
 		}
 	};
-	
+
 
 	uielement_c endscreen = spawn(uielement_c, flags: UIFLAG_STRETCH);
 		endscreen.active_condition = endscreen_conditional;

@@ -132,10 +132,7 @@ float skill;
 .vector oangles;
 .float pframe;
 .float dframe;
-//.float fscale;
 .entity msprite;
-//.float fake_illumination;
-float globalfake_illumination;
 
 //
 //player
@@ -922,6 +919,7 @@ float CLIPGROUP_MODEL = 4;  // model emitter
 float CLIPGROUP_GUARDIAN = 8;  // boss1 guardian projectile
 float CLIPGROUP_PROWLER = 16;  // prowler monster?
 float CLIPGROUP_CYSTS = 32;  // Prevent cysts from blocking each other
+
 
 /*FGD
 @BaseClass = TargetName [

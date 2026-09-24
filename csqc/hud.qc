@@ -1240,21 +1240,9 @@ vector thumbstick_right;
 vector radial_thumbstick;
 vector radial_pos;
 float radial_selected;
-float radial_artifact_order[] = {
-	0,
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-	7,
-	8,
-	9,
-};
+float radial_artifact_order[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-void HUD_InitializeArtifactRadial(void)
-{
+void HUD_InitializeArtifactRadial(void) {
 	static string ring_images[] = {
 		"gfx/artifactmenu/radial/artifactslot_0.tga", 	// 1
 		"gfx/artifactmenu/radial/artifactslot_1.tga", 	// 2 
@@ -2471,13 +2459,12 @@ void CSQC_UpdateView(float b, float c)
 	
 	renderscene();
 
-	float fdev = cvar("developer");
 	float fcamera_stage = cvar("camera_stage");
-	if((fdev >= 1) && (hidehud == 3) && (fcamera_stage > 0))
-	{
+	if ((cvar("developer") >= 1) && (hidehud == 3) && (fcamera_stage > 0)) {
 		drawstring('0 0 0', strcat("camera stage: ",""), '16 16 0', '1 1 1', 1, 0);
 		drawstring('0 0 0', strcat("              ",ftos(fcamera_stage)), '16 16 0', '1 1 0', 1, 0);
 	}
+
 	if (vid_height == 540)
 		aspectratiomode = 1;
 	if (vid_height == 720)

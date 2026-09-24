@@ -52,7 +52,7 @@ void check_custom_cvars() {
 
 void() sgib_touch =
 {
-	if (other.flags &FL_MONSTER)
+	if (other.flags & FL_MONSTER)
 		return;
 	if (other.classname == "player")
 		return;
@@ -213,19 +213,8 @@ void SpawnBlood(vector org, vector vel, float damage, float type, float pcount) 
 
 	pointparticles(bparticle, org, vel * 0.1, pcount);
 };
-float TE_LIGHTNING4NEH = 17;
-void(string mdl, entity owner, vector start, vector end) te_custombeam  = {
-	WriteByte(MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte(MSG_BROADCAST, TE_LIGHTNING4NEH);
-	WriteString(MSG_BROADCAST, mdl);
-	WriteEntity(MSG_BROADCAST, owner);
-	WriteCoord(MSG_BROADCAST, start_x);
-	WriteCoord(MSG_BROADCAST, start_y);
-	WriteCoord(MSG_BROADCAST, start_z);
-	WriteCoord(MSG_BROADCAST, end_x);
-	WriteCoord(MSG_BROADCAST, end_y);
-	WriteCoord(MSG_BROADCAST, end_z);
-}
+
+
 .float lance_secondary;
 .float particle_time;
 void()explogibs =
@@ -2200,15 +2189,15 @@ void delebboxesandrespawnthem() {
 
 .float noattack;
 
-void() giveme_oldrelics =
-{
-	if(self.oldrelics <= 4)
-		self.oldrelics ++;
-	centerprint(single_player, strcat("encounter number: ",ftos(self.oldrelics + 1),"\n"));
-};
 
-void() giveme_relics =
-{
+void giveme_oldrelics() {
+	if (self.oldrelics <= 4)
+		self.oldrelics ++;
+	centerprint(self, strcat("encounter number: ", ftos(self.oldrelics + 1), "\n"));
+}
+
+
+void giveme_relics() {
 	//self.slot_relics = 12345;
 	relic_addtoslot(self, RL_INTR);
 	relic_addtoslot(self, RL_E1M1);
@@ -2221,42 +2210,42 @@ void() giveme_relics =
 	relic_addtoslot(self, RL_E2M3);
 	relic_addtoslot(self, RL_E2M4);
 	relic_addtoslot(self, RL_E2M5);
-};
-void()debugger_particles_think
-{
+}
+
+
+void debugger_particles_think() {
 	pointparticles(self.cnt,self.origin,'0 0 0',32);
-	//single_player.SoulTether = self.cnt;
 	self.cnt ++;
-	//(float effectnum, vector org, vector vel, float howmany) pointparticles
-	if(self.cnt > 210)
+	if (self.cnt > 210) {
 		remove(self);
-	else
-	{
+	}
+	else {
 		string viewxanglesfactor;
 		viewxanglesfactor = strcat((ftos (self.cnt)), (" particlecount\n"));
 		bprint(viewxanglesfactor);
 		self.think = debugger_particles_think;
 		self.nextthink = time + 0.1;
 	}
-};
-void()debug_particles =
-{
+}
+
+
+void debug_particles() {
 	entity debugger_particles = spawn();
 	debugger_particles.origin = self.origin;
 	debugger_particles.think = debugger_particles_think;
 	debugger_particles.nextthink = time;
-};
+}
 
-void()debug_particle =
-{
+
+void debug_particle() {
 	float particlenumber = cvar("particlenumber");
-	makevectors (self.angles);
+	makevectors(self.angles);
 
-	pointparticles(particlenumber,self.origin + v_forward * 48 ,'0 0 0',32);
-		local string viewxanglesfactor;
-		viewxanglesfactor = strcat ((ftos (particlenumber)), (" particlecount\n"));
-		bprint (viewxanglesfactor);
-};
+	pointparticles(particlenumber, self.origin + v_forward * 48, '0 0 0', 32);
+	string viewxanglesfactor = strcat(ftos(particlenumber), " particlecount\n");
+	bprint(viewxanglesfactor);
+}
+
 
 void()debug_particle_increase =
 {

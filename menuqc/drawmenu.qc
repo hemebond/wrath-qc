@@ -474,7 +474,7 @@ void m_init() {
 
 
 	check_menuversion();
-	cmd("exec start.cfg\n");
+	// cmd("exec start.cfg\n");  this doesn't exist
 	vid_wres = cvar("vid_width");
 	vid_hres = cvar("vid_height");
 	string consize_w, consize_h;
@@ -651,9 +651,6 @@ void(float key, float ascii) m_keydown = {};
 void(float key, float ascii) m_keyup = {};
 
 void(float key, float ascii) menu_keydown = {
-	dprint("menu_keydown->key: ", ftos(key), "\n");
-	dprint("menu_keydown->ascii: ", ftos(ascii), "\n");
-
 	float deadmenu = cvar("scratch3");
 	if (deadmenu) {
 		if (key == K_ESCAPE)
