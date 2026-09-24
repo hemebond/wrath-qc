@@ -747,7 +747,7 @@ void PlayerPreThink() {
 	}
 
 	if (self.vhud == 3) {
-		UpdateCameras(self.active_camera);
+		update_player_camera(self.active_camera);
 		self.velocity = '0 0 0';
 	}
 
