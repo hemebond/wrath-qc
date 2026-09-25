@@ -662,6 +662,7 @@ void() shotgun_proj_touch2 =
 { 
 	if (other == self.owner)
 		return;
+
 	if (pointcontents(self.origin) == CONTENT_SKY)
 	{
 		remove(self);
@@ -708,6 +709,7 @@ void() shotgun_proj_touch2 =
 	if (other.classname == "dome")
 	{
 		remove(self);
+		return;
 	}
 
 	if (other.health)
@@ -721,10 +723,13 @@ void() shotgun_proj_touch2 =
 		else
 			T_Damage(other, self, self.owner, invader_ad);
 		remove(self);
+		return;
 	}
 
-	if ((self.owner.classname != "monster_invader") && (other.classname != "projectile"))
+	if ((self.owner.classname != "monster_invader") && (other.classname != "projectile")) {
 		remove(self);
+		return;
+	}
 
 	if (other.classname != "projectile")
 	{
@@ -732,8 +737,6 @@ void() shotgun_proj_touch2 =
 		self.think = SUB_Remove;
 	}
 };
-
-void() shotgun_proj_touch2;
 
 void(vector org, vector dir, float order, entity ownerproj) launch_projectile_inv = { local entity shotgun_proj;
 	shotgun_proj = spawn();
